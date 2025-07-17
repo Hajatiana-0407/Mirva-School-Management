@@ -1,0 +1,1 @@
+export const cycles =  ['Primaire', 'Collège', 'Lycée'];

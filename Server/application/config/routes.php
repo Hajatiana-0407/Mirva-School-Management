@@ -58,3 +58,4 @@ $route['api/admin/classe'] = 'ClasseController';
 
 // ******************* ROUTE NIVEAU ********************** //
 $route['api/admin/niveau'] = 'NiveauController';
+$route['api/admin/niveau/update'] = 'NiveauController/update';

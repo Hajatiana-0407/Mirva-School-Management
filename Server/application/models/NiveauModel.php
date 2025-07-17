@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class NiveauModel extends CI_Model {
+class NiveauModel extends CI_Model
+{
     protected $table = 'niveaux';
     protected $primaryKey = 'id_niveau';
 
@@ -38,8 +39,14 @@ class NiveauModel extends CI_Model {
     // ======= UPDATE =======
     public function update($id, $data)
     {
-        return $this->db->where($this->primaryKey, $id)
+        $updated =  $this->db->where($this->primaryKey, $id)
             ->update($this->table, $data);
+        if ($updated) {
+            return $this->db->where($this->primaryKey, $id)
+                ->get($this->table)
+                ->row();
+        }
+        return $updated;
     }
 
     // ======= DELETE =======
@@ -47,5 +54,15 @@ class NiveauModel extends CI_Model {
     {
         return $this->db->where($this->primaryKey, $id)
             ->delete($this->table);
+    }
+
+    public function isNiveauExist($niveau = '')
+    {
+        $query = $this->db->where('niveau', $niveau)
+            ->get($this->table);
+        if ($query->row() ) {
+            return true;
+        }
+        return false;
     }
 }

@@ -16,7 +16,9 @@ class AppFixtures extends CI_Controller
     {
         $faker = \Faker\Factory::create('fr_FR');
 
-        $cycles = ['Maternelle', 'Primaire', 'Collège', 'Lycée', 'Université'];
+        $cycles = [ 'Primaire', 'Collège', 'Lycée'];
+
+        $this->model->emptyDb(['niveaux']) ; 
 
         for ($i = 0; $i < $count; $i++) {
             $data = [

@@ -1,5 +1,13 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+
+$hook['pre_controller'] = array(
+    'class'    => 'Cors',
+    'function' => 'enable',
+    'filename' => 'Cors.php',
+    'filepath' => 'hooks',
+    'params'   => array()
+);
 
 /*
 | -------------------------------------------------------------------------
