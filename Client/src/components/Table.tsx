@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Loading from './ui/Loading';
 
 interface TableProps {
   data: any[];
@@ -15,9 +16,10 @@ interface TableProps {
     color: string;
   }>;
   searchTerm?: string;
+  isLoading: boolean
 }
 
-const Table = ({ data, columns, actions, searchTerm = '' }: TableProps) => {
+const Table = ({ data, columns, actions, searchTerm = '', isLoading = false  }: TableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
@@ -67,34 +69,42 @@ const Table = ({ data, columns, actions, searchTerm = '' }: TableProps) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems.map((item, index) => (
-              <tr key={index} className="border-b hover:bg-gray-50">
-                {columns.map((column) => (
-                  <td key={column.key} className="py-3 px-4 text-gray-900">
-                    {column.render ? column.render(item[column.key], item) : item[column.key]}
-                  </td>
-                ))}
-                {actions && actions.length > 0 && (
-                  <td className="py-3 px-4">
-                    <div className="flex justify-center space-x-2">
-                      {actions.map((action, actionIndex) => {
-                        const Icon = action.icon;
-                        return (
-                          <button
-                            key={actionIndex}
-                            onClick={() => action.onClick(item)}
-                            className={`p-1 rounded hover:bg-gray-100 ${getActionColor(action.color)}`}
-                            title={action.label}
-                          >
-                            <Icon className="w-4 h-4" />
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </td>
-                )}
+            {isLoading ?
+              <tr >
+                <td colSpan={columns.length + 1} className=''>
+                  <Loading />
+                </td>
               </tr>
-            ))}
+              :
+              currentItems.map((item, index) => (
+                <tr key={index} className="border-b hover:bg-gray-50">
+                  {columns.map((column) => (
+                    <td key={column.key} className="py-3 px-4 text-gray-900">
+                      {column.render ? column.render(item[column.key], item) : item[column.key]}
+                    </td>
+                  ))}
+                  {actions && actions.length > 0 && (
+                    <td className="py-3 px-4">
+                      <div className="flex justify-center space-x-2">
+                        {actions.map((action, actionIndex) => {
+                          const Icon = action.icon;
+                          return (
+                            <button
+                              key={actionIndex}
+                              onClick={() => action.onClick(item)}
+                              className={`p-1 rounded hover:bg-gray-100 ${getActionColor(action.color)}`}
+                              title={action.label}
+                            >
+                              <Icon className="w-4 h-4" />
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </td>
+                  )}
+                </tr>
+              ))
+            }
           </tbody>
         </table>
       </div>
@@ -117,11 +127,10 @@ const Table = ({ data, columns, actions, searchTerm = '' }: TableProps) => {
               <button
                 key={page}
                 onClick={() => handlePageChange(page)}
-                className={`px-3 py-1 rounded ${
-                  currentPage === page
-                    ? 'bg-blue-600 text-white'
-                    : 'border hover:bg-gray-50'
-                }`}
+                className={`px-3 py-1 rounded ${currentPage === page
+                  ? 'bg-blue-600 text-white'
+                  : 'border hover:bg-gray-50'
+                  }`}
               >
                 {page}
               </button>

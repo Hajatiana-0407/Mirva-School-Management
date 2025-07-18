@@ -23,13 +23,12 @@ const LevelSchema = object({
 
 const Levels = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { datas, action, error } = useSelector(getLevelState);
+  const {  datas , action , error  } = useSelector(getLevelState);
   
   const {
     onSubmite,
     formErrors
   } = useForm<levelType>(LevelSchema, { niveau: '', cycle: '', description: '' });
-
 
   useEffect(() => {
     dispatch(getAllLevel());
@@ -120,6 +119,7 @@ const Levels = () => {
           columns={columns}
           actions={actions}
           searchTerm={searchTerm}
+          isLoading={action.isLoading as boolean }
         />
       </div>
 
