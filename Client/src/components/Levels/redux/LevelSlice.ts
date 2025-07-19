@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ActionIntialValue, ActionType, ApiReturnType, levelType } from "../../../Utils/Types";
-import { createLevel, getAllLevel, updateLevel } from "./LevelAsyncThunk";
+import { createLevel, deleteLevel, getAllLevel, updateLevel } from "./LevelAsyncThunk";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
 
@@ -42,8 +42,10 @@ const LevelSlice = createSlice({
                 state.datas = action.payload;
             })
             .addCase(getAllLevel.rejected, (state) => {
-                state.action.isLoading = false
-            })
+                state.action.isLoading = false;
+                state.error = 'Erreur de connexion au server'
+                toast.error("Erreur de connexion au server")  ; 
+            }) ; 
 
         // ************************************* Create ************************************* //
         builder
@@ -64,7 +66,9 @@ const LevelSlice = createSlice({
                 }
             })
             .addCase(createLevel.rejected, (state) => {
-                state.action.isLoading = false
+                state.action.isLoading = false;
+                state.error = 'Erreur de connexion au server'; 
+                toast.error("Erreur de connexion au server") ; 
             })
 
         // // ************************************* Update ************************************* //
@@ -75,7 +79,7 @@ const LevelSlice = createSlice({
             .addCase(updateLevel.fulfilled, (state, action: {
                 payload: ApiReturnType
             }) => {
-                state.action.isLoading = false;
+                state.action.isUpdating = false;
                 const { error, data, message } = action.payload;
                 if (error) {
                     state.error = message as string;
@@ -95,26 +99,33 @@ const LevelSlice = createSlice({
             })
             .addCase(updateLevel.rejected, (state) => {
                 state.action.isUpdating = false
+                state.error = 'Erreur de connexion au server'; 
+                toast.error("Erreur de connexion au server") ; 
             })
 
         // // ************************************* Delete ************************************* //
 
-        // builder
-        //     .addCase(LevelDelete.pending, (state) => {
-        //         state.action.isLoading = true;
-        //         state.action.isDeleting = true;
+        builder
+            .addCase(deleteLevel.pending, (state) => {
+                state.action.isDeleting = true;
 
-        //     })
-        //     .addCase(LevelDelete.fulfilled, (state, action: { payload: number }) => {
-        //         state.action.isLoading = false;
-        //         state.action.isDeleting = false;
-        //         state.datas = state.datas.filter((data: levelType) => data.id !== action.payload);
-        //         toast.success('Suppression effectuée');
-        //     })
-        //     .addCase(LevelDelete.rejected, (state) => {
-        //         state.action.isLoading = false
-        //         state.action.isDeleting = false
-        //     })
+            })
+            .addCase(deleteLevel.fulfilled, (state, action: { payload: ApiReturnType }) => {
+                state.action.isDeleting = false;
+                const { error, data: id_deleted, message } = action.payload;
+                if (error) {
+                    state.error = message as string;
+                } else {
+                    toast.success('Suppression effectuée');
+                    state.error = '';
+                    state.datas = state.datas.filter((data: levelType) => data.id_niveau !== id_deleted);
+                }
+            })
+            .addCase(deleteLevel.rejected, (state) => {
+                state.action.isDeleting = false;
+                state.error = 'Erreur de connexion au server'; 
+                toast.error("Erreur de connexion au server") ; 
+            })
     }
 })
 

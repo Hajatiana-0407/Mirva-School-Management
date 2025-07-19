@@ -26,7 +26,7 @@ class NiveauController extends CI_Controller
         if ($this->NiveauModel->isNiveauExist($data['niveau'])) {
             echo json_encode(['error' => true, 'message' => 'Le niveau existe déjà.']);
         } else {
-            $data =  $this->NiveauModel->insert( $data );
+            $data =  $this->NiveauModel->insert($data);
             if ($data) {
                 echo json_encode(['error' => false, 'data' => $data]);
             } else {
@@ -57,9 +57,28 @@ class NiveauController extends CI_Controller
         }
     }
 
-    public function delete($id)
+    public function delete()
     {
-        $this->NiveauModel->delete($id);
-        echo json_encode(['status' => 'deleted']);
+
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+
+            $input = json_decode(file_get_contents('php://input'), true);
+
+            if (!empty($input['id_niveau'])) {
+                $id = $input['id_niveau'];
+
+                $data = $this->NiveauModel->delete($id);
+
+                if ($data) {
+                    echo json_encode(['error' => false, 'data' => $data]);
+                } else {
+                    echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                }
+            } else {
+                echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+            }
+        } else {
+            echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+        }
     }
 }

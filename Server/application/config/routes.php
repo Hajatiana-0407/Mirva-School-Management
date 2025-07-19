@@ -60,3 +60,4 @@ $route['api/admin/classe'] = 'ClasseController';
 $route['api/admin/niveau'] = 'NiveauController';
 $route['api/admin/niveau/update'] = 'NiveauController/update';
 $route['api/admin/niveau/create'] = 'NiveauController/create';
+$route['api/admin/niveau/delete'] = 'NiveauController/delete';

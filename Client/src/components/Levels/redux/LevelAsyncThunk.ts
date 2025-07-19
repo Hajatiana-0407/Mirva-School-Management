@@ -36,7 +36,7 @@ export const updateLevel = createAsyncThunk('niveau/modification', async ({ leve
 })
 
 // CREATE
-export const createLevel = createAsyncThunk('niveau/ajout', async (level: levelType , { dispatch }): Promise<ApiReturnType> => {
+export const createLevel = createAsyncThunk('niveau/ajout', async (level: levelType, { dispatch }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
     await api.post('admin/niveau/create', {
         ...level,
@@ -48,6 +48,25 @@ export const createLevel = createAsyncThunk('niveau/ajout', async (level: levelT
     }).catch(error => {
         console.error('Erreur lors de la récupération des données:', error.getMessage());
     });
+    return data;
+})
+
+// DELETE 
+export const deleteLevel = createAsyncThunk('niveau/suppression', async (id_niveau: number, { dispatch }): Promise<ApiReturnType> => {
+    let data: ApiReturnType = ApiReturnInitial;
+    if (id_niveau) {
+        await api.delete('admin/niveau/delete', {
+            data: { id_niveau },
+            headers: { 'Content-Type': 'application/json' }
+        }).then(response => {
+            data = response.data;
+            if (!data.error) {
+                dispatch(setHiddeModalValue(true));
+            }
+        }).catch(error => {
+            console.error('Erreur lors de la récupération des données:', error.getMessage());
+        });
+    }
     return data;
 })
 

@@ -43,7 +43,7 @@ class NiveauModel extends CI_Model
                 ->row();
         }
 
-        return false; 
+        return false;
     }
 
     // ======= UPDATE =======
@@ -62,8 +62,20 @@ class NiveauModel extends CI_Model
     // ======= DELETE =======
     public function delete($id)
     {
-        return $this->db->where($this->primaryKey, $id)
-            ->delete($this->table);
+        $element = $this->db
+            ->get_where($this->table, [$this->primaryKey => $id])
+            ->row();
+
+        if ($element) {
+            $deleted = $this->db
+                ->where($this->primaryKey, $id)
+                ->delete($this->table);
+
+            if ($deleted) {
+                return $id ;
+            }
+        }
+        return false;
     }
 
     public function isNiveauExist($niveau = '')

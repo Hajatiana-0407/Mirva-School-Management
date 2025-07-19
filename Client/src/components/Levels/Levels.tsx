@@ -6,7 +6,7 @@ import ConfirmDialog from '../ConfirmDialog';
 import { AppDispatch } from '../../Redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { getLevelState } from './redux/LevelSlice';
-import { createLevel, getAllLevel, updateLevel } from './redux/LevelAsyncThunk';
+import { createLevel, deleteLevel, getAllLevel, updateLevel } from './redux/LevelAsyncThunk';
 import { cycles } from '../../Utils/Utils';
 import { levelType } from '../../Utils/Types';
 import { object, string } from 'yup';
@@ -21,7 +21,6 @@ const LevelSchema = object({
   description: string().required('La description est obligatoire.')
 })
 
-
 const Levels = () => {
   const dispatch: AppDispatch = useDispatch();
   const { datas, action, error } = useSelector(getLevelState);
@@ -30,8 +29,9 @@ const Levels = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingLevel, setEditingLevel] = useState<levelType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [levelToArchive, setLevelToArchive] = useState<levelType | null>(null);
+  const [levelToDelete, setLevelToDelete] = useState<levelType | null>(null);
   const { hiddeTheModalActive } = useSelector(getAppState);
+
   // fonctions
   const handleEdit = (level: any) => {
     setEditingLevel(level);
@@ -39,13 +39,16 @@ const Levels = () => {
   };
 
   const handleDelete = (level: any) => {
-    setLevelToArchive(level);
+    setLevelToDelete(level);
     setShowConfirmDialog(true);
   };
 
   const handleConfirmDelete = () => {
+    if ( levelToDelete ){
+      dispatch( deleteLevel( levelToDelete.id_niveau as number  ))
+    }
     setShowConfirmDialog(false);
-    setLevelToArchive(null);
+    setLevelToDelete(null);
   };
 
   const handleCloseModal = () => {
@@ -55,7 +58,7 @@ const Levels = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     onSubmite((validateData: levelType) => {
-      editingLevel ? dispatch(updateLevel({ level: validateData, id: editingLevel?.id_niveau as number })) : dispatch( createLevel( validateData ))
+      editingLevel ? dispatch(updateLevel({ level: validateData, id: editingLevel?.id_niveau as number })) : dispatch(createLevel(validateData))
     }, e)
   }
 
@@ -186,8 +189,8 @@ const Levels = () => {
         isOpen={showConfirmDialog}
         onClose={() => setShowConfirmDialog(false)}
         onConfirm={handleConfirmDelete}
-        title="Archiver le niveau"
-        message={`Êtes-vous sûr de vouloir archiver le niveau ${levelToArchive?.niveau} ?`}
+        title="Suppression du niveau"
+        message={`Êtes-vous sûr de vouloir archiver le niveau ${levelToDelete?.niveau} ?`}
       />
     </div>
   );
