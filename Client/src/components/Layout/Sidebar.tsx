@@ -43,12 +43,12 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
 
 
   return (
-    <div className={`${collapsed ? 'w-16' : 'w-64'} bg-white shadow-lg transition-all duration-300 ease-in-out`}>
+    <div className={`${collapsed ? 'w-16' : 'w-64'} bg-white shadow-lg transition-all duration-300 ease-in-out flex flex-col min-h-screen h-max`}>
       <div className="py-6 border-b border-r">
         <div className="flex items-center justify-center">
           {!collapsed && (
             <div>
-              <h1 className="text-xl font-bold text-gray-800">École Manager</h1>
+              <h1 className="text-xl font-bold text-gray-800">Lycée Mirva</h1>
               <p className="text-sm text-gray-600">Gestion scolaire</p>
             </div>
           )}
@@ -65,9 +65,8 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
           </button>
         </div>
       </div>
-
       <nav className="mt-6">
-        <ul className="space-y-1">
+        <ul className="">
           {menuItems.map((menu) => {
             return (
               <li key={menu.id}>
@@ -83,7 +82,7 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
                         "text-gray-700 hover:bg-gray-50": !isActive,
                       },
                       "w-full flex items-center py-3 text-left transition-colors group relative"
-                    );
+                    ); 
                   }}
                 >
                   {({ isActive }: { isActive: boolean }) => {
