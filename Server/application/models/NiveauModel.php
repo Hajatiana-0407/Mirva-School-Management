@@ -65,26 +65,30 @@ class NiveauModel extends CI_Model
         $element = $this->db
             ->get_where($this->table, [$this->primaryKey => $id])
             ->row();
-
         if ($element) {
             $deleted = $this->db
                 ->where($this->primaryKey, $id)
                 ->delete($this->table);
 
             if ($deleted) {
-                return $id ;
+                return $id;
             }
         }
         return false;
     }
 
-    public function isNiveauExist($niveau = '')
+    public function isNiveauExist($niveau = '', $id = null)
     {
-        $query = $this->db->where('niveau', $niveau)
-            ->get($this->table);
-        if ($query->row()) {
+        $query = $this->db->where('niveau', $niveau);
+        if ($id) {
+            $query->where($this->primaryKey . ' <>', $id);
+        }
+        $data = $query->get($this->table)->result();
+        if ( count( $data )) {
             return true;
         }
         return false;
     }
 }
+
+

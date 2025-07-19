@@ -2,5 +2,10 @@
 Configuration
 ###################
 
-.htaccess dans Server 
-change le route /Mirva/Server
+Route vers le server : 
+    .htacces
+
+Pour l'autorisation d'url :
+    Hooks/Cors
+
+Fournitures scolaire
