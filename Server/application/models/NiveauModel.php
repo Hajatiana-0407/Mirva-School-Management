@@ -33,7 +33,17 @@ class NiveauModel extends CI_Model
     // ======= CREATE =======
     public function insert($data)
     {
-        return $this->db->insert($this->table, $data);
+        $inserted = $this->db->insert($this->table, $data);
+
+        if ($inserted) {
+            $inserted_id = $this->db->insert_id();
+
+            return $this->db
+                ->get_where($this->table, [$this->primaryKey  => $inserted_id])
+                ->row();
+        }
+
+        return false; 
     }
 
     // ======= UPDATE =======
@@ -60,7 +70,7 @@ class NiveauModel extends CI_Model
     {
         $query = $this->db->where('niveau', $niveau)
             ->get($this->table);
-        if ($query->row() ) {
+        if ($query->row()) {
             return true;
         }
         return false;

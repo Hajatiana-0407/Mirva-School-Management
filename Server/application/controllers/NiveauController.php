@@ -15,11 +15,24 @@ class NiveauController extends CI_Controller
         echo json_encode($data);
     }
 
-    public function store()
+    public function create()
     {
-        $input = $this->input->post();
-        $this->NiveauModel->insert($input);
-        echo json_encode(['status' => 'success']);
+        $data = [
+            'niveau' => $this->input->post('niveau'),
+            'cycle' => $this->input->post('cycle'),
+            'description' => $this->input->post('description'),
+        ];
+
+        if ($this->NiveauModel->isNiveauExist($data['niveau'])) {
+            echo json_encode(['error' => true, 'message' => 'Le niveau existe déjà.']);
+        } else {
+            $data =  $this->NiveauModel->insert( $data );
+            if ($data) {
+                echo json_encode(['error' => false, 'data' => $data]);
+            } else {
+                echo json_encode(['error' => true, 'message' => 'Une erreur c\'est produite.']);
+            }
+        }
     }
 
     public function update()
@@ -32,14 +45,13 @@ class NiveauController extends CI_Controller
             'description' => $this->input->post('description'),
         ];
 
-        if ($this->NiveauModel->isNiveauExist($data['niveau']) ) {
+        if ($this->NiveauModel->isNiveauExist($data['niveau'])) {
             echo json_encode(['error' => true, 'message' => 'Le niveau existe déjà.']);
         } else {
             $data =  $this->NiveauModel->update($id_niveau, $data);
-            if ( $data ) {
-                echo json_encode(['error' => false, 'data' => $data ]);
-                
-            }else {
+            if ($data) {
+                echo json_encode(['error' => false, 'data' => $data]);
+            } else {
                 echo json_encode(['error' => true, 'message' => 'Une erreur c\'est produite.']);
             }
         }

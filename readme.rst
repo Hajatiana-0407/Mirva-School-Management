@@ -3,4 +3,4 @@ Configuration
 ###################
 
 .htaccess dans Server 
-change route /Mirva/Server
+change le route /Mirva/Server

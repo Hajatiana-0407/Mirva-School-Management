@@ -6,7 +6,7 @@ import ConfirmDialog from '../ConfirmDialog';
 import { AppDispatch } from '../../Redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { getLevelState } from './redux/LevelSlice';
-import { getAllLevel, updateLevel } from './redux/LevelAsyncThunk';
+import { createLevel, getAllLevel, updateLevel } from './redux/LevelAsyncThunk';
 import { cycles } from '../../Utils/Utils';
 import { levelType } from '../../Utils/Types';
 import { object, string } from 'yup';
@@ -31,7 +31,7 @@ const Levels = () => {
   const [editingLevel, setEditingLevel] = useState<levelType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [levelToArchive, setLevelToArchive] = useState<levelType | null>(null);
-  const { hiddeTheModalActive } = useSelector( getAppState ) ; 
+  const { hiddeTheModalActive } = useSelector(getAppState);
   // fonctions
   const handleEdit = (level: any) => {
     setEditingLevel(level);
@@ -53,12 +53,18 @@ const Levels = () => {
     setEditingLevel(null);
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    onSubmite((validateData: levelType) => {
+      editingLevel ? dispatch(updateLevel({ level: validateData, id: editingLevel?.id_niveau as number })) : dispatch( createLevel( validateData ))
+    }, e)
+  }
+
   // Modal
   useEffect(() => {
-    if (showModal && hiddeTheModalActive ) {
+    if (showModal && hiddeTheModalActive) {
       handleCloseModal();
     }
-  }, [ hiddeTheModalActive ]) ; 
+  }, [hiddeTheModalActive]);
 
   useEffect(() => {
     if (!datas.length) {
@@ -127,9 +133,7 @@ const Levels = () => {
         onClose={handleCloseModal}
         title={editingLevel ? 'Modifier le niveau' : 'Nouveau niveau'}
       >
-        <form className="space-y-4" onSubmit={(e) => {
-          onSubmite((validateData: levelType) => { dispatch(updateLevel({ level: validateData, id: editingLevel?.id_niveau as number })) }, e)
-        }}>
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <InputError message={error} />
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Nom du niveau</label>

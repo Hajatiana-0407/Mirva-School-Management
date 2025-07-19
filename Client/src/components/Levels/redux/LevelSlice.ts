@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ActionIntialValue, ActionType, ApiReturnType, levelType } from "../../../Utils/Types";
-import { getAllLevel, updateLevel } from "./LevelAsyncThunk";
+import { createLevel, getAllLevel, updateLevel } from "./LevelAsyncThunk";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
 
@@ -13,10 +13,10 @@ type initialStateType = {
 }
 
 const initialState: initialStateType = {
-    action: ActionIntialValue ,
+    action: ActionIntialValue,
     datas: [],
     page: 1,
-    error: '' , 
+    error: '',
 }
 
 const LevelSlice = createSlice({
@@ -25,8 +25,8 @@ const LevelSlice = createSlice({
     reducers: {
         setLevelDeleting: (state) => {
             state.action.isDeleting = true;
-        }  , 
-        
+        },
+
     },
     extraReducers(builder) {
 
@@ -45,25 +45,27 @@ const LevelSlice = createSlice({
                 state.action.isLoading = false
             })
 
-
-
-        // ************************************* Creat ************************************* //
-        // builder
-        //     .addCase(LevelAdd.pending, (state) => {
-        //         state.action.isLoading = true;
-        //     })
-        //     .addCase(LevelAdd.fulfilled, (state, action: {
-        //         payload: levelType
-        //     }) => {
-        //         state.action.isLoading = false;
-        //         state.datas.unshift({
-        //             ...action.payload,
-        //             id: state.datas.length + 1
-        //         })
-        //     })
-        //     .addCase(LevelAdd.rejected, (state) => {
-        //         state.action.isLoading = false
-        //     })
+        // ************************************* Create ************************************* //
+        builder
+            .addCase(createLevel.pending, (state) => {
+                state.action.isLoading = true;
+            })
+            .addCase(createLevel.fulfilled, (state, action: {
+                payload: ApiReturnType
+            }) => {
+                state.action.isLoading = false;
+                const { error, data, message } = action.payload;
+                if (error) {
+                    state.error = message as string;
+                } else {
+                    toast.success('Niveau ajouté !');
+                    state.error = '';
+                    state.datas.unshift(data);
+                }
+            })
+            .addCase(createLevel.rejected, (state) => {
+                state.action.isLoading = false
+            })
 
         // // ************************************* Update ************************************* //
         builder
