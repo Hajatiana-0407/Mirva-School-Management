@@ -38,12 +38,12 @@ const Levels = () => {
     setShowModal(true);
   };
 
-  const handleArchive = (level: any) => {
+  const handleDelete = (level: any) => {
     setLevelToArchive(level);
     setShowConfirmDialog(true);
   };
 
-  const handleConfirmArchive = () => {
+  const handleConfirmDelete = () => {
     setShowConfirmDialog(false);
     setLevelToArchive(null);
   };
@@ -82,7 +82,7 @@ const Levels = () => {
   const actions = [
     { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
     { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
-    { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
+    { icon: Archive, label: 'Archiver', onClick: handleDelete, color: 'red' },
   ];
 
   return (
@@ -185,7 +185,7 @@ const Levels = () => {
       <ConfirmDialog
         isOpen={showConfirmDialog}
         onClose={() => setShowConfirmDialog(false)}
-        onConfirm={handleConfirmArchive}
+        onConfirm={handleConfirmDelete}
         title="Archiver le niveau"
         message={`Êtes-vous sûr de vouloir archiver le niveau ${levelToArchive?.niveau} ?`}
       />
