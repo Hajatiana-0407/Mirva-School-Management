@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionType, ApiReturnType, levelType } from "../../../Utils/Types";
+import { ActionIntialValue, ActionType, ApiReturnType, levelType } from "../../../Utils/Types";
 import { getAllLevel, updateLevel } from "./LevelAsyncThunk";
 import { RootStateType } from "../../../Redux/store";
+import { toast } from "react-toastify";
 
 
 type initialStateType = {
@@ -12,14 +13,10 @@ type initialStateType = {
 }
 
 const initialState: initialStateType = {
-    action: {
-        isLoading: false,
-        isDeleting: false,
-        isUpdating: false
-    },
+    action: ActionIntialValue ,
     datas: [],
     page: 1,
-    error: ''
+    error: '' , 
 }
 
 const LevelSlice = createSlice({
@@ -28,7 +25,8 @@ const LevelSlice = createSlice({
     reducers: {
         setLevelDeleting: (state) => {
             state.action.isDeleting = true;
-        }
+        }  , 
+        
     },
     extraReducers(builder) {
 
@@ -67,7 +65,6 @@ const LevelSlice = createSlice({
         //         state.action.isLoading = false
         //     })
 
-
         // // ************************************* Update ************************************* //
         builder
             .addCase(updateLevel.pending, (state) => {
@@ -81,6 +78,7 @@ const LevelSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
+                    toast.success('Niveau modifié !');
                     state.error = '';
                     state.datas = state.datas.map(level => {
                         if (level.id_niveau === data?.id_niveau) {

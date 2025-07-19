@@ -1,6 +1,9 @@
 import React, { useState } from "react"
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { ValidationError, type AnyObjectSchema } from 'yup'
+import { AppDispatch } from "../Redux/store";
+import { setHiddeModalValue } from "../Redux/AppSlice";
 
 
 // function to use on the input change event
@@ -14,6 +17,7 @@ export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T
 
     const [formValue, setAllFormValue] = useState(initial);
     const [formErrors, setFormErrors] = useState<Partial<Record<keyof T, string>>>();
+    const dispatch: AppDispatch = useDispatch() ; 
 
     const setFormValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -43,6 +47,7 @@ export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T
     }
 
     const onSubmite = async (next: ( data: T) => void, e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+        dispatch( setHiddeModalValue( false ))  ; 
         e.preventDefault();
         const form = e.currentTarget;
 
@@ -71,7 +76,6 @@ export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T
             setFormErrors({});
             next(data as T);
             toast.dismiss(toastId);
-            toast.success('Opération réussie !');
         } catch (error) {
             const errors: Partial<Record<keyof T, string>> = {};
             if (error instanceof ValidationError) {

@@ -12,6 +12,7 @@ import { levelType } from '../../Utils/Types';
 import { object, string } from 'yup';
 import useForm from '../../Hooks/useForm';
 import InputError from '../ui/InputError';
+import { getAppState } from '../../Redux/AppSlice';
 
 // Validation de donnée avec yup 
 const LevelSchema = object({
@@ -23,29 +24,16 @@ const LevelSchema = object({
 
 const Levels = () => {
   const dispatch: AppDispatch = useDispatch();
-  const {  datas , action , error  } = useSelector(getLevelState);
-  
-  const {
-    onSubmite,
-    formErrors
-  } = useForm<levelType>(LevelSchema, { niveau: '', cycle: '', description: '' });
-
-  useEffect(() => {
-    dispatch(getAllLevel());
-  }, [dispatch]);
-
-
+  const { datas, action, error } = useSelector(getLevelState);
+  const { onSubmite, formErrors } = useForm<levelType>(LevelSchema, { niveau: '', cycle: '', description: '' });
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingLevel, setEditingLevel] = useState<levelType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [levelToArchive, setLevelToArchive] = useState<levelType | null>(null);
-
-
-
-
+  const { hiddeTheModalActive } = useSelector( getAppState ) ; 
+  // fonctions
   const handleEdit = (level: any) => {
-
     setEditingLevel(level);
     setShowModal(true);
   };
@@ -56,7 +44,6 @@ const Levels = () => {
   };
 
   const handleConfirmArchive = () => {
-    console.log('Archivage de:', levelToArchive);
     setShowConfirmDialog(false);
     setLevelToArchive(null);
   };
@@ -66,13 +53,24 @@ const Levels = () => {
     setEditingLevel(null);
   };
 
+  // Modal
+  useEffect(() => {
+    if (showModal && hiddeTheModalActive ) {
+      handleCloseModal();
+    }
+  }, [ hiddeTheModalActive ]) ; 
+
+  useEffect(() => {
+    if (!datas.length) {
+      dispatch(getAllLevel());
+    }
+  }, [dispatch]);
 
   // Tableau //
   const columns = [
     { key: 'niveau', label: 'Niveau' },
     { key: 'cycle', label: 'Cycle' },
     { key: 'description', label: 'Description' },
-    { key: 'ordre', label: 'Ordre' },
   ];
 
   const actions = [
@@ -119,7 +117,7 @@ const Levels = () => {
           columns={columns}
           actions={actions}
           searchTerm={searchTerm}
-          isLoading={action.isLoading as boolean }
+          isLoading={action.isLoading as boolean}
         />
       </div>
 

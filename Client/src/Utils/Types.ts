@@ -1,22 +1,36 @@
+// ACTION
 export type ActionType = {
-    isLoading?: boolean,
-    isDeleting?: boolean,
-    isUpdating?: boolean
+    isLoading?: boolean;
+    isDeleting?: boolean;
+    isUpdating?: boolean;
+}
+export const ActionIntialValue: ActionType  = {
+    isLoading: false,
+    isDeleting: false,
+    isUpdating: false,
 }
 
+// APP
+export type AppStateType = {
+    hiddeTheModalActive: boolean  
+}
+export const AppInitialValue: AppStateType = {
+    hiddeTheModalActive: false 
+}
 
+// BACK'S OBJECT RETURN 
 export type ApiReturnType = {
     'error': boolean;
     'message'?: string,
     'data'?: any
 }
-
 export const ApiReturnInitial: ApiReturnType = {
     'error': false,
     'message': '',
     'data': {}
 }
-// Level
+
+// LEVEL ( NIVEAU )
 export type levelType = {
     id_niveau?: number;
     niveau: string;

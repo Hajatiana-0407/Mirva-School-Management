@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import LevelReducer from '../components/Levels/redux/LevelSlice' ; 
+import LevelReducer from '../components/Levels/redux/LevelSlice' ;
+import AppReducer from './AppSlice' ; 
 export const store = configureStore({
     reducer : {
-        levels : LevelReducer 
+        levels : LevelReducer , 
+        app : AppReducer ,  
     }
 }) ; 
 
