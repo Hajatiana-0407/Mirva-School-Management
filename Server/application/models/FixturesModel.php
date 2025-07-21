@@ -1,35 +1,25 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
-
 class FixturesModel extends CI_Model
 {
-    public function __construct()
+    public function insert($table, $data)
     {
-        parent::__construct();
-    }
-
-
-    public function insert($data)
-    {
-
-        $result = $this->db->insert('niveaux', $data);
-
+        $result = $this->db->insert($table, $data);
         if (!$result) {
-            $error = $this->db->error();
-            log_message('error', 'Erreur insertion dans ' . $this->table . ' : ' . $error['message']);
-            return ['success' => false, 'error' => $error];
+            log_message('error', 'Erreur insertion dans ' . $table . ' : ' . json_encode($this->db->error()));
         }
-
-        return ['success' => true, 'insert_id' => $this->db->insert_id()];
     }
 
-    public function emptyDb($db = [])
+    public function getIds($table, $idField)
     {
-        for ($i = 0; $i < count($db); $i++) {
-            try {
-                $this->db->empty_table($db[$i]);
-            } catch (\Throwable $th) {
-            }
+        return array_map(function ($row) use ($idField) {
+            return $row[$idField];
+        }, $this->db->select($idField)->get($table)->result_array());
+    }
+
+    public function emptyDb($tables)
+    {
+        foreach ($tables as $table) {
+            $this->db->empty_table($table);
         }
     }
 }
