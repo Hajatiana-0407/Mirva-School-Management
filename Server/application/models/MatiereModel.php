@@ -1,10 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class NiveauModel extends CI_Model
+class MatiereModel extends CI_Model
 {
-    protected $table = 'niveau';
-    protected $primaryKey = 'id_niveau';
+    protected $table = 'matiere';
+    protected $primaryKey = 'id_matiere';
 
     public function __construct()
     {
@@ -77,18 +77,23 @@ class NiveauModel extends CI_Model
         return false;
     }
 
-    public function isNiveauExist($niveau = '', $id = null)
+    public function isExist($champs = [], $id = null)
     {
-        $query = $this->db->where('niveau', $niveau);
-        if ($id) {
-            $query->where($this->primaryKey . ' <>', $id);
+        $query = $this->db;
+        $i = 0;
+        $query->where($this->primaryKey . ' <>', $id);
+        foreach ($champs as $key => $value) {
+            if ($i == 0) {
+                $query->where($key, $value);
+            } else {
+                $query->or_where($key, $value);
+            }
+            $i++;
         }
         $data = $query->get($this->table)->result();
-        if ( count( $data )) {
+        if (count($data)) {
             return true;
         }
         return false;
     }
 }
-
-

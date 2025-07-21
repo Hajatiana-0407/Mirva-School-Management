@@ -5,7 +5,7 @@ import Students from './components/Students';
 import Teachers from './components/Teachers';
 import Classes from './components/Classes';
 import Levels from './components/Levels/Levels';
-import Subjects from './components/Subjects';
+import Subjects from './components/Subjects/Subjects';
 import Schedule from './components/Schedule';
 import Attendance from './components/Attendance';
 import Exams from './components/Exams';

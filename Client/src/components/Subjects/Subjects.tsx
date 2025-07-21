@@ -1,36 +1,50 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Plus, Search, Filter, Edit, Archive, Eye } from 'lucide-react';
-import Table from './Table';
-import Modal from './Modal';
-import ConfirmDialog from './ConfirmDialog';
+import Modal from '../Modal';
+import ConfirmDialog from '../ConfirmDialog';
+import Table from '../Table';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSubjectState } from './redux/SubjectSlice';
+import useForm from '../../Hooks/useForm';
+import { subjectInitialValue, SubjectType } from '../../Utils/Types';
+import { object, string } from 'yup';
+import { AppDispatch } from '../../Redux/store';
+import { createSubject, deleteSubject, getAllSubject, updateSubject } from './redux/SubjectAsyncThunk';
+import { getAppState } from '../../Redux/AppSlice';
+import InputError from '../ui/InputError';
 
-const Subjects: React.FC = () => {
+// Validation de donnée avec yup 
+const SubjectSchema = object({
+  denomination: string().required('La denomination est obligatoire.'),
+  abbreviation: string().required('L\' abbreviation est obligatoire.'),
+  couleur: string().required('La couleur est obligatoire.'),
+});
+
+const Subjects = () => {
+  const { datas: subjects, action , error  } = useSelector(getSubjectState);
+  const { onSubmite, formErrors } = useForm<SubjectType>(SubjectSchema, subjectInitialValue);
+  const { hiddeTheModalActive } = useSelector(getAppState);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [editingSubject, setEditingSubject] = useState<any>(null);
+  const [editingSubject, setEditingSubject] = useState<SubjectType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [subjectToArchive, setSubjectToArchive] = useState<any>(null);
+  const [subjectToArchive, setSubjectToArchive] = useState<SubjectType | null>(null);
+  const dispatch: AppDispatch = useDispatch();
 
-  const subjects = [
-    { id: 1, nom: 'Mathématiques', coefficient: 4, heuresParSemaine: 4, couleur: '#3B82F6' },
-    { id: 2, nom: 'Français', coefficient: 4, heuresParSemaine: 4, couleur: '#10B981' },
-    { id: 3, nom: 'Anglais', coefficient: 3, heuresParSemaine: 3, couleur: '#F59E0B' },
-    { id: 4, nom: 'Histoire-Géographie', coefficient: 3, heuresParSemaine: 3, couleur: '#EF4444' },
-    { id: 5, nom: 'Sciences Physiques', coefficient: 3, heuresParSemaine: 2, couleur: '#8B5CF6' },
-    { id: 6, nom: 'SVT', coefficient: 2, heuresParSemaine: 2, couleur: '#06B6D4' },
-    { id: 7, nom: 'EPS', coefficient: 1, heuresParSemaine: 2, couleur: '#84CC16' },
-  ];
 
   const columns = [
-    { key: 'nom', label: 'Matière' },
-    { key: 'coefficient', label: 'Coefficient' },
-    { key: 'heuresParSemaine', label: 'Heures/semaine' },
-    { key: 'couleur', label: 'Couleur', render: (value: string) => (
-      <div className="flex items-center space-x-2">
-        <div className="w-4 h-4 rounded-full" style={{ backgroundColor: value }}></div>
-        <span>{value}</span>
-      </div>
-    ) },
+    { key: 'denomination', label: 'Matière' },
+    { key: 'abbreviation', label: 'Abbreviation' },
+    { key: 'description', label: 'Déscription' },
+    {
+      key: 'couleur', label: 'Couleur', render: (value: string) => (
+        <div className="flex items-center space-x-2">
+          <div className="w-4 h-4 rounded-full" style={{ backgroundColor: value }}></div>
+          <span>{value}</span>
+        </div>
+      )
+    },
+    { key: 'created_at', label: 'Date d\'ajout' },
   ];
 
   const handleEdit = (subject: any) => {
@@ -44,7 +58,9 @@ const Subjects: React.FC = () => {
   };
 
   const handleConfirmArchive = () => {
-    console.log('Archivage de:', subjectToArchive);
+    if( subjectToArchive ){
+      dispatch(deleteSubject( subjectToArchive?.id_matiere as number))
+    }
     setShowConfirmDialog(false);
     setSubjectToArchive(null);
   };
@@ -53,6 +69,26 @@ const Subjects: React.FC = () => {
     setShowModal(false);
     setEditingSubject(null);
   };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    onSubmite((validateData: SubjectType) => {
+      editingSubject ? dispatch(updateSubject({ subject: validateData, id: editingSubject?.id_matiere as number })) : dispatch(createSubject(validateData))
+    }, e)
+  }
+
+  // Modal
+  useEffect(() => {
+    if (showModal && hiddeTheModalActive) {
+      handleCloseModal();
+    }
+  }, [hiddeTheModalActive]);
+
+  useEffect(() => {
+    if (!subjects.length) {
+      dispatch(getAllSubject());
+    }
+  }, [dispatch]);
+
 
   const actions = [
     { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
@@ -98,6 +134,7 @@ const Subjects: React.FC = () => {
           columns={columns}
           actions={actions}
           searchTerm={searchTerm}
+          isLoading={action.isLoading as boolean}
         />
       </div>
 
@@ -107,44 +144,50 @@ const Subjects: React.FC = () => {
         onClose={handleCloseModal}
         title={editingSubject ? 'Modifier la matière' : 'Nouvelle matière'}
       >
-        <form className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nom de la matière</label>
-            <input
-              type="text"
-              defaultValue={editingSubject?.nom || ''}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <InputError message={error}/>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Coefficient</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1" >Nom de la matière</label>
               <input
-                type="number"
-                defaultValue={editingSubject?.coefficient || ''}
-                min="1"
-                max="10"
+                name='denomination'
+                type="text"
+                defaultValue={editingSubject?.denomination || ''}
+                placeholder='Ex:Mathématique'
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+              <InputError message={ formErrors?.denomination } />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Heures par semaine</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Abbreviation</label>
               <input
-                type="number"
-                defaultValue={editingSubject?.heuresParSemaine || ''}
-                min="1"
-                max="10"
+                name='abbreviation'
+                type="text"
+                defaultValue={editingSubject?.abbreviation || ''}
+                placeholder='Ex:MATH'
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+              <InputError message={ formErrors?.abbreviation } />
             </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Déscription</label>
+            <textarea
+              name='description'
+              defaultValue={editingSubject?.description}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <InputError message={ formErrors?.description } />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Couleur</label>
             <input
               type="color"
-              defaultValue={editingSubject?.couleur || '#3B82F6'}
+              name='couleur'
+              defaultValue={editingSubject?.couleur || '#80aed1'}
               className="w-full h-10 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            <InputError message={ formErrors?.couleur } />
           </div>
           <div className="flex justify-end space-x-3 pt-4">
             <button
@@ -170,7 +213,7 @@ const Subjects: React.FC = () => {
         onClose={() => setShowConfirmDialog(false)}
         onConfirm={handleConfirmArchive}
         title="Archiver la matière"
-        message={`Êtes-vous sûr de vouloir archiver la matière ${subjectToArchive?.nom} ?`}
+        message={`Êtes-vous sûr de vouloir archiver la matière ${subjectToArchive?.denomination} ?`}
       />
     </div>
   );

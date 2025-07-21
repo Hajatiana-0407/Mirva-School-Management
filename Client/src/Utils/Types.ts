@@ -4,7 +4,7 @@ export type ActionType = {
     isDeleting?: boolean;
     isUpdating?: boolean;
 }
-export const ActionIntialValue: ActionType  = {
+export const ActionIntialValue: ActionType = {
     isLoading: false,
     isDeleting: false,
     isUpdating: false,
@@ -12,10 +12,10 @@ export const ActionIntialValue: ActionType  = {
 
 // APP
 export type AppStateType = {
-    hiddeTheModalActive: boolean  
+    hiddeTheModalActive: boolean
 }
 export const AppInitialValue: AppStateType = {
-    hiddeTheModalActive: false 
+    hiddeTheModalActive: false
 }
 
 // BACK'S OBJECT RETURN 
@@ -41,5 +41,23 @@ export const levelInitial: levelType = {
     niveau: '',
     cycle: '',
     description: '',
+}
+
+// Subjects ( MATIERE )
+export type SubjectType = {
+    id_matiere?: number;
+    denomination: string;
+    abbreviation: string;
+    description?: string;
+    couleur: string;
+    created_at: string
+};
+export const subjectInitialValue: SubjectType = {
+    id_matiere: undefined,
+    denomination: '',
+    abbreviation: '',
+    description: '',
+    couleur: '',
+    created_at: ''
 }
 

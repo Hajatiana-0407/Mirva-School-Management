@@ -57,9 +57,9 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false  }: 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="border-b">
+            <tr className="border-b w-max">
               {columns.map((column) => (
-                <th key={column.key} className="text-left py-3 px-4 font-medium text-gray-700">
+                <th key={column.key} className="text-left py-3 px-4 font-medium text-gray-700 text-nowrap ">
                   {column.label}
                 </th>
               ))}
@@ -77,14 +77,14 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false  }: 
               </tr>
               :
               currentItems.map((item, index) => (
-                <tr key={index} className="border-b hover:bg-gray-50">
+                <tr key={index} className="border-b hover:bg-gray-50 w-max">
                   {columns.map((column) => (
-                    <td key={column.key} className="py-3 px-4 text-gray-900">
+                    <td key={column.key} className="py-3 px-4 text-gray-900 w-max text-nowrap">
                       {column.render ? column.render(item[column.key], item) : item[column.key]}
                     </td>
                   ))}
                   {actions && actions.length > 0 && (
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 w-max ">
                       <div className="flex justify-center space-x-2">
                         {actions.map((action, actionIndex) => {
                           const Icon = action.icon;
