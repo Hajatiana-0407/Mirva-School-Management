@@ -61,3 +61,16 @@ export const subjectInitialValue: SubjectType = {
     created_at: ''
 }
 
+// Classes ( CLASSSE )
+export type ClasseType = {
+    id_classe?: number;
+    denomination: string;
+    niveau_id_niveau: number
+}
+
+export const classeInitialState: ClasseType = {
+    id_classe: undefined,
+    denomination: '',
+    niveau_id_niveau: 0
+}
+

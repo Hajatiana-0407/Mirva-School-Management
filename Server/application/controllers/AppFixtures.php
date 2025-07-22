@@ -75,7 +75,7 @@ class AppFixtures extends CI_Controller
             foreach ($faker->randomElements($niveaux, rand(1, 2)) as $niveau) {
                 $this->model->insert('matiere_niveau', [
                     'matiere_id_matiere' => $matiere,
-                    'classe_groupe_id_classe_groupe' => $niveau,
+                    'niveau_id_niveau' => $niveau,
                     'coefficient' => $faker->numberBetween(1, 5),
                     'heure_semaine' => $faker->numberBetween(1, 10)
                 ]);
@@ -86,7 +86,7 @@ class AppFixtures extends CI_Controller
         for ($i = 0; $i < 4; $i++) {
             $this->model->insert('classe', [
                 'denomination' => 'Classe ' . $faker->word,
-                'classe_groupe_id_classe_groupe' => $faker->randomElement($niveaux),
+                'niveau_id_niveau' => $faker->randomElement($niveaux),
                 'created_at' => date('Y-m-d H:i:s')
             ]);
         }
@@ -97,7 +97,7 @@ class AppFixtures extends CI_Controller
         foreach ($niveaux as $niveau) {
             $this->model->insert('droit_inscription', [
                 'montant' => $faker->numberBetween(50000, 100000),
-                'classe_groupe_id_classe_groupe' => $niveau,
+                'niveau_id_niveau' => $niveau,
                 'created_at' => date('Y-m-d H:i:s')
             ]);
         }
@@ -106,7 +106,7 @@ class AppFixtures extends CI_Controller
         foreach ($niveaux as $niveau) {
             $this->model->insert('ecolage', [
                 'montant' => $faker->numberBetween(25000, 80000),
-                'classe_groupe_id_classe_groupe' => $niveau,
+                'niveau_id_niveau' => $niveau,
                 'created_at' => date('Y-m-d H:i:s')
             ]);
         }

@@ -25,12 +25,13 @@ const Levels = () => {
   const dispatch: AppDispatch = useDispatch();
   const { datas, action, error } = useSelector(getLevelState);
   const { onSubmite, formErrors } = useForm<levelType>(LevelSchema, { niveau: '', cycle: '', description: '' });
+  const { hiddeTheModalActive } = useSelector(getAppState);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingLevel, setEditingLevel] = useState<levelType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [levelToDelete, setLevelToDelete] = useState<levelType | null>(null);
-  const { hiddeTheModalActive } = useSelector(getAppState);
   const [isActiveAutoGenationClasse, setIsActiveAutoGenationClasse] = useState(false)
 
   // fonctions

@@ -55,6 +55,9 @@ $route['translate_uri_dashes'] = FALSE;
 
 // ******************* ROUTE CLASSE ********************** //
 $route['api/admin/classe'] = 'ClasseController';
+$route['api/admin/classe/update'] = 'ClasseController/update';
+$route['api/admin/classe/create'] = 'ClasseController/create';
+$route['api/admin/classe/delete'] = 'ClasseController/delete';
 
 // ******************* ROUTE NIVEAU ********************** //
 $route['api/admin/niveau'] = 'NiveauController';

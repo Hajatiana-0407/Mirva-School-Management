@@ -1,30 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Plus, Search, Filter, Edit, Archive, Eye } from 'lucide-react';
-import Table from './Table';
-import Modal from './Modal';
-import ConfirmDialog from './ConfirmDialog';
+import Table from '../Table';
+import Modal from '../Modal';
+import ConfirmDialog from '../ConfirmDialog';
+import { number, object, string } from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../Redux/store';
+import useForm from '../../Hooks/useForm';
+import { classeInitialState, ClasseType, levelType } from '../../Utils/Types';
+import { createClasse, deleteClasse, getAllClasse, updateClasse } from './redux/ClasseAsyncThunk';
+import { getAppState } from '../../Redux/AppSlice';
+import { getClasseState } from './redux/ClasseSlice';
+import { getLevelState } from '../Levels/redux/LevelSlice';
+import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
+import InputError from '../ui/InputError';
+
+// Validation de donnée avec yup 
+const LevelSchema = object({
+  denomination: string().required('La denomination est obligatoire.'),
+  niveau_id_niveau: number().min(1, "'Selectionner un niveau.'").required('Selectionner un niveau.'),
+})
 
 const Classes: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const { datas: classes, action, error } = useSelector(getClasseState);
+  const { onSubmite, formErrors } = useForm<ClasseType>(LevelSchema, classeInitialState);
+  const { hiddeTheModalActive } = useSelector(getAppState);
+  const { datas: niveaux } = useSelector(getLevelState);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [editingClass, setEditingClass] = useState<any>(null);
+  const [editingClass, setEditingClass] = useState<ClasseType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [classToArchive, setClassToArchive] = useState<any>(null);
+  const [classToArchive, setClassToArchive] = useState<ClasseType | null>(null);
 
-  const classes = [
-    { id: 1, nom: '6ème A', niveau: '6ème', effectif: 28, enseignant: 'Mme Dupont', salle: 'A101' },
-    { id: 2, nom: '5ème B', niveau: '5ème', effectif: 25, enseignant: 'M. Leroy', salle: 'B205' },
-    { id: 3, nom: '4ème C', niveau: '4ème', effectif: 30, enseignant: 'Mme Garcia', salle: 'C301' },
-    { id: 4, nom: '3ème A', niveau: '3ème', effectif: 22, enseignant: 'M. Rousseau', salle: 'A102' },
-  ];
 
-  const columns = [
-    { key: 'nom', label: 'Nom de la classe' },
-    { key: 'niveau', label: 'Niveau' },
-    { key: 'effectif', label: 'Effectif' },
-    { key: 'enseignant', label: 'Enseignant principal' },
-    { key: 'salle', label: 'Salle' },
-  ];
 
   const handleEdit = (classItem: any) => {
     setEditingClass(classItem);
@@ -37,7 +46,9 @@ const Classes: React.FC = () => {
   };
 
   const handleConfirmArchive = () => {
-    console.log('Archivage de:', classToArchive);
+    if (classToArchive) {
+      dispatch(deleteClasse(classToArchive.id_classe as number))
+    }
     setShowConfirmDialog(false);
     setClassToArchive(null);
   };
@@ -46,6 +57,38 @@ const Classes: React.FC = () => {
     setShowModal(false);
     setEditingClass(null);
   };
+
+
+  // Modale 
+  useEffect(() => {
+    if (showModal && hiddeTheModalActive) {
+      handleCloseModal();
+    }
+  }, [hiddeTheModalActive]);
+
+  useEffect(() => {
+    if (!classes.length) {
+      dispatch(getAllClasse());
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!niveaux.length) {
+      dispatch(getAllLevel());
+    }
+  }, [dispatch]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    onSubmite((validateData: ClasseType) => {
+      editingClass ? dispatch(updateClasse({ Classe: validateData, id: editingClass?.id_classe as number })) : dispatch(createClasse(validateData))
+    }, e)
+  }
+
+  const columns = [
+    { key: 'denomination', label: 'Nom de la classe' },
+    { key: 'niveau', label: 'Niveau' },
+    // { key: 'effectif', label: 'Effectif' },
+  ];
 
   const actions = [
     { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
@@ -78,6 +121,7 @@ const Classes: React.FC = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
+
             </div>
             <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
               <Filter className="w-4 h-4" />
@@ -91,6 +135,7 @@ const Classes: React.FC = () => {
           columns={columns}
           actions={actions}
           searchTerm={searchTerm}
+          isLoading={action.isLoading as boolean}
         />
       </div>
 
@@ -100,54 +145,35 @@ const Classes: React.FC = () => {
         onClose={handleCloseModal}
         title={editingClass ? 'Modifier la classe' : 'Nouvelle classe'}
       >
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <InputError message={error} />
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Nom de la classe</label>
             <input
               type="text"
-              defaultValue={editingClass?.nom || ''}
+              name='denomination'
+              defaultValue={editingClass?.denomination || ''}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            <InputError message={formErrors?.denomination} />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Niveau</label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="">Sélectionner un niveau</option>
-              <option value="6ème">6ème</option>
-              <option value="5ème">5ème</option>
-              <option value="4ème">4ème</option>
-              <option value="3ème">3ème</option>
-              <option value="2nde">2nde</option>
-              <option value="1ère">1ère</option>
-              <option value="Terminale">Terminale</option>
+            <select name='niveau_id_niveau' className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              {!editingClass && <option value="0">Sélectionner un niveau</option>}
+
+              {niveaux.map((niveau: levelType, key: number) => {
+                return editingClass && editingClass.niveau_id_niveau === niveau.id_niveau
+                  ? <option key={key} value={niveau.id_niveau}>{niveau.niveau}</option>
+                  : editingClass ? "" : <option key={key} value={niveau.id_niveau}>{niveau.niveau}</option>
+              })}
+              {niveaux.map((niveau: levelType, key: number) => {
+                return editingClass && editingClass.niveau_id_niveau !== niveau.id_niveau
+                  ? <option key={key} value={niveau.id_niveau}>{niveau.niveau}</option>
+                  : ""
+              })}
             </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Effectif maximum</label>
-            <input
-              type="number"
-              defaultValue={editingClass?.effectif || ''}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Enseignant principal</label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="">Sélectionner un enseignant</option>
-              <option value="Mme Dupont">Mme Dupont</option>
-              <option value="M. Leroy">M. Leroy</option>
-              <option value="Mme Garcia">Mme Garcia</option>
-              <option value="M. Rousseau">M. Rousseau</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Salle</label>
-            <input
-              type="text"
-              defaultValue={editingClass?.salle || ''}
-              placeholder="ex: A101"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <InputError message={formErrors?.niveau_id_niveau} />
           </div>
           <div className="flex justify-end space-x-3 pt-4">
             <button
@@ -173,7 +199,7 @@ const Classes: React.FC = () => {
         onClose={() => setShowConfirmDialog(false)}
         onConfirm={handleConfirmArchive}
         title="Archiver la classe"
-        message={`Êtes-vous sûr de vouloir archiver la classe ${classToArchive?.nom} ?`}
+        message={`Êtes-vous sûr de vouloir archiver la classe ${classToArchive?.denomination} ?`}
       />
     </div>
   );

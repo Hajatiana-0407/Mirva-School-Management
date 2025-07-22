@@ -20,6 +20,15 @@ class ClasseModel extends CI_Model
             ->get()
             ->result_array();
     }
+    public function findAllClasseData()
+    {
+        return $this->db->select('*')
+            ->from($this->table)
+            ->join('niveau', 'niveau.id_niveau = ' . $this->table . '.niveau_id_niveau', 'left')
+            ->order_by($this->primaryKey, 'DESC')
+            ->get()
+            ->result_array();
+    }
 
     public function findOneById($id)
     {
@@ -39,8 +48,11 @@ class ClasseModel extends CI_Model
             $inserted_id = $this->db->insert_id();
 
             return $this->db
-                ->get_where($this->table, [$this->primaryKey  => $inserted_id])
-                ->row();
+                ->select('*')
+                ->from($this->table)
+                ->where($this->primaryKey , $inserted_id )
+                ->join('niveau', 'niveau.id_niveau = ' . $this->table . '.niveau_id_niveau', 'left')
+                ->get()->row();
         }
 
         return false;
@@ -52,9 +64,12 @@ class ClasseModel extends CI_Model
         $updated =  $this->db->where($this->primaryKey, $id)
             ->update($this->table, $data);
         if ($updated) {
-            return $this->db->where($this->primaryKey, $id)
-                ->get($this->table)
-                ->row();
+            return $this->db
+                ->select('*')
+                ->from($this->table)
+                ->where($this->primaryKey , $id )
+                ->join('niveau', 'niveau.id_niveau = ' . $this->table . '.niveau_id_niveau', 'left')
+                ->get()->row();
         }
         return $updated;
     }
@@ -97,7 +112,8 @@ class ClasseModel extends CI_Model
         return false;
     }
 
-    public function insertBatch( $data = [ ]){
-        return $this->db->insert_batch( $this->table , $data ) ; 
+    public function insertBatch($data = [])
+    {
+        return $this->db->insert_batch($this->table, $data);
     }
 }

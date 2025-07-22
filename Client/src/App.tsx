@@ -3,7 +3,7 @@ import Layout from './components/Layout/Layout';
 import Dashboard from './components/Dashboard';
 import Students from './components/Students';
 import Teachers from './components/Teachers';
-import Classes from './components/Classes';
+import Classes from './components/Classes/Classes';
 import Levels from './components/Levels/Levels';
 import Subjects from './components/Subjects/Subjects';
 import Schedule from './components/Schedule';
