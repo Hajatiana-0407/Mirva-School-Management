@@ -74,3 +74,10 @@ export const classeInitialState: ClasseType = {
     niveau_id_niveau: 0
 }
 
+// Level / Subject 
+export type LevelSubjectType = {
+    matiere_id_matiere: number;
+    niveau_id_niveau: number ; 
+    coefficient: number 
+}
+

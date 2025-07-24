@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ApiReturnInitial, ApiReturnType, levelType } from "../../../Utils/Types";
+import { ApiReturnInitial, ApiReturnType, LevelSubjectType, levelType } from "../../../Utils/Types";
 import api from "../../../Utils/api";
 import { setHiddeModalValue } from "../../../Redux/AppSlice";
 
@@ -69,4 +69,32 @@ export const deleteLevel = createAsyncThunk('niveau/suppression', async (id_nive
     }
     return data;
 })
+
+
+// LEVEL & SUBJECT 
+export const getLelvelSubjectByIdNiveau = createAsyncThunk('niveau/matiere', async (id_niveau: number): Promise<LevelSubjectType[]> => {
+    let datas: LevelSubjectType[] = [];
+    if (id_niveau) {
+        await api.get(`admin/niveau-matiere/${id_niveau}`).then(response => {
+            datas = response.data;
+        }).catch(error => {
+            console.error('Erreur lors de la récupération des données:', error.getMessage());
+        });
+    }
+    return datas;
+})
+
+
+export const registerSubjectLevelCoef = createAsyncThunk('niveau/matiere/coef', async (datas: any) => {
+    await api.post(`admin/niveau-matiere/enrigistrer` , 
+        { 
+            ...datas
+        }
+    ).then(response => {
+        datas = response.data;
+    }).catch(error => {
+        console.error('Erreur lors de la récupération des données:', error.getMessage());
+    });
+})
+
 

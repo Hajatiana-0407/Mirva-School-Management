@@ -52,24 +52,26 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false  }: 
     return colors[color as keyof typeof colors] || 'text-gray-600 hover:text-gray-800';
   };
 
+  
+
   return (
     <div className="space-y-4">
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="border-b w-max">
+            <tr className="border-b w-max ">
               {columns.map((column) => (
-                <th key={column.key} className="text-left py-3 px-4 font-medium text-gray-700 text-nowrap ">
+                <th key={column.key} className="text-left py-3 px-4 font-semibold text-gray-700 text-nowrap ">
                   {column.label}
                 </th>
               ))}
               {actions && actions.length > 0 && (
-                <th className="text-center py-3 px-4 font-medium text-gray-700">Actions</th>
+                <th className="text-center py-3 px-4 font-semibold text-gray-700">Actions</th>
               )}
             </tr>
           </thead>
           <tbody>
-            {isLoading ?
+            {(isLoading && !currentItems.length  ) ?
               <tr >
                 <td colSpan={columns.length + 1} className=''>
                   <Loading />

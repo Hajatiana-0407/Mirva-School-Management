@@ -13,6 +13,7 @@ import { object, string } from 'yup';
 import useForm from '../../Hooks/useForm';
 import InputError from '../ui/InputError';
 import { getAppState } from '../../Redux/AppSlice';
+import LevelSubject from './LevelSubject';
 
 // Validation de donnée avec yup 
 const LevelSchema = object({
@@ -26,7 +27,7 @@ const Levels = () => {
   const { datas, action, error } = useSelector(getLevelState);
   const { onSubmite, formErrors } = useForm<levelType>(LevelSchema, { niveau: '', cycle: '', description: '' });
   const { hiddeTheModalActive } = useSelector(getAppState);
-
+  const [activeTab, setActiveTab] = useState('listeLevel');
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingLevel, setEditingLevel] = useState<levelType | null>(null);
@@ -56,7 +57,7 @@ const Levels = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setEditingLevel(null);
-    setIsActiveAutoGenationClasse(false) ; 
+    setIsActiveAutoGenationClasse(false);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -73,9 +74,7 @@ const Levels = () => {
   }, [hiddeTheModalActive]);
 
   useEffect(() => {
-    if (!datas.length) {
-      dispatch(getAllLevel());
-    }
+    dispatch(getAllLevel());
   }, [dispatch]);
 
   // Tableau //
@@ -83,6 +82,8 @@ const Levels = () => {
     { key: 'niveau', label: 'Niveau' },
     { key: 'cycle', label: 'Cycle' },
     { key: 'description', label: 'Description' },
+    { key: 'total_classe', label: 'Nombre de classe', render: (value: number) => <div className={value == 0 ? "text-gray-300" : ''}>{value > 0 ? value : 'Aucune'} </div> },
+    { key: 'total_matiere', label: 'Nombre de matière', render: (value: number) => <div className={value == 0 ? "text-gray-300" : ''}>{value > 0 ? value : 'Aucune'} </div> },
   ];
 
   const actions = [
@@ -104,34 +105,64 @@ const Levels = () => {
         </button>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-sm border">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Rechercher un niveau..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-            <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-              <Filter className="w-4 h-4" />
-              <span>Filtres</span>
-            </button>
-          </div>
-        </div>
-
-        <Table
-          data={datas}
-          columns={columns}
-          actions={actions}
-          searchTerm={searchTerm}
-          isLoading={action.isLoading as boolean}
-        />
+      {/* Onglets */}
+      <div className="border-b">
+        <nav className="flex space-x-8">
+          <button
+            onClick={() => setActiveTab('listeLevel')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'listeLevel'
+              ? 'border-blue-500 text-blue-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+          >
+            Listes des niveaux
+          </button>
+          <button
+            onClick={() => setActiveTab('levelSbject')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'levelSbject'
+              ? 'border-blue-500 text-blue-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+          >
+            Niveau & Matiere
+          </button>
+        </nav>
       </div>
+
+      {activeTab === "listeLevel" &&
+        <div className="bg-white p-6 rounded-lg shadow-sm border">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-4">
+              <div className="relative">
+                <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Rechercher un niveau..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                <Filter className="w-4 h-4" />
+                <span>Filtres</span>
+              </button>
+            </div>
+          </div>
+
+          <Table
+            data={datas}
+            columns={columns}
+            actions={actions}
+            searchTerm={searchTerm}
+            isLoading={action.isLoading as boolean}
+          />
+        </div>
+      }
+
+      {activeTab === 'levelSbject' &&  <LevelSubject />
+      }
+
 
       {/* Modal pour ajouter/modifier un niveau */}
       <Modal
@@ -182,7 +213,7 @@ const Levels = () => {
             </div>
           }
           {
-            (isActiveAutoGenationClasse && !editingLevel ) &&
+            (isActiveAutoGenationClasse && !editingLevel) &&
             <>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Nombre de classe</label>
@@ -219,7 +250,7 @@ const Levels = () => {
       {/* Dialog de confirmation */}
       <ConfirmDialog
         isOpen={showConfirmDialog}
-        onClose={() =>{ setShowConfirmDialog(false) }}
+        onClose={() => { setShowConfirmDialog(false) }}
         onConfirm={handleConfirmDelete}
         title="Suppression du niveau"
         message={`Êtes-vous sûr de vouloir archiver le niveau ${levelToDelete?.niveau} ?`}

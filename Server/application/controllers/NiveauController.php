@@ -8,11 +8,12 @@ class NiveauController extends CI_Controller
         parent::__construct();
         $this->load->model('NiveauModel');
         $this->load->model('ClasseModel');
+        $this->load->model('MatiereNiveauModel');
     }
 
     public function index()
     {
-        $data = $this->NiveauModel->findAll();
+        $data = $this->NiveauModel->findAllLevelData();
         echo json_encode($data);
     }
 
@@ -24,8 +25,6 @@ class NiveauController extends CI_Controller
             'description' => $this->input->post('description'),
         ];
 
-
-
         if ($this->NiveauModel->isNiveauExist($data['niveau'])) {
             echo json_encode(['error' => true, 'message' => 'Le niveau existe déjà.']);
         } else {
@@ -35,16 +34,19 @@ class NiveauController extends CI_Controller
                 if ($this->input->post('classe')) {
                     $nbr_classe = (int)$this->input->post('classe');
                     if ($nbr_classe > 0 && $nbr_classe <= 15) {
-                        $classes = []; 
-                        for ($i =( $nbr_classe - 1) ; $i >= 0  ; $i--) {
+                        $classes = [];
+                        for ($i = ($nbr_classe - 1); $i >= 0; $i--) {
                             $alphabet = range('A', 'Z');
                             $classes[]  = [
                                 'denomination' => ucfirst($data->niveau) . " " . $alphabet[$i],
-                                'niveau_id_niveau' => $data->id_niveau , 
+                                'niveau_id_niveau' => $data->id_niveau,
                             ];
                         }
 
-                        $this->ClasseModel->insertBatch( $classes); 
+                        $isClasseAdd =  $this->ClasseModel->insertBatch($classes);
+                        if ($isClasseAdd) {
+                            $data->total_classe = $nbr_classe;
+                        }
                     }
                 }
                 echo json_encode(['error' => false, 'data' => $data]);
@@ -52,6 +54,16 @@ class NiveauController extends CI_Controller
                 echo json_encode(['error' => true, 'message' => 'Une erreur c\'est produite.']);
             }
         }
+    }
+
+
+    public function niveauMatiere($id = 0)
+    {
+        $datas = [];
+        if ($id > 0) {
+            $datas =  $this->MatiereNiveauModel->getLelvelSubjectByIdNiveau($id);
+        }
+        echo json_encode($datas);
     }
 
     public function update()
@@ -98,6 +110,47 @@ class NiveauController extends CI_Controller
             }
         } else {
             echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+        }
+    }
+
+    public function registerCoef()
+    {
+        $toDeleteIdMatiere  = [];
+        if (isset($_POST['deletes']) && $_POST['deletes'] !== '') {
+            $deletesString = trim(strip_tags($_POST['deletes']));
+            $toDeleteIdMatiere = explode(',', $deletesString);
+        }
+
+        $id_niveau = '';
+        if (isset($_POST['id_niveau']) && $_POST['id_niveau'] !== '') {
+            $id_niveau = trim(strip_tags($_POST['id_niveau']));
+        }
+
+        //* Suppression 
+        if (count($toDeleteIdMatiere) && $id_niveau !== '') {
+            for ($i = 0; $i < count($toDeleteIdMatiere); $i++) {
+                $this->MatiereNiveauModel->deleteByLevelAndSubject($id_niveau, $toDeleteIdMatiere[$i]);
+            }
+        }
+
+        // Modification 
+        $toUpdateIdMatiere = [];
+        if (isset($_POST['update']) && count($_POST['update']) > 0) {
+            $toUpdateIdMatiere = $_POST['update'];
+        }
+        foreach ($toUpdateIdMatiere as $key => $value) {
+            $data = ["coefficient" => $value];
+            $this->MatiereNiveauModel->update($id_niveau, $key, $data);
+        }
+
+        // Modification 
+        $toAddIdMatiere = [];
+        if (isset($_POST['add']) && count($_POST['add']) > 0) {
+            $toAddIdMatiere = $_POST['add'];
+        }
+        foreach ($toAddIdMatiere as $key => $value) {
+            $data = ["coefficient" => $value , "matiere_id_matiere" => $key , "niveau_id_niveau" => $id_niveau ];
+            $this->MatiereNiveauModel->insert( $data );
         }
     }
 }
