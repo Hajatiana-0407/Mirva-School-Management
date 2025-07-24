@@ -58,13 +58,65 @@ class AppFixtures extends CI_Controller
         }
 
         // 3. matiere
-        for ($i = 0; $i < 5; $i++) {
+        $matieresListe = [
+            [
+                'denomination' => 'Mathématiques',
+                'abbreviation' => 'MATH',
+                'description' => 'Étude des nombres, des formes, des structures et des relations.'
+            ],
+            [
+                'denomination' => 'Physique',
+                'abbreviation' => 'PHYS',
+                'description' => 'Étude des phénomènes naturels, des lois de la matière et de l’énergie.'
+            ],
+            [
+                'denomination' => 'Chimie',
+                'abbreviation' => 'CHIM',
+                'description' => 'Science qui étudie la composition, les propriétés et les transformations de la matière.'
+            ],
+            [
+                'denomination' => 'Biologie',
+                'abbreviation' => 'BIO',
+                'description' => 'Science du vivant, étude des êtres vivants et de leur fonctionnement.'
+            ],
+            [
+                'denomination' => 'Informatique',
+                'abbreviation' => 'INFO',
+                'description' => 'Science du traitement automatique de l’information par des machines.'
+            ],
+            [
+                'denomination' => 'Histoire',
+                'abbreviation' => 'HIST',
+                'description' => 'Étude des événements du passé et de leur impact sur le présent.'
+            ],
+            [
+                'denomination' => 'Géographie',
+                'abbreviation' => 'GEO',
+                'description' => 'Étude des territoires, des populations et de leur interaction avec l’environnement.'
+            ],
+            [
+                'denomination' => 'Philosophie',
+                'abbreviation' => 'PHILO',
+                'description' => 'Réflexion critique sur les concepts fondamentaux comme la vérité, la justice, la liberté.'
+            ],
+            [
+                'denomination' => 'Français',
+                'abbreviation' => 'FR',
+                'description' => 'Étude de la langue française, sa grammaire, son orthographe et sa littérature.'
+            ],
+            [
+                'denomination' => 'Anglais',
+                'abbreviation' => 'ANG',
+                'description' => 'Apprentissage de la langue anglaise, écrite et orale.'
+            ]
+        ];
+
+        foreach ($matieresListe as  $mat) {
             $this->model->insert('matiere', [
-                'denomination' => $faker->word,
-                'abbreviation' => strtoupper($faker->lexify('???')),
-                'description' => $faker->sentence(3),
+                'denomination' => $mat['denomination'],
+                'abbreviation' => strtoupper($mat['abbreviation']),
+                'description' => $mat['description'],
                 'couleur' => $faker->hexColor,
-                'created_at' => date('Y-m-d H:i:s')
             ]);
         }
 

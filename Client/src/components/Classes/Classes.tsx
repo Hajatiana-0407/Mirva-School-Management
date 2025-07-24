@@ -67,15 +67,11 @@ const Classes: React.FC = () => {
   }, [hiddeTheModalActive]);
 
   useEffect(() => {
-    if (!classes.length) {
-      dispatch(getAllClasse());
-    }
+    dispatch(getAllClasse());
   }, [dispatch]);
 
   useEffect(() => {
-    if (!niveaux.length) {
-      dispatch(getAllLevel());
-    }
+    dispatch(getAllLevel());
   }, [dispatch]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

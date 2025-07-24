@@ -65,6 +65,9 @@ $route['api/admin/niveau/update'] = 'NiveauController/update';
 $route['api/admin/niveau/create'] = 'NiveauController/create';
 $route['api/admin/niveau/delete'] = 'NiveauController/delete';
 
+$route['api/admin/niveau-matiere/(:num)'] = 'NiveauController/niveauMatiere/$1';
+$route['api/admin/niveau-matiere/enrigistrer'] = 'NiveauController/registerCoef';
+
 // ******************* ROUTE MATIERE ********************** //
 $route['api/admin/matiere'] = 'MatiereController';
 $route['api/admin/matiere/update'] = 'MatiereController/update';

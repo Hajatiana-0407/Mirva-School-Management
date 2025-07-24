@@ -20,14 +20,28 @@ class NiveauModel extends CI_Model
             ->get()
             ->result_array();
     }
+    public function findAllLevelData()
+    {
+        return $this->db->select($this->table . '.* , COUNT(classe.id_classe) as total_classe ,  COUNT(matiere_niveau.niveau_id_niveau) as total_matiere')
+            ->from($this->table)
+            ->join('classe', 'classe.niveau_id_niveau = ' . $this->table . '.' . $this->primaryKey, 'left')
+            ->join('matiere_niveau', 'matiere_niveau.niveau_id_niveau = ' . $this->table . '.' . $this->primaryKey, 'left')
+            ->order_by($this->primaryKey, 'DESC')
+            ->group_by($this->table . '.' . $this->primaryKey)
+            ->get()
+            ->result_array();
+    }
 
     public function findOneById($id)
     {
-        return $this->db->select('*')
+        return $this->db->select($this->table . '.* , COUNT(classe.id_classe) as total_classe ,  COUNT(matiere_niveau.niveau_id_niveau) as total_matiere')
             ->from($this->table)
+            ->join('classe', 'classe.niveau_id_niveau = ' . $this->table . '.' . $this->primaryKey, 'left')
+            ->join('matiere_niveau', 'matiere_niveau.niveau_id_niveau = ' . $this->table . '.' . $this->primaryKey, 'left')
             ->where($this->primaryKey, $id)
+            ->group_by($this->table . '.' . $this->primaryKey)
             ->get()
-            ->row_array();
+            ->row();
     }
 
     // ======= CREATE =======
@@ -38,9 +52,7 @@ class NiveauModel extends CI_Model
         if ($inserted) {
             $inserted_id = $this->db->insert_id();
 
-            return $this->db
-                ->get_where($this->table, [$this->primaryKey  => $inserted_id])
-                ->row();
+            return $this->findOneById($inserted_id);
         }
 
         return false;
@@ -52,9 +64,7 @@ class NiveauModel extends CI_Model
         $updated =  $this->db->where($this->primaryKey, $id)
             ->update($this->table, $data);
         if ($updated) {
-            return $this->db->where($this->primaryKey, $id)
-                ->get($this->table)
-                ->row();
+            return  $this->findOneById($id);
         }
         return $updated;
     }
@@ -84,11 +94,10 @@ class NiveauModel extends CI_Model
             $query->where($this->primaryKey . ' <>', $id);
         }
         $data = $query->get($this->table)->result();
-        if ( count( $data )) {
+        if (count($data)) {
             return true;
         }
         return false;
     }
+
 }
-
-
