@@ -76,24 +76,4 @@ class MatiereModel extends CI_Model
         }
         return false;
     }
-
-    public function isExist($champs = [], $id = null)
-    {
-        $query = $this->db;
-        $i = 0;
-        $query->where($this->primaryKey . ' <>', $id);
-        foreach ($champs as $key => $value) {
-            if ($i == 0) {
-                $query->where($key, $value);
-            } else {
-                $query->or_where($key, $value);
-            }
-            $i++;
-        }
-        $data = $query->get($this->table)->result();
-        if (count($data)) {
-            return true;
-        }
-        return false;
-    }
 }

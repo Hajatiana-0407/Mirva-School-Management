@@ -74,4 +74,27 @@ class CI_Model {
 		return get_instance()->$key;
 	}
 
+	/**
+	 * Verification de doublan
+	 *
+	 * @param array $champs
+	 * @param [type] $id
+	 * @return boolean
+	 */
+	public function isExist($champs = [], $id = null)
+    {
+        $query = $this->db;
+        $query->select($this->primaryKey)->from($this->table)->where($this->primaryKey . ' <>', $id);
+        $query->group_start();
+        foreach ($champs as $key => $value) {
+            $query->or_where($key, $value);
+        }
+        $query->group_end();
+        $data = $query->get()->result();
+        if (count($data)) {
+            return true;
+        }
+        return false;
+    }
+
 }
