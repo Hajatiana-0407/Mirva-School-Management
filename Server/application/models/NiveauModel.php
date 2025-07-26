@@ -22,19 +22,30 @@ class NiveauModel extends CI_Model
     }
     public function findAllLevelData()
     {
-        return $this->db->select($this->table . '.* , COUNT(classe.id_classe) as total_classe ,  COUNT(matiere_niveau.niveau_id_niveau) as total_matiere')
+        $niveaux =  $this->db->select($this->table . '.* , COUNT(c.id_classe) as total_classe ,  COUNT(mn.niveau_id_niveau) as total_matiere')
             ->from($this->table)
-            ->join('classe', 'classe.niveau_id_niveau = ' . $this->table . '.' . $this->primaryKey, 'left')
-            ->join('matiere_niveau', 'matiere_niveau.niveau_id_niveau = ' . $this->table . '.' . $this->primaryKey, 'left')
+            ->join('classe c', 'c.niveau_id_niveau = ' . $this->table . '.' . $this->primaryKey, 'left')
+            ->join('matiere_niveau mn', 'mn.niveau_id_niveau = ' . $this->table . '.' . $this->primaryKey, 'left')
             ->order_by($this->primaryKey, 'DESC')
             ->group_by($this->table . '.' . $this->primaryKey)
             ->get()
-            ->result_array();
+            ->result();
+
+        foreach ($niveaux as  &$niveau) {
+            $niveau->matiere['listes'] = $this->db->select('mn.matiere_id_matiere , mn.coefficient ,   m.*')
+                ->from('matiere_niveau mn')
+                ->join('matiere m', 'm.id_matiere = mn.matiere_id_matiere', 'inner')
+                ->where('mn.niveau_id_niveau', $niveau->id_niveau)
+                ->group_by('m.id_matiere')
+                ->get()->result();
+            $niveau->matiere['id_niveau'] = $niveau->id_niveau;
+        }
+        return $niveaux;
     }
 
     public function findOneById($id)
     {
-        return $this->db->select($this->table . '.* , COUNT(classe.id_classe) as total_classe ,  COUNT(matiere_niveau.niveau_id_niveau) as total_matiere')
+        $niveau =  $this->db->select($this->table . '.* , COUNT(classe.id_classe) as total_classe  ,  COUNT(matiere_niveau.niveau_id_niveau) as total_matiere')
             ->from($this->table)
             ->join('classe', 'classe.niveau_id_niveau = ' . $this->table . '.' . $this->primaryKey, 'left')
             ->join('matiere_niveau', 'matiere_niveau.niveau_id_niveau = ' . $this->table . '.' . $this->primaryKey, 'left')
@@ -42,6 +53,15 @@ class NiveauModel extends CI_Model
             ->group_by($this->table . '.' . $this->primaryKey)
             ->get()
             ->row();
+
+        $niveau->matiere['listes'] = $this->db->select('mn.matiere_id_matiere , mn.coefficient , ,  m.*')
+            ->from('matiere_niveau mn')
+            ->join('matiere m', 'm.id_matiere = mn.matiere_id_matiere', 'inner')
+            ->where('mn.niveau_id_niveau', $niveau->id_niveau)
+            ->group_by('m.id_matiere')
+            ->get()->result();
+        $niveau->matiere['id_niveau'] = $niveau->id_niveau;
+        return $niveau;
     }
 
     // ======= CREATE =======
@@ -83,19 +103,6 @@ class NiveauModel extends CI_Model
             if ($deleted) {
                 return $id;
             }
-        }
-        return false;
-    }
-
-    public function isNiveauExist($niveau = '', $id = null)
-    {
-        $query = $this->db->where('niveau', $niveau);
-        if ($id) {
-            $query->where($this->primaryKey . ' <>', $id);
-        }
-        $data = $query->get($this->table)->result();
-        if (count($data)) {
-            return true;
         }
         return false;
     }
