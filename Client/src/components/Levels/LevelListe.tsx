@@ -28,7 +28,7 @@ const LevelListe = ({ handleEdit, setActiveTab, setIdLevelToAddSubject }: LevelL
     const getContentMatiereCol = (subjects: { listes: ActionColTypeLevel[]; id_niveau: number }) => {
         if (subjects.listes.length > 0) {
             return (
-                <div className='flex justify-center items-center gap-2'>
+                <div className='flex justify-start items-center gap-2'>
                     {subjects.listes.slice(0, 2).map((subject: ActionColTypeLevel) => (
                         <div key={subject.id_matiere} className='px-2  py-1 rounded text-xs font-medium  hover:opacity-80' style={{ backgroundColor: hexToRgba(subject.couleur, 0.5) }}>
                             <span>
