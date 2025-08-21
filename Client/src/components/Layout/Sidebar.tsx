@@ -43,7 +43,7 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
 
 
   return (
-    <div className={`${collapsed ? 'w-16' : 'w-64'} bg-white shadow-lg transition-all duration-300 ease-in-out flex flex-col min-h-screen h-max`}>
+    <div className={`${collapsed ? 'w-16' : 'w-64'} bg-white shadow-lg transition-all duration-300 ease-in-out flex flex-col min-h-screen`}>
       <div className="py-6 border-b border-r">
         <div className="flex items-center justify-center">
           {!collapsed && (
@@ -65,7 +65,7 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
           </button>
         </div>
       </div>
-      <nav className="mt-6">
+      <nav className="mt-6 flex-1 overflow-y-auto">
         <ul className="">
           {menuItems.map((menu) => {
             return (
