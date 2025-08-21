@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1
--- Généré le : mar. 22 juil. 2025 à 03:46
--- Version du serveur : 10.4.25-MariaDB
--- Version de PHP : 8.1.10
+-- Hôte : localhost
+-- Généré le : jeu. 21 août 2025 à 13:58
+-- Version du serveur : 10.4.22-MariaDB
+-- Version de PHP : 8.0.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -51,7 +51,7 @@ INSERT INTO `annee_scolaire` (`id_annee_scolaire`, `date_debut`, `date_fin`, `cr
 CREATE TABLE `classe` (
   `id_classe` int(11) NOT NULL,
   `denomination` varchar(45) DEFAULT NULL,
-  `classe_groupe_id_classe_groupe` int(11) NOT NULL,
+  `niveau_id_niveau` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -59,7 +59,7 @@ CREATE TABLE `classe` (
 -- Déchargement des données de la table `classe`
 --
 
-INSERT INTO `classe` (`id_classe`, `denomination`, `classe_groupe_id_classe_groupe`, `created_at`) VALUES
+INSERT INTO `classe` (`id_classe`, `denomination`, `niveau_id_niveau`, `created_at`) VALUES
 (61, 'Classe aut', 47, '2025-07-21 15:47:19'),
 (62, 'Classe quia', 48, '2025-07-21 15:47:19'),
 (63, 'Classe sed', 48, '2025-07-21 15:47:19'),
@@ -122,7 +122,7 @@ INSERT INTO `depense` (`id_depense`, `raison`, `montant`, `date`, `user_id_user`
 CREATE TABLE `droit_inscription` (
   `id_droit_inscription` int(11) NOT NULL,
   `montant` int(11) DEFAULT NULL,
-  `classe_groupe_id_classe_groupe` int(11) NOT NULL,
+  `niveau_id_niveau` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -130,7 +130,7 @@ CREATE TABLE `droit_inscription` (
 -- Déchargement des données de la table `droit_inscription`
 --
 
-INSERT INTO `droit_inscription` (`id_droit_inscription`, `montant`, `classe_groupe_id_classe_groupe`, `created_at`) VALUES
+INSERT INTO `droit_inscription` (`id_droit_inscription`, `montant`, `niveau_id_niveau`, `created_at`) VALUES
 (0, 71711, 46, '2025-07-21 15:47:20'),
 (0, 96243, 47, '2025-07-21 15:47:20'),
 (0, 86513, 48, '2025-07-21 15:47:20'),
@@ -148,7 +148,7 @@ INSERT INTO `droit_inscription` (`id_droit_inscription`, `montant`, `classe_grou
 CREATE TABLE `ecolage` (
   `id_ecolage` int(11) NOT NULL,
   `montant` decimal(10,2) DEFAULT NULL,
-  `classe_groupe_id_classe_groupe` int(11) NOT NULL,
+  `niveau_id_niveau` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -156,7 +156,7 @@ CREATE TABLE `ecolage` (
 -- Déchargement des données de la table `ecolage`
 --
 
-INSERT INTO `ecolage` (`id_ecolage`, `montant`, `classe_groupe_id_classe_groupe`, `created_at`) VALUES
+INSERT INTO `ecolage` (`id_ecolage`, `montant`, `niveau_id_niveau`, `created_at`) VALUES
 (46, '78413.00', 46, '2025-07-21 15:47:20'),
 (47, '65920.00', 47, '2025-07-21 15:47:20'),
 (48, '64181.00', 48, '2025-07-21 15:47:20'),
@@ -253,7 +253,7 @@ INSERT INTO `matiere` (`id_matiere`, `denomination`, `abbreviation`, `descriptio
 (76, 'Francais', 'FRS', 'Libero velit unde molestiae quo.', '#a51e1e', '2025-07-21 15:47:18'),
 (77, 'Malagasy', 'MLG', 'Rerum consectetur magni.', '#f87748', '2025-07-21 15:47:18'),
 (78, 'ut', 'EYA', 'Rem non consequatur.', '#01bdac', '2025-07-21 15:47:18'),
-(79, 'voluptatibus', 'OPY', 'Aut magnam sit a.', '#d30ee5', '2025-07-21 15:47:18');
+(79, 'Teste', 'OPY', 'Aut magnam sit a.', '#d30ee5', '2025-07-21 15:47:18');
 
 -- --------------------------------------------------------
 
@@ -460,7 +460,7 @@ ALTER TABLE `annee_scolaire`
 --
 ALTER TABLE `classe`
   ADD PRIMARY KEY (`id_classe`),
-  ADD KEY `fk_classe_classe_groupe1_idx` (`classe_groupe_id_classe_groupe`);
+  ADD KEY `fk_classe_classe_groupe1_idx` (`niveau_id_niveau`);
 
 --
 -- Index pour la table `classe_professeur_matier`
@@ -482,15 +482,15 @@ ALTER TABLE `depense`
 -- Index pour la table `droit_inscription`
 --
 ALTER TABLE `droit_inscription`
-  ADD PRIMARY KEY (`id_droit_inscription`,`classe_groupe_id_classe_groupe`),
-  ADD KEY `fk_droit_inscription_classe_groupe1_idx` (`classe_groupe_id_classe_groupe`);
+  ADD PRIMARY KEY (`id_droit_inscription`,`niveau_id_niveau`),
+  ADD KEY `fk_droit_inscription_classe_groupe1_idx` (`niveau_id_niveau`);
 
 --
 -- Index pour la table `ecolage`
 --
 ALTER TABLE `ecolage`
   ADD PRIMARY KEY (`id_ecolage`),
-  ADD KEY `fk_ecolage_classe_groupe1_idx` (`classe_groupe_id_classe_groupe`);
+  ADD KEY `fk_ecolage_classe_groupe1_idx` (`niveau_id_niveau`);
 
 --
 -- Index pour la table `eleve`
@@ -654,7 +654,7 @@ ALTER TABLE `users`
 -- Contraintes pour la table `classe`
 --
 ALTER TABLE `classe`
-  ADD CONSTRAINT `fk_classe_classe_groupe1` FOREIGN KEY (`classe_groupe_id_classe_groupe`) REFERENCES `niveau` (`id_niveau`);
+  ADD CONSTRAINT `fk_classe_classe_groupe1` FOREIGN KEY (`niveau_id_niveau`) REFERENCES `niveau` (`id_niveau`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `classe_professeur_matier`
@@ -674,13 +674,13 @@ ALTER TABLE `depense`
 -- Contraintes pour la table `droit_inscription`
 --
 ALTER TABLE `droit_inscription`
-  ADD CONSTRAINT `fk_droit_inscription_classe_groupe1` FOREIGN KEY (`classe_groupe_id_classe_groupe`) REFERENCES `niveau` (`id_niveau`);
+  ADD CONSTRAINT `fk_droit_inscription_classe_groupe1` FOREIGN KEY (`niveau_id_niveau`) REFERENCES `niveau` (`id_niveau`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `ecolage`
 --
 ALTER TABLE `ecolage`
-  ADD CONSTRAINT `fk_ecolage_classe_groupe1` FOREIGN KEY (`classe_groupe_id_classe_groupe`) REFERENCES `niveau` (`id_niveau`);
+  ADD CONSTRAINT `fk_ecolage_classe_groupe1` FOREIGN KEY (`niveau_id_niveau`) REFERENCES `niveau` (`id_niveau`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `eleve`
