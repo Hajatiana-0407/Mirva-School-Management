@@ -24,7 +24,8 @@ class AppFixtures extends CI_Controller
             'inscription',
             'classe_professeur_matier',
             'eleve',
-            'professeur',
+            'personnel',
+            'type_personnel',
             'ecolage',
             'droit_inscription',
             'classe',
@@ -109,6 +110,18 @@ class AppFixtures extends CI_Controller
                 'abbreviation' => 'ANG',
                 'description' => 'Apprentissage de la langue anglaise, écrite et orale.'
             ]
+        ];
+
+
+        $type_personnels= [
+            'Enseignant',
+            'Secrétaire',
+            'Gardin',
+            'Surveillant',
+            'Agent d’entretien',
+            'Bibliothécaire',
+            'Comptable',
+            'Chauffeur'
         ];
 
         foreach ($matieresListe as  $mat) {
@@ -199,13 +212,23 @@ class AppFixtures extends CI_Controller
 
         $eleves = $this->model->getIds('eleve', 'id_eleve');
 
-        // 10. professeur
+        // Types de personnel
+        foreach ($type_personnels as $type) {
+            $this->model->insert('type_personnel', [
+                'type' => $type,
+                'description' => $faker->sentence(6),
+            ]);
+        }
+        
+        $types = $this->model->getIds('type_personnel', 'id_type_personnel');
+
+        // 10. Personnel
         $userIds = 1;
         for ($i = 0; $i < 5; $i++) {
-            $this->model->insert('professeur', [
+            $this->model->insert('personnel', [
                 'nom' => $faker->lastName,
                 'prenom' => $faker->firstName,
-                'adresse' => $faker->address,
+                'addesse' => $faker->address,
                 'telephone' => $faker->phoneNumber,
                 'date_naissance' => $faker->date(),
                 'sexe' => $faker->randomElement(['Homme', 'Femme']),
@@ -214,11 +237,12 @@ class AppFixtures extends CI_Controller
                 'password' => password_hash('123456', PASSWORD_DEFAULT),
                 'pc_cin' => $faker->numerify('#########'),
                 'photo' => 'default.jpg',
-                'created_at' => date('Y-m-d H:i:s')
+                'created_at' => date('Y-m-d H:i:s') , 
+                'id_type_presonnel' => $faker->randomElement($types),
             ]);
         }
 
-        $professeurs = $this->model->getIds('professeur', 'id_professeur');
+        $professeurs = $this->model->getIds('personnel', 'id_personnel');
 
         // 11. classe_professeur_matier
 

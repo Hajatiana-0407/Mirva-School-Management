@@ -1,32 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Plus, Search, Filter, Edit, Archive, Eye } from 'lucide-react';
-import Table from './Table';
-import Modal from './Modal';
-import ConfirmDialog from './ConfirmDialog';
+import Table from '../Table';
+import Modal from '../Modal';
+import ConfirmDialog from '../ConfirmDialog';
+import { date, object, string } from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { getEmployeState } from './redux/EmployeSlice';
+import { employeeInitialValue, EmployeeType } from '../../Utils/Types';
+import { AppDispatch } from '../../Redux/store';
+import { getAllEmployees } from './redux/EmployeAsyncThunk';
+import useForm from '../../Hooks/useForm';
 
-const Teachers: React.FC = () => {
+// Validation de donnée avec yup 
+const EmployeSchema = object({
+  nom: string().required('Le nom est obligatoire.'),
+  prenom: string().required('La prénom est obligatoire.'),
+  date_naissance: date().required('La date est obligatoire.'),
+  sexe: string().required('Ce champ est obligatoire.'),
+});
+
+const Employees: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingTeacher, setEditingTeacher] = useState<any>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [teacherToArchive, setTeacherToArchive] = useState<any>(null);
 
-  const teachers = [
-    { id: 1, nom: 'Dupont', prenom: 'Marie', specialite: 'Mathématiques', email: 'm.dupont@ecole.fr', telephone: '06.11.22.33.44', statut: 'Actif' },
-    { id: 2, nom: 'Leroy', prenom: 'Jean', specialite: 'Français', email: 'j.leroy@ecole.fr', telephone: '06.22.33.44.55', statut: 'Actif' },
-    { id: 3, nom: 'Garcia', prenom: 'Carmen', specialite: 'Anglais', email: 'c.garcia@ecole.fr', telephone: '06.33.44.55.66', statut: 'Congé' },
-    { id: 4, nom: 'Rousseau', prenom: 'Paul', specialite: 'Histoire', email: 'p.rousseau@ecole.fr', telephone: '06.44.55.66.77', statut: 'Actif' },
-  ];
+  // *** //
+    const { datas: employees, action , error  } = useSelector(getEmployeState);
+    const { onSubmite, formErrors } = useForm<EmployeeType>(EmployeSchema, employeeInitialValue);
 
-  const columns = [
-    { key: 'nom', label: 'Nom' },
-    { key: 'prenom', label: 'Prénom' },
-    { key: 'specialite', label: 'Spécialité' },
-    { key: 'email', label: 'Email' },
-    { key: 'telephone', label: 'Téléphone' },
-    { key: 'statut', label: 'Statut' },
-  ];
+    const dispatch: AppDispatch = useDispatch();
+  // *** //
+  
 
+  //Handlers
   const handleEdit = (teacher: any) => {
     setEditingTeacher(teacher);
     setShowModal(true);
@@ -54,16 +62,31 @@ const Teachers: React.FC = () => {
     { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
 
+  const columns = [
+    { key: 'nom', label: 'Nom' },
+    { key: 'prenom', label: 'Prénom' },
+    { key: 'addresse', label: 'Addrèsse' },
+    { key: 'telephone', label: 'Tél' },
+    { key: 'sexe', label: 'Sex' },
+  ];
+
+  // Effets
+    useEffect(() => {
+      if (!employees.length) {
+        dispatch(getAllEmployees());
+      }
+    }, [dispatch]);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Gestion des enseignants</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Gestion des employés</h1>
         <button
           onClick={() => setShowModal(true)}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
-          <span>Nouvel enseignant</span>
+          <span>Nouveau employés</span>
         </button>
       </div>
 
@@ -88,7 +111,7 @@ const Teachers: React.FC = () => {
         </div>
 
         <Table
-          data={teachers}
+          data={employees}
           columns={columns}
           actions={actions}
           searchTerm={searchTerm}
@@ -185,4 +208,4 @@ const Teachers: React.FC = () => {
   );
 };
 
-export default Teachers;
+export default Employees;

@@ -28,7 +28,7 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
   const menuItems = [
     { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard, path: '/dashboard' },
     { id: 'students', label: 'Élèves', icon: Users, path: '/students' },
-    { id: 'teachers', label: 'Enseignants', icon: UserCheck, path: '/teachers' },
+    { id: 'employees', label: 'Employés', icon: UserCheck, path: '/employees' },
     { id: 'classes', label: 'Classes', icon: School, path: '/classes' },
     { id: 'levels', label: 'Niveaux', icon: GraduationCap, path: '/levels' },
     { id: 'subjects', label: 'Matières', icon: BookOpen, path: '/subjects' },

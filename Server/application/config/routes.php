@@ -73,3 +73,9 @@ $route['api/admin/matiere'] = 'MatiereController';
 $route['api/admin/matiere/update'] = 'MatiereController/update';
 $route['api/admin/matiere/create'] = 'MatiereController/create';
 $route['api/admin/matiere/delete'] = 'MatiereController/delete';
+
+// ******************* ROUTE PERSONNEL ********************** //
+$route['api/admin/personnel'] = 'PersonnelController';
+$route['api/admin/personnel/update'] = 'PersonnelController/update';
+$route['api/admin/personnel/create'] = 'PersonnelController/create';
+$route['api/admin/personnel/delete'] = 'PersonnelController/delete';

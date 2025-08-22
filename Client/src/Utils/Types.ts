@@ -81,3 +81,39 @@ export type LevelSubjectType = {
     coefficient: number 
 }
 
+
+
+// Employee ( EMPLOYE )
+export type EmployeeType = {
+    id_personnel?: number;   
+    nom: string;
+    prenom: string;
+    addresse: string;
+    telephone: string;
+    date_naissance: string;
+    sexe: string;
+    email?: string;
+    engagement?: string;
+    password?: string;
+    pc_cin?: string;
+    photo?: string;
+    id_type_personnel?: number;
+    created_at?: string;
+}
+
+export const employeeInitialValue: EmployeeType = {
+    id_personnel: undefined,
+    nom: '',
+    prenom: '', 
+    addresse: '',
+    telephone: '', 
+    date_naissance: '',
+    sexe: '',   
+    email: '',
+    engagement: '', 
+    password: '',
+    pc_cin: '',
+    photo: '',
+    id_type_personnel: undefined ,
+    created_at: ''
+} ; 

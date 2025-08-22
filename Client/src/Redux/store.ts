@@ -4,6 +4,7 @@ import LevelReducer from '../components/Levels/redux/LevelSlice';
 import LevelsubjectReducer from '../components/Levels/redux/LevelSubjectSlice';
 import SubjectReducer from '../components/Subjects/redux/SubjectSlice';
 import ClasseReducer from '../components/Classes/redux/ClasseSlice';
+import EmployeReducer from '../components/Employees/redux/EmployeSlice';
 export const store = configureStore({
     reducer: {
         app: AppReducer,
@@ -11,6 +12,7 @@ export const store = configureStore({
         levelSubject: LevelsubjectReducer , 
         subjects: SubjectReducer,
         classe: ClasseReducer,
+        employes: EmployeReducer 
     }
 });
 
