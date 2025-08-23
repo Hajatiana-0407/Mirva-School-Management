@@ -18,12 +18,13 @@ export const getAllSubject = createAsyncThunk('matiere/getAll', async (): Promis
 })
 
 // UPDATE
-export const updateSubject = createAsyncThunk('matiere/modification', async ({ subject, id }: { subject: SubjectType, id: number }, { dispatch }): Promise<ApiReturnType> => {
-
+export const updateSubject = createAsyncThunk('matiere/modification', async ({ subject, id }: { subject: any , id: number }, { dispatch }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
-    await api.post('admin/matiere/update', {
-        ...subject,
-        id_matiere: id
+
+    subject.append('id_matiere', id.toString());
+    
+    await api.post('admin/matiere/update', subject, {
+        headers: { 'Content-Type': 'multipart/form-data' }
     }).then(response => {
         data = response.data;
         if (!data.error) {
@@ -36,11 +37,11 @@ export const updateSubject = createAsyncThunk('matiere/modification', async ({ s
 })
 
 // CREATE
-export const createSubject = createAsyncThunk('matiere/ajout', async (level: SubjectType, { dispatch }): Promise<ApiReturnType> => {
+export const createSubject = createAsyncThunk('matiere/ajout', async (subject: SubjectType, { dispatch }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
-    await api.post('admin/matiere/create', {
-        ...level,
-    }).then(response => {
+    await api.post('admin/matiere/create', 
+        subject
+    ).then(response => {
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));

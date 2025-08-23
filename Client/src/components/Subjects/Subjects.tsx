@@ -71,7 +71,7 @@ const Subjects = () => {
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    onSubmite((validateData: SubjectType) => {
+    onSubmite((validateData ) => {
       editingSubject ? dispatch(updateSubject({ subject: validateData, id: editingSubject?.id_matiere as number })) : dispatch(createSubject(validateData))
     }, e)
   }
