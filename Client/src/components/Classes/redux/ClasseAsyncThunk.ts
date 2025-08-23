@@ -18,13 +18,11 @@ export const getAllClasse = createAsyncThunk('classe/getAll', async (): Promise<
 })
 
 // UPDATE
-export const updateClasse = createAsyncThunk('classe/modification', async ({ Classe, id }: { Classe: ClasseType, id: number }, { dispatch }): Promise<ApiReturnType> => {
+export const updateClasse = createAsyncThunk('classe/modification', async ({ Classe, id }: { Classe: any , id: number }, { dispatch }): Promise<ApiReturnType> => {
 
     let data: ApiReturnType = ApiReturnInitial;
-    await api.post('admin/classe/update', {
-        ...Classe,
-        id_classe: id
-    }).then(response => {
+    Classe.append('id_classe', id.toString());
+    await api.post('admin/classe/update', Classe ).then(response => {
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
@@ -38,9 +36,7 @@ export const updateClasse = createAsyncThunk('classe/modification', async ({ Cla
 // CREATE
 export const createClasse = createAsyncThunk('classe/ajout', async (Classe: ClasseType, { dispatch }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
-    await api.post('admin/classe/create', {
-        ...Classe,
-    }).then(response => {
+    await api.post('admin/classe/create', Classe ).then(response => {
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
