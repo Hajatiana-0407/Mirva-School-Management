@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive, Eye } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Archive, Eye, BookOpen, User, Users, Shield, Brush, Library, Calculator, Truck } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
@@ -10,6 +10,31 @@ import { employeeInitialValue, EmployeeType } from '../../Utils/Types';
 import { AppDispatch } from '../../Redux/store';
 import { getAllEmployees } from './redux/EmployeAsyncThunk';
 import useForm from '../../Hooks/useForm';
+import InputError from '../ui/InputError';
+
+
+// Mapping des types à des couleurs de fond
+const typeBgColors: Record<string, string> = {
+  'Enseignant': 'bg-blue-100 text-blue-800',
+  'Secrétaire': 'bg-green-100 text-green-800',
+  'Gardin': 'bg-yellow-100 text-yellow-800',
+  'Surveillant': 'bg-purple-100 text-purple-800',
+  "Agent d’entretien": 'bg-pink-100 text-pink-800',
+  'Bibliothécaire': 'bg-indigo-100 text-indigo-800',
+  'Comptable': 'bg-orange-100 text-orange-800',
+  'Chauffeur': 'bg-teal-100 text-teal-800',
+};
+// Mapping des types à des icônes Lucide
+const typeIcons: Record<string, any> = {
+  'Enseignant': BookOpen,
+  'Secrétaire': User,
+  'Gardin': Shield,
+  'Surveillant': Users,
+  "Agent d’entretien": Brush,
+  'Bibliothécaire': Library,
+  'Comptable': Calculator,
+  'Chauffeur': Truck,
+};
 
 // Validation de donnée avec yup 
 const EmployeSchema = object({
@@ -62,9 +87,30 @@ const Employees: React.FC = () => {
     { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
 
+
   const columns = [
-    { key: 'nom', label: 'Nom' },
-    { key: 'prenom', label: 'Prénom' },
+    { key: 'nom', label: 'Profil'  , render: (value: string, item: EmployeeType) => (
+      <div className="flex items-center space-x-3">
+        <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+          <img src={item.photo} alt='' className="w-full h-full object-cover" />
+        </div>
+        <div>
+          <div className="font-medium text-gray-900">{value} {item.prenom}</div>
+          <div className="text-sm text-gray-500">{item.email}</div>
+        </div>
+      </div>
+    ) },  
+      { key: 'type', label: 'Fonction', render: (employeType: string ) => {
+      const type = employeType || 'Autre';
+      const color = typeBgColors[type] || 'bg-gray-200 text-gray-800';
+      const Icon = typeIcons[type];
+      return (
+        <span className={`px-2 py-1 rounded-full text-sm flex items-center gap-1 ${color}`}>
+          {Icon && <Icon className="w-4 h-4 mr-1" />}
+          {type}
+        </span>
+      );
+    } },
     { key: 'addresse', label: 'Addrèsse' },
     { key: 'telephone', label: 'Tél' },
     { key: 'sexe', label: 'Sex' },
@@ -111,6 +157,7 @@ const Employees: React.FC = () => {
         </div>
 
         <Table
+          isLoading={action.isLoading as boolean}
           data={employees}
           columns={columns}
           actions={actions}
@@ -133,6 +180,7 @@ const Employees: React.FC = () => {
                 defaultValue={editingTeacher?.nom || ''}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+              <InputError message={ formErrors?.nom } />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Prénom</label>

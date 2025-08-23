@@ -10,4 +10,14 @@ class PersonnelModel extends CI_Model
     {
         parent::__construct();
     }
+    
+    public function findAll()
+    {
+        $query = $this->db->select('*')
+                          ->from($this->table)
+                          ->join('type_personnel', "{$this->table}.id_type_personnel = type_personnel.id_type_personnel", 'left')
+                            ->order_by( $this->primaryKey  , 'DESC')
+                            ->get();
+        return $query->result_array();
+    }
 }
