@@ -55,6 +55,11 @@ class CI_Model {
 	 * @link	https://github.com/bcit-ci/CodeIgniter/issues/5332
 	 * @return	void
 	 */
+
+
+	protected $table ;
+    protected $primaryKey ;
+
 	public function __construct() {}
 
 	/**
@@ -77,24 +82,101 @@ class CI_Model {
 	/**
 	 * Verification de doublan
 	 *
-	 * @param array $champs
-	 * @param [type] $id
+	 * @param array $champs [ column => value  ]
+	 * @param [type] $id ( id a exclure )
 	 * @return boolean
 	 */
-	public function isExist($champs = [], $id = null)
+    public function isExist($champs = [], $id = null)
     {
         $query = $this->db;
-        $query->select($this->primaryKey)->from($this->table)->where($this->primaryKey . ' <>', $id);
-        $query->group_start();
+        $i = 0;
+        $query->where($this->primaryKey . ' <>', $id);
         foreach ($champs as $key => $value) {
-            $query->or_where($key, $value);
+            if ($i == 0) {
+                $query->where($key, $value);
+            } else {
+                $query->or_where($key, $value);
+            }
+            $i++;
         }
-        $query->group_end();
-        $data = $query->get()->result();
+        $data = $query->get($this->table)->result();
         if (count($data)) {
             return true;
         }
         return false;
+    }
+
+
+
+	// * fonctions CRUD * //
+	// ======= READ =======
+    public function findAll()
+    {
+        return $this->db->select('*')
+            ->from($this->table)
+            ->order_by($this->primaryKey, 'DESC')
+            ->get()
+            ->result_array();
+    }
+
+    public function findOneById($id)
+    {
+        return $this->db->select('*')
+            ->from($this->table)
+            ->where($this->primaryKey, $id)
+            ->get()
+            ->row_array();
+    }
+
+    // ======= CREATE =======
+    public function insert($data)
+    {
+        $inserted = $this->db->insert($this->table, $data);
+
+         if ($inserted) {
+            $inserted_id = $this->db->insert_id();
+
+            return $this->findOneById($inserted_id);
+        }
+
+        return false;
+    }
+
+    // ======= UPDATE =======
+    public function update($id, $data)
+    {
+        $updated =  $this->db->where($this->primaryKey, $id)
+            ->update($this->table, $data);
+        if ($updated) {
+            return  $this->findOneById($id);
+        }
+        return $updated;
+    }
+
+    // ======= DELETE =======
+    public function delete($id)
+    {
+        $element = $this->db
+            ->get_where($this->table, [$this->primaryKey => $id])
+            ->row();
+        if ($element) {
+            $deleted = $this->db
+                ->where($this->primaryKey, $id)
+                ->delete($this->table);
+
+            if ($deleted) {
+                return $id;
+            }
+        }
+        return false;
+    }
+
+   
+
+    // ======= INSERT BATCH =======
+    public function insertBatch($data = [])
+    {
+        return $this->db->insert_batch($this->table, $data);
     }
 
 }

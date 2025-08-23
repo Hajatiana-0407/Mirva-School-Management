@@ -11,15 +11,7 @@ class NiveauModel extends CI_Model
         parent::__construct();
     }
 
-    // ======= READ =======
-    public function findAll()
-    {
-        return $this->db->select('*')
-            ->from($this->table)
-            ->order_by($this->primaryKey, 'DESC')
-            ->get()
-            ->result_array();
-    }
+    // ======= FIND ALL =======
     public function findAllLevelData()
     {
         $niveaux =  $this->db->select($this->table . '.* , COUNT(c.id_classe) as total_classe ,  COUNT(mn.niveau_id_niveau) as total_matiere')
@@ -43,6 +35,7 @@ class NiveauModel extends CI_Model
         return $niveaux;
     }
 
+    // ======= FIND ONE BY ID =======
     public function findOneById($id)
     {
         $niveau =  $this->db->select($this->table . '.* , COUNT(classe.id_classe) as total_classe  ,  COUNT(matiere_niveau.niveau_id_niveau) as total_matiere')
@@ -87,24 +80,6 @@ class NiveauModel extends CI_Model
             return  $this->findOneById($id);
         }
         return $updated;
-    }
-
-    // ======= DELETE =======
-    public function delete($id)
-    {
-        $element = $this->db
-            ->get_where($this->table, [$this->primaryKey => $id])
-            ->row();
-        if ($element) {
-            $deleted = $this->db
-                ->where($this->primaryKey, $id)
-                ->delete($this->table);
-
-            if ($deleted) {
-                return $id;
-            }
-        }
-        return false;
     }
 
 }

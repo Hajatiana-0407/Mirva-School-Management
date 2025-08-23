@@ -20,7 +20,7 @@ class MatiereNiveauModel extends CI_Model
             ->result_array();
     }
 
-    // ======= READ =======
+    // ======= DELETE =======
     public function deleteByLevelAndSubject($level, $subject)
     {
         $this->db->where('niveau_id_niveau', $level)
@@ -28,15 +28,11 @@ class MatiereNiveauModel extends CI_Model
             ->delete($this->table);
     }
 
-    public function update($idLevel, $idSubject, $data )
+    // ======= UPDATE =======
+    public function updateMaterielNiveau($idLevel, $idSubject, $data )
     {
         $this->db->where('niveau_id_niveau ', $idLevel); 
         $this->db->where('matiere_id_matiere  ', $idSubject); 
         return $this->db->update( $this->table , $data ); 
-    }
-
-    public function insert(  $data )
-    {
-        $this->db->insert( $this->table , $data ) ; 
     }
 }

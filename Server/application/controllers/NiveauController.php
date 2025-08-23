@@ -140,7 +140,7 @@ class NiveauController extends CI_Controller
         }
         foreach ($toUpdateIdMatiere as $key => $value) {
             $data = ["coefficient" => $value];
-            $this->MatiereNiveauModel->update($id_niveau, $key, $data);
+            $this->MatiereNiveauModel->updateMaterielNiveau($id_niveau, $key, $data);
         }
 
         // Modification 

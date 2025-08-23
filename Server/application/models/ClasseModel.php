@@ -12,14 +12,6 @@ class ClasseModel extends CI_Model
     }
 
     // ======= READ =======
-    public function findAll()
-    {
-        return $this->db->select('*')
-            ->from($this->table)
-            ->order_by($this->primaryKey, 'DESC')
-            ->get()
-            ->result_array();
-    }
     public function findAllClasseData()
     {
         return $this->db->select('*')
@@ -30,14 +22,6 @@ class ClasseModel extends CI_Model
             ->result_array();
     }
 
-    public function findOneById($id)
-    {
-        return $this->db->select('*')
-            ->from($this->table)
-            ->where($this->primaryKey, $id)
-            ->get()
-            ->row_array();
-    }
 
     // ======= CREATE =======
     public function insert($data)
@@ -74,46 +58,5 @@ class ClasseModel extends CI_Model
         return $updated;
     }
 
-    // ======= DELETE =======
-    public function delete($id)
-    {
-        $element = $this->db
-            ->get_where($this->table, [$this->primaryKey => $id])
-            ->row();
-        if ($element) {
-            $deleted = $this->db
-                ->where($this->primaryKey, $id)
-                ->delete($this->table);
 
-            if ($deleted) {
-                return $id;
-            }
-        }
-        return false;
-    }
-
-    public function isExist($champs = [], $id = null)
-    {
-        $query = $this->db;
-        $i = 0;
-        $query->where($this->primaryKey . ' <>', $id);
-        foreach ($champs as $key => $value) {
-            if ($i == 0) {
-                $query->where($key, $value);
-            } else {
-                $query->or_where($key, $value);
-            }
-            $i++;
-        }
-        $data = $query->get($this->table)->result();
-        if (count($data)) {
-            return true;
-        }
-        return false;
-    }
-
-    public function insertBatch($data = [])
-    {
-        return $this->db->insert_batch($this->table, $data);
-    }
 }
