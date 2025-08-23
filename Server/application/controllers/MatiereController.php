@@ -55,7 +55,7 @@ class MatiereController extends CI_Controller
 
         if ($this->MatiereModel->isExist([
             'denomination' => $data['denomination'],
-            'abbreviation' => $data['abbreviation'],
+            // 'abbreviation' => $data['abbreviation'],
         ], $id)) {
             echo json_encode(['error' => true, 'message' => 'La matière existe déjà.']);
         } else {

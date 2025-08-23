@@ -25,7 +25,7 @@ class NiveauController extends CI_Controller
             'description' => $this->input->post('description'),
         ];
 
-        if ($this->NiveauModel->isNiveauExist($data['niveau'])) {
+        if ($this->NiveauModel->isExist(['niveau' => $data['niveau']])) {
             echo json_encode(['error' => true, 'message' => 'Le niveau existe déjà.']);
         } else {
             $data =  $this->NiveauModel->insert($data);

@@ -121,6 +121,7 @@ class CI_Model {
 
     public function findOneById($id)
     {
+        if ( !!!$id )  return null ;
         return $this->db->select('*')
             ->from($this->table)
             ->where($this->primaryKey, $id)
