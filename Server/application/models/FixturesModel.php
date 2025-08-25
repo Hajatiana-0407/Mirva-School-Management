@@ -1,7 +1,7 @@
 <?php
 class FixturesModel extends CI_Model
 {
-    public function insert($table, $data)
+    public function insertFixture($table, $data)
     {
         $result = $this->db->insert($table, $data);
         if (!$result) {
