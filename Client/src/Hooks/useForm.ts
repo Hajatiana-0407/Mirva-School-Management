@@ -6,18 +6,23 @@ import { AppDispatch } from "../Redux/store";
 import { setHiddeModalValue } from "../Redux/AppSlice";
 
 
-// function to use on the input change event
-export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T  ): {
+/**
+ * Fonction pour les formlaire 
+ * @param schemaValidation 
+ * @param initial 
+ * @returns 
+ */
+export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T): {
     formValue: T;
     setFormValue: (e: React.ChangeEvent<HTMLInputElement>) => void;
     formErrors?: Partial<Record<keyof T, string>>;
-    onSubmite: (next: ( data: T) => void, e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+    onSubmite: (next: (data: T) => void, e: React.FormEvent<HTMLFormElement>) => Promise<void>;
     handleInputFileChange: (e: React.ChangeEvent<HTMLInputElement>) => string | undefined
 } {
 
     const [formValue, setAllFormValue] = useState(initial);
     const [formErrors, setFormErrors] = useState<Partial<Record<keyof T, string>>>();
-    const dispatch: AppDispatch = useDispatch() ; 
+    const dispatch: AppDispatch = useDispatch();
 
     const setFormValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -46,12 +51,13 @@ export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T
         return
     }
 
-    const onSubmite = async (next: ( data: T) => void, e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-        dispatch( setHiddeModalValue( false ))  ; 
+    const onSubmite = async (next: (data: T) => void, e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+        dispatch(setHiddeModalValue(false));
         e.preventDefault();
         const form = e.currentTarget;
 
-        let data: Record<string, string> = {};
+        const formData = new FormData();
+        let data: Record<string, any> = {};
         for (let i = 0; i < form.elements.length; i++) {
             const element = form.elements[i] as HTMLElement;
             if (
@@ -60,21 +66,37 @@ export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T
                 || element instanceof HTMLTextAreaElement
             ) {
                 const name = element.name;
-                const value = element.value;
-                if (name) {
-                    data[name] = value;
+                if (!name) continue;
+                if (element instanceof HTMLInputElement && element.type === 'file') {
+                    if (element.files) {
+                        if (element.multiple) {
+                            for (let j = 0; j < element.files.length; j++) {
+                                formData.append(name, element.files[j]);
+                            }
+                        } else if (element.files[0]) {
+                            formData.append(name, element.files[0]);
+                        }
+                    }
+                } else if (element instanceof HTMLInputElement && element.type === 'radio') {
+                    if ( element.checked ){ 
+                        data[name] = element.value ;
+                        formData.append( name , element.value ) 
+                    }
+                } else {
+                    formData.append(name, element.value);
+                    data[name] = element.value;
                 }
             }
         }
 
-        if ( data ){
-            setAllFormValue( data as T ) ; 
+        if (data) {
+            setAllFormValue(data as T);
         }
         const toastId = toast.loading('Veuillez patienter...');
         try {
             await schemaValidation.validate(data as T, { abortEarly: false })
             setFormErrors({});
-            next(data as T);
+            next(formData as any);
             toast.dismiss(toastId);
         } catch (error) {
             const errors: Partial<Record<keyof T, string>> = {};
