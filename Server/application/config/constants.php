@@ -83,3 +83,13 @@ defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+
+
+/* My constants */
+defined('UPLOAD_DIR_PERSONNEL') OR define('UPLOAD_DIR_PERSONNEL', 'public/uploads/personnel/');
+defined('UPLOAD_DIR_ETUDIANTS') OR define('UPLOAD_DIR_ETUDIANTS',  'public/uploads/etudiant/') ; 
+
+// ************************************************* //
+defined('PERSONNEL_PROFIL_UPLOAD_DIR') OR define('PERSONNEL_PROFIL_UPLOAD_DIR', UPLOAD_DIR_PERSONNEL . "profil/");
+defined('PERSONNEL_PC_CIN_UPLOAD_DIR') OR define('PERSONNEL_PC_CIN_UPLOAD_DIR', UPLOAD_DIR_PERSONNEL . "pc_cin/");

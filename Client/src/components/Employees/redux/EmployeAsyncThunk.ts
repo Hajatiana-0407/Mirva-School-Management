@@ -18,13 +18,12 @@ export const getAllEmployees= createAsyncThunk('personnel/getAll', async (): Pro
 })
 
 // UPDATE
-export const updateEmployees= createAsyncThunk('personnel/modification', async ({ subject, id }: { subject: EmployeeType, id: number }, { dispatch }): Promise<ApiReturnType> => {
+export const updateEmployees= createAsyncThunk('personnel/modification', async ({ datas, id }: { datas: any , id: number }, { dispatch }): Promise<ApiReturnType> => {
 
     let data: ApiReturnType = ApiReturnInitial;
-    await api.post('admin/personnel/update', {
-        ...subject,
-        id_personnel: id
-    }).then(response => {
+
+    datas.append('id_personnel', id.toString());
+    await api.post('admin/personnel/update', datas ).then(response => {
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
@@ -36,11 +35,12 @@ export const updateEmployees= createAsyncThunk('personnel/modification', async (
 })
 
 // CREATE
-export const createEmployees= createAsyncThunk('personnel/ajout', async (level: EmployeeType, { dispatch }): Promise<ApiReturnType> => {
+export const createEmployees= createAsyncThunk('personnel/ajout', async (datas: any , { dispatch }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
-    await api.post('admin/personnel/create', {
-        ...level,
-    }).then(response => {
+
+    console.log( datas );
+    
+    await api.post('admin/personnel/create', datas ).then(response => {
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));

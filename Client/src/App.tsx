@@ -14,8 +14,21 @@ import Messages from './components/Messages';
 import Settings from './components/Settings';
 import { ToastContainer } from 'react-toastify';
 import Employees from './components/Employees/Employees';
+import { useEffect } from 'react';
+import { AppDispatch } from './Redux/store';
+import { useDispatch } from 'react-redux';
+import { getAllTypePersonnel } from './Redux/Other/asyncThunk/TypeEmployesAsyncThunk';
+
+
 
 function App() {
+const dispatch: AppDispatch =  useDispatch();
+
+// Utils
+useEffect(() => {
+  dispatch(getAllTypePersonnel( ))
+}, []);
+
   return (
     <Layout >
       <ToastContainer

@@ -117,3 +117,16 @@ export const employeeInitialValue: EmployeeType = {
     id_type_personnel: undefined ,
     created_at: ''
 } ; 
+
+
+// Type Personnel ( TYPE PERSONNEL )
+export type TypePersonnelType = {
+    id_type_personnel?: number;
+    type: string;
+    description?: string;
+}
+export const TypePersonnelInitialValue: TypePersonnelType = {
+    id_type_personnel: undefined,   
+    type: '',
+    description: ''
+} ;

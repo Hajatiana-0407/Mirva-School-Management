@@ -5,3 +5,13 @@ export const hexToRgba = (hex: string , alpha = 1): string  => {
   const b = parseInt(hex.slice(5, 7), 16);
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
+
+export const baseUrl = ( uri: string | undefined ) => {
+  const serverUrl = 'http://localhost/Mirva-School-Management/Server/' ; 
+
+  if ( uri !== undefined  ){ 
+    return `${ serverUrl }${ uri }` ; 
+  }else { 
+    return `${ serverUrl }` ; 
+  }
+}
