@@ -40,7 +40,7 @@ class AppFixtures extends CI_Controller
 
         // 1. annee_scolaire
         for ($i = 0; $i < 2; $i++) {
-            $this->model->insert('annee_scolaire', [
+            $this->model->insertFixture('annee_scolaire', [
                 'date_debut' => $faker->date(),
                 'date_fin' => $faker->date(),
                 'created_at' => date('Y-m-d')
@@ -50,7 +50,7 @@ class AppFixtures extends CI_Controller
         // 2. niveau
         $cycles = ['Primaire', 'Collège', 'Lycée'];
         for ($i = 0; $i < 7; $i++) {
-            $this->model->insert('niveau', [
+            $this->model->insertFixture('niveau', [
                 'niveau' => $faker->word . ' ' . $faker->numberBetween(1, 6),
                 'cycle' => $faker->randomElement($cycles),
                 'description' => $faker->sentence(4),
@@ -125,7 +125,7 @@ class AppFixtures extends CI_Controller
         ];
 
         foreach ($matieresListe as  $mat) {
-            $this->model->insert('matiere', [
+            $this->model->insertFixture('matiere', [
                 'denomination' => $mat['denomination'],
                 'abbreviation' => strtoupper($mat['abbreviation']),
                 'description' => $mat['description'],
@@ -138,7 +138,7 @@ class AppFixtures extends CI_Controller
         $matieres = $this->model->getIds('matiere', 'id_matiere');
         foreach ($matieres as $matiere) {
             foreach ($faker->randomElements($niveaux, rand(1, 2)) as $niveau) {
-                $this->model->insert('matiere_niveau', [
+                $this->model->insertFixture('matiere_niveau', [
                     'matiere_id_matiere' => $matiere,
                     'niveau_id_niveau' => $niveau,
                     'coefficient' => $faker->numberBetween(1, 5),
@@ -149,7 +149,7 @@ class AppFixtures extends CI_Controller
 
         // 5. classe
         for ($i = 0; $i < 4; $i++) {
-            $this->model->insert('classe', [
+            $this->model->insertFixture('classe', [
                 'denomination' => 'Classe ' . $faker->word,
                 'niveau_id_niveau' => $faker->randomElement($niveaux),
                 'created_at' => date('Y-m-d H:i:s')
@@ -160,7 +160,7 @@ class AppFixtures extends CI_Controller
 
         // 6. droit_inscription
         foreach ($niveaux as $niveau) {
-            $this->model->insert('droit_inscription', [
+            $this->model->insertFixture('droit_inscription', [
                 'montant' => $faker->numberBetween(50000, 100000),
                 'niveau_id_niveau' => $niveau,
                 'created_at' => date('Y-m-d H:i:s')
@@ -169,7 +169,7 @@ class AppFixtures extends CI_Controller
 
         // 7. ecolage
         foreach ($niveaux as $niveau) {
-            $this->model->insert('ecolage', [
+            $this->model->insertFixture('ecolage', [
                 'montant' => $faker->numberBetween(25000, 80000),
                 'niveau_id_niveau' => $niveau,
                 'created_at' => date('Y-m-d H:i:s')
@@ -178,7 +178,7 @@ class AppFixtures extends CI_Controller
 
         // 8. parent
         for ($i = 0; $i < 5; $i++) {
-            $this->model->insert('parent', [
+            $this->model->insertFixture('parent', [
                 'nom_pere' => $faker->lastName,
                 'nom_mere' => $faker->lastName,
                 'profession_pere' => $faker->jobTitle,
@@ -196,7 +196,7 @@ class AppFixtures extends CI_Controller
 
         // 9. eleve
         for ($i = 0; $i < 10; $i++) {
-            $this->model->insert('eleve', [
+            $this->model->insertFixture('eleve', [
                 'nom' => $faker->lastName,
                 'prenom' => $faker->firstName,
                 'adresse' => $faker->address,
@@ -214,7 +214,7 @@ class AppFixtures extends CI_Controller
 
         // Types de personnel
         foreach ($type_personnels as $type) {
-            $this->model->insert('type_personnel', [
+            $this->model->insertFixture('type_personnel', [
                 'type' => $type,
                 'description' => $faker->sentence(6),
             ]);
@@ -225,10 +225,10 @@ class AppFixtures extends CI_Controller
         // 10. Personnel
         $userIds = 1;
         for ($i = 0; $i < 5; $i++) {
-            $this->model->insert('personnel', [
+            $this->model->insertFixture('personnel', [
                 'nom' => $faker->lastName,
                 'prenom' => $faker->firstName,
-                'addesse' => $faker->address,
+                'addresse' => $faker->address,
                 'telephone' => $faker->phoneNumber,
                 'date_naissance' => $faker->date(),
                 'sexe' => $faker->randomElement(['Homme', 'Femme']),
@@ -238,7 +238,7 @@ class AppFixtures extends CI_Controller
                 'pc_cin' => $faker->numerify('#########'),
                 'photo' => 'default.jpg',
                 'created_at' => date('Y-m-d H:i:s') , 
-                'id_type_presonnel' => $faker->randomElement($types),
+                'id_type_personnel' => $faker->randomElement($types),
             ]);
         }
 
@@ -257,7 +257,7 @@ class AppFixtures extends CI_Controller
                     ->num_rows() > 0;
 
                 if (!$exists) {
-                    $this->model->insert('classe_professeur_matier', [
+                    $this->model->insertFixture('classe_professeur_matier', [
                         'classe_id_classe' => $classe,
                         'professeur_id_professeur' => $professeur,
                         'matiere_id_matiere' => $matiere
@@ -273,7 +273,7 @@ class AppFixtures extends CI_Controller
         for ($i = 0; $i < 5; $i++) {
             $eleve = $faker->randomElement($eleves);
             $parent = $faker->randomElement($parents);
-            $this->model->insert('inscription', [
+            $this->model->insertFixture('inscription', [
                 'is_passed' => $faker->randomElement(['oui', 'non']),
                 'date_inscription' => $faker->date(),
                 'classe_id_classe' => $faker->randomElement($classes),
@@ -289,7 +289,7 @@ class AppFixtures extends CI_Controller
 
         // 13. note
         for ($i = 0; $i < 10; $i++) {
-            $this->model->insert('note', [
+            $this->model->insertFixture('note', [
                 'valeur' => $faker->numberBetween(0, 20),
                 'eleve_id_eleve' => $faker->randomElement($eleves),
                 'annee_scolaire_id_annee_scolaire' => $faker->randomElement($annees),
@@ -300,7 +300,7 @@ class AppFixtures extends CI_Controller
 
         // 14. depense
         for ($i = 0; $i < 5; $i++) {
-            $this->model->insert('depense', [
+            $this->model->insertFixture('depense', [
                 'raison' => $faker->sentence(3),
                 'montant' => $faker->randomFloat(2, 500, 5000),
                 'date' => $faker->date(),
@@ -313,7 +313,7 @@ class AppFixtures extends CI_Controller
         $droitIds = $this->model->getIds('droit_inscription', 'id_droit_inscription');
         $ecolageIds = $this->model->getIds('ecolage', 'id_ecolage');
         foreach ($inscriptions as $inscription) {
-            $this->model->insert('paiement', [
+            $this->model->insertFixture('paiement', [
                 'date_paiement' => $faker->date(),
                 'droit_inscription_id' => $faker->randomElement($droitIds),
                 'ecolage_id_ecolage' => $faker->randomElement($ecolageIds),
