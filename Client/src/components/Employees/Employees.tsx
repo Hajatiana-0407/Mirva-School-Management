@@ -87,8 +87,8 @@ const Employees: React.FC = () => {
   };
 
   const handleConfirmArchive = () => {
-    if ( teacherToArchive ){ 
-      dispatch( deleteEmployees( teacherToArchive?.id_personnel as number ))
+    if (teacherToArchive) {
+      dispatch(deleteEmployees(teacherToArchive?.id_personnel as number))
     }
     setShowConfirmDialog(false);
     setTeacherToArchive(null);
@@ -211,6 +211,20 @@ const Employees: React.FC = () => {
                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
+            <select
+              id="countries"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 cursor-pointer"
+              onChange={(e) => {
+                setSearchTerm(e.target.value)
+              }}
+            >
+              <option value="">Tous</option>
+              {
+                TypesEmployees.map((type: TypePersonnelType) => (
+                  <option key={type.id_type_personnel} value={type.type}>{type.type}</option>
+                ))
+              }
+            </select>
             <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
               <Filter className="w-4 h-4" />
               <span>Filtres</span>
