@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getEmployeState } from './redux/EmployeSlice';
 import { employeeInitialValue, EmployeeType, TypePersonnelType } from '../../Utils/Types';
 import { AppDispatch } from '../../Redux/store';
-import { createEmployees, getAllEmployees, updateEmployees } from './redux/EmployeAsyncThunk';
+import { createEmployees, deleteEmployees, getAllEmployees, updateEmployees } from './redux/EmployeAsyncThunk';
 import useForm from '../../Hooks/useForm';
 import InputError from '../ui/InputError';
 import { getTypeEmployeesState } from '../../Redux/Other/slices/TypeEmployeesSlice';
@@ -54,7 +54,7 @@ const Employees: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingEmployees, setEditingEmployees] = useState<EmployeeType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [teacherToArchive, setTeacherToArchive] = useState<any>(null);
+  const [teacherToArchive, setTeacherToArchive] = useState<EmployeeType | null>(null);
   const [sexe, setSexe] = useState({
     homme: false,
     femme: true
@@ -63,7 +63,7 @@ const Employees: React.FC = () => {
 
   // Aperçu de la photo uploadée
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
-  const { hiddeTheModalActive  } = useSelector(getAppState) ; 
+  const { hiddeTheModalActive } = useSelector(getAppState);
 
   // *** //
   const { datas: employees, action } = useSelector(getEmployeState);
@@ -87,7 +87,9 @@ const Employees: React.FC = () => {
   };
 
   const handleConfirmArchive = () => {
-    console.log('Archivage de:', teacherToArchive);
+    if ( teacherToArchive ){ 
+      dispatch( deleteEmployees( teacherToArchive?.id_personnel as number ))
+    }
     setShowConfirmDialog(false);
     setTeacherToArchive(null);
   };
@@ -119,41 +121,37 @@ const Employees: React.FC = () => {
     {
       key: 'nom',
       label: 'Profil',
-      render: (value: string, item: EmployeeType) => {
-        const [showPreview, setShowPreview] = useState(false);
-
-        return (
-          <div className="flex items-center space-x-3 relative group">
-            {/* Image miniature */}
-            <div
-              className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer"
-              onMouseEnter={() => setShowPreview(true)}
-              onMouseLeave={() => setShowPreview(false)}
-            >
-              <img src={baseUrl(item.photo)} alt='' className="w-full h-full object-cover" />
-            </div>
-            {/* Pop-up image agrandie */}
-            {showPreview && (
-              <div className="absolute z-50 left-12 top-1/2 -translate-y-1/2 bg-white border border-gray-200 rounded-lg shadow-lg p-2">
+      render: (value: string, item: EmployeeType) => (
+        <div className="flex items-center space-x-3 relative group">
+          {/* Image miniature */}
+          <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer group">
+            <img
+              src={baseUrl(item.photo)}
+              alt=""
+              className="w-full h-full object-cover"
+            />
+            {/* Pop-up image agrandie au survol */}
+            <div className="absolute left-12 top-1/2 -translate-y-1/2 z-50 hidden group-hover:flex flex-col items-center">
+              <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-2">
                 <img
                   src={baseUrl(item.photo)}
                   alt="Aperçu"
                   className="w-40 h-40 object-cover rounded-md"
                   style={{ minWidth: 160, minHeight: 160 }}
                 />
-                <div className='text-center '>
-                  <h5 className='font-semibold'>{item.nom} {item.prenom}</h5>
-                  <p className='text-sm  text-gray-500'>{item.email} </p>
+                <div className="text-center mt-2">
+                  <h5 className="font-semibold">{item.nom} {item.prenom}</h5>
+                  <p className="text-sm text-gray-500">{item.email}</p>
                 </div>
               </div>
-            )}
-            <div>
-              <div className="font-medium text-gray-900">{value} {item.prenom}</div>
-              <div className="text-sm text-gray-500">{item.email}</div>
             </div>
           </div>
-        );
-      }
+          <div>
+            <div className="font-medium text-gray-900">{value} {item.prenom}</div>
+            <div className="text-sm text-gray-500">{item.email}</div>
+          </div>
+        </div>
+      )
     },
     {
       key: 'type', label: 'Fonction', render: (employeType: string) => {
@@ -181,11 +179,11 @@ const Employees: React.FC = () => {
   }, [dispatch]);
 
   // Modale 
-    useEffect(() => {
-      if (showModal && hiddeTheModalActive) {
-        handleCloseModal();
-      }
-    }, [hiddeTheModalActive]);
+  useEffect(() => {
+    if (showModal && hiddeTheModalActive) {
+      handleCloseModal();
+    }
+  }, [hiddeTheModalActive]);
 
   return (
     <div className="space-y-6">
