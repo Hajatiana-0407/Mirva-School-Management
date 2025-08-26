@@ -3,7 +3,7 @@ import { Plus, Search, Filter, Edit, Archive, Eye, BookOpen, User, Users, Shield
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
-import { date, object, string } from 'yup';
+import { object, string } from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEmployeState } from './redux/EmployeSlice';
 import { employeeInitialValue, EmployeeType, TypePersonnelType } from '../../Utils/Types';
@@ -13,6 +13,7 @@ import useForm from '../../Hooks/useForm';
 import InputError from '../ui/InputError';
 import { getTypeEmployeesState } from '../../Redux/Other/slices/TypeEmployeesSlice';
 import { baseUrl } from '../../Utils/Utils';
+import { getAppState } from '../../Redux/AppSlice';
 
 // Mapping des types à des couleurs de fond
 const typeBgColors: Record<string, string> = {
@@ -51,7 +52,7 @@ const Employees: React.FC = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [editingEmployees, setEditingEmployees] = useState<any>(null);
+  const [editingEmployees, setEditingEmployees] = useState<EmployeeType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [teacherToArchive, setTeacherToArchive] = useState<any>(null);
   const [sexe, setSexe] = useState({
@@ -62,6 +63,7 @@ const Employees: React.FC = () => {
 
   // Aperçu de la photo uploadée
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const { hiddeTheModalActive  } = useSelector(getAppState) ; 
 
   // *** //
   const { datas: employees, action } = useSelector(getEmployeState);
@@ -74,7 +76,8 @@ const Employees: React.FC = () => {
   //Handlers
   const handleEdit = (employee: any) => {
     setEditingEmployees(employee);
-    setPhotoPreview(employee?.photo || null);
+    setPhotoPreview(baseUrl(employee?.photo) || null);
+    setSexe(employee?.sexe === 'Homme' ? { homme: true, femme: false } : { homme: false, femme: true });
     setShowModal(true);
   };
 
@@ -98,13 +101,13 @@ const Employees: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     onSubmite((validateData: EmployeeType) => {
       editingEmployees ? dispatch(updateEmployees({ datas: validateData, id: editingEmployees?.id_personnel as number })) : dispatch(createEmployees(validateData))
-    } , e );
+    }, e);
   };
 
 
 
 
-// TABLEAUX 
+  // TABLEAUX 
   const actions = [
     { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
     { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
@@ -114,17 +117,43 @@ const Employees: React.FC = () => {
 
   const columns = [
     {
-      key: 'nom', label: 'Profil', render: (value: string, item: EmployeeType) => (
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-            <img src={  baseUrl(item.photo ) } alt='' className="w-full h-full object-cover" />
+      key: 'nom',
+      label: 'Profil',
+      render: (value: string, item: EmployeeType) => {
+        const [showPreview, setShowPreview] = useState(false);
+
+        return (
+          <div className="flex items-center space-x-3 relative group">
+            {/* Image miniature */}
+            <div
+              className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer"
+              onMouseEnter={() => setShowPreview(true)}
+              onMouseLeave={() => setShowPreview(false)}
+            >
+              <img src={baseUrl(item.photo)} alt='' className="w-full h-full object-cover" />
+            </div>
+            {/* Pop-up image agrandie */}
+            {showPreview && (
+              <div className="absolute z-50 left-12 top-1/2 -translate-y-1/2 bg-white border border-gray-200 rounded-lg shadow-lg p-2">
+                <img
+                  src={baseUrl(item.photo)}
+                  alt="Aperçu"
+                  className="w-40 h-40 object-cover rounded-md"
+                  style={{ minWidth: 160, minHeight: 160 }}
+                />
+                <div className='text-center '>
+                  <h5 className='font-semibold'>{item.nom} {item.prenom}</h5>
+                  <p className='text-sm  text-gray-500'>{item.email} </p>
+                </div>
+              </div>
+            )}
+            <div>
+              <div className="font-medium text-gray-900">{value} {item.prenom}</div>
+              <div className="text-sm text-gray-500">{item.email}</div>
+            </div>
           </div>
-          <div>
-            <div className="font-medium text-gray-900">{value} {item.prenom}</div>
-            <div className="text-sm text-gray-500">{item.email}</div>
-          </div>
-        </div>
-      )
+        );
+      }
     },
     {
       key: 'type', label: 'Fonction', render: (employeType: string) => {
@@ -150,6 +179,13 @@ const Employees: React.FC = () => {
       dispatch(getAllEmployees());
     }
   }, [dispatch]);
+
+  // Modale 
+    useEffect(() => {
+      if (showModal && hiddeTheModalActive) {
+        handleCloseModal();
+      }
+    }, [hiddeTheModalActive]);
 
   return (
     <div className="space-y-6">
@@ -260,7 +296,7 @@ const Employees: React.FC = () => {
                       type="radio"
                       name='sexe'
                       value='Homme'
-                      checked={editingEmployees ? editingEmployees?.sexe === 'Homme' : sexe.homme}
+                      checked={sexe.homme}
                       onChange={(e) => { setSexe({ homme: e.target.checked, femme: !e.target.checked }) }}
                       className="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
@@ -271,7 +307,7 @@ const Employees: React.FC = () => {
                       type="radio"
                       name='sexe'
                       value='Femme'
-                      checked={editingEmployees ? editingEmployees?.sexe === 'Homme' : sexe.femme}
+                      checked={sexe.femme}
                       onChange={(e) => { setSexe({ homme: !e.target.checked, femme: e.target.checked }) }}
                       className="form-checkbox h-4 w-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
                     />
@@ -303,7 +339,6 @@ const Employees: React.FC = () => {
                 placeholder='Tananarivo'
               />
               <InputError message={formErrors?.addresse} />
-
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
@@ -335,7 +370,7 @@ const Employees: React.FC = () => {
                   name='engagement'
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-10"
                 >
-                  <option value="Marié">Célibataire</option>
+                  <option value="Célibataire">Célibataire</option>
                   <option value="Marié">Marié</option>
                   <option value="Divorcé">Divorcé</option>
                 </select>
@@ -349,7 +384,7 @@ const Employees: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Fonction</label>
               <div className="relative">
                 <select
-                  defaultValue={editingEmployees?.type || ''}
+                  defaultValue={editingEmployees?.id_type_personnel || ''}
                   name='type_personnel'
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-10"
                 >
