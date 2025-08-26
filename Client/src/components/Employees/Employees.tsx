@@ -14,6 +14,7 @@ import InputError from '../ui/InputError';
 import { getTypeEmployeesState } from '../../Redux/Other/slices/TypeEmployeesSlice';
 import { baseUrl } from '../../Utils/Utils';
 import { getAppState } from '../../Redux/AppSlice';
+import { useNavigate } from 'react-router-dom';
 
 // Mapping des types à des couleurs de fond
 const typeBgColors: Record<string, string> = {
@@ -43,6 +44,7 @@ const EmployeSchema = object({
   nom: string().required('Le nom est obligatoire.'),
   prenom: string().required('La prénom est obligatoire.'),
   addresse: string().required('La adresse est obligatoire.'),
+  // date_embauche: string().required("La date d'embauche est obligatoire."),
   telephone: string().required('Le téléphone est obligatoire.'),
 });
 
@@ -68,6 +70,7 @@ const Employees: React.FC = () => {
   // *** //
   const { datas: employees, action } = useSelector(getEmployeState);
   const { onSubmite, formErrors } = useForm<EmployeeType>(EmployeSchema, employeeInitialValue);
+  const navigate = useNavigate( ) ; 
 
   const dispatch: AppDispatch = useDispatch();
   // *** //
@@ -111,7 +114,7 @@ const Employees: React.FC = () => {
 
   // TABLEAUX 
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
+    { icon: Eye, label: 'Voir', onClick: (item: EmployeeType ) => navigate("/employees/" + item.id_personnel ), color: 'blue' },
     { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
     { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];

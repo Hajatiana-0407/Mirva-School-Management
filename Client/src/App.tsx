@@ -18,16 +18,17 @@ import { useEffect } from 'react';
 import { AppDispatch } from './Redux/store';
 import { useDispatch } from 'react-redux';
 import { getAllTypePersonnel } from './Redux/Other/asyncThunk/TypeEmployesAsyncThunk';
+import EmployeesSinglePage from './components/Employees/EmployeesSinglePage';
 
 
 
 function App() {
-const dispatch: AppDispatch =  useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
-// Utils
-useEffect(() => {
-  dispatch(getAllTypePersonnel( ))
-}, []);
+  // Utils
+  useEffect(() => {
+    dispatch(getAllTypePersonnel())
+  }, []);
 
   return (
     <Layout >
@@ -45,7 +46,10 @@ useEffect(() => {
         <Route index element={<Dashboard />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="students" element={<Students />} />
-        <Route path="employees" element={<Employees />} />
+        <Route path="employees"  >
+          <Route index element={<Employees />} />
+          <Route path=':id' element={<EmployeesSinglePage />} />
+        </Route>
         <Route path="classes" element={<Classes />} />
         <Route path="levels" element={<Levels />} />
         <Route path="subjects" element={<Subjects />} />
