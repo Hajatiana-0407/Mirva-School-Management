@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CodeIgniter
  *
@@ -36,7 +37,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Model Class
@@ -47,45 +48,46 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/libraries/config.html
  */
-class CI_Model {
+class CI_Model
+{
 
-	/**
-	 * Class constructor
-	 *
-	 * @link	https://github.com/bcit-ci/CodeIgniter/issues/5332
-	 * @return	void
-	 */
+    /**
+     * Class constructor
+     *
+     * @link	https://github.com/bcit-ci/CodeIgniter/issues/5332
+     * @return	void
+     */
 
 
-	protected $table ;
-    protected $primaryKey ;
+    protected $table;
+    protected $primaryKey;
 
-	public function __construct() {}
+    public function __construct() {}
 
-	/**
-	 * __get magic
-	 *
-	 * Allows models to access CI's loaded classes using the same
-	 * syntax as controllers.
-	 *
-	 * @param	string	$key
-	 */
-	public function __get($key)
-	{
-		// Debugging note:
-		//	If you're here because you're getting an error message
-		//	saying 'Undefined Property: system/core/Model.php', it's
-		//	most likely a typo in your model code.
-		return get_instance()->$key;
-	}
+    /**
+     * __get magic
+     *
+     * Allows models to access CI's loaded classes using the same
+     * syntax as controllers.
+     *
+     * @param	string	$key
+     */
+    public function __get($key)
+    {
+        // Debugging note:
+        //	If you're here because you're getting an error message
+        //	saying 'Undefined Property: system/core/Model.php', it's
+        //	most likely a typo in your model code.
+        return get_instance()->$key;
+    }
 
-	/**
-	 * Verification de doublan
-	 *
-	 * @param array $champs [ column => value  ]
-	 * @param [type] $id ( id a exclure )
-	 * @return boolean
-	 */
+    /**
+     * Verification de doublan
+     *
+     * @param array $champs [ column => value  ]
+     * @param [type] $id ( id a exclure )
+     * @return boolean
+     */
     public function isExist($champs = [], $id = null)
     {
         $query = $this->db;
@@ -108,8 +110,8 @@ class CI_Model {
 
 
 
-	// * fonctions CRUD * //
-	// ======= READ =======
+    // * fonctions CRUD * //
+    // ======= READ =======
     public function findAll()
     {
         return $this->db->select('*')
@@ -121,10 +123,21 @@ class CI_Model {
 
     public function findOneById($id)
     {
-        if ( !!!$id )  return null ;
+        if (!!!$id)  return null;
         return $this->db->select('*')
             ->from($this->table)
             ->where($this->primaryKey, $id)
+            ->get()
+            ->row_array();
+    }
+
+    // Récupère le dernier élément inséré
+    public function findLasted()
+    {
+        return $this->db->select('*')
+            ->from($this->table)
+            ->order_by($this->primaryKey, 'DESC')
+            ->limit(1)
             ->get()
             ->row_array();
     }
@@ -134,7 +147,7 @@ class CI_Model {
     {
         $inserted = $this->db->insert($this->table, $data);
 
-         if ($inserted) {
+        if ($inserted) {
             $inserted_id = $this->db->insert_id();
 
             return $this->findOneById($inserted_id);
@@ -172,12 +185,11 @@ class CI_Model {
         return false;
     }
 
-   
+
 
     // ======= INSERT BATCH =======
     public function insertBatch($data = [])
     {
         return $this->db->insert_batch($this->table, $data);
     }
-
 }

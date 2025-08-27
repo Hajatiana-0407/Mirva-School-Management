@@ -11,6 +11,7 @@ class AppFixtures extends CI_Controller
         }
 
         $this->load->model('FixturesModel', 'model');
+        $this->load->model('PersonnelModel', 'personnelModel');
     }
 
     public function loadFixtures()
@@ -113,7 +114,7 @@ class AppFixtures extends CI_Controller
         ];
 
 
-        $type_personnels= [
+        $type_personnels = [
             'Enseignant',
             'Secrétaire',
             'Gardin',
@@ -219,13 +220,27 @@ class AppFixtures extends CI_Controller
                 'description' => $faker->sentence(6),
             ]);
         }
-        
+
         $types = $this->model->getIds('type_personnel', 'id_type_personnel');
 
         // 10. Personnel
         $userIds = 1;
+        // Récupérer le dernier matricule enregistré
+        $lasted = $this->personnelModel->findLasted();
+        $last_id = 0;
+
+        if ($lasted && !empty($lasted->matricule_personnel)) {
+            // Extraire uniquement la partie numérique du matricule
+            $last_id = intval(preg_replace('/[^0-9]/', '', $lasted->matricule_personnel));
+        }
+
+        // Générer 5 nouveaux employés
         for ($i = 0; $i < 5; $i++) {
+            $new_id = $last_id + 1;
+            $matricule = 'EMP' . str_pad($new_id, 5, '0', STR_PAD_LEFT);
+
             $this->model->insertFixture('personnel', [
+                'matricule_personnel' => $matricule,
                 'nom' => $faker->lastName,
                 'prenom' => $faker->firstName,
                 'addresse' => $faker->address,
@@ -237,10 +252,16 @@ class AppFixtures extends CI_Controller
                 'password' => password_hash('123456', PASSWORD_DEFAULT),
                 'pc_cin' => $faker->numerify('#########'),
                 'photo' => 'default.jpg',
-                'created_at' => date('Y-m-d H:i:s') , 
                 'id_type_personnel' => $faker->randomElement($types),
+                'date_embauche' => $faker->date(),
+                'salaire_base' => $faker->numberBetween(200000, 800000),
+                "status" => $faker->randomElement(['Actif', 'Suspendu', "Démissionnaire"]),
+                'created_at' => date('Y-m-d H:i:s'),
             ]);
+
+            $last_id++; // incrémenter pour le prochain matricule
         }
+
 
         $professeurs = $this->model->getIds('personnel', 'id_personnel');
 

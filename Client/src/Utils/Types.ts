@@ -98,6 +98,9 @@ export type EmployeeType = {
     pc_cin?: string;
     photo?: string;
     id_type_personnel?: number;
+    status?: 'Actif' | 'Suspendu' | 'Démissionnaire';
+    date_embauche?: string;
+    salaire_base?: number;
     created_at?: string;
 }
 
@@ -115,6 +118,9 @@ export const employeeInitialValue: EmployeeType = {
     pc_cin: '',
     photo: '',
     id_type_personnel: undefined ,
+    status: 'Actif',
+    date_embauche: '',
+    salaire_base: 0,
     created_at: ''
 } ; 
 

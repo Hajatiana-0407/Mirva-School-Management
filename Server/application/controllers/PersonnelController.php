@@ -19,6 +19,15 @@ class PersonnelController extends CI_Controller
     public function create()
     {
 
+        // Creation d'un matricule unique si non fourni
+        $lasted = $this->PersonnelModel->findLasted();
+        $matricule = 'EMP00001';
+        if ($lasted) {
+            $last_id = intval(preg_replace('/[^0-9]/', '', $lasted[ "matricule_personnel"] ));
+            $new_id = $last_id + 1;
+            $matricule = 'EMP' . str_pad($new_id, 5, '0', STR_PAD_LEFT);
+        }
+
         // Récupération des données du formulaire
         $data = [
             'nom'               => $this->input->post('nom'),
@@ -30,6 +39,10 @@ class PersonnelController extends CI_Controller
             'engagement'        => $this->input->post('engagement'),
             'email'             => $this->input->post('email'),
             'id_type_personnel'    => $this->input->post('type_personnel'),
+            'salaire_base'     => $this->input->post('salaire_base') ?: 0,
+            'status'            => $this->input->post('status') ?: 'Actif',
+            'date_embauche'     => $this->input->post('date_embauche') ?: date('Y-m-d'),
+            'matricule_personnel'         => $matricule,
         ];
 
         // Gestion de l'upload de la photo de profil
@@ -57,7 +70,7 @@ class PersonnelController extends CI_Controller
         // Création du personnel
         $result = $this->PersonnelModel->insert($data);
 
-        if ($result) {
+        if ($result  ) {
             echo json_encode(['error' => false, 'data' => $result]);
         } else {
             echo json_encode(['error' => true, 'message' => "Erreur lors de l'enregistrement"]);
@@ -72,6 +85,8 @@ class PersonnelController extends CI_Controller
             return;
         }
 
+
+
         // Récupération des données du formulaire
         $data = [
             'nom'               => $this->input->post('nom'),
@@ -82,7 +97,10 @@ class PersonnelController extends CI_Controller
             'sexe'              => $this->input->post('sexe'),
             'engagement'        => $this->input->post('engagement'),
             'email'             => $this->input->post('email'),
-            'id_type_personnel'              => $this->input->post('type_personnel'),
+            'id_type_personnel'    => $this->input->post('type_personnel'),
+            'salaire_base'     => $this->input->post('salaire_base') ?: 0,
+            'status'            => $this->input->post('status') ?: 'Actif',
+            'date_embauche'     => $this->input->post('date_embauche') ?: date('Y-m-d'),
         ];
 
         // Gestion de l'upload de la photo de profil (optionnel)
