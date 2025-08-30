@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : sam. 30 août 2025 à 07:43
+-- Généré le : sam. 30 août 2025 à 19:59
 -- Version du serveur : 10.4.22-MariaDB
 -- Version de PHP : 8.0.14
 
@@ -83,7 +83,7 @@ CREATE TABLE `depense` (
 
 CREATE TABLE `droit_inscription` (
   `id_droit_inscription` int(11) NOT NULL,
-  `montant` int(11) DEFAULT NULL,
+  `montant` int(11) NOT NULL,
   `niveau_id_niveau` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -342,8 +342,8 @@ ALTER TABLE `depense`
 -- Index pour la table `droit_inscription`
 --
 ALTER TABLE `droit_inscription`
-  ADD PRIMARY KEY (`id_droit_inscription`,`niveau_id_niveau`),
-  ADD KEY `fk_droit_inscription_classe_groupe1_idx` (`niveau_id_niveau`);
+  ADD PRIMARY KEY (`id_droit_inscription`),
+  ADD KEY `fk_niveau_droit_inscription` (`niveau_id_niveau`);
 
 --
 -- Index pour la table `ecolage`
@@ -439,73 +439,79 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `annee_scolaire`
 --
 ALTER TABLE `annee_scolaire`
-  MODIFY `id_annee_scolaire` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `id_annee_scolaire` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- AUTO_INCREMENT pour la table `classe`
 --
 ALTER TABLE `classe`
-  MODIFY `id_classe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=189;
+  MODIFY `id_classe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=198;
 
 --
 -- AUTO_INCREMENT pour la table `depense`
 --
 ALTER TABLE `depense`
-  MODIFY `id_depense` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
+  MODIFY `id_depense` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
+
+--
+-- AUTO_INCREMENT pour la table `droit_inscription`
+--
+ALTER TABLE `droit_inscription`
+  MODIFY `id_droit_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pour la table `ecolage`
 --
 ALTER TABLE `ecolage`
-  MODIFY `id_ecolage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=256;
+  MODIFY `id_ecolage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=270;
 
 --
 -- AUTO_INCREMENT pour la table `eleve`
 --
 ALTER TABLE `eleve`
-  MODIFY `id_eleve` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=451;
+  MODIFY `id_eleve` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=471;
 
 --
 -- AUTO_INCREMENT pour la table `inscription`
 --
 ALTER TABLE `inscription`
-  MODIFY `id_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
+  MODIFY `id_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=186;
 
 --
 -- AUTO_INCREMENT pour la table `matiere`
 --
 ALTER TABLE `matiere`
-  MODIFY `id_matiere` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=376;
+  MODIFY `id_matiere` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=397;
 
 --
 -- AUTO_INCREMENT pour la table `niveau`
 --
 ALTER TABLE `niveau`
-  MODIFY `id_niveau` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=258;
+  MODIFY `id_niveau` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=273;
 
 --
 -- AUTO_INCREMENT pour la table `note`
 --
 ALTER TABLE `note`
-  MODIFY `id_note` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=331;
+  MODIFY `id_note` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=351;
 
 --
 -- AUTO_INCREMENT pour la table `paiement`
 --
 ALTER TABLE `paiement`
-  MODIFY `id_paiement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+  MODIFY `id_paiement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
 
 --
 -- AUTO_INCREMENT pour la table `parent`
 --
 ALTER TABLE `parent`
-  MODIFY `id_parent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=226;
+  MODIFY `id_parent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=236;
 
 --
 -- AUTO_INCREMENT pour la table `personnel`
 --
 ALTER TABLE `personnel`
-  MODIFY `id_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=237;
+  MODIFY `id_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=247;
 
 --
 -- AUTO_INCREMENT pour la table `type_personnel`
@@ -547,7 +553,7 @@ ALTER TABLE `depense`
 -- Contraintes pour la table `droit_inscription`
 --
 ALTER TABLE `droit_inscription`
-  ADD CONSTRAINT `fk_droit_inscription_classe_groupe1` FOREIGN KEY (`niveau_id_niveau`) REFERENCES `niveau` (`id_niveau`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_niveau_droit_inscription` FOREIGN KEY (`niveau_id_niveau`) REFERENCES `niveau` (`id_niveau`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `ecolage`
@@ -565,9 +571,9 @@ ALTER TABLE `eleve`
 -- Contraintes pour la table `inscription`
 --
 ALTER TABLE `inscription`
-  ADD CONSTRAINT `fk_inscription_annee_scolaire` FOREIGN KEY (`annee_scolaire_id_annee_scolaire`) REFERENCES `annee_scolaire` (`id_annee_scolaire`),
-  ADD CONSTRAINT `fk_inscription_classe` FOREIGN KEY (`classe_id_classe`) REFERENCES `classe` (`id_classe`),
-  ADD CONSTRAINT `fk_inscription_eleve_correct` FOREIGN KEY (`eleve_id_eleve`) REFERENCES `eleve` (`id_eleve`);
+  ADD CONSTRAINT `fk_inscription_annee_scolaire` FOREIGN KEY (`annee_scolaire_id_annee_scolaire`) REFERENCES `annee_scolaire` (`id_annee_scolaire`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_inscription_classe` FOREIGN KEY (`classe_id_classe`) REFERENCES `classe` (`id_classe`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_inscription_eleve_correct` FOREIGN KEY (`eleve_id_eleve`) REFERENCES `eleve` (`id_eleve`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `matiere_niveau`
@@ -588,9 +594,9 @@ ALTER TABLE `note`
 -- Contraintes pour la table `paiement`
 --
 ALTER TABLE `paiement`
-  ADD CONSTRAINT `fk_paiement_droit_inscription1` FOREIGN KEY (`droit_inscription_id`) REFERENCES `droit_inscription` (`id_droit_inscription`),
-  ADD CONSTRAINT `fk_paiement_ecolage1` FOREIGN KEY (`ecolage_id_ecolage`) REFERENCES `ecolage` (`id_ecolage`),
-  ADD CONSTRAINT `fk_paiement_inscription1` FOREIGN KEY (`inscription_id_inscription`) REFERENCES `inscription` (`id_inscription`);
+  ADD CONSTRAINT `fk_paiement_droit_inscription1` FOREIGN KEY (`droit_inscription_id`) REFERENCES `droit_inscription` (`id_droit_inscription`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_paiement_ecolage1` FOREIGN KEY (`ecolage_id_ecolage`) REFERENCES `ecolage` (`id_ecolage`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_paiement_inscription1` FOREIGN KEY (`inscription_id_inscription`) REFERENCES `inscription` (`id_inscription`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `personnel`
