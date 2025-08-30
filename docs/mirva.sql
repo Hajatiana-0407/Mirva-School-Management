@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : jeu. 21 août 2025 à 13:58
+-- Généré le : sam. 30 août 2025 à 07:43
 -- Version du serveur : 10.4.22-MariaDB
 -- Version de PHP : 8.0.14
 
@@ -34,14 +34,6 @@ CREATE TABLE `annee_scolaire` (
   `created_at` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `annee_scolaire`
---
-
-INSERT INTO `annee_scolaire` (`id_annee_scolaire`, `date_debut`, `date_fin`, `created_at`) VALUES
-(31, '2019-01-07', '1987-08-12', '2025-07-21'),
-(32, '2002-05-31', '1977-07-01', '2025-07-21');
-
 -- --------------------------------------------------------
 
 --
@@ -55,16 +47,6 @@ CREATE TABLE `classe` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `classe`
---
-
-INSERT INTO `classe` (`id_classe`, `denomination`, `niveau_id_niveau`, `created_at`) VALUES
-(61, 'Classe aut', 47, '2025-07-21 15:47:19'),
-(62, 'Classe quia', 48, '2025-07-21 15:47:19'),
-(63, 'Classe sed', 48, '2025-07-21 15:47:19'),
-(64, 'Classe at', 50, '2025-07-21 15:47:20');
-
 -- --------------------------------------------------------
 
 --
@@ -74,18 +56,9 @@ INSERT INTO `classe` (`id_classe`, `denomination`, `niveau_id_niveau`, `created_
 CREATE TABLE `classe_professeur_matier` (
   `classe_id_classe` int(11) NOT NULL,
   `professeur_id_professeur` int(11) NOT NULL,
-  `matiere_id_matiere` int(11) NOT NULL
+  `matiere_id_matiere` int(11) NOT NULL,
+  `heure_semaine` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `classe_professeur_matier`
---
-
-INSERT INTO `classe_professeur_matier` (`classe_id_classe`, `professeur_id_professeur`, `matiere_id_matiere`) VALUES
-(62, 73, 76),
-(64, 73, 77),
-(61, 74, 79),
-(63, 76, 79);
 
 -- --------------------------------------------------------
 
@@ -102,17 +75,6 @@ CREATE TABLE `depense` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `depense`
---
-
-INSERT INTO `depense` (`id_depense`, `raison`, `montant`, `date`, `user_id_user`, `created_at`) VALUES
-(29, 'Aut qui praesentium vel ut.', '3408.98', '1979-09-05', 1, '2025-07-21 15:47:25'),
-(30, 'Porro harum quis fugiat.', '2380.90', '2006-02-16', 1, '2025-07-21 15:47:25'),
-(31, 'Reiciendis quidem.', '4811.47', '1996-03-07', 1, '2025-07-21 15:47:25'),
-(32, 'Possimus sequi.', '2582.98', '2016-05-06', 1, '2025-07-21 15:47:25'),
-(33, 'Blanditiis labore cupiditate quidem.', '927.47', '1984-12-30', 1, '2025-07-21 15:47:25');
-
 -- --------------------------------------------------------
 
 --
@@ -126,19 +88,6 @@ CREATE TABLE `droit_inscription` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `droit_inscription`
---
-
-INSERT INTO `droit_inscription` (`id_droit_inscription`, `montant`, `niveau_id_niveau`, `created_at`) VALUES
-(0, 71711, 46, '2025-07-21 15:47:20'),
-(0, 96243, 47, '2025-07-21 15:47:20'),
-(0, 86513, 48, '2025-07-21 15:47:20'),
-(0, 87896, 49, '2025-07-21 15:47:20'),
-(0, 62238, 50, '2025-07-21 15:47:20'),
-(0, 63683, 51, '2025-07-21 15:47:20'),
-(0, 76949, 52, '2025-07-21 15:47:20');
-
 -- --------------------------------------------------------
 
 --
@@ -151,19 +100,6 @@ CREATE TABLE `ecolage` (
   `niveau_id_niveau` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `ecolage`
---
-
-INSERT INTO `ecolage` (`id_ecolage`, `montant`, `niveau_id_niveau`, `created_at`) VALUES
-(46, '78413.00', 46, '2025-07-21 15:47:20'),
-(47, '65920.00', 47, '2025-07-21 15:47:20'),
-(48, '64181.00', 48, '2025-07-21 15:47:20'),
-(49, '41363.00', 49, '2025-07-21 15:47:20'),
-(50, '64619.00', 50, '2025-07-21 15:47:20'),
-(51, '68680.00', 51, '2025-07-21 15:47:21'),
-(52, '49553.00', 52, '2025-07-21 15:47:21');
 
 -- --------------------------------------------------------
 
@@ -185,22 +121,6 @@ CREATE TABLE `eleve` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `eleve`
---
-
-INSERT INTO `eleve` (`id_eleve`, `nom`, `prenom`, `adresse`, `telephone`, `parent_id_parent`, `date_naissance`, `sexe`, `maladie`, `photo`, `created_at`) VALUES
-(151, 'Morin', 'Alphonse', '917, place de Barthelemy\n56097 Poulaindan', '+33 (0)9 04 27 83 76', 76, '2021-11-07', 'Femme', 'asperiores', 'default.jpg', '2025-07-21 15:47:21'),
-(152, 'Vidal', 'Laurent', '34, rue Rossi\n88364 Rolland-sur-Lambert', '06 98 49 11 28', 76, '1986-09-05', 'Femme', 'praesentium', 'default.jpg', '2025-07-21 15:47:21'),
-(153, 'Colas', 'Daniel', '43, rue Lacroix\n14191 Vincentdan', '+33 (0)3 27 91 15 39', 77, '1998-02-05', 'Femme', 'et', 'default.jpg', '2025-07-21 15:47:21'),
-(154, 'Baudry', 'Agathe', 'place Auger\n95758 Besson', '+33 7 83 13 14 44', 80, '2012-07-01', 'Femme', 'accusantium', 'default.jpg', '2025-07-21 15:47:21'),
-(155, 'Giraud', 'William', 'boulevard Agnès Diallo\n98652 Guillet-les-Bain', '+33 1 93 59 52 65', 76, '2003-03-01', 'Femme', 'veniam', 'default.jpg', '2025-07-21 15:47:22'),
-(156, 'Leroux', 'Théodore', '71, avenue de Munoz\n04368 Labbe', '+33 7 76 66 97 44', 80, '1971-04-27', 'Homme', 'in', 'default.jpg', '2025-07-21 15:47:22'),
-(157, 'Bonnet', 'Vincent', 'rue Besson\n24106 Dufour', '+33 9 62 70 96 44', 80, '2021-02-16', 'Femme', 'a', 'default.jpg', '2025-07-21 15:47:22'),
-(158, 'Legrand', 'Madeleine', '735, place de Leroy\n19086 Hernandez-sur-Hoara', '05 74 40 26 97', 79, '2012-09-12', 'Homme', 'aut', 'default.jpg', '2025-07-21 15:47:22'),
-(159, 'Couturier', 'Frédéric', '13, place Costa\n86066 Deschamps', '0599075832', 80, '1990-04-10', 'Femme', 'aperiam', 'default.jpg', '2025-07-21 15:47:22'),
-(160, 'Begue', 'Théodore', '283, place Couturier\n54297 Chartier-les-Bains', '+33 4 92 59 77 84', 76, '2016-09-28', 'Homme', 'autem', 'default.jpg', '2025-07-21 15:47:22');
-
 -- --------------------------------------------------------
 
 --
@@ -219,17 +139,6 @@ CREATE TABLE `inscription` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `inscription`
---
-
-INSERT INTO `inscription` (`id_inscription`, `is_passed`, `date_inscription`, `classe_id_classe`, `annee_scolaire_id_annee_scolaire`, `eleve_id_eleve`, `image`, `is_droit_payed`, `created_at`) VALUES
-(66, 0, '1994-12-15', 63, 31, 153, 'default.jpg', 0, '2025-07-21 15:47:24'),
-(67, 0, '2012-03-21', 62, 31, 158, 'default.jpg', 0, '2025-07-21 15:47:24'),
-(68, 0, '1971-11-18', 62, 32, 154, 'default.jpg', 0, '2025-07-21 15:47:24'),
-(69, 0, '2017-07-09', 64, 32, 153, 'default.jpg', 0, '2025-07-21 15:47:24'),
-(70, 0, '1991-01-06', 64, 31, 160, 'default.jpg', 0, '2025-07-21 15:47:24');
-
 -- --------------------------------------------------------
 
 --
@@ -245,16 +154,6 @@ CREATE TABLE `matiere` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `matiere`
---
-
-INSERT INTO `matiere` (`id_matiere`, `denomination`, `abbreviation`, `description`, `couleur`, `created_at`) VALUES
-(76, 'Francais', 'FRS', 'Libero velit unde molestiae quo.', '#a51e1e', '2025-07-21 15:47:18'),
-(77, 'Malagasy', 'MLG', 'Rerum consectetur magni.', '#f87748', '2025-07-21 15:47:18'),
-(78, 'ut', 'EYA', 'Rem non consequatur.', '#01bdac', '2025-07-21 15:47:18'),
-(79, 'Teste', 'OPY', 'Aut magnam sit a.', '#d30ee5', '2025-07-21 15:47:18');
-
 -- --------------------------------------------------------
 
 --
@@ -267,17 +166,6 @@ CREATE TABLE `matiere_niveau` (
   `coefficient` int(11) DEFAULT NULL,
   `heure_semaine` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `matiere_niveau`
---
-
-INSERT INTO `matiere_niveau` (`matiere_id_matiere`, `niveau_id_niveau`, `coefficient`, `heure_semaine`) VALUES
-(76, 46, 2, 5),
-(77, 51, 4, 7),
-(78, 48, 2, 7),
-(79, 48, 5, 9),
-(79, 50, 4, 4);
 
 -- --------------------------------------------------------
 
@@ -292,19 +180,6 @@ CREATE TABLE `niveau` (
   `description` varchar(45) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `niveau`
---
-
-INSERT INTO `niveau` (`id_niveau`, `niveau`, `cycle`, `description`, `created_at`) VALUES
-(46, 'laboriosam 1', 'Primaire', 'Non odit veritatis.', '2025-07-21 15:47:18'),
-(47, 'repellendus 6', 'Collège', 'Accusamus beatae eum omnis modi.', '2025-07-21 15:47:18'),
-(48, 'qui 2', 'Lycée', 'Est autem eos rerum voluptatum.', '2025-07-21 15:47:18'),
-(49, 'ipsum 3', 'Lycée', 'Nisi sint harum.', '2025-07-21 15:47:18'),
-(50, 'officiis 1', 'Primaire', 'Quia hic culpa culpa illo.', '2025-07-21 15:47:18'),
-(51, 'laboriosam 4', 'Primaire', 'Rerum nostrum est modi quo qui.', '2025-07-21 15:47:18'),
-(52, 'Terminal', 'Lycée', 'Ut aut itaque molestiae.', '2025-07-21 15:47:18');
 
 -- --------------------------------------------------------
 
@@ -321,19 +196,6 @@ CREATE TABLE `note` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `note`
---
-
-INSERT INTO `note` (`id_note`, `valeur`, `eleve_id_eleve`, `annee_scolaire_id_annee_scolaire`, `matiere_id_matiere`, `created_at`) VALUES
-(111, 2, 158, 32, 78, '2025-07-21 15:47:24'),
-(112, 11, 152, 32, 79, '2025-07-21 15:47:24'),
-(113, 14, 153, 32, 78, '2025-07-21 15:47:24'),
-(115, 16, 156, 32, 77, '2025-07-21 15:47:24'),
-(117, 3, 158, 31, 79, '2025-07-21 15:47:24'),
-(118, 3, 153, 32, 77, '2025-07-21 15:47:24'),
-(120, 4, 151, 32, 78, '2025-07-21 15:47:24');
-
 -- --------------------------------------------------------
 
 --
@@ -349,17 +211,6 @@ CREATE TABLE `paiement` (
   `inscription_id_inscription` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `paiement`
---
-
-INSERT INTO `paiement` (`id_paiement`, `date_paiement`, `droit_inscription_id`, `ecolage_id_ecolage`, `mois`, `inscription_id_inscription`, `created_at`) VALUES
-(24, '1993-01-28', 0, 47, 'January', 67, '2025-07-21 15:47:25'),
-(25, '1983-01-03', 0, 51, 'November', 68, '2025-07-21 15:47:25'),
-(26, '1974-05-03', 0, 48, 'June', 66, '2025-07-21 15:47:25'),
-(27, '1985-07-15', 0, 47, 'June', 69, '2025-07-21 15:47:25'),
-(28, '1989-07-15', 0, 52, 'October', 70, '2025-07-21 15:47:25');
 
 -- --------------------------------------------------------
 
@@ -381,49 +232,58 @@ CREATE TABLE `parent` (
   `type` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `parent`
---
-
-INSERT INTO `parent` (`id_parent`, `nom_pere`, `nom_mere`, `profession_pere`, `profession_mere`, `telephone_pere`, `telephone_mere`, `adresse`, `pc_cin_pere`, `pc_cin_mere`, `type`) VALUES
-(76, 'Voisin', 'Hamon', 'Recuiseur', 'Analyste télématique', '+33 (0)8 14 42 08 43', '0898100701', 'boulevard Guibert\n01881 Diaz-sur-Carpentier', '930070469', '942346158', 'Père'),
-(77, 'Adam', 'Carlier', 'Testeur informatique', 'Photographe d\'art', '0472035768', '08 95 37 66 48', '45, rue Boulanger\n56215 Le Goff', '460355341', '446686736', 'Père'),
-(78, 'Leclerc', 'Meyer', 'Scannériste', 'Mannequin détail', '+33 3 92 18 16 09', '+33 (0)8 91 45 31 68', 'rue Michèle Millet\n74197 AlbertVille', '684230867', '750512271', 'Mère'),
-(79, 'Chevalier', 'Bousquet', 'Plisseur', 'Auteur-adaptateur', '+33 (0)9 48 57 99 48', '0513356125', '512, avenue Allain\n26592 Pelletier', '493624668', '351073131', 'Mère'),
-(80, 'Riou', 'Herve', 'Pyrotechnicien', 'Stratifieur', '09 16 58 18 44', '0143776393', '91, place de Antoine\n63527 Boulay', '316812789', '058655650', 'Mère');
-
 -- --------------------------------------------------------
 
 --
--- Structure de la table `professeur`
+-- Structure de la table `personnel`
 --
 
-CREATE TABLE `professeur` (
-  `id_professeur` int(11) NOT NULL,
+CREATE TABLE `personnel` (
+  `id_personnel` int(11) NOT NULL,
+  `matricule_personnel` varchar(50) NOT NULL,
   `nom` varchar(45) DEFAULT NULL,
   `prenom` varchar(45) DEFAULT NULL,
-  `adresse` varchar(45) DEFAULT NULL,
+  `addresse` varchar(45) DEFAULT NULL,
   `telephone` varchar(45) DEFAULT NULL,
   `date_naissance` date DEFAULT NULL,
   `sexe` varchar(45) DEFAULT NULL,
   `engagement` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `pc_cin` varchar(45) DEFAULT NULL,
-  `photo` varchar(45) DEFAULT NULL,
+  `pc_cin` varchar(255) DEFAULT NULL,
+  `photo` varchar(255) DEFAULT NULL,
+  `id_type_personnel` int(11) NOT NULL,
+  `date_embauche` date NOT NULL,
+  `salaire_base` int(11) NOT NULL,
+  `status` varchar(20) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
 --
--- Déchargement des données de la table `professeur`
+-- Structure de la table `type_personnel`
 --
 
-INSERT INTO `professeur` (`id_professeur`, `nom`, `prenom`, `adresse`, `telephone`, `date_naissance`, `sexe`, `engagement`, `email`, `password`, `pc_cin`, `photo`, `created_at`) VALUES
-(72, 'Gaudin', 'Xavier', 'chemin Timothée Mendes\n94146 Georges', '01 04 52 60 44', '2013-06-19', 'Femme', 'Permanent', 'jduval@techer.com', '$2y$10$nC6eLrvFp6VqS4iCLyuLz.GMLnicAsPn4WFxrPUtJ6YHdm9PN6otG', '407956081', 'default.jpg', '2025-07-21 15:47:22'),
-(73, 'Chauvin', 'Joseph', '809, rue de Hardy\n08844 Foucher', '01 07 48 47 03', '1996-07-11', 'Femme', 'Permanent', 'laetitia.pinto@noos.fr', '$2y$10$Tj6E.Vh8VqIP4fgJz.Q94OrjaKJI/hinwHpgUjaa8KsjlRK9oMyyi', '034973412', 'default.jpg', '2025-07-21 15:47:23'),
-(74, 'Pascal', 'Jacques', '86, rue de Carlier\n44111 Barbierboeuf', '03 96 57 35 84', '1983-07-06', 'Femme', 'Permanent', 'omarie@orange.fr', '$2y$10$D9sS8K8u6Hip8QG25Ze2Eez4FCkqV2EiKSO3mLUyJt3RNbZORhoyW', '000879555', 'default.jpg', '2025-07-21 15:47:23'),
-(75, 'Torres', 'Édith', '56, chemin Théodore Leleu\n05095 Renault', '+33 (0)1 34 56 33 64', '2008-03-07', 'Femme', 'Permanent', 'normand.victor@baron.com', '$2y$10$/qXJqO.lTvmQThLJrtQVLeojyNsn6gYHuJje1iQPzPmMmZaEzNkf6', '558571310', 'default.jpg', '2025-07-21 15:47:23'),
-(76, 'Marin', 'Margaud', '27, boulevard Leroy\n08924 LevequeBourg', '0756436499', '2006-07-20', 'Homme', 'Permanent', 'sebastien01@lebrun.com', '$2y$10$AKo2u6QTyNwsSaHAdZxhlOnFyT/fjXtMKHW9BW8dIIAkV72RSN4mO', '343098135', 'default.jpg', '2025-07-21 15:47:23');
+CREATE TABLE `type_personnel` (
+  `id_type_personnel` int(11) NOT NULL,
+  `type` text NOT NULL,
+  `description` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `type_personnel`
+--
+
+INSERT INTO `type_personnel` (`id_type_personnel`, `type`, `description`) VALUES
+(201, 'Enseignant', 'Placeat tenetur nemo rerum consequatur ad ducimus.'),
+(202, 'Secrétaire', 'Qui voluptatem unde impedit dolor.'),
+(203, 'Gardin', 'In occaecati fugit quisquam modi quia accusantium incidunt.'),
+(204, 'Surveillant', 'Nostrum quo error nemo et quaerat aliquid qui exercitationem.'),
+(205, 'Agent d’entretien', 'Eveniet non fugit consequuntur labore molestiae.'),
+(206, 'Bibliothécaire', 'Quis odit occaecati error repellendus fugiat.'),
+(207, 'Comptable', 'Rem in fugit ipsam.'),
+(208, 'Chauffeur', 'Rerum deserunt incidunt sunt asperiores assumenda et officiis iure.');
 
 -- --------------------------------------------------------
 
@@ -553,10 +413,17 @@ ALTER TABLE `parent`
   ADD PRIMARY KEY (`id_parent`);
 
 --
--- Index pour la table `professeur`
+-- Index pour la table `personnel`
 --
-ALTER TABLE `professeur`
-  ADD PRIMARY KEY (`id_professeur`);
+ALTER TABLE `personnel`
+  ADD PRIMARY KEY (`id_personnel`),
+  ADD KEY `fx_personne_type` (`id_type_personnel`);
+
+--
+-- Index pour la table `type_personnel`
+--
+ALTER TABLE `type_personnel`
+  ADD PRIMARY KEY (`id_type_personnel`);
 
 --
 -- Index pour la table `users`
@@ -572,73 +439,79 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `annee_scolaire`
 --
 ALTER TABLE `annee_scolaire`
-  MODIFY `id_annee_scolaire` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id_annee_scolaire` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT pour la table `classe`
 --
 ALTER TABLE `classe`
-  MODIFY `id_classe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id_classe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=189;
 
 --
 -- AUTO_INCREMENT pour la table `depense`
 --
 ALTER TABLE `depense`
-  MODIFY `id_depense` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id_depense` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
 
 --
 -- AUTO_INCREMENT pour la table `ecolage`
 --
 ALTER TABLE `ecolage`
-  MODIFY `id_ecolage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id_ecolage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=256;
 
 --
 -- AUTO_INCREMENT pour la table `eleve`
 --
 ALTER TABLE `eleve`
-  MODIFY `id_eleve` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=161;
+  MODIFY `id_eleve` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=451;
 
 --
 -- AUTO_INCREMENT pour la table `inscription`
 --
 ALTER TABLE `inscription`
-  MODIFY `id_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `id_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
 
 --
 -- AUTO_INCREMENT pour la table `matiere`
 --
 ALTER TABLE `matiere`
-  MODIFY `id_matiere` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `id_matiere` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=376;
 
 --
 -- AUTO_INCREMENT pour la table `niveau`
 --
 ALTER TABLE `niveau`
-  MODIFY `id_niveau` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id_niveau` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=258;
 
 --
 -- AUTO_INCREMENT pour la table `note`
 --
 ALTER TABLE `note`
-  MODIFY `id_note` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+  MODIFY `id_note` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=331;
 
 --
 -- AUTO_INCREMENT pour la table `paiement`
 --
 ALTER TABLE `paiement`
-  MODIFY `id_paiement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id_paiement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
 
 --
 -- AUTO_INCREMENT pour la table `parent`
 --
 ALTER TABLE `parent`
-  MODIFY `id_parent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `id_parent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=226;
 
 --
--- AUTO_INCREMENT pour la table `professeur`
+-- AUTO_INCREMENT pour la table `personnel`
 --
-ALTER TABLE `professeur`
-  MODIFY `id_professeur` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+ALTER TABLE `personnel`
+  MODIFY `id_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=237;
+
+--
+-- AUTO_INCREMENT pour la table `type_personnel`
+--
+ALTER TABLE `type_personnel`
+  MODIFY `id_type_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=209;
 
 --
 -- AUTO_INCREMENT pour la table `users`
@@ -661,7 +534,7 @@ ALTER TABLE `classe`
 --
 ALTER TABLE `classe_professeur_matier`
   ADD CONSTRAINT `fk_classe_has_professeur_classe1` FOREIGN KEY (`classe_id_classe`) REFERENCES `classe` (`id_classe`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_classe_has_professeur_professeur1` FOREIGN KEY (`professeur_id_professeur`) REFERENCES `professeur` (`id_professeur`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_classe_has_professeur_professeur1` FOREIGN KEY (`professeur_id_professeur`) REFERENCES `personnel` (`id_personnel`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_classe_professeur_matier_matiere1` FOREIGN KEY (`matiere_id_matiere`) REFERENCES `matiere` (`id_matiere`) ON DELETE CASCADE;
 
 --
@@ -718,6 +591,12 @@ ALTER TABLE `paiement`
   ADD CONSTRAINT `fk_paiement_droit_inscription1` FOREIGN KEY (`droit_inscription_id`) REFERENCES `droit_inscription` (`id_droit_inscription`),
   ADD CONSTRAINT `fk_paiement_ecolage1` FOREIGN KEY (`ecolage_id_ecolage`) REFERENCES `ecolage` (`id_ecolage`),
   ADD CONSTRAINT `fk_paiement_inscription1` FOREIGN KEY (`inscription_id_inscription`) REFERENCES `inscription` (`id_inscription`);
+
+--
+-- Contraintes pour la table `personnel`
+--
+ALTER TABLE `personnel`
+  ADD CONSTRAINT `fx_personne_type` FOREIGN KEY (`id_type_personnel`) REFERENCES `type_personnel` (`id_type_personnel`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -26,7 +26,7 @@ class AppFixtures extends CI_Controller
             'classe_professeur_matier',
             'eleve',
             'personnel',
-            'type_personnel',
+            // 'type_personnel',
             'ecolage',
             'droit_inscription',
             'classe',
@@ -143,7 +143,6 @@ class AppFixtures extends CI_Controller
                     'matiere_id_matiere' => $matiere,
                     'niveau_id_niveau' => $niveau,
                     'coefficient' => $faker->numberBetween(1, 5),
-                    'heure_semaine' => $faker->numberBetween(1, 10)
                 ]);
             }
         }
@@ -214,12 +213,12 @@ class AppFixtures extends CI_Controller
         $eleves = $this->model->getIds('eleve', 'id_eleve');
 
         // Types de personnel
-        foreach ($type_personnels as $type) {
-            $this->model->insertFixture('type_personnel', [
-                'type' => $type,
-                'description' => $faker->sentence(6),
-            ]);
-        }
+        // foreach ($type_personnels as $type) {
+        //     $this->model->insertFixture('type_personnel', [
+        //         'type' => $type,
+        //         'description' => $faker->sentence(6),
+        //     ]);
+        // }
 
         $types = $this->model->getIds('type_personnel', 'id_type_personnel');
 
@@ -281,7 +280,8 @@ class AppFixtures extends CI_Controller
                     $this->model->insertFixture('classe_professeur_matier', [
                         'classe_id_classe' => $classe,
                         'professeur_id_professeur' => $professeur,
-                        'matiere_id_matiere' => $matiere
+                        'matiere_id_matiere' => $matiere,
+                        'heure_semaine' => $faker->numberBetween(1, 10)
                     ]);
                 }
             }
