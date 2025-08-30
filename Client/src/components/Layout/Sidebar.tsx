@@ -12,35 +12,208 @@ import {
   CreditCard,
   Settings,
   ChevronRight,
+  ChevronDown,
   Menu,
   ChevronLeft
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
+import { useState } from 'react';
+
+interface MenuItemType {
+  id: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  path?: string;
+  children?: MenuItemType[];
+}
 
 interface SidebarPropsType {
   collapsed: boolean;
   onToggleCollapse: () => void;
 }
+const menuItems: MenuItemType[] = [
+  { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard, path: '/dashboard' },
+
+  { id: 'students', label: 'Élèves', icon: Users, path: '/students' },
+  { id: 'schedule', label: 'Emploi du temps', icon: Calendar, path: '/schedule' },
+  { id: 'attendance', label: 'Présences', icon: UserCog, path: '/attendance' },
+  { id: 'exams', label: 'Examens et Notes', icon: FileText, path: '/exams' },
+
+  // Section Administration
+  {
+    id: 'management',
+    label: 'Administration',
+    icon: UserCheck,
+    children: [
+      { id: 'employees', label: 'Employés', icon: UserCheck, path: '/employees' },
+      { id: 'parents', label: 'Parents', icon: Users, path: '/parents' },
+      { id: 'payments', label: 'Paiements', icon: CreditCard, path: '/payments' },
+      { id: 'messages', label: 'Messagerie', icon: MessageSquare, path: '/messages' },
+    ],
+  },
+
+  // Section Paramétrage
+  {
+    id: 'settingsSection',
+    label: 'Configuration',
+    icon: Settings,
+    children: [
+      { id: 'levels', label: 'Niveaux', icon: GraduationCap, path: '/levels' },
+      { id: 'classes', label: 'Classes', icon: School, path: '/classes' },
+      { id: 'subjects', label: 'Matières', icon: BookOpen, path: '/subjects' },
+      { id: 'settings', label: 'Paramètres', icon: Settings, path: '/settings' },
+      // Ici tu peux ajouter d'autres menus liés aux paramètres si besoin
+    ],
+  },
+];
+
+
+const flattenMenuItems = (items: MenuItemType[]): MenuItemType[] => {
+  let flat: MenuItemType[] = [];
+  items.forEach(item => {
+    flat.push(item);
+    if (item.children) {
+      flat = flat.concat(item.children);
+    }
+  });
+  return flat;
+};
 
 const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
+  const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
 
-  const menuItems = [
-    { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard, path: '/dashboard' },
-    { id: 'students', label: 'Élèves', icon: Users, path: '/students' },
-    { id: 'employees', label: 'Employés', icon: UserCheck, path: '/employees' },
-    { id: 'classes', label: 'Classes', icon: School, path: '/classes' },
-    { id: 'levels', label: 'Niveaux', icon: GraduationCap, path: '/levels' },
-    { id: 'subjects', label: 'Matières', icon: BookOpen, path: '/subjects' },
-    { id: 'schedule', label: 'Emploi du temps', icon: Calendar, path: '/schedule' },
-    { id: 'attendance', label: 'Présences', icon: UserCog, path: '/attendance' },
-    { id: 'exams', label: 'Examens et Notes', icon: FileText, path: '/exams' },
-    { id: 'parents', label: 'Parents', icon: Users, path: '/parents' },
-    { id: 'payments', label: 'Paiements', icon: CreditCard, path: '/payments' },
-    { id: 'messages', label: 'Messagerie', icon: MessageSquare, path: '/messages' },
-    { id: 'settings', label: 'Paramètres', icon: Settings, path: '/settings' },
-  ];
+  const handleToggleMenu = (id: string) => {
+    setOpenMenus((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
+  // Rendu des menus pour collapsed
+  const renderCollapsedMenuItems = () => {
+    const flatMenus = flattenMenuItems(menuItems);
+    return (
+      <ul>
+        {flatMenus.map((menu, idx) => {
+          const Icon = menu.icon;
+          return (
+            <li key={menu.id} className="relative">
+              {menu.path ? (
+                <NavLink
+                  to={menu.path}
+                  title={menu.label}
+                  className={({ isActive }: { isActive: boolean }) =>
+                    clsx(
+                      "px-4 justify-center w-full flex items-center py-3 text-left transition-colors group relative",
+                      isActive
+                        ? "bg-blue-50 text-blue-700 border-r-2 border-blue-700"
+                        : "text-gray-700 hover:bg-gray-50"
+                    )
+                  }
+                >
+                  <Icon className="w-5 h-5" />
+                  <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                    {menu.label}
+                  </div>
+                </NavLink>
+              ) : (
+                idx < flatMenus.length - 1 && (
+                  <hr className="border-t border-blue-200 mx-2" />
+                )
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    );
+  };
+
+  // Rendu récursif des menus et sous-menus (pour non-collapsed)
+  const renderMenuItems = (items: MenuItemType[], level = 0) => (
+    <ul className='space-y-0.5'>
+      {items.map((menu, idx) => {
+        const Icon = menu.icon;
+        const hasChildren = !!menu.children?.length;
+        const isOpen = openMenus[menu.id];
+
+        return (
+          <li key={menu.id}>
+            {menu.path ? (
+              <NavLink
+                to={menu.path}
+                title={collapsed ? menu.label : ''}
+                className={({ isActive }: { isActive: boolean }) =>
+                  clsx(
+                    {
+                      "px-4 justify-center": collapsed,
+                      "px-6": !collapsed,
+                      "bg-blue-50 text-blue-700 border-r-2 border-blue-700": isActive,
+                      "text-gray-700 hover:bg-gray-50": !isActive,
+                    },
+                    "w-full flex items-center py-3 text-left transition-colors group relative",
+                    level > 0 ? "pl-8" : ""
+                  )
+                }
+              >
+                {({ isActive }: { isActive: boolean }) => (
+                  <>
+                    <Icon className={`w-5 h-5 ${collapsed ? '' : 'mr-3'}`} />
+                    {!collapsed && (
+                      <>
+                        <span className="font-medium">{menu.label}</span>
+                        {isActive && <ChevronRight className="w-4 h-4 ml-auto" />}
+                      </>
+                    )}
+                    {collapsed && (
+                      <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                        {menu.label}
+                      </div>
+                    )}
+                  </>
+                )}
+              </NavLink>
+            ) : (
+              <button
+                type="button"
+                className={clsx(
+                  "w-full flex items-center py-3 px-6 text-left transition-colors font-medium text-gray-700 hover:bg-blue-100 bg-gray-100",
+                  collapsed ? "justify-center px-4" : "",
+                  level > 0 ? "pl-8" : ""
+                )}
+                onClick={() => handleToggleMenu(menu.id)}
+              >
+                <Icon className={`w-5 h-5 ${collapsed ? '' : 'mr-3'}`} />
+                {!collapsed && (
+                  <>
+                    <span>{menu.label}</span>
+                    <span className="ml-auto">
+                      <ChevronDown
+                        className={clsx(
+                          "w-4 h-4 transition-transform",
+                          isOpen ? "rotate-180" : ""
+                        )}
+                      />
+                    </span>
+                  </>
+                )}
+                {collapsed && (
+                  <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                    {menu.label}
+                  </div>
+                )}
+              </button>
+            )}
+            {hasChildren && isOpen && !collapsed && (
+              <div className="ml-2 border-l border-blue-100">
+                {renderMenuItems(menu.children!, level + 1)}
+              </div>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  );
 
   return (
     <div className={`${collapsed ? 'w-16' : 'w-64'} bg-white shadow-lg transition-all duration-300 ease-in-out flex flex-col min-h-screen`}>
@@ -66,49 +239,7 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
         </div>
       </div>
       <nav className="mt-6 flex-1 overflow-y-auto">
-        <ul className="">
-          {menuItems.map((menu) => {
-            return (
-              <li key={menu.id}>
-                <NavLink
-                  to={menu.path}
-                  title={collapsed ? menu.label : ''}
-                  className={({ isActive }: { isActive: boolean }) => {
-                    return clsx(
-                      {
-                        "px-4 justify-center": collapsed,
-                        "px-6": !collapsed,
-                        "bg-blue-50 text-blue-700 border-r-2 border-blue-700": isActive,
-                        "text-gray-700 hover:bg-gray-50": !isActive,
-                      },
-                      "w-full flex items-center py-3 text-left transition-colors group relative"
-                    ); 
-                  }}
-                >
-                  {({ isActive }: { isActive: boolean }) => {
-                    const Icon = menu.icon;
-                    return (
-                      <>
-                        <Icon className={`w-5 h-5 ${collapsed ? '' : 'mr-3'}`} />
-                        {!collapsed && (
-                          <>
-                            <span className="font-medium">{menu.label}</span>
-                            {isActive && <ChevronRight className="w-4 h-4 ml-auto" />}
-                          </>
-                        )}
-                        {collapsed && (
-                          <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                            {menu.label}
-                          </div>
-                        )}
-                      </>
-                    );
-                  }}
-                </NavLink>
-              </li>
-            );
-          })}
-        </ul>
+        {collapsed ? renderCollapsedMenuItems() : renderMenuItems(menuItems)}
       </nav>
     </div>
   );
