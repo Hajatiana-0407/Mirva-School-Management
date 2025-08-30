@@ -32,7 +32,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, size = 
 
   // Détermine la largeur du modal selon la prop size
   const sizeClass = size === 'lg'
-    ? 'w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl'
+    ? 'w-full sm:max-w-3xl md:max-w-4xl lg:max-w-7xl'
     : 'w-full sm:max-w-lg';
 
   return (
