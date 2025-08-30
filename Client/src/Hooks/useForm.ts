@@ -17,7 +17,9 @@ export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T
     setFormValue: (e: React.ChangeEvent<HTMLInputElement>) => void;
     formErrors?: Partial<Record<keyof T, string>>;
     onSubmite: (next: (data: T) => void, e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-    handleInputFileChange: (e: React.ChangeEvent<HTMLInputElement>) => string | undefined
+    handleInputFileChange: (e: React.ChangeEvent<HTMLInputElement>) => string | undefined;
+    resetError: () => void ; 
+    forceError: (errors: Partial<Record<keyof T, string>>) => void  
 } {
 
     const [formValue, setAllFormValue] = useState(initial);
@@ -78,9 +80,9 @@ export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T
                         }
                     }
                 } else if (element instanceof HTMLInputElement && element.type === 'radio') {
-                    if ( element.checked ){ 
-                        data[name] = element.value ;
-                        formData.append( name , element.value ) 
+                    if (element.checked) {
+                        data[name] = element.value;
+                        formData.append(name, element.value)
                     }
                 } else {
                     formData.append(name, element.value);
@@ -112,11 +114,25 @@ export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T
         }
     }
 
+    // Effacer toutes les erreur 
+    const resetError = () => {
+        setFormErrors({});
+    }
+
+    // Forcer les erreurs 
+    const forceError = (errors: Partial<Record<keyof T, string>>) => {
+        setFormErrors(errors);
+    }
+
+
+
     return {
         formValue,
         setFormValue,
         formErrors,
         onSubmite,
-        handleInputFileChange
+        handleInputFileChange,
+        resetError , 
+        forceError
     }
 }
