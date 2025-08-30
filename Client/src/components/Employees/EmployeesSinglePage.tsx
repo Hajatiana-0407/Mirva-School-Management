@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { baseUrl } from '../../Utils/Utils';
 import { EmployeeType, TypePersonnelType } from '../../Utils/Types';
 import { getEmployeState } from './redux/EmployeSlice';
-import { BookOpen, User, Users, Shield, Brush, Library, Calculator, Truck, Mail, Phone, MapPin, Calendar, HeartPulse, CreditCard, ArrowBigLeft, Archive } from 'lucide-react';
+import { BookOpen, User, Users, Shield, Brush, Library, Calculator, Truck, Mail, Phone, MapPin, Calendar, HeartPulse, CreditCard, Archive, DollarSign, Clock, ChevronLeft } from 'lucide-react';
 import { getTypeEmployeesState } from '../../Redux/Other/slices/TypeEmployeesSlice';
 
 const EmployeesSinglePage: React.FC = () => {
@@ -107,40 +107,40 @@ const EmployeesSinglePage: React.FC = () => {
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-gray-900">
                     <span>
-                        <ArrowBigLeft className="w-8 h-8 inline-block cursor-pointer  mr-2"
+                        <ChevronLeft className="w-8 h-8 inline-block cursor-pointer  mr-2"
                             onClick={() => window.history.back()}
                         />
                     </span>
                     Fiche Employé
                 </h1>
             </div>
-            <div className=" mx-auto bg-white rounded-2xl shadow-xl p-8">
-
-                <div className="flex flex-col lg:flex-row gap-10">
+            <div className=" mx-auto bg-white rounded-2xl shadow-xl p-4 space-y-6">
+                <h2 className="text-3xl font-bold text-gray-900 flex items-center gap-2 max-sm:justify-center">
+                    <User className="w-7 h-7 text-blue-400" />
+                    {employee?.nom} {employee?.prenom}
+                </h2>
+                <div className="flex max-sm:justify-center flex-wrap gap-4">
                     {/* Photo */}
-                    <div className=" flex flex-col">
-                        <div className="w-48 h-48 rounded-xl bg-gradient-to-br from-blue-50 to-gray-100 border-4 border-blue-200 overflow-hidden flex  shadow-md">
+                    <div className="flex flex-col max-w-52">
+                        <div className="w-48 h-48 rounded-xl relative bg-gradient-to-br from-blue-50 to-gray-100 border-4 border-blue-200 overflow-hidden flex  shadow-md">
                             <img
                                 src={baseUrl(employee?.photo)}
                                 alt={`${employee?.nom} ${employee?.prenom}`}
                                 className="w-full h-full object-cover"
                             />
-                        </div>
-                        <span className={`mt-5 w-max px-4 py-1 rounded-full flex items-center gap-2 text-base font-semibold shadow-sm ${color}`}>
-                            {Icon && <Icon className="w-5 h-5" />}
-                            {types?.[employee?.id_type_personnel as number] || 'Type inconnu'}
-                            <span className={`px-2 py-1 rounded-full text-sm flex gap-2 items-center ${colorClass}`}>
+                            <span className={`px-2 py-1 absolute bottom-0 right-0  text-sm flex gap-2 items-center rounded-ms rounded-tl border ${colorClass}`}>
                                 {icon}
                                 {statusLabel}
                             </span>
+                        </div>
+                        <span className={`mt-5 w-max px-4 py-1 min-w-48 text rounded-full flex items-center justify-center gap-2 text-base font-semibold shadow-sm  ${color}`}>
+                            {Icon && <Icon className="w-5 h-5" />}
+                            {types?.[employee?.id_type_personnel as number] || 'Type inconnu'}
                         </span>
                     </div>
-                    {/* Infos */}
-                    <div className="flex-1  space-y-6">
-                        <h2 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-                            <User className="w-7 h-7 text-blue-400" />
-                            {employee?.nom} {employee?.prenom}
-                        </h2>
+
+                    {/* Information sur le personnel */}
+                    <div className="space-y-6" >
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {employee?.email && (
                                 <div className="flex items-center gap-3 text-gray-700 bg-gray-50 rounded-lg px-4 py-2 shadow-sm">
@@ -179,24 +179,38 @@ const EmployeesSinglePage: React.FC = () => {
                         </div>
                     </div>
                 </div>
-                <div className='flex gap-2 my-5'>
-                    <span>Salaire de base : </span>
-                    <span className='font-semibold'>  {parseFloat(employee?.salaire_base?.toString() as string).toLocaleString("fr-FR")} Ar</span>
-                </div>
-                <div className='flex gap-2'>
-                    <span>Date d'embauche : </span>
-                    <span className='font-semibold'>
-                        {employee?.date_embauche ? new Date(employee?.date_embauche).toLocaleDateString('fr-FR', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        }) : 'N/A'}
-                    </span>
+                <div className='flex flex-wrap max-sm:justify-center gap-6'>
+                    <div className="relative w-full max-w-xs">
+                        <div className="absolute -top-3 -left-2  flex items-center gap-2 px-4 py-1 rounded-md border border-green-500text-gray-700 bg-gray-50 border-orange-500 font-semibold ">
+                            <Clock className='text-orange-500' />
+                            <span className="text-base">Date d'embauche</span>
+                        </div>
+                        <div className="rounded-xl border-2 border-red-300 bg-white shadow-md py-4 px-1 flex flex-col items-center">
+                            <span className="text-xl font-bold font-mono tracking-widest text-gray-900 mt-2">
+                                {employee?.date_embauche ? new Date(employee?.date_embauche).toLocaleDateString('fr-FR', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                }) : 'N/A'}
+                            </span>
+                        </div>
+                    </div>
+                    <div className="relative w-full max-w-xs">
+                        <div className="absolute -top-3 -left-2  flex items-center gap-2 px-4 py-1 rounded-md border border-green-500text-gray-700 bg-gray-50 border-green-500 font-semibold ">
+                            <DollarSign className='text-green-500' />
+                            <span className="text-base">Salaire de base</span>
+                        </div>
+                        <div className="rounded-xl border-2 border-blue-300 bg-white shadow-md py-4 px-1 flex flex-col items-center">
+                            <span className="text-3xl font-bold font-mono tracking-widest text-gray-900 mt-2">
+                                {parseFloat(employee?.salaire_base?.toString() as string).toLocaleString("fr-FR")} AR
+                            </span>
+                        </div>
+                    </div>
                 </div>
                 {/* Pièce d'identité si dispo */}
                 {employee?.pc_cin && (
                     <div className="mt-10">
-                        <h3 className="font-semibold mb-3 flex items-center gap-2 text-gray-700">
+                        <h3 className="font-semibold mb-3 flex items-center max-sm:justify-center gap-2 text-gray-700">
                             <CreditCard className="w-5 h-5 text-indigo-400" />
                             Pièce d'identité
                         </h3>
