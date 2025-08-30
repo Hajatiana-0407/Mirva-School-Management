@@ -10,14 +10,13 @@
 - [x] Affichage liste des employés 
 - [x] Liaison des type d'employés 
 - [ ] Créer un formulaire d’ajout/modification/suppression d’un employé.  
-- [ ] Ajouter la possibilité d’uploader des documents (contrat, CV, pièces d’identité).  
-- [ ] Permettre la recherche et le filtrage par type de personnel, poste, statut (actif/inactif).  
-- [ ] Mettre en place une fiche détaillée du personnel avec historique.  
+- [x] Ajouter la possibilité d’uploader des documents (contrat, CV, pièces d’identité).  
+- [x] Permettre la recherche et le filtrage par type de personnel, poste
+- [x] Mettre en place une fiche détaillée du personnel avec historique.  
 
 ---
-# important
-- [x] Changer le tél en telephone 
-- [ ] Degub sexe ( ejout de type radio sur le useForm ) 
+# Important 
+- [] Ajout metiere pour le type proffeseur 
 
 ## 3. Gestion administrative
 - [ ] Gérer les absences et congés :  

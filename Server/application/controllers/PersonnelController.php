@@ -23,7 +23,7 @@ class PersonnelController extends CI_Controller
         $lasted = $this->PersonnelModel->findLasted();
         $matricule = 'EMP00001';
         if ($lasted) {
-            $last_id = intval(preg_replace('/[^0-9]/', '', $lasted[ "matricule_personnel"] ));
+            $last_id = intval(preg_replace('/[^0-9]/', '', $lasted["matricule_personnel"]));
             $new_id = $last_id + 1;
             $matricule = 'EMP' . str_pad($new_id, 5, '0', STR_PAD_LEFT);
         }
@@ -70,7 +70,23 @@ class PersonnelController extends CI_Controller
         // Création du personnel
         $result = $this->PersonnelModel->insert($data);
 
-        if ($result  ) {
+        if ($result) {
+
+            $assignations = $this->input->post('assignations');
+            if ($assignations) {
+                $this->load->model('MatiereClasseProfModel');
+                $assignation_data = [];
+                foreach ($assignations as $assignation) {
+                    $assignation_data[] = [
+                        'professeur_id_professeur' => $result->id_personnel,
+                        'classe_id_classe'    => $assignation['id_classe'],
+                        'matiere_id_matiere'  => $assignation['id_matiere'],
+                        'heure_semaine'      => $assignation['heures'],
+                    ];
+                }
+                $this->MatiereClasseProfModel->insertBatch($assignation_data);
+            }
+
             echo json_encode(['error' => false, 'data' => $result]);
         } else {
             echo json_encode(['error' => true, 'message' => "Erreur lors de l'enregistrement"]);

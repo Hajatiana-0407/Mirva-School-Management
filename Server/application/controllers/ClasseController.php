@@ -84,4 +84,16 @@ class ClasseController extends CI_Controller
             echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
         }
     }
+
+
+
+    // Selection des classes par id_matiere
+    public function getAllClasseByIdMatiere($id = 0)
+    {
+        $datas = [];
+        if ($id > 0) {
+            $datas =  $this->ClasseModel->getAllClasseByIdMatiere($id);
+        }
+        echo json_encode($datas);
+    }
 }

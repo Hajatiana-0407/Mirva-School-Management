@@ -59,6 +59,8 @@ $route['api/admin/classe/update'] = 'ClasseController/update';
 $route['api/admin/classe/create'] = 'ClasseController/create';
 $route['api/admin/classe/delete'] = 'ClasseController/delete';
 
+$route['api/admin/matiere-classe/(:num)'] = 'ClasseController/getAllClasseByIdMatiere/$1';
+
 // ******************* ROUTE NIVEAU ********************** //
 $route['api/admin/niveau'] = 'NiveauController';
 $route['api/admin/niveau/update'] = 'NiveauController/update';
@@ -82,4 +84,6 @@ $route['api/admin/personnel/delete'] = 'PersonnelController/delete';
 
 // ******************* ROUTE TYPE PERSONNEL ********************** //
 $route['api/admin/type-personnel'] = 'TypePersonnelController';
+
+
 

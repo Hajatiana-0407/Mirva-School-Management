@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ApiReturnInitial, ApiReturnType, ClasseType } from "../../../Utils/Types";
+import { ApiReturnInitial, ApiReturnType, ClasseType, LevelSubjectType } from "../../../Utils/Types";
 import api from "../../../Utils/api";
 import { setHiddeModalValue } from "../../../Redux/AppSlice";
 
@@ -18,11 +18,11 @@ export const getAllClasse = createAsyncThunk('classe/getAll', async (): Promise<
 })
 
 // UPDATE
-export const updateClasse = createAsyncThunk('classe/modification', async ({ Classe, id }: { Classe: any , id: number }, { dispatch }): Promise<ApiReturnType> => {
+export const updateClasse = createAsyncThunk('classe/modification', async ({ Classe, id }: { Classe: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
 
     let data: ApiReturnType = ApiReturnInitial;
     Classe.append('id_classe', id.toString());
-    await api.post('admin/classe/update', Classe ).then(response => {
+    await api.post('admin/classe/update', Classe).then(response => {
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
@@ -36,7 +36,7 @@ export const updateClasse = createAsyncThunk('classe/modification', async ({ Cla
 // CREATE
 export const createClasse = createAsyncThunk('classe/ajout', async (Classe: ClasseType, { dispatch }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
-    await api.post('admin/classe/create', Classe ).then(response => {
+    await api.post('admin/classe/create', Classe).then(response => {
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
@@ -65,4 +65,18 @@ export const deleteClasse = createAsyncThunk('classe/suppression', async (id_cla
     }
     return data;
 })
+
+
+// Get niveaux matieres by id_matiere
+export const getSubjectLevelByIdSubject = createAsyncThunk('niveau/matiere/subject', async (id_matiere: number): Promise<ClasseType[]> => {
+    let datas: ClasseType[] = [];
+    if (id_matiere) {
+        await api.get(`admin/matiere-classe/${id_matiere}`).then(response => {
+            datas = response.data;
+        }).catch(error => {
+            console.error('Erreur lors de la récupération des données:', error.getMessage());
+        });
+    }
+    return datas;
+});
 

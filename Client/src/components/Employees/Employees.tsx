@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive, Eye, BookOpen, User, Users, Shield, Brush, Library, Calculator, Truck, Camera, HeartPulse, UserCheck, CalendarDays, Phone, Mail, MapPinned } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Archive, Eye, BookOpen, User, Users, Shield, Brush, Library, Calculator, Truck, Camera, HeartPulse, UserCheck, CalendarDays, Phone, Mail, MapPinned, X, ChevronRight, SquarePen, ChevronLeft, Check } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
-import { object, string } from 'yup';
+import { date, object, string } from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEmployeState } from './redux/EmployeSlice';
 import { employeeInitialValue, EmployeeType, TypePersonnelType } from '../../Utils/Types';
@@ -15,6 +15,8 @@ import { baseUrl } from '../../Utils/Utils';
 import { getAppState } from '../../Redux/AppSlice';
 import { useNavigate } from 'react-router-dom';
 import Input from '../ui/Input';
+import clsx from 'clsx';
+import TeacherSubject from '../TeacherSubject';
 
 // Mapping des types à des couleurs de fond
 const typeBgColors: Record<string, string> = {
@@ -41,11 +43,21 @@ const typeIcons: Record<string, any> = {
 
 // Validation de donnée avec yup 
 const EmployeSchema = object({
-  nom: string().required('Le nom est obligatoire.'),
-  prenom: string().required('La prénom est obligatoire.'),
-  addresse: string().required('La adresse est obligatoire.'),
-  // date_embauche: string().required("La date d'embauche est obligatoire."),
-  telephone: string().required('Le téléphone est obligatoire.'),
+  nom: string()
+    .required('Le nom est obligatoire.'),
+  prenom: string()
+    .required('La prénom est obligatoire.'),
+  addresse: string()
+    .required('La adresse est obligatoire.'),
+  date_naissance: date()
+    .typeError("La date n'est pas valide.")
+    .required("La date de naissance est obligatoire.")
+    .max(new Date(), "La date ne peut pas être dans le futur."),
+  date_embauche: date()
+    .typeError("La date n'est pas valide.")
+    .required("La date d'embauche est obligatoire."),
+  telephone: string()
+    .required('Le téléphone est obligatoire.'),
 });
 
 const Employees: React.FC = () => {
@@ -62,6 +74,12 @@ const Employees: React.FC = () => {
     femme: true
   })
   const { datas: TypesEmployees } = useSelector(getTypeEmployeesState);
+  const [assignations, setAssignations] = useState<any>([])
+
+
+  // Traitement quand le type est enseigant 
+  const [isTeacher, setIsTeacher] = useState(false)
+  const [page, setPage] = useState(1)
 
   // Aperçu de la photo uploadée
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
@@ -69,11 +87,9 @@ const Employees: React.FC = () => {
 
   // *** //
   const { datas: employees, action } = useSelector(getEmployeState);
-  const { onSubmite, formErrors } = useForm<EmployeeType>(EmployeSchema, employeeInitialValue);
+  const { onSubmite, formErrors, resetError, forceError } = useForm<EmployeeType>(EmployeSchema, employeeInitialValue);
   const navigate = useNavigate();
-
   const dispatch: AppDispatch = useDispatch();
-  // *** //
 
 
   //Handlers
@@ -84,11 +100,13 @@ const Employees: React.FC = () => {
     setShowModal(true);
   };
 
+  // Comfirmation de l'archivage
   const handleArchive = (employee: any) => {
     setTeacherToArchive(employee);
     setShowConfirmDialog(true);
   };
 
+  // Suppression de l'employé
   const handleConfirmArchive = () => {
     if (teacherToArchive) {
       dispatch(deleteEmployees(teacherToArchive?.id_personnel as number))
@@ -97,17 +115,99 @@ const Employees: React.FC = () => {
     setTeacherToArchive(null);
   };
 
+  // Fermer la modale
   const handleCloseModal = () => {
     setShowModal(false);
     setEditingEmployees(null);
     setPhotoPreview(null);
+    setIsTeacher(false);
+    setPage(1);
+    resetError();
   };
 
+  // Soumission du formulaire
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     onSubmite((validateData: EmployeeType) => {
       editingEmployees ? dispatch(updateEmployees({ datas: validateData, id: editingEmployees?.id_personnel as number })) : dispatch(createEmployees(validateData))
     }, e);
   };
+
+  // changement du selection du  type de personnel
+  const handleTypeEmployeesChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+
+    let teste = false;
+    TypesEmployees.map((type: TypePersonnelType) => {
+      if ((type.id_type_personnel as number).toString() == value && type.type.toLowerCase() === 'enseignant') {
+        teste = true;
+      }
+    })
+    setIsTeacher(teste);
+  }
+
+  // Passer a la page suivant si le type est enseignant
+  const handleNext = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+
+    const formulaire = document.querySelector<HTMLFormElement>('#__formulaire_personnel');
+
+    if (formulaire && e.currentTarget.type === 'button') {
+      const elements = formulaire.elements; // HTMLFormControlsCollection
+      let canNext = true;
+      let errors = {};
+      for (let i = 0; i < elements.length; i++) {
+        const element = elements[i] as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+        switch (element.name) {
+          case 'nom':
+            if (element.value == '') {
+              canNext = false
+              errors = { nom: "Le nom est obligatoire." };
+            }
+            break;
+          case 'prenom':
+            if (element.value == '') {
+              canNext = false
+              errors = { ...errors, prenom: "Le prénom est obligatoire." };
+            }
+            break;
+          case 'addresse':
+            if (element.value == '') {
+              canNext = false
+              errors = { ...errors, addresse: "L'addresse est obligatoire." };
+            }
+            break;
+          case 'telephone':
+            if (element.value == '') {
+              canNext = false
+              errors = { ...errors, telephone: "Le téléphone est obligatoire." };
+            }
+            break;
+          case 'date_naissance':
+            if (element.value == '') {
+              canNext = false
+              errors = { ...errors, date_naissance: "La date de naissance est obligatoire." };
+            }
+            break;
+          case 'date_embauche':
+            if (element.value == '') {
+              canNext = false
+              errors = { ...errors, date_embauche: "La date d'embauche est obligatoire." }
+            }
+            break;
+          default:
+            break;
+        }
+      }
+      if (canNext) {
+        setPage(v => v + 1)
+        resetError();
+      } else {
+        // Forcer les erreurs
+        forceError(errors);
+      }
+    }
+  };
+
+
 
   // TABLEAUX 
   const actions = [
@@ -207,6 +307,8 @@ const Employees: React.FC = () => {
 
   return (
     <div className="space-y-6">
+
+      {/* Entete */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Gestion des employés</h1>
         <button
@@ -218,6 +320,7 @@ const Employees: React.FC = () => {
         </button>
       </div>
 
+      {/* Filtrage  */}
       <div className="bg-white p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
@@ -265,6 +368,7 @@ const Employees: React.FC = () => {
           </div>
         </div>
 
+
         <Table
           isLoading={action.isLoading as boolean}
           data={employees}
@@ -281,228 +385,292 @@ const Employees: React.FC = () => {
         title={editingEmployees ? "Modifier l'employé" : 'Nouvel employé'}
         size='lg'
       >
-        <form className="space-y-6" onSubmit={handleSubmit}>
-          <div className="flex flex-col sm:flex-row gap-5  space-y-2">
-            <div className="relative flex flex-col items-center justify-center">
-              <label htmlFor="photo-upload" className="cursor-pointer flex flex-col items-center justify-center w-60 h-60 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 transition-all">
-                {photoPreview ? (
-                  <img src={photoPreview} alt="Photo" className="w-56 h-56 rounded-md object-cover" />
-                ) : (
-                  <>
-                    <Camera className="w-8 h-8 text-gray-400 mb-1" />
-                    <span className="text-xs text-gray-500 text-center ">Ajouter une photo de profil </span>
-                  </>
-                )}
-                <input
-                  id="photo-upload"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  name='photo'
-                  onChange={e => {
-                    const file = e.target.files && e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        setPhotoPreview(reader.result as string);
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
+        <form onSubmit={handleSubmit} id='__formulaire_personnel'>
+          {/* Page numero 1  */}
+
+          {/* Photo de profil de l'employé */}
+          <div className={clsx({
+            'sr-only': (page !== 1)
+          }, 'space-y-6')} >
+            <div className="flex flex-col sm:flex-row gap-5  space-y-2">
+              <div className="relative flex flex-col items-center justify-center">
+                <label htmlFor="photo-upload" className="cursor-pointer flex flex-col items-center justify-center w-60 h-60 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 transition-all">
+                  {photoPreview ? (
+                    <img src={photoPreview} alt="Photo" className="w-56 h-56 rounded-md object-cover" />
+                  ) : (
+                    <>
+                      <Camera className="w-8 h-8 text-gray-400 mb-1" />
+                      <span className="text-xs text-gray-500 text-center ">Ajouter une photo de profil </span>
+                    </>
+                  )}
+                  <input
+                    id="photo-upload"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    name='photo'
+                    onChange={e => {
+                      const file = e.target.files && e.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setPhotoPreview(reader.result as string);
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
+                </label>
+              </div>
+
+              {/* Information personnel sur l'employer  */}
+              <div className='flex-1 space-y-4' >
+                <Input
+                  label='Nom'
+                  name='nom'
+                  defaultValue={editingEmployees?.nom || ''}
+                  icon={User}
+                  errorMessage={formErrors?.nom}
                 />
-              </label>
-            </div>
-            <div className='flex-1 space-y-4' >
-              <Input
-                label='Nom'
-                name='nom'
-                defaultValue={editingEmployees?.nom || ''}
-                icon={User}
-                errorMessage={formErrors?.nom}
-              />
-              <Input
-                label='Prénom'
-                name='prenom'
-                defaultValue={editingEmployees?.prenom || ''}
-                icon={UserCheck}
-                errorMessage={formErrors?.prenom}
-              />
-              <Input
-                label='Date de naissance'
-                name='date_naissance'
-                defaultValue={editingEmployees?.date_naissance || ''}
-                icon={CalendarDays}
-                errorMessage={formErrors?.date_naissance}
-                type='date'
-              />
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Sexe</label>
-                <div className="flex items-center gap-6 px-1 py-2">
-                  <label className="inline-flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      name='sexe'
-                      value='Homme'
-                      checked={sexe.homme}
-                      onChange={(e) => { setSexe({ homme: e.target.checked, femme: !e.target.checked }) }}
-                      className="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="ml-2 text-gray-700">Homme</span>
-                  </label>
-                  <label className="inline-flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      name='sexe'
-                      value='Femme'
-                      checked={sexe.femme}
-                      onChange={(e) => { setSexe({ homme: !e.target.checked, femme: e.target.checked }) }}
-                      className="form-checkbox h-4 w-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
-                    />
-                    <span className="ml-2 text-gray-700">Femme</span>
-                  </label>
+                <Input
+                  label='Prénom'
+                  name='prenom'
+                  defaultValue={editingEmployees?.prenom || ''}
+                  icon={UserCheck}
+                  errorMessage={formErrors?.prenom}
+                />
+                <Input
+                  label='Date de naissance'
+                  name='date_naissance'
+                  defaultValue={editingEmployees?.date_naissance || ''}
+                  icon={CalendarDays}
+                  errorMessage={formErrors?.date_naissance}
+                  type='date'
+                />
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Sexe</label>
+                  <div className="flex items-center gap-6 px-1 py-2">
+                    <label className="inline-flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name='sexe'
+                        value='Homme'
+                        checked={sexe.homme}
+                        onChange={(e) => { setSexe({ homme: e.target.checked, femme: !e.target.checked }) }}
+                        className="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-gray-700">Homme</span>
+                    </label>
+                    <label className="inline-flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name='sexe'
+                        value='Femme'
+                        checked={sexe.femme}
+                        onChange={(e) => { setSexe({ homme: !e.target.checked, femme: e.target.checked }) }}
+                        className="form-checkbox h-4 w-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+                      />
+                      <span className="ml-2 text-gray-700">Femme</span>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              label='Addresse'
-              name='addresse'
-              defaultValue={editingEmployees?.addresse || ''}
-              icon={MapPinned}
-              errorMessage={formErrors?.addresse}
-            />
-            <Input
-              label='Téléphone'
-              name='telephone'
-              defaultValue={editingEmployees?.telephone || ''}
-              icon={Phone}
-              errorMessage={formErrors?.telephone}
-            />
-            <Input
-              label='Email'
-              name='email'
-              defaultValue={editingEmployees?.email || ''}
-              icon={Mail}
-              errorMessage={formErrors?.email}
-            />
-            <div>
-              <div className="relative">
-                <select
-                  defaultValue={editingEmployees?.engagement || ''}
-                  name='engagement'
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-10"
-                >
-                  <option value="">Sélectionner une engagement</option>
-                  <option value="Célibataire">Célibataire</option>
-                  <option value="Marié">Marié</option>
-                  <option value="Divorcé">Divorcé</option>
-                </select>
-                <span className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                  <HeartPulse className="w-4 h-4" />
-                </span>
-              </div>
-            </div>
 
-            <div>
-              <div className="relative">
-                <select
-                  defaultValue={editingEmployees?.id_type_personnel || ''}
-                  name='type_personnel'
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-10"
-                >
-                  <option value="">Sélectionner une fonction</option>
-                  {TypesEmployees && TypesEmployees.map((type: TypePersonnelType) => (
-                    <option
-                      key={type.id_type_personnel}
-                      value={type.id_type_personnel}>
-                      {type.type}
-                    </option>
-                  ))}
-                </select>
-                <span className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                  <User className="w-4 h-4" />
-                </span>
-              </div>
-            </div>
-
-            <Input
-              label="Date d'embauche"
-              name='date_embauche'
-              defaultValue={editingEmployees?.date_embauche || ''}
-              type='date'
-              icon={CalendarDays}
-              errorMessage={formErrors?.date_embauche}
-            />
-
-            <Input
-              label='Salaire de base'
-              name='salaire_base'
-              defaultValue={editingEmployees?.salaire_base ? editingEmployees?.salaire_base.toString() : ''}
-              icon={Calculator}
-              errorMessage={formErrors?.salaire_base}
-              type='number'
-            />
-            <div>
-              <div className="relative">
-                <select
-                  defaultValue={editingEmployees?.status || ''}
-                  name='status'
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-10"
-                >
-                  <option value="">Sélectionner un status</option>
-                  <option value="Actif">Actif</option>
-                  <option value="Suspendu">Suspendu</option>
-                  <option value="Démissionnaire">Démissionnaire</option>
-                </select>
-                <span className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                  <User className="w-4 h-4" />
-                </span>
-              </div>
-            </div>
-          </div>
-          {/* Photocopie CIN  */}
-          <div className=''>
-            <div className="flex w-full flex-col items-start gap-2">
-              <label htmlFor="pc_cin" className="flex w-full items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
-                <Camera className="w-5 h-5 " />
-                <span className=" text-sm font-medium">
-                  {ciVersoFileName ? ciVersoFileName : "Pièce d'indetité (SVG, PNG, JPG, GIF)"}
-                </span>
-              </label>
-              <input
-                id="pc_cin"
-                name='pc_cin'
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={e => {
-                  const file = e.target.files && e.target.files[0];
-                  if (file) {
-                    setCiVersoFileName(file.name);
-                  } else {
-                    setCiVersoFileName("");
-                  }
-                }}
+            {/* Information sur les coordonner de l'employer */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label='Addresse'
+                name='addresse'
+                defaultValue={editingEmployees?.addresse || ''}
+                icon={MapPinned}
+                errorMessage={formErrors?.addresse}
               />
-              <p className="text-xs text-gray-500 ml-1">Max 800x400px</p>
+              <Input
+                label='Téléphone'
+                name='telephone'
+                defaultValue={editingEmployees?.telephone || ''}
+                icon={Phone}
+                errorMessage={formErrors?.telephone}
+              />
+              <Input
+                label='Email'
+                name='email'
+                defaultValue={editingEmployees?.email || ''}
+                icon={Mail}
+                errorMessage={formErrors?.email}
+              />
+
+              {/* Engagement  */}
+              <div>
+                <div className="relative">
+                  <select
+                    defaultValue={editingEmployees?.engagement || ''}
+                    name='engagement'
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-10"
+                  >
+                    <option value="">Sélectionner une engagement</option>
+                    <option value="Célibataire">Célibataire</option>
+                    <option value="Marié">Marié</option>
+                    <option value="Divorcé">Divorcé</option>
+                  </select>
+                  <span className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <HeartPulse className="w-4 h-4" />
+                  </span>
+                </div>
+              </div>
+
+              {/* Fonctions du personnel  */}
+              <div>
+                <div className="relative">
+                  <select
+                    defaultValue={editingEmployees?.id_type_personnel || ''}
+                    name='type_personnel'
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-10"
+                    onChange={handleTypeEmployeesChange}
+                  >
+                    <option value="">Sélectionner une fonction</option>
+                    {TypesEmployees && TypesEmployees.map((type: TypePersonnelType) => (
+                      <option
+                        key={type.id_type_personnel}
+                        value={type.id_type_personnel}>
+                        {type.type}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <User className="w-4 h-4" />
+                  </span>
+                </div>
+              </div>
+
+              <Input
+                label="Date d'embauche"
+                name='date_embauche'
+                defaultValue={editingEmployees?.date_embauche || ''}
+                type='date'
+                icon={CalendarDays}
+                errorMessage={formErrors?.date_embauche}
+              />
+
+              <Input
+                label='Salaire de base'
+                name='salaire_base'
+                defaultValue={editingEmployees?.salaire_base ? editingEmployees?.salaire_base.toString() : ''}
+                icon={Calculator}
+                errorMessage={formErrors?.salaire_base}
+                type='number'
+              />
+              <div>
+                <div className="relative">
+                  <select
+                    defaultValue={editingEmployees?.status || ''}
+                    name='status'
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-10"
+                  >
+                    <option value="">Sélectionner un status</option>
+                    <option value="Actif">Actif</option>
+                    <option value="Suspendu">Suspendu</option>
+                    <option value="Démissionnaire">Démissionnaire</option>
+                  </select>
+                  <span className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <User className="w-4 h-4" />
+                  </span>
+                </div>
+              </div>
             </div>
 
+            {/* Photocopie CIN  */}
+            <div className=''>
+              <div className="flex w-full flex-col items-start gap-2">
+                <label htmlFor="pc_cin" className="flex w-full items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
+                  <Camera className="w-5 h-5 " />
+                  <span className=" text-sm font-medium">
+                    {ciVersoFileName ? ciVersoFileName : "Pièce d'indetité (SVG, PNG, JPG, GIF)"}
+                  </span>
+                </label>
+                <input
+                  id="pc_cin"
+                  name='pc_cin'
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={e => {
+                    const file = e.target.files && e.target.files[0];
+                    if (file) {
+                      setCiVersoFileName(file.name);
+                    } else {
+                      setCiVersoFileName("");
+                    }
+                  }}
+                />
+                <p className="text-xs text-gray-500 ml-1">Max 800x400px</p>
+              </div>
+
+            </div>
+
+            {/* Boutons de validation , d'annulation et pour passer au  suivant  */}
+            <div className="flex justify-end space-x-3 pt-4">
+              <button
+                type="button"
+                onClick={handleCloseModal}
+                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 flex gap-1 items-center "
+              >
+                <X size={25} />
+                Annuler
+              </button>
+              <button
+                type={isTeacher ? 'button' : 'submit'}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex gap-1 items-center"
+                onClick={handleNext}
+              >
+                {/* Icone si le mot est modifier */}
+                {editingEmployees && <SquarePen />}
+                {/* Icone si le mot est Ajouter */}
+                {!!!editingEmployees && !isTeacher && <Plus size={25} />}
+                {editingEmployees ? 'Modifier' : isTeacher ? 'Suivant' : 'Ajouter'}
+                {/* Icone si le mot suivant */}
+                {isTeacher && !!!editingEmployees && <ChevronRight size={25} />}
+              </button>
+            </div>
           </div>
-          <div className="flex justify-end space-x-3 pt-4">
-            <button
-              type="button"
-              onClick={handleCloseModal}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              Annuler
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              {editingEmployees ? 'Modifier' : 'Ajouter'}
-            </button>
+
+          {/* Page numero 2 si le c'est une enseignant  */}
+          <div className={clsx({
+            'sr-only': page !== 2
+          })} >
+            {/* Composant pour l'assigantion des matieres dans les classes pour le proffesseur */}
+            <TeacherSubject setParentAssignation={setAssignations} />
+
+            {/* Boutons de validation et retour dans l'assignation des matieres et classes pour le prof actuel */}
+            <div className='flex items-center justify-between'>
+              <button
+                className="bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg flex items-center hover:bg-gray-300 transition-colors  gap-01 "
+                onClick={() => { setPage(v => v - 1) }}
+                type='button'
+              >
+                <ChevronLeft size={25} />
+                <span>Percedent</span>
+              </button>
+              <button
+                className={`bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-1 transition-colors hover:bg-blue-700`}
+                type='submit'
+              >
+                <Check size={25} />
+                <span>Valider</span>
+              </button>
+            </div>
+
+            {/* Div cacher pour creation d'input qui va contenire les valeur des assigantions  */}
+            <div>
+              {assignations.map((assignation: any, index: number) => (
+                <div key={index}>
+                  <input type="text" name={`assignations[${index}][id_classe]`} value={assignation.id_classe} onChange={() => { }} />
+                  <input type="text" name={`assignations[${index}][id_matiere]`} value={assignation.id_matiere} onChange={() => { }} />
+                  <input type="text" name={`assignations[${index}][heures]`} value={assignation.heures} onChange={() => { }} />
+                </div>
+              ))}
+            </div>
           </div>
         </form>
       </Modal>

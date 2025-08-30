@@ -59,4 +59,14 @@ class ClasseModel extends CI_Model
     }
 
 
+    // ======= GET CLASSE BY ID_MATIERE =======
+    public function getAllClasseByIdMatiere( $id_matiere ){
+        return $this->db->select('classe.*')
+            ->from('classe')
+            ->join('niveau', 'niveau.id_niveau = classe.niveau_id_niveau', 'left')
+            ->join('matiere_niveau', 'matiere_niveau.niveau_id_niveau = niveau.id_niveau', 'left')
+            ->where('matiere_niveau.matiere_id_matiere', $id_matiere)
+            ->get()
+            ->result_array();
+    }
 }
