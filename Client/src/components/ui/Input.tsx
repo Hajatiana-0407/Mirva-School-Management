@@ -14,6 +14,7 @@ interface InputProps {
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     errorMessage?: string;
     defaultValue?: string | number | readonly string[] | undefined;
+    iconColor?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -29,7 +30,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             readonly = false,
             onChange,
             errorMessage = "",
-            defaultValue = undefined
+            defaultValue = undefined , 
+            iconColor = "text-gray-800"
         },
         ref
     ) => {
@@ -79,8 +81,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                     />
 
                     {icon && (
-                        <div className="absolute flex justify-center items-center w-10 top-0 left-0 text-xl text-secondary border-r border-gray-300 h-full">
-                            {React.createElement(icon, { size: 18, className: "text-secondary" })}
+                        <div className={`absolute flex justify-center items-center w-10 top-0 left-0 text-xl  border-r border-gray-300 h-full `}>
+                            {React.createElement(icon, { size: 18, className:  iconColor })}
                         </div>
                     )}
 
