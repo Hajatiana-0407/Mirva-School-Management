@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { X } from 'lucide-react';
+import { Bookmark, X } from 'lucide-react';
 
 interface ModalProps {
   isOpen: boolean;
@@ -45,8 +45,13 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, size = 
 
         {/* Modal */}
         <div className={`inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:w-full sm:p-6 ${sizeClass}`}>
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-medium text-gray-900">{title}</h3>
+          <div className="flex items-center  mb-4 text-3xl font-semibold border-b-2 pb-2 border-gray-300">
+            <div className='flex items-center gap-2 mr-auto'>
+              <Bookmark />
+              <h3 className="text-gray-900">
+                {title}
+              </h3>
+            </div>
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600 transition-colors"
