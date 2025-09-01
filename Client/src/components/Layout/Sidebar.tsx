@@ -19,6 +19,8 @@ import {
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getSchoolState } from '../Settings/School/redux/SchoolSlice';
 
 interface MenuItemType {
   id: string;
@@ -83,6 +85,7 @@ const flattenMenuItems = (items: MenuItemType[]): MenuItemType[] => {
 
 const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
+  const { action: shoolInfoAction , datas: shoolInfo } = useSelector( getSchoolState)
 
   const handleToggleMenu = (id: string) => {
     setOpenMenus((prev) => ({
@@ -222,8 +225,8 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
         <div className="flex items-center justify-center">
           {!collapsed && (
             <div>
-              <h1 className="text-xl font-bold text-gray-800">Lycée Mirva</h1>
-              <p className="text-sm text-gray-600">Gestion scolaire</p>
+              <h1 className="text-xl font-bold text-gray-800">{ shoolInfo.nom || 'Nom de votre etablissement' }</h1>
+              <p className="text-sm text-gray-600">{ shoolInfo.slogan || 'Votre slogan' }</p>
             </div>
           )}
           <button

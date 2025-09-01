@@ -11,24 +11,33 @@ import Exams from './components/Exams';
 import Parents from './components/Parents';
 import Payments from './components/Payments';
 import Messages from './components/Messages';
-import Settings from './components/Settings';
+import Settings from './components/Settings/Settings';
 import { ToastContainer } from 'react-toastify';
 import Employees from './components/Employees/Employees';
 import { useEffect } from 'react';
 import { AppDispatch } from './Redux/store';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getAllTypePersonnel } from './Redux/Other/asyncThunk/TypeEmployesAsyncThunk';
 import EmployeesSinglePage from './components/Employees/EmployeesSinglePage';
 import Teachers from './components/Teachers/Teachers';
+import { getSchoolState } from './components/Settings/School/redux/SchoolSlice';
+import { getSchoolInfo } from './components/Settings/School/redux/SchoolAsyncThunk';
 
 
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
+  const { datas: schoolInfo } = useSelector(getSchoolState)
 
   // Utils
   useEffect(() => {
     dispatch(getAllTypePersonnel())
+
+    // Load school info
+    if (schoolInfo?.code === "") {
+      // Fetch school info only if not already loaded
+      dispatch(getSchoolInfo());
+    }
   }, []);
 
   return (

@@ -93,3 +93,4 @@ defined('UPLOAD_DIR_ETUDIANTS') OR define('UPLOAD_DIR_ETUDIANTS',  'public/uploa
 // ************************************************* //
 defined('PERSONNEL_PROFIL_UPLOAD_DIR') OR define('PERSONNEL_PROFIL_UPLOAD_DIR', UPLOAD_DIR_PERSONNEL . "profil/");
 defined('PERSONNEL_PC_CIN_UPLOAD_DIR') OR define('PERSONNEL_PC_CIN_UPLOAD_DIR', UPLOAD_DIR_PERSONNEL . "pc_cin/");
+defined('ETABLISSEMENT_UPLOAD_DIRECTORY') OR define('ETABLISSEMENT_UPLOAD_DIRECTORY', 'public/uploads/etablissement/');

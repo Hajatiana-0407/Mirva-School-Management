@@ -53,6 +53,10 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+// ******************* ROUTE ETABLISSEMENT ********************** //
+$route['api/admin/school'] = 'EtablissementController/getEtablissementInfo' ;
+$route['api/admin/school/update'] = 'EtablissementController/updateEtablissementInfo' ;
+
 // ******************* ROUTE CLASSE ********************** //
 $route['api/admin/classe'] = 'ClasseController';
 $route['api/admin/classe/update'] = 'ClasseController/update';

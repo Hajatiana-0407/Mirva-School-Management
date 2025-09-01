@@ -30,6 +30,48 @@ export const ApiReturnInitial: ApiReturnType = {
     'data': {}
 }
 
+// SCHOOL MANAGEMENT SYSTEM TYPES //
+export type ShoolInfoType = {
+    id_etablissement?: number;
+    nom: string;
+    code: string;
+    slogan?: string;
+    adresse: string;
+    telephone: string;
+    email: string;
+    logo?: string;
+    created_at?: string;
+    description?: string;
+
+    // Optional - Social Media Links
+    site_web?: string;
+    facebook?: string;
+    twitter?: string;
+    instagram?: string;
+    linkedin?: string;
+    youtube?: string;
+}
+
+export const SchoolInfoInitialValue: ShoolInfoType = {
+    id_etablissement: undefined,
+    nom: '',
+    code: '',
+    slogan: '',
+    adresse: '',
+    telephone: '',
+    email: '',
+    logo: '',
+    created_at: '',
+    description: '',
+
+    site_web: '',
+    facebook: '',
+    twitter: '',
+    instagram: '',
+    linkedin: '',
+    youtube: ''
+};
+
 // LEVEL ( NIVEAU )
 export type levelType = {
     id_niveau?: number;
@@ -77,15 +119,15 @@ export const classeInitialState: ClasseType = {
 // Level / Subject 
 export type LevelSubjectType = {
     matiere_id_matiere: number;
-    niveau_id_niveau: number ; 
-    coefficient: number 
+    niveau_id_niveau: number;
+    coefficient: number
 }
 
 
 
 // Employee ( EMPLOYE )
 export type EmployeeType = {
-    id_personnel?: number;   
+    id_personnel?: number;
     nom: string;
     prenom: string;
     addresse: string;
@@ -107,22 +149,22 @@ export type EmployeeType = {
 export const employeeInitialValue: EmployeeType = {
     id_personnel: undefined,
     nom: '',
-    prenom: '', 
+    prenom: '',
     addresse: '',
-    telephone: '', 
+    telephone: '',
     date_naissance: '',
-    sexe: '',   
+    sexe: '',
     email: '',
-    engagement: '', 
+    engagement: '',
     password: '',
     pc_cin: '',
     photo: '',
-    id_type_personnel: undefined ,
+    id_type_personnel: undefined,
     status: 'Actif',
     date_embauche: '',
     salaire_base: 0,
     created_at: ''
-} ; 
+};
 
 
 // Type Personnel ( TYPE PERSONNEL )
@@ -132,7 +174,7 @@ export type TypePersonnelType = {
     description?: string;
 }
 export const TypePersonnelInitialValue: TypePersonnelType = {
-    id_type_personnel: undefined,   
+    id_type_personnel: undefined,
     type: '',
     description: ''
-} ;
+};

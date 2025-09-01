@@ -7,6 +7,7 @@ import ClasseReducer from '../components/Classes/redux/ClasseSlice';
 import EmployeReducer from '../components/Employees/redux/EmployeSlice';
 import TypeEmployeesReducer from '../Redux/Other/slices/TypeEmployeesSlice';
 import TeacherReducer from '../components/Teachers/redux/TeachersSlice';
+import SchoolReducer from '../components/Settings/School/redux/SchoolSlice';
 export const store = configureStore({
     reducer: {
         app: AppReducer,
@@ -17,6 +18,7 @@ export const store = configureStore({
         employes: EmployeReducer,
         teacher: TeacherReducer,
         typeEmployees: TypeEmployeesReducer,
+        school : SchoolReducer,
     }
 });
 
