@@ -6,15 +6,17 @@ import SubjectReducer from '../components/Subjects/redux/SubjectSlice';
 import ClasseReducer from '../components/Classes/redux/ClasseSlice';
 import EmployeReducer from '../components/Employees/redux/EmployeSlice';
 import TypeEmployeesReducer from '../Redux/Other/slices/TypeEmployeesSlice';
+import TeacherReducer from '../components/Teachers/redux/TeachersSlice';
 export const store = configureStore({
     reducer: {
         app: AppReducer,
         levels: LevelReducer,
-        levelSubject: LevelsubjectReducer , 
+        levelSubject: LevelsubjectReducer,
         subjects: SubjectReducer,
         classe: ClasseReducer,
-        employes: EmployeReducer  , 
-        typeEmployees : TypeEmployeesReducer
+        employes: EmployeReducer,
+        teacher: TeacherReducer,
+        typeEmployees: TypeEmployeesReducer,
     }
 });
 

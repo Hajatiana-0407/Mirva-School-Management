@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive, Eye, BookOpen, User, Users, Shield, Brush, Library, Calculator, Truck, Camera, HeartPulse, UserCheck, CalendarDays, Phone, Mail, MapPinned, X, ChevronRight, SquarePen, ChevronLeft, Check } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Archive, Eye, BookOpen, User, Users, Shield, Brush, Library, Calculator, Truck, Camera, HeartPulse, UserCheck, CalendarDays, Phone, Mail, MapPinned, X, ChevronRight, ChevronLeft, Check, SquarePen } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import { date, object, string } from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEmployeState } from './redux/EmployeSlice';
 import { employeeInitialValue, EmployeeType, TypePersonnelType } from '../../Utils/Types';
 import { AppDispatch } from '../../Redux/store';
-import { createEmployees, deleteEmployees, getAllEmployees, updateEmployees } from './redux/EmployeAsyncThunk';
 import useForm from '../../Hooks/useForm';
 import { getTypeEmployeesState } from '../../Redux/Other/slices/TypeEmployeesSlice';
 import { baseUrl } from '../../Utils/Utils';
@@ -17,6 +15,9 @@ import { useNavigate } from 'react-router-dom';
 import Input from '../ui/Input';
 import clsx from 'clsx';
 import TeacherSubject from '../TeacherSubject';
+import { getTeacherState } from './redux/TeachersSlice';
+import { getAllTeachers } from './redux/TeacherAsyncThunk';
+import { createEmployees, deleteEmployees, updateEmployees } from '../Employees/redux/EmployeAsyncThunk';
 
 // Mapping des types à des couleurs de fond
 const typeBgColors: Record<string, string> = {
@@ -60,7 +61,7 @@ const EmployeSchema = object({
     .required('Le téléphone est obligatoire.'),
 });
 
-const Employees: React.FC = () => {
+const Teachers: React.FC = () => {
   // Nom du fichier pièce d'identité (verso)
   const [ciVersoFileName, setCiVersoFileName] = useState<string>("");
 
@@ -78,7 +79,6 @@ const Employees: React.FC = () => {
 
 
   // Traitement quand le type est enseigant 
-  const [isTeacher, setIsTeacher] = useState(false)
   const [page, setPage] = useState(1)
 
   // Aperçu de la photo uploadée
@@ -86,7 +86,7 @@ const Employees: React.FC = () => {
   const { hiddeTheModalActive } = useSelector(getAppState);
 
   // *** //
-  const { datas: employees, action } = useSelector(getEmployeState);
+  const { datas: employees, action } = useSelector(getTeacherState);
   const { onSubmite, formErrors, resetError, forceError } = useForm<EmployeeType>(EmployeSchema, employeeInitialValue);
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
@@ -120,7 +120,6 @@ const Employees: React.FC = () => {
     setShowModal(false);
     setEditingEmployees(null);
     setPhotoPreview(null);
-    setIsTeacher(false);
     setPage(1);
     resetError();
   };
@@ -132,18 +131,7 @@ const Employees: React.FC = () => {
     }, e);
   };
 
-  // changement du selection du  type de personnel
-  const handleTypeEmployeesChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
 
-    let teste = false;
-    TypesEmployees.map((type: TypePersonnelType) => {
-      if ((type.id_type_personnel as number).toString() == value && type.type.toLowerCase() === 'enseignant') {
-        teste = true;
-      }
-    })
-    setIsTeacher(teste);
-  }
 
   // Passer a la page suivant si le type est enseignant
   const handleNext = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -293,7 +281,7 @@ const Employees: React.FC = () => {
 
   // Effets
   useEffect(() => {
-    dispatch(getAllEmployees());
+    dispatch(getAllTeachers());
   }, [dispatch]);
 
   // Modale 
@@ -314,7 +302,7 @@ const Employees: React.FC = () => {
           className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
-          <span>Nouveau employés</span>
+          <span>Nouveau enseigant</span>
         </button>
       </div>
 
@@ -332,20 +320,6 @@ const Employees: React.FC = () => {
                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
-            <select
-              id="countries"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 cursor-pointer"
-              onChange={(e) => {
-                setSearchTerm(e.target.value)
-              }}
-            >
-              <option value="">Tous les fonctions</option>
-              {
-                TypesEmployees.map((type: TypePersonnelType) => (
-                  <option key={type.id_type_personnel} value={type.type}>{type.type}</option>
-                ))
-              }
-            </select>
             <select
               id="countries"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 cursor-pointer"
@@ -525,10 +499,8 @@ const Employees: React.FC = () => {
                     defaultValue={editingEmployees?.id_type_personnel || ''}
                     name='type_personnel'
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-10"
-                    onChange={handleTypeEmployeesChange}
                   >
-                    <option value="">Sélectionner une fonction</option>
-                    {TypesEmployees && TypesEmployees.map((type: TypePersonnelType) => (
+                    {TypesEmployees && TypesEmployees.map((type: TypePersonnelType) => (type.type.toLowerCase() === 'enseignant' &&
                       <option
                         key={type.id_type_personnel}
                         value={type.id_type_personnel}>
@@ -618,17 +590,16 @@ const Employees: React.FC = () => {
                 Annuler
               </button>
               <button
-                type={isTeacher ? 'button' : 'submit'}
+                type={!editingEmployees ? 'button' : 'submit'}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex gap-1 items-center"
                 onClick={handleNext}
               >
                 {/* Icone si le mot est modifier */}
                 {editingEmployees && <SquarePen />}
                 {/* Icone si le mot est Ajouter */}
-                {!!!editingEmployees && !isTeacher && <Plus size={25} />}
-                {editingEmployees ? 'Modifier' : isTeacher ? 'Suivant' : 'Ajouter'}
+                {editingEmployees ? 'Modifier' : 'Suivant'}
                 {/* Icone si le mot suivant */}
-                {isTeacher && !!!editingEmployees && <ChevronRight size={25} />}
+                {!!!editingEmployees && <ChevronRight size={25} />}
               </button>
             </div>
           </div>
@@ -685,4 +656,4 @@ const Employees: React.FC = () => {
   );
 };
 
-export default Employees;
+export default Teachers;

@@ -16,7 +16,7 @@
 
 ---
 # Important 
-- [] Ajout metiere pour le type proffeseur 
+- [x] Ajout metiere pour le type proffeseur 
 
 ## 3. Gestion administrative
 - [ ] Gérer les absences et congés :  

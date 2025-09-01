@@ -1,11 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ApiReturnInitial, ApiReturnType, EmployeeType  } from "../../../Utils/Types";
+import { ApiReturnInitial, ApiReturnType, EmployeeType } from "../../../Utils/Types";
 import api from "../../../Utils/api";
 import { setHiddeModalValue } from "../../../Redux/AppSlice";
+import { toast } from "react-toastify";
 
 
 // READ
-export const getAllEmployees= createAsyncThunk('personnel/getAll', async (): Promise<EmployeeType[]> => {
+export const getAllEmployees = createAsyncThunk('personnel/getAll', async (): Promise<EmployeeType[]> => {
     let datas: EmployeeType[] = [];
     await api.get('admin/personnel')
         .then(response => {
@@ -18,15 +19,16 @@ export const getAllEmployees= createAsyncThunk('personnel/getAll', async (): Pro
 })
 
 // UPDATE
-export const updateEmployees= createAsyncThunk('personnel/modification', async ({ datas, id }: { datas: any , id: number }, { dispatch }): Promise<ApiReturnType> => {
+export const updateEmployees = createAsyncThunk('personnel/modification', async ({ datas, id }: { datas: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
 
     let data: ApiReturnType = ApiReturnInitial;
 
     datas.append('id_personnel', id.toString());
-    await api.post('admin/personnel/update', datas ).then(response => {
+    await api.post('admin/personnel/update', datas).then(response => {
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
+            toast.success('Modification effectuée !');
         }
     }).catch(error => {
         console.error('Erreur lors de la récupération des données:', error.getMessage());
@@ -35,15 +37,16 @@ export const updateEmployees= createAsyncThunk('personnel/modification', async (
 })
 
 // CREATE
-export const createEmployees= createAsyncThunk('personnel/ajout', async (datas: any , { dispatch }): Promise<ApiReturnType> => {
+export const createEmployees = createAsyncThunk('personnel/ajout', async (datas: any, { dispatch }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
 
-    console.log( datas );
-    
-    await api.post('admin/personnel/create', datas ).then(response => {
+    console.log(datas);
+
+    await api.post('admin/personnel/create', datas).then(response => {
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
+            toast.success('Employé ajoutée !');
         }
     }).catch(error => {
         console.error('Erreur lors de la récupération des données:', error.getMessage());
@@ -52,7 +55,7 @@ export const createEmployees= createAsyncThunk('personnel/ajout', async (datas: 
 })
 
 // DELETE 
-export const deleteEmployees= createAsyncThunk('personnel/suppression', async (id_personnel: number, { dispatch }): Promise<ApiReturnType> => {
+export const deleteEmployees = createAsyncThunk('personnel/suppression', async (id_personnel: number, { dispatch }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
     if (id_personnel) {
         await api.delete('admin/personnel/delete', {
@@ -62,6 +65,7 @@ export const deleteEmployees= createAsyncThunk('personnel/suppression', async (i
             data = response.data;
             if (!data.error) {
                 dispatch(setHiddeModalValue(true));
+                toast.success('Suppression effectuée');
             }
         }).catch(error => {
             console.error('Erreur lors de la récupération des données:', error.getMessage());

@@ -19,6 +19,7 @@ import { AppDispatch } from './Redux/store';
 import { useDispatch } from 'react-redux';
 import { getAllTypePersonnel } from './Redux/Other/asyncThunk/TypeEmployesAsyncThunk';
 import EmployeesSinglePage from './components/Employees/EmployeesSinglePage';
+import Teachers from './components/Teachers/Teachers';
 
 
 
@@ -46,6 +47,7 @@ function App() {
         <Route index element={<Dashboard />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="students" element={<Students />} />
+        <Route path="teachers" element={<Teachers />} />
         <Route path="employees"  >
           <Route index element={<Employees />} />
           <Route path=':id' element={<EmployeesSinglePage />} />

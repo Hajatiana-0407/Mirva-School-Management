@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionIntialValue, ActionType, ApiReturnType, EmployeeType } from "../../../Utils/Types";
+import { ActionIntialValue, ActionType, ApiReturnType, EmployeeType, TypePersonnelType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
-import { createEmployees, deleteEmployees, getAllEmployees, updateEmployees } from "./EmployeAsyncThunk";
+import { getAllTeachers } from "./TeacherAsyncThunk";
+import { createEmployees, deleteEmployees, updateEmployees } from "../../Employees/redux/EmployeAsyncThunk";
 
 
 type initialStateType = {
@@ -19,8 +20,8 @@ const initialState: initialStateType = {
     error: '',
 }
 
-const EmployeSlice = createSlice({
-    name: 'Subject (Niveau)',
+const TeacherSlice = createSlice({
+    name: 'Teacher (enseignant)',
     initialState,
     reducers: {
         setSubjectDeleting: (state) => {
@@ -32,19 +33,18 @@ const EmployeSlice = createSlice({
 
         // // ************************************* Read ************************************* //
         builder
-            .addCase(getAllEmployees.pending, (state) => {
+            .addCase(getAllTeachers.pending, (state) => {
                 state.action.isLoading = true;
             })
-            .addCase(getAllEmployees.fulfilled, (state, action: {
+            .addCase(getAllTeachers.fulfilled, (state, action: {
                 payload: EmployeeType[]
             }) => {
                 state.action.isLoading = false;
                 state.datas = action.payload;
             })
-            .addCase(getAllEmployees.rejected, (state) => {
+            .addCase(getAllTeachers.rejected, (state) => {
                 state.action.isLoading = false;
                 state.error = 'Erreur de connexion au server'
-                toast.error("Erreur de connexion au server");
             });
 
         // ************************************* Create ************************************* //
@@ -61,7 +61,10 @@ const EmployeSlice = createSlice({
                     state.error = message as string;
                 } else {
                     state.error = '';
-                    state.datas.unshift(data);
+                    const newData = data as TypePersonnelType & EmployeeType;
+                    if (newData.type.includes('Enseignant')) {
+                        state.datas.unshift(data);
+                    }
                 }
             })
             .addCase(createEmployees.rejected, (state) => {
@@ -83,7 +86,6 @@ const EmployeSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
-
                     state.error = '';
                     state.datas = state.datas.map(level => {
                         if (level.id_personnel === data?.id_personnel) {
@@ -127,7 +129,7 @@ const EmployeSlice = createSlice({
     }
 })
 
-export const getEmployeState = (state: RootStateType) => state.employes
+export const getTeacherState = (state: RootStateType) => state.teacher
 
-export const { setSubjectDeleting } = EmployeSlice.actions;
-export default EmployeSlice.reducer; 
+export const { setSubjectDeleting } = TeacherSlice.actions;
+export default TeacherSlice.reducer; 

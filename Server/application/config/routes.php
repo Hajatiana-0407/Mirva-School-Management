@@ -82,6 +82,9 @@ $route['api/admin/personnel/update'] = 'PersonnelController/update';
 $route['api/admin/personnel/create'] = 'PersonnelController/create';
 $route['api/admin/personnel/delete'] = 'PersonnelController/delete';
 
+// ******************* ROUTE ENSEIGNANT ********************** //
+$route['api/admin/teachers'] = 'EnseigantsController';
+
 // ******************* ROUTE TYPE PERSONNEL ********************** //
 $route['api/admin/type-personnel'] = 'TypePersonnelController';
 

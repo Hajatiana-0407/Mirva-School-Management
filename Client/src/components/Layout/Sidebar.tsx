@@ -36,6 +36,7 @@ const menuItems: MenuItemType[] = [
   { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard, path: '/dashboard' },
 
   { id: 'students', label: 'Élèves', icon: Users, path: '/students' },
+  { id: 'teachers', label: 'Enseignants', icon: UserCheck, path: '/teachers' },
   { id: 'schedule', label: 'Emploi du temps', icon: Calendar, path: '/schedule' },
   { id: 'attendance', label: 'Présences', icon: UserCog, path: '/attendance' },
   { id: 'exams', label: 'Examens et Notes', icon: FileText, path: '/exams' },
@@ -132,7 +133,7 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
   // Rendu récursif des menus et sous-menus (pour non-collapsed)
   const renderMenuItems = (items: MenuItemType[], level = 0) => (
     <ul className='space-y-0.5'>
-      {items.map((menu, idx) => {
+      {items.map((menu ) => {
         const Icon = menu.icon;
         const hasChildren = !!menu.children?.length;
         const isOpen = openMenus[menu.id];

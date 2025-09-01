@@ -234,7 +234,7 @@ class AppFixtures extends CI_Controller
         }
 
         // Générer 5 nouveaux employés
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $new_id = $last_id + 1;
             $matricule = 'EMP' . str_pad($new_id, 5, '0', STR_PAD_LEFT);
 
