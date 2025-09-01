@@ -20,6 +20,7 @@ class AppFixtures extends CI_Controller
 
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
+            // 'etablissement',
             'paiement',
             'note',
             'inscription',
@@ -37,6 +38,29 @@ class AppFixtures extends CI_Controller
             'parent',
             'depense'
         ]);
+
+
+
+        // Insertion des données sur l'etablissement
+        $this->model->insertFixture('etablissement', [
+            'nom' => 'Mada School',
+            'code' => 'MIRV2024',
+            'adresse' => '123 Rue de l\'Éducation, Ville, Pays',
+            'telephone' => '+1234567890',
+            'email' => 'mada.shool@gmail.com',
+            'slogan' => 'Apprendre, Grandir, Réussir',
+            'logo' => '',
+            'created_at' => date('Y-m-d H:i:s'),
+            'site_web' => 'www.madaschool.com',
+            'description' => 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.',
+
+            'facebook' => 'https://www.facebook.com/madaschool',
+            'twitter' => 'https://www.twitter.com/madaschool',
+            'instagram' => 'https://www.instagram.com/madaschool',
+            'linkedin' => 'https://www.linkedin.com/company/madaschool',
+            'youtube' => 'https://www.youtube.com/madaschool'
+        ]);
+
 
 
         // 1. annee_scolaire
