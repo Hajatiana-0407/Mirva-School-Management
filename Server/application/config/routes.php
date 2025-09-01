@@ -92,5 +92,10 @@ $route['api/admin/teachers'] = 'EnseigantsController';
 // ******************* ROUTE TYPE PERSONNEL ********************** //
 $route['api/admin/type-personnel'] = 'TypePersonnelController';
 
+// ******************* ROUTE ANNEE SCOLAIRE  ********************** //
+$route['api/admin/school-year'] = 'AnneeScolaireController';
+$route['api/admin/school-year/update'] = 'AnneeScolaireController/update';
+$route['api/admin/school-year/create'] = 'AnneeScolaireController/create';
+$route['api/admin/school-year/delete'] = 'AnneeScolaireController/delete';
 
 

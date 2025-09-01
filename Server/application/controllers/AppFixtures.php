@@ -66,8 +66,10 @@ class AppFixtures extends CI_Controller
         // 1. annee_scolaire
         for ($i = 0; $i < 2; $i++) {
             $this->model->insertFixture('annee_scolaire', [
+                'nom' => 'Année Scolaire ' . ($i + 1),
                 'date_debut' => $faker->date(),
                 'date_fin' => $faker->date(),
+                'description' => $faker->sentence(6),
                 'created_at' => date('Y-m-d')
             ]);
         }

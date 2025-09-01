@@ -14,13 +14,15 @@ import {
   ChevronRight,
   ChevronDown,
   Menu,
-  ChevronLeft
+  ChevronLeft,
+  Backpack
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getSchoolState } from '../Settings/School/redux/SchoolSlice';
+import { getSchoolYearState } from '../School-Year/redux/SchoolYearSlice';
 
 interface MenuItemType {
   id: string;
@@ -62,6 +64,7 @@ const menuItems: MenuItemType[] = [
     label: 'Configuration',
     icon: Settings,
     children: [
+      { id: 'school-year', label: 'Année scolaire', icon: Backpack, path: '/school-year' },
       { id: 'levels', label: 'Niveaux', icon: GraduationCap, path: '/levels' },
       { id: 'classes', label: 'Classes', icon: School, path: '/classes' },
       { id: 'subjects', label: 'Matières', icon: BookOpen, path: '/subjects' },
@@ -85,7 +88,8 @@ const flattenMenuItems = (items: MenuItemType[]): MenuItemType[] => {
 
 const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
-  const { action: shoolInfoAction , datas: shoolInfo } = useSelector( getSchoolState)
+  const { datas: shoolInfo } = useSelector( getSchoolState)
+  const { activeSchoolYear } = useSelector(getSchoolYearState )
 
   const handleToggleMenu = (id: string) => {
     setOpenMenus((prev) => ({
@@ -155,7 +159,7 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
                       "bg-blue-50 text-blue-700 border-r-2 border-blue-700": isActive,
                       "text-gray-700 hover:bg-gray-50": !isActive,
                     },
-                    "w-full flex items-center py-3 text-left transition-colors group relative",
+                    "w-full  flex items-center py-3 text-left transition-colors group relative",
                     level > 0 ? "pl-8" : ""
                   )
                 }
@@ -209,7 +213,7 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
               </button>
             )}
             {hasChildren && isOpen && !collapsed && (
-              <div className="ml-2 border-l border-blue-100">
+              <div className="mx-1 mb-1 rounded mt-0.5 shadow-inner border-2 ">
                 {renderMenuItems(menu.children!, level + 1)}
               </div>
             )}
@@ -224,9 +228,10 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
       <div className="py-6 border-b border-r">
         <div className="flex items-center justify-center">
           {!collapsed && (
-            <div>
+            <div >
               <h1 className="text-xl font-bold text-gray-800">{ shoolInfo.nom || 'Nom de votre etablissement' }</h1>
               <p className="text-sm text-gray-600">{ shoolInfo.slogan || 'Votre slogan' }</p>
+              <p className='text-xs font-semibold text-blue-600'> { activeSchoolYear?.nom } </p>
             </div>
           )}
           <button

@@ -178,3 +178,20 @@ export const TypePersonnelInitialValue: TypePersonnelType = {
     type: '',
     description: ''
 };
+
+// School Year ( ANNEE SCOLAIRE )
+export type SchoolYearType = {
+    id_annee_scolaire?: number;
+    nom: string;
+    date_debut: string;
+    date_fin: string;
+    description?: string;
+    isActif?: string;
+};
+
+export const schoolYearInitialValue: SchoolYearType = {
+    nom: '',
+    date_debut: '',
+    date_fin: '',
+    description: '',
+};

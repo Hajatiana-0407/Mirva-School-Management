@@ -22,12 +22,16 @@ import EmployeesSinglePage from './components/Employees/EmployeesSinglePage';
 import Teachers from './components/Teachers/Teachers';
 import { getSchoolState } from './components/Settings/School/redux/SchoolSlice';
 import { getSchoolInfo } from './components/Settings/School/redux/SchoolAsyncThunk';
+import SchoolYear from './components/School-Year/SchoolYear';
+import { getSchoolYearState } from './components/School-Year/redux/SchoolYearSlice';
+import { getAllSchoolYear } from './components/School-Year/redux/SchoolYearAsyncThunk';
 
 
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
   const { datas: schoolInfo } = useSelector(getSchoolState)
+  const { activeSchoolYear } = useSelector(getSchoolYearState)
 
   // Utils
   useEffect(() => {
@@ -37,6 +41,10 @@ function App() {
     if (schoolInfo?.code === "") {
       // Fetch school info only if not already loaded
       dispatch(getSchoolInfo());
+    }
+
+    if (!!!activeSchoolYear) {
+      dispatch(getAllSchoolYear());
     }
   }, []);
 
@@ -71,6 +79,7 @@ function App() {
         <Route path="payments" element={<Payments />} />
         <Route path="messages" element={<Messages />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="school-year" element={<SchoolYear />} />
         {/* 404 Not found  */}
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
