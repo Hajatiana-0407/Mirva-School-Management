@@ -25,6 +25,7 @@ import { getSchoolInfo } from './components/Settings/School/redux/SchoolAsyncThu
 import SchoolYear from './components/School-Year/SchoolYear';
 import { getSchoolYearState } from './components/School-Year/redux/SchoolYearSlice';
 import { getAllSchoolYear } from './components/School-Year/redux/SchoolYearAsyncThunk';
+import Registration from './components/Registration/Registration';
 
 
 
@@ -64,6 +65,7 @@ function App() {
         <Route index element={<Dashboard />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="students" element={<Students />} />
+        <Route path="registration" element={<Registration />} />
         <Route path="teachers" element={<Teachers />} />
         <Route path="employees"  >
           <Route index element={<Employees />} />

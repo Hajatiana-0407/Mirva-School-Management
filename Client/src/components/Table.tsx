@@ -81,12 +81,12 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false  }: 
               currentItems.map((item, index) => (
                 <tr key={index} className="border-b hover:bg-gray-50 w-max">
                   {columns.map((column) => (
-                    <td key={column.key} className="py-3 px-4 text-gray-900 w-max text-nowrap">
+                    <td key={column.key} className="py-3 px-4 text-gray-900 truncate max-w-80">
                       {column.render ? column.render(item[column.key], item) : item[column.key]}
                     </td>
                   ))}
                   {actions && actions.length > 0 && (
-                    <td className="py-3 px-4 w-max ">
+                    <td className="py-3 px-4 ">
                       <div className="flex justify-center space-x-2">
                         {actions.map((action, actionIndex) => {
                           const Icon = action.icon;

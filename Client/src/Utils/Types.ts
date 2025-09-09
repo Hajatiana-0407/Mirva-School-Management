@@ -195,3 +195,20 @@ export const schoolYearInitialValue: SchoolYearType = {
     date_fin: '',
     description: '',
 };
+
+// Students ( Eleve )
+export type StudentType = {
+    id_eleve?: number;
+    nom: string;
+    prenom: string;
+    adresse?: string;
+    parent_id_parent?: number;
+    date_naissance: string;
+    lieu_naissance: string;
+    sex: string;
+    maladie?: string;
+    photo?: string;
+    created_at?: string;
+    email?: string;
+    pc_pi?: string;
+}

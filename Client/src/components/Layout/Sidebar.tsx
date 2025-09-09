@@ -15,7 +15,8 @@ import {
   ChevronDown,
   Menu,
   ChevronLeft,
-  Backpack
+  Backpack,
+  UserPlus
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
@@ -39,8 +40,8 @@ interface SidebarPropsType {
 const menuItems: MenuItemType[] = [
   { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard, path: '/dashboard' },
 
+  { id: 'registration', label: 'Inscriptions', icon: UserPlus, path: '/registration' },
   { id: 'students', label: 'Élèves', icon: Users, path: '/students' },
-  { id: 'teachers', label: 'Enseignants', icon: UserCheck, path: '/teachers' },
   { id: 'schedule', label: 'Emploi du temps', icon: Calendar, path: '/schedule' },
   { id: 'attendance', label: 'Présences', icon: UserCog, path: '/attendance' },
   { id: 'exams', label: 'Examens et Notes', icon: FileText, path: '/exams' },
@@ -52,6 +53,7 @@ const menuItems: MenuItemType[] = [
     icon: UserCheck,
     children: [
       { id: 'employees', label: 'Employés', icon: UserCheck, path: '/employees' },
+      { id: 'teachers', label: 'Enseignants', icon: UserCheck, path: '/teachers' },
       { id: 'parents', label: 'Parents', icon: Users, path: '/parents' },
       { id: 'payments', label: 'Paiements', icon: CreditCard, path: '/payments' },
       { id: 'messages', label: 'Messagerie', icon: MessageSquare, path: '/messages' },
@@ -88,8 +90,8 @@ const flattenMenuItems = (items: MenuItemType[]): MenuItemType[] => {
 
 const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
-  const { datas: shoolInfo } = useSelector( getSchoolState)
-  const { activeSchoolYear } = useSelector(getSchoolYearState )
+  const { datas: shoolInfo } = useSelector(getSchoolState)
+  const { activeSchoolYear } = useSelector(getSchoolYearState)
 
   const handleToggleMenu = (id: string) => {
     setOpenMenus((prev) => ({
@@ -140,7 +142,7 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
   // Rendu récursif des menus et sous-menus (pour non-collapsed)
   const renderMenuItems = (items: MenuItemType[], level = 0) => (
     <ul className='space-y-0.5'>
-      {items.map((menu ) => {
+      {items.map((menu) => {
         const Icon = menu.icon;
         const hasChildren = !!menu.children?.length;
         const isOpen = openMenus[menu.id];
@@ -229,9 +231,9 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
         <div className="flex items-center justify-center">
           {!collapsed && (
             <div >
-              <h1 className="text-xl font-bold text-gray-800">{ shoolInfo.nom || 'Nom de votre etablissement' }</h1>
-              <p className="text-sm text-gray-600">{ shoolInfo.slogan || 'Votre slogan' }</p>
-              <p className='text-xs font-semibold text-blue-600'> { activeSchoolYear?.nom } </p>
+              <h1 className="text-xl font-bold text-gray-800">{shoolInfo.nom || 'Nom de votre etablissement'}</h1>
+              <p className="text-sm text-gray-600">{shoolInfo.slogan || 'Votre slogan'}</p>
+              <p className='text-xs font-semibold text-blue-600'> {activeSchoolYear?.nom} </p>
             </div>
           )}
           <button
