@@ -71,4 +71,22 @@ class AnneeScolaireModel extends CI_Model
         }
         return false;
     }
+    // ======= Change Active =======
+    public function changeActiveSchoolYear($id)
+    {
+        $element = $this->db
+            ->get_where($this->table, [$this->primaryKey => $id])
+            ->row();
+
+        if ($element) {
+            $this->db->where($this->primaryKey, $id);
+            $this->db->update($this->table, ['isActif' => 1]);
+
+            // Desactiver les autres années scolaires
+            $this->db->where($this->primaryKey . ' <>', $id );
+            $this->db->update($this->table, ['isActif' => 0]);
+            return true;
+        }
+        return false;
+    }
 }

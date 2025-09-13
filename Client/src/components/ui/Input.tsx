@@ -7,17 +7,18 @@ interface InputProps {
     name: string;
     placeholder?: string;
     required?: boolean;
-    type?: "text" | "password" | "email" | "number" | "date";
+    type?: "text" | "password" | "email" | "number" | "date" | "select";
     icon?: React.ComponentType<LucideProps>;
     value?: string | number;
     readonly?: boolean;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
     errorMessage?: string;
     defaultValue?: string | number | readonly string[] | undefined;
     iconColor?: string;
+    options?: { value: string | number; label: string }[]; // Ajout pour select
 }
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
+const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
     (
         {
             label,
@@ -30,8 +31,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             readonly = false,
             onChange,
             errorMessage = "",
-            defaultValue = undefined , 
-            iconColor = "text-gray-800"
+            defaultValue = undefined,
+            iconColor = "text-gray-800",
+            options = []
         },
         ref
     ) => {
@@ -60,29 +62,53 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                             {label}
                         </span>
                     )}
-                    <input
-                        ref={ref}
-                        autoComplete="off"
-                        type={inputType}
-                        id={name}
-                        className={clsx(
-                            {
-                                "ps-12": icon,
-                            },
-                            "bg-background border border-gray-300 text-primary text-sm rounded focus:ring-gray-300/50 focus:border-gray-300/50 focus:outline-1 block w-full p-2 py-2.5"
-                        )}
-                        name={name}
-                        placeholder={icon ? label : placeholder}
-                        required={required}
-                        value={value}
-                        onChange={onChange}
-                        readOnly={readonly}
-                        defaultValue={defaultValue}
-                    />
+                    {type === "select" ? (
+                        <select
+                            key={'selection-option'}
+                            id={name}
+                            name={name}
+                            required={required}
+                            value={value}
+                            onChange={onChange}
+                            defaultValue={defaultValue}
+                            className={clsx(
+                                {
+                                    "ps-12": icon,
+                                },
+                                "bg-background border border-gray-300 text-primary text-sm rounded focus:ring-gray-300/50 focus:border-gray-300/50 focus:outline-1 block w-full p-2 py-2.5"
+                            )}
+                        >
+                            {options.map((opt ,idx ) => (
+                                <option key={idx} value={opt.value}>
+                                    {opt.label}
+                                </option>
+                            ))}
+                        </select>
+                    ) : (
+                        <input
+                            ref={ref as React.Ref<HTMLInputElement>}
+                            autoComplete="off"
+                            type={inputType}
+                            id={name}
+                            className={clsx(
+                                {
+                                    "ps-12": icon,
+                                },
+                                "bg-background border border-gray-300 text-primary text-sm rounded focus:ring-gray-300/50 focus:border-gray-300/50 focus:outline-1 block w-full p-2 py-2.5"
+                            )}
+                            name={name}
+                            placeholder={icon ? label : placeholder}
+                            required={required}
+                            value={value}
+                            onChange={onChange}
+                            readOnly={readonly}
+                            defaultValue={defaultValue}
+                        />
+                    )}
 
                     {icon && (
                         <div className={`absolute flex justify-center items-center w-10 top-0 left-0 text-xl  border-r border-gray-300 h-full `}>
-                            {React.createElement(icon, { size: 18, className:  iconColor })}
+                            {React.createElement(icon, { size: 18, className: iconColor })}
                         </div>
                     )}
 

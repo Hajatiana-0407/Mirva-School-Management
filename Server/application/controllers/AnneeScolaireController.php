@@ -93,4 +93,22 @@ class AnneeScolaireController extends CI_Controller
             echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
         }
     }
+
+
+    // Changer l'année scolaire active 
+    public function changeActiveSchoolYear()
+    {
+        $id = $this->input->post($this->pk);
+        
+        if ($id) {
+            $isChnaged = $this->AnneeScolaireModel->changeActiveSchoolYear($id);
+            if ($isChnaged) {
+                echo json_encode(['error' => false, 'data' => $id]);
+            } else {
+                echo json_encode(['error' => true , 'data' => null, 'message' => 'Échec de la modification']);
+            }
+        } else {
+            echo json_encode(['error' => true , 'data' => null, 'message' => 'Échec dffsdfsde la modification']);
+        }
+    }
 }

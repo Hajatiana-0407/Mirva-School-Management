@@ -3,6 +3,7 @@ import { ApiReturnInitial, ApiReturnType } from "../../../Utils/Types";
 import api from "../../../Utils/api";
 import { setHiddeModalValue } from "../../../Redux/AppSlice";
 import { SchoolYearType } from "../../../Utils/Types";
+import { toast } from "react-toastify";
 
 // READ
 export const getAllSchoolYear = createAsyncThunk('schoolYear/getAll', async (): Promise<SchoolYearType[]> => {
@@ -21,7 +22,7 @@ export const getAllSchoolYear = createAsyncThunk('schoolYear/getAll', async (): 
 export const updateSchoolYear = createAsyncThunk('schoolYear/modification', async ({ schoolYear, id }: { schoolYear: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
   let data: ApiReturnType = ApiReturnInitial;
   schoolYear.append('id_annee_scolaire', id.toString());
-  
+
   await api.post('admin/school-year/update', schoolYear, {
     headers: { 'Content-Type': 'multipart/form-data' }
   }).then(response => {
@@ -69,3 +70,20 @@ export const deleteSchoolYear = createAsyncThunk('schoolYear/suppression', async
   }
   return data;
 });
+
+
+// SET ACTIVE SCHOOL YEAR 
+export const changeActiveSchoolYear = createAsyncThunk('schoolYear/change-active', async (validateData: any ): Promise<ApiReturnType> => {
+  let data = ApiReturnInitial ;   
+  await api.post('admin/school-year/change-active',
+    validateData
+  ).then(response => {
+    data = response.data;
+    if (!data.error) {
+      toast.success('Modification éffectuée')
+    }
+  }).catch(error => {
+    console.error('Erreur lors de la récupération des données:', error.getMessage());
+  });
+  return data;
+})

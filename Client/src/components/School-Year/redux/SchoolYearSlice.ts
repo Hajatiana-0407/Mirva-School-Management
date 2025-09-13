@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionIntialValue, ActionType, SchoolYearType } from "../../../Utils/Types";
+import { ActionIntialValue, ActionType, ApiReturnType, SchoolYearType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
-import { createSchoolYear, deleteSchoolYear, getAllSchoolYear, updateSchoolYear } from "./SchoolYearAsyncThunk";
+import { changeActiveSchoolYear, createSchoolYear, deleteSchoolYear, getAllSchoolYear, updateSchoolYear } from "./SchoolYearAsyncThunk";
 
 // Type SchoolYear à adapter selon votre modèle
 
@@ -128,7 +128,7 @@ const SchoolYearSlice = createSlice({
                         }
                     }
                     else {
-                        state.activeSchoolYear = null ;
+                        state.activeSchoolYear = null;
                     }
                 }
             })
@@ -137,6 +137,25 @@ const SchoolYearSlice = createSlice({
                 state.error = 'Erreur de connexion au server';
                 toast.error("Erreur de connexion au server");
             });
+
+        // Change the active school-year 
+        builder.addCase(changeActiveSchoolYear.pending, (state) => {
+            state.action.isUpdating = true;
+        })
+            .addCase(changeActiveSchoolYear.fulfilled, (state, action: { payload: ApiReturnType }) => {
+                const { error, data: id_annee_scolaire } = action.payload;
+                if (!error) {
+                    state.datas = state.datas.map((data: SchoolYearType) => {
+                        if (data.id_annee_scolaire == id_annee_scolaire as number) {
+                            state.activeSchoolYear = { ...data, isActif: '1' };
+                            return { ...data, isActif: '1' };
+                        }
+                        return { ...data, isActif: '0' };
+                    })
+                    console.log('Teste', state.datas);
+
+                }
+            })
     }
 });
 

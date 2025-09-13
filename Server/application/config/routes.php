@@ -98,4 +98,6 @@ $route['api/admin/school-year/update'] = 'AnneeScolaireController/update';
 $route['api/admin/school-year/create'] = 'AnneeScolaireController/create';
 $route['api/admin/school-year/delete'] = 'AnneeScolaireController/delete';
 
+$route['api/admin/school-year/change-active'] = 'AnneeScolaireController/changeActiveSchoolYear';
+
 

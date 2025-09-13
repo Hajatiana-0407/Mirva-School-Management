@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Save, Upload, Download, Users, Calendar, Shield, Bell } from 'lucide-react';
+import { Save, Users, Calendar, Shield, Bell } from 'lucide-react';
 import School from './School/School';
+import GeneralSettings from './General/GeneralSettings';
 
 const Settings: React.FC = () => {
   const [activeTab, setActiveTab] = useState('general');
@@ -14,7 +15,10 @@ const Settings: React.FC = () => {
 
 
   const handleSave = () => {
-    const form = document.getElementById('__etablissement-form') as HTMLFormElement;
+    let form = document.getElementById('__etablissement-form') as HTMLFormElement;
+    if (!form) {
+      form = document.getElementById('__form-to-change-active-schoolYear') as HTMLFormElement;
+    }
     if (form) {
       form.requestSubmit();
     }
@@ -59,43 +63,7 @@ const Settings: React.FC = () => {
 
         <div className="p-6">
           {activeTab === 'general' && (
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Paramètres généraux</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Langue</label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                      <option value="fr">Français</option>
-                      <option value="en">English</option>
-                      <option value="es">Español</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Fuseau horaire</label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                      <option value="Europe/Paris">Europe/Paris</option>
-                      <option value="Europe/London">Europe/London</option>
-                      <option value="America/New_York">America/New_York</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Sauvegarde et restauration</h3>
-                <div className="flex space-x-4">
-                  <button className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-green-700 transition-colors">
-                    <Download className="w-4 h-4" />
-                    <span>Exporter les données</span>
-                  </button>
-                  <button className="bg-orange-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-orange-700 transition-colors">
-                    <Upload className="w-4 h-4" />
-                    <span>Importer les données</span>
-                  </button>
-                </div>
-              </div>
-            </div>
+            <GeneralSettings />
           )}
 
           {activeTab === 'school' && (
