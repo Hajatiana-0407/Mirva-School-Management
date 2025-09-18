@@ -42,6 +42,7 @@ export type ShoolInfoType = {
     logo?: string;
     created_at?: string;
     description?: string;
+    prefix?: string ; 
 
     // Optional - Social Media Links
     site_web?: string;
