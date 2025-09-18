@@ -23,6 +23,7 @@ class NiveauModel extends CI_Model
             ->get()
             ->result();
 
+        // Liste des matieres pour chaque niveau
         foreach ($niveaux as  &$niveau) {
             $niveau->matiere['listes'] = $this->db->select('mn.matiere_id_matiere , mn.coefficient ,   m.*')
                 ->from('matiere_niveau mn')
@@ -31,6 +32,14 @@ class NiveauModel extends CI_Model
                 ->group_by('m.id_matiere')
                 ->get()->result();
             $niveau->matiere['id_niveau'] = $niveau->id_niveau;
+        }
+
+        // Liste des classe pour chaque niveau
+        foreach ($niveaux as  &$niveau) {
+            $niveau->classe['listes'] = $this->db->select('c.*')
+                ->from('classe c')
+                ->where('c.niveau_id_niveau', $niveau->id_niveau)
+                ->get()->result();
         }
         return $niveaux;
     }
@@ -54,6 +63,12 @@ class NiveauModel extends CI_Model
             ->group_by('m.id_matiere')
             ->get()->result();
         $niveau->matiere['id_niveau'] = $niveau->id_niveau;
+
+        $niveau->classe['listes'] = $this->db->select('c.*')
+            ->from('classe c')
+            ->where('c.niveau_id_niveau', $niveau->id_niveau)
+            ->get()->result();
+            
         return $niveau;
     }
 
@@ -81,5 +96,4 @@ class NiveauModel extends CI_Model
         }
         return $updated;
     }
-
 }

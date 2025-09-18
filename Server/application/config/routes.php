@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
@@ -54,8 +54,8 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 // ******************* ROUTE ETABLISSEMENT ********************** //
-$route['api/admin/school'] = 'EtablissementController/getEtablissementInfo' ;
-$route['api/admin/school/update'] = 'EtablissementController/updateEtablissementInfo' ;
+$route['api/admin/school'] = 'EtablissementController/getEtablissementInfo';
+$route['api/admin/school/update'] = 'EtablissementController/updateEtablissementInfo';
 
 // ******************* ROUTE CLASSE ********************** //
 $route['api/admin/classe'] = 'ClasseController';
@@ -101,3 +101,5 @@ $route['api/admin/school-year/delete'] = 'AnneeScolaireController/delete';
 $route['api/admin/school-year/change-active'] = 'AnneeScolaireController/changeActiveSchoolYear';
 
 
+// ******************* ROUTE INSCRIPTION  ********************** //
+$route['api/admin/registration-student'] = 'InscriptionController/create';

@@ -25,7 +25,7 @@ import { getSchoolInfo } from './components/Settings/School/redux/SchoolAsyncThu
 import SchoolYear from './components/School-Year/SchoolYear';
 import { getSchoolYearState } from './components/School-Year/redux/SchoolYearSlice';
 import { getAllSchoolYear } from './components/School-Year/redux/SchoolYearAsyncThunk';
-import Registration from './components/Registration/Registration';
+import Registration from './components/Registrations/Registration';
 
 
 

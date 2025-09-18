@@ -78,6 +78,8 @@ export type levelType = {
     niveau: string;
     cycle: string;
     description: string;
+    classe?: { listes : ClasseType[] }; 
+    matiere?: { listes : SubjectType[] }; 
 }
 export const levelInitial: levelType = {
     niveau: '',
@@ -202,13 +204,231 @@ export type StudentType = {
     nom: string;
     prenom: string;
     adresse?: string;
+    telephone?: string;
+    classe?: string;
+    nationalite?: string;
     parent_id_parent?: number;
     date_naissance: string;
     lieu_naissance: string;
-    sex: string;
+    sexe: string;
     maladie?: string;
     photo?: string;
     created_at?: string;
     email?: string;
     pc_pi?: string;
 }
+
+export const initialStudent: StudentType = {
+    id_eleve: undefined,
+    nom: "",
+    prenom: "",
+    adresse: "",
+    telephone: "",
+    classe: "",
+    nationalite: "",
+    parent_id_parent: undefined,
+    date_naissance: "",
+    lieu_naissance: "",
+    sexe: "",
+    maladie: "",
+    photo: "",
+    created_at: "",
+    email: "",
+    pc_pi: "",
+};
+
+// Registration ( INSCRIPTION )
+export type RegistrationType = {
+    // Élève
+    nom: string;
+    prenom: string;
+    sexe: string;
+    date_naissance: string;
+    lieu_naissance: string;
+    nationalite: string;
+    adresse: string;
+    telephone: string;
+    email: string;
+    identifiant: string;
+    certificat_naissance: string;
+    // Scolarité
+    niveau: string;
+    classe: string;
+    annee_scolaire: string;
+    langue_vivante?: string;
+    ancienne_ecole?: string;
+    diplome?: string;
+    // Parents / Tuteur
+    pere_nom?: string;
+    pere_profession?: string;
+    pere_tel?: string;
+    pere_email?: string;
+    mere_nom?: string;
+    mere_profession?: string;
+    mere_tel?: string;
+    mere_email?: string;
+    adresse_parents?: string;
+    tuteur_nom?: string;
+    tuteur_lien?: string;
+    tuteur_tel?: string;
+    tuteur_email?: string;
+    // Médical
+    groupe_sanguin?: string;
+    allergies?: string;
+    maladies?: string;
+    traitements?: string;
+    medecin?: string;
+    medecin_contact?: string;
+    urgence_nom?: string;
+    urgence_lien?: string;
+    urgence_tel?: string;
+    // Administratif / Financier
+    paiement?: string;
+    bourse?: string;
+    payeur_nom?: string;
+    payeur_coord?: string;
+    // Pièces jointes
+    acte_naissance: string;
+    piece_identite: string;
+    photo_recente: string;
+    bulletin?: string;
+    vaccination?: string;
+    // Autres
+    photo?: string;
+    id_eleve?: number;
+};
+
+export const registrationInitialValue: RegistrationType = {
+    id_eleve: undefined ,  
+    nom: '',
+    prenom: '',
+    sexe: '',
+    date_naissance: '',
+    lieu_naissance: '',
+    nationalite: '',
+    adresse: '',
+    telephone: '',
+    email: '',
+    identifiant: '',
+    certificat_naissance: '',
+    niveau: '',
+    classe: '',
+    annee_scolaire: '',
+    langue_vivante: '',
+    ancienne_ecole: '',
+    diplome: '',
+    pere_nom: '',
+    pere_profession: '',
+    pere_tel: '',
+    pere_email: '',
+    mere_nom: '',
+    mere_profession: '',
+    mere_tel: '',
+    mere_email: '',
+    adresse_parents: '',
+    tuteur_nom: '',
+    tuteur_lien: '',
+    tuteur_tel: '',
+    tuteur_email: '',
+    groupe_sanguin: '',
+    allergies: '',
+    maladies: '',
+    traitements: '',
+    medecin: '',
+    medecin_contact: '',
+    urgence_nom: '',
+    urgence_lien: '',
+    urgence_tel: '',
+    paiement: '',
+    bourse: '',
+    payeur_nom: '',
+    payeur_coord: '',
+    acte_naissance: '',
+    piece_identite: '',
+    photo_recente: '',
+    bulletin: '',
+    vaccination: '',
+    photo: '',
+};
+
+
+// STUDENTS FORM REGISTER TYPE 
+type Field = {
+    label: string;
+    value: string;
+};
+export type StudentFormDataType = {
+    nom: Field;
+    prenom: Field;
+    date_naissance: Field;
+    lieu_naissance: Field;
+    adresse: Field;
+    telephone: Field;
+    email: Field;
+    sexe: Field;
+    nationalite: Field;
+
+    // Étape 2 (scolaire)
+    ancienne_ecole: Field;
+    niveau: Field;
+    classe: Field;
+
+    // Étape 3 (parents)
+    pere_nom: Field;
+    pere_profession: Field;
+    pere_tel: Field;
+    mere_nom: Field;
+    mere_profession: Field;
+    mere_tel: Field;
+    adresse_parents: Field;
+    tuteur_email: Field;
+
+    // Si tuteur
+    tuteur_nom: Field;
+    tuteur_lien: Field;
+    tuteur_tel: Field;
+    tuteur_email_alt: Field;
+
+    // Étape 4 (médical)
+    maladies: Field;
+    urgence_nom: Field;
+    urgence_lien: Field;
+    urgence_tel: Field;
+};
+
+export const StudentFormDataInitialValue: StudentFormDataType = {
+  nom: { label: "", value: "" },
+  prenom: { label: "", value: "" },
+  date_naissance: { label: "", value: "" },
+  lieu_naissance: { label: "", value: "" },
+  adresse: { label: "", value: "" },
+  telephone: { label: "", value: "" },
+  email: { label: "", value: "" },
+  sexe: { label: "", value: "" },
+  nationalite: { label: "", value: "" },
+
+  ancienne_ecole: { label: "", value: "" },
+  niveau: { label: "", value: "" },
+  classe: { label: "", value: "" },
+
+  pere_nom: { label: "", value: "" },
+  pere_profession: { label: "", value: "" },
+  pere_tel: { label: "", value: "" },
+  mere_nom: { label: "", value: "" },
+  mere_profession: { label: "", value: "" },
+  mere_tel: { label: "", value: "" },
+  adresse_parents: { label: "", value: "" },
+  tuteur_email: { label: "", value: "" },
+
+  tuteur_nom: { label: "", value: "" },
+  tuteur_lien: { label: "", value: "" },
+  tuteur_tel: { label: "", value: "" },
+  tuteur_email_alt: { label: "", value: "" },
+
+  maladies: { label: "", value: "" },
+  urgence_nom: { label: "", value: "" },
+  urgence_lien: { label: "", value: "" },
+  urgence_tel: { label: "", value: "" },
+};
+
+
