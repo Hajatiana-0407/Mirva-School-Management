@@ -26,6 +26,7 @@ class EtablissementController extends CI_Controller
         $email = $this->input->post('email');
         $site_web = $this->input->post('site_web');
         $description = $this->input->post('description');
+        $prefix = $this->input->post('prefix');
 
         // Information sur les réseaux sociaux
         $facebook = $this->input->post('facebook');
@@ -33,9 +34,6 @@ class EtablissementController extends CI_Controller
         $linkedin = $this->input->post('linkedin');
         $instagram = $this->input->post('instagram');
         $youtube = $this->input->post('youtube');
-
-
-
 
         // Préparation des données à mettre à jour
         $data = [
@@ -46,6 +44,8 @@ class EtablissementController extends CI_Controller
             'email' => $email,
             'site_web' => $site_web,
             'description' => $description,
+            'prefix' => $prefix,
+
             'facebook' => $facebook,
             'twitter' => $twitter,
             'linkedin' => $linkedin,
@@ -66,7 +66,7 @@ class EtablissementController extends CI_Controller
 
         // Mise à jour des informations de l'établissement
         $result = $this->EtablissementModel->update($id_etablissement, $data);
-        
+
         if ($result) {
             echo json_encode(['error' => false, 'data' => $result]);
         } else {

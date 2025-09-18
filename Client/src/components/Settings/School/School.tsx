@@ -18,6 +18,8 @@ const schoolInfoSchema = object({
         .required('Le nom de l\'établissement est obligatoire.'),
     adresse: string()
         .required('La adresse est obligatoire.'),
+    prefix: string()
+        .required('Veuillez ajouter un préfixe afin d’assurer l’unicité des matricules.'),
     telephone: string()
         .required('Le téléphone est obligatoire.'),
     slogan: string()
@@ -154,6 +156,15 @@ const School = () => {
                         rows={3}
                         name="description"
                         defaultValue={schoolInfo.description || ""}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+                <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Préfix ( pour les matricules ) </label>
+                    <input
+                        type="text"
+                        defaultValue={schoolInfo.prefix || ""}
+                        name="prefix"
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
