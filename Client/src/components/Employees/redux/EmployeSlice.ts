@@ -30,7 +30,7 @@ const EmployeSlice = createSlice({
     },
     extraReducers(builder) {
 
-        // // ************************************* Read ************************************* //
+        // ? ************************************* Read ************************************* //
         builder
             .addCase(getAllEmployees.pending, (state) => {
                 state.action.isLoading = true;

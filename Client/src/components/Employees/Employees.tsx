@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive, Eye, BookOpen, User, Users, Shield, Brush, Library, Calculator, Truck, Camera, HeartPulse, UserCheck, CalendarDays, Phone, Mail, MapPinned, X, ChevronRight, SquarePen, ChevronLeft, Check } from 'lucide-react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Plus, Search, Filter, Edit, Archive, Eye, BookOpen, User, Users, Shield, Brush, Library, Calculator, Truck, Camera, HeartPulse, UserCheck, CalendarDays, Phone, Mail, MapPinned, X, ChevronRight, SquarePen, ChevronLeft, Check, FolderOpen, Handshake } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
@@ -58,12 +58,11 @@ const EmployeSchema = object({
     .required("La date d'embauche est obligatoire."),
   telephone: string()
     .required('Le téléphone est obligatoire.'),
+  type_personnel: string()
+    .required('Veuillez choisir un type.'),
 });
 
 const Employees: React.FC = () => {
-  // Nom du fichier pièce d'identité (verso)
-  const [ciVersoFileName, setCiVersoFileName] = useState<string>("");
-
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingEmployees, setEditingEmployees] = useState<EmployeeType | null>(null);
@@ -74,17 +73,13 @@ const Employees: React.FC = () => {
     femme: true
   })
   const { datas: TypesEmployees } = useSelector(getTypeEmployeesState);
-  const [assignations, setAssignations] = useState<any>([])
-
-
+  const [assignations, setAssignations] = useState<any>([]);
   // Traitement quand le type est enseigant 
   const [isTeacher, setIsTeacher] = useState(false)
   const [page, setPage] = useState(1)
-
   // Aperçu de la photo uploadée
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const { hiddeTheModalActive } = useSelector(getAppState);
-
   // *** //
   const { datas: employees, action } = useSelector(getEmployeState);
   const { onSubmite, formErrors, resetError, forceError } = useForm<EmployeeType>(EmployeSchema, employeeInitialValue);
@@ -291,6 +286,9 @@ const Employees: React.FC = () => {
     { key: 'sexe', label: 'Sex' },
   ];
 
+  // ? Type personnel options
+  const typePersonnelOptions = TypesEmployees.map((type) => ({ value: type.id_type_personnel as number, label: type.type }));
+
   // Effets
   useEffect(() => {
     dispatch(getAllEmployees());
@@ -477,20 +475,7 @@ const Employees: React.FC = () => {
 
             {/* Information sur les coordonner de l'employer */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                label='Addresse'
-                name='addresse'
-                defaultValue={editingEmployees?.addresse || ''}
-                icon={MapPinned}
-                errorMessage={formErrors?.addresse}
-              />
-              <Input
-                label='Téléphone'
-                name='telephone'
-                defaultValue={editingEmployees?.telephone || ''}
-                icon={Phone}
-                errorMessage={formErrors?.telephone}
-              />
+              <h2 className='text-sm col-span-2 text-gray-500 italic'>Information sur les coordonner</h2>
               <Input
                 label='Email'
                 name='email'
@@ -499,49 +484,27 @@ const Employees: React.FC = () => {
                 errorMessage={formErrors?.email}
               />
 
-              {/* Engagement  */}
-              <div>
-                <div className="relative">
-                  <select
-                    defaultValue={editingEmployees?.engagement || ''}
-                    name='engagement'
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-10"
-                  >
-                    <option value="">Sélectionner une engagement</option>
-                    <option value="Célibataire">Célibataire</option>
-                    <option value="Marié">Marié</option>
-                    <option value="Divorcé">Divorcé</option>
-                  </select>
-                  <span className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    <HeartPulse className="w-4 h-4" />
-                  </span>
-                </div>
+              <Input
+                label='Téléphone'
+                name='telephone'
+                defaultValue={editingEmployees?.telephone || ''}
+                icon={Phone}
+                errorMessage={formErrors?.telephone}
+              />
+              <div className='col-span-2'>
+                <Input
+                  label='Addresse'
+                  name='addresse'
+                  defaultValue={editingEmployees?.addresse || ''}
+                  icon={MapPinned}
+                  errorMessage={formErrors?.addresse}
+                />
               </div>
+            </div>
 
-              {/* Fonctions du personnel  */}
-              <div>
-                <div className="relative">
-                  <select
-                    defaultValue={editingEmployees?.id_type_personnel || ''}
-                    name='type_personnel'
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-10"
-                    onChange={handleTypeEmployeesChange}
-                  >
-                    <option value="">Sélectionner une fonction</option>
-                    {TypesEmployees && TypesEmployees.map((type: TypePersonnelType) => (
-                      <option
-                        key={type.id_type_personnel}
-                        value={type.id_type_personnel}>
-                        {type.type}
-                      </option>
-                    ))}
-                  </select>
-                  <span className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    <User className="w-4 h-4" />
-                  </span>
-                </div>
-              </div>
-
+            {/* Information sur les Autres informations */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <h2 className='text-sm col-span-2 text-gray-500 italic'>Autres informations</h2>
               <Input
                 label="Date d'embauche"
                 name='date_embauche'
@@ -556,56 +519,52 @@ const Employees: React.FC = () => {
                 name='salaire_base'
                 defaultValue={editingEmployees?.salaire_base ? editingEmployees?.salaire_base.toString() : ''}
                 icon={Calculator}
-                errorMessage={formErrors?.salaire_base}
                 type='number'
               />
-              <div>
-                <div className="relative">
-                  <select
-                    defaultValue={editingEmployees?.status || ''}
-                    name='status'
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-10"
-                  >
-                    <option value="">Sélectionner un status</option>
-                    <option value="Actif">Actif</option>
-                    <option value="Suspendu">Suspendu</option>
-                    <option value="Démissionnaire">Démissionnaire</option>
-                  </select>
-                  <span className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    <User className="w-4 h-4" />
-                  </span>
-                </div>
+
+              {/* Engagement  */}
+              <Input
+                label='Engagement'
+                name='engagement'
+                defaultValue={editingEmployees?.engagement || 'Célibataire'}
+                icon={Handshake}
+                type='select'
+                options={[
+                  { label: 'Célibataire', value: 'Célibataire' },
+                  { label: 'Marié', value: 'Marié' },
+                  { label: 'Divorcé', value: 'Divorcé' },
+                ]}
+              />
+
+              {/* Fonctions du personnel  */}
+              <Input
+                label='Type du personnel'
+                name='type_personnel'
+                defaultValue={editingEmployees?.engagement || typePersonnelOptions[0]?.value}
+                icon={Handshake}
+                errorMessage={formErrors?.type_personnel} type='select'
+                options={typePersonnelOptions}
+                onChange={(e) => { handleTypeEmployeesChange(e as ChangeEvent<HTMLSelectElement>) }}
+              />
+
+              <div className='col-span-2'>
+                <Input
+                  label='Status'
+                  name='status'
+                  defaultValue={editingEmployees?.status || 'Actif'}
+                  icon={Check}
+                  errorMessage={formErrors?.status} type='select'
+                  options={[
+                    { label: 'Actif', value: 'Actif' },
+                    { label: 'Suspendu', value: 'Suspendu' },
+                    { label: 'Démissionnaire', value: 'Démissionnaire' },
+                  ]}
+                />
               </div>
             </div>
 
             {/* Photocopie CIN  */}
-            <div className=''>
-              <div className="flex w-full flex-col items-start gap-2">
-                <label htmlFor="pc_cin" className="flex w-full items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
-                  <Camera className="w-5 h-5 " />
-                  <span className=" text-sm font-medium">
-                    {ciVersoFileName ? ciVersoFileName : "Pièce d'indetité (SVG, PNG, JPG, GIF)"}
-                  </span>
-                </label>
-                <input
-                  id="pc_cin"
-                  name='pc_cin'
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={e => {
-                    const file = e.target.files && e.target.files[0];
-                    if (file) {
-                      setCiVersoFileName(file.name);
-                    } else {
-                      setCiVersoFileName("");
-                    }
-                  }}
-                />
-                <p className="text-xs text-gray-500 ml-1">Max 800x400px</p>
-              </div>
-
-            </div>
+            <Input label="Pièce d'indetité (SVG, PNG, JPG, GIF)" name='pc_cin' icon={FolderOpen} iconColor='text-amber-500' type='file' />
 
             {/* Boutons de validation , d'annulation et pour passer au  suivant  */}
             <div className="flex justify-end space-x-3 pt-4">

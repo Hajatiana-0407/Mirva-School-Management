@@ -20,7 +20,6 @@ export const getAllEmployees = createAsyncThunk('personnel/getAll', async (): Pr
 
 // UPDATE
 export const updateEmployees = createAsyncThunk('personnel/modification', async ({ datas, id }: { datas: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
-
     let data: ApiReturnType = ApiReturnInitial;
 
     datas.append('id_personnel', id.toString());
@@ -39,9 +38,6 @@ export const updateEmployees = createAsyncThunk('personnel/modification', async 
 // CREATE
 export const createEmployees = createAsyncThunk('personnel/ajout', async (datas: any, { dispatch }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
-
-    console.log(datas);
-
     await api.post('admin/personnel/create', datas).then(response => {
         data = response.data;
         if (!data.error) {

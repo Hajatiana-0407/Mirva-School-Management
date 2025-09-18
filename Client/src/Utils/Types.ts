@@ -143,6 +143,8 @@ export type EmployeeType = {
     pc_cin?: string;
     photo?: string;
     id_type_personnel?: number;
+    type_personnel?: string;
+
     status?: 'Actif' | 'Suspendu' | 'Démissionnaire';
     date_embauche?: string;
     salaire_base?: number;
