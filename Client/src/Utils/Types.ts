@@ -42,7 +42,7 @@ export type ShoolInfoType = {
     logo?: string;
     created_at?: string;
     description?: string;
-    prefix?: string ; 
+    prefix?: string;
 
     // Optional - Social Media Links
     site_web?: string;
@@ -79,8 +79,8 @@ export type levelType = {
     niveau: string;
     cycle: string;
     description: string;
-    classe?: { listes : ClasseType[] }; 
-    matiere?: { listes : SubjectType[] }; 
+    classe?: { listes: ClasseType[] };
+    matiere?: { listes: SubjectType[] };
 }
 export const levelInitial: levelType = {
     niveau: '',
@@ -240,8 +240,11 @@ export const initialStudent: StudentType = {
 
 // Registration ( INSCRIPTION )
 export type RegistrationType = {
+    id_inscription?: number;
     // Élève
+    matricule_etudiant?: string;
     nom: string;
+    nom_eleve?: string;
     prenom: string;
     sexe: string;
     date_naissance: string;
@@ -300,7 +303,7 @@ export type RegistrationType = {
 };
 
 export const registrationInitialValue: RegistrationType = {
-    id_eleve: undefined ,  
+    id_eleve: undefined,
     nom: '',
     prenom: '',
     sexe: '',
@@ -398,38 +401,38 @@ export type StudentFormDataType = {
 };
 
 export const StudentFormDataInitialValue: StudentFormDataType = {
-  nom: { label: "", value: "" },
-  prenom: { label: "", value: "" },
-  date_naissance: { label: "", value: "" },
-  lieu_naissance: { label: "", value: "" },
-  adresse: { label: "", value: "" },
-  telephone: { label: "", value: "" },
-  email: { label: "", value: "" },
-  sexe: { label: "", value: "" },
-  nationalite: { label: "", value: "" },
+    nom: { label: "", value: "" },
+    prenom: { label: "", value: "" },
+    date_naissance: { label: "", value: "" },
+    lieu_naissance: { label: "", value: "" },
+    adresse: { label: "", value: "" },
+    telephone: { label: "", value: "" },
+    email: { label: "", value: "" },
+    sexe: { label: "", value: "" },
+    nationalite: { label: "", value: "" },
 
-  ancienne_ecole: { label: "", value: "" },
-  niveau: { label: "", value: "" },
-  classe: { label: "", value: "" },
+    ancienne_ecole: { label: "", value: "" },
+    niveau: { label: "", value: "" },
+    classe: { label: "", value: "" },
 
-  pere_nom: { label: "", value: "" },
-  pere_profession: { label: "", value: "" },
-  pere_tel: { label: "", value: "" },
-  mere_nom: { label: "", value: "" },
-  mere_profession: { label: "", value: "" },
-  mere_tel: { label: "", value: "" },
-  adresse_parents: { label: "", value: "" },
-  tuteur_email: { label: "", value: "" },
+    pere_nom: { label: "", value: "" },
+    pere_profession: { label: "", value: "" },
+    pere_tel: { label: "", value: "" },
+    mere_nom: { label: "", value: "" },
+    mere_profession: { label: "", value: "" },
+    mere_tel: { label: "", value: "" },
+    adresse_parents: { label: "", value: "" },
+    tuteur_email: { label: "", value: "" },
 
-  tuteur_nom: { label: "", value: "" },
-  tuteur_lien: { label: "", value: "" },
-  tuteur_tel: { label: "", value: "" },
-  tuteur_email_alt: { label: "", value: "" },
+    tuteur_nom: { label: "", value: "" },
+    tuteur_lien: { label: "", value: "" },
+    tuteur_tel: { label: "", value: "" },
+    tuteur_email_alt: { label: "", value: "" },
 
-  maladies: { label: "", value: "" },
-  urgence_nom: { label: "", value: "" },
-  urgence_lien: { label: "", value: "" },
-  urgence_tel: { label: "", value: "" },
+    maladies: { label: "", value: "" },
+    urgence_nom: { label: "", value: "" },
+    urgence_lien: { label: "", value: "" },
+    urgence_tel: { label: "", value: "" },
 };
 
 

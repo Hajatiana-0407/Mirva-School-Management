@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Edit, Archive, Eye, User, Camera, UserCheck, CalendarDays, Phone, Mail, Check, MapPin, Globe, Home, ArrowRight, ArrowLeft, Activity, FolderOpen, HeartPulse, GraduationCap, } from 'lucide-react';
+import { Plus, Search, Archive, User, Camera, UserCheck, CalendarDays, Phone, Mail, Check, MapPin, Globe, Home, ArrowRight, ArrowLeft, Activity, FolderOpen, HeartPulse, GraduationCap, } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
@@ -8,11 +8,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getRegistrationState } from './redux/registerSlice';
 import { ClasseType, registrationInitialValue, RegistrationType, StudentFormDataType } from '../../Utils/Types'
 import { AppDispatch } from '../../Redux/store';
-import { createRegistration, deleteRegistration, getAllRegistrations, updateRegistration } from './redux/registerAsyncThunk';
+import { createRegistration, deleteRegistration, getAllRegistrations } from './redux/registerAsyncThunk';
 import useForm from '../../Hooks/useForm';
 import Input from '../ui/Input';
 import clsx from 'clsx';
-import { fakeStudentData } from '../../Utils/Utils';
+import { baseUrl, fakeStudentData } from '../../Utils/Utils';
 import { getLevelState } from '../Levels/redux/LevelSlice';
 import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
 import { getSchoolYearState } from '../School-Year/redux/SchoolYearSlice';
@@ -56,15 +56,13 @@ const fomrStep: FormStepType[] = [
   { number: 5, title: "Pièces jointes à fournir" },
 ]
 
-
 const Registration: React.FC = () => {
-
   // ===================== GESTION DES ETATS =====================
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<RegistrationType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [studentToArchive, setStudentToArchive] = useState<RegistrationType | null>(null);
+  const [dataToDelete, setDataToDelete] = useState<RegistrationType | null>(null);
   const [sexe, setSexe] = useState({ homme: false, femme: true });
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [step, setStep] = useState(1);
@@ -83,29 +81,22 @@ const Registration: React.FC = () => {
   const { activeSchoolYear } = useSelector(getSchoolYearState);
   // ! Droit d'inscription
   const [isPayed, setIsPayed] = useState(true)
-  const { hiddeTheModalActive} = useSelector(getAppState)
+  const { hiddeTheModalActive } = useSelector(getAppState)
 
   const totalSteps = fomrStep.length + 1;
 
-  // ===================== HANDLERS =====================
-  const handleEdit = (student: any) => {
-    setEditingStudent(student);
-    setPhotoPreview(student?.photo || null);
-    setSexe(student?.sexe === 'Homme' ? { homme: true, femme: false } : { homme: false, femme: true });
-    setShowModal(true);
-  };
-
+  // ? ===================== HANDLERS =====================
   const handleArchive = (student: any) => {
-    setStudentToArchive(student);
+    setDataToDelete(student);
     setShowConfirmDialog(true);
   };
 
   const handleConfirmArchive = () => {
-    if (studentToArchive) {
-      dispatch(deleteRegistration(studentToArchive?.id_eleve as number))
+    if (dataToDelete) {
+      dispatch(deleteRegistration(dataToDelete?.id_inscription as number))
     }
     setShowConfirmDialog(false);
-    setStudentToArchive(null);
+    setDataToDelete(null);
   };
 
   const handleCloseModal = () => {
@@ -116,15 +107,14 @@ const Registration: React.FC = () => {
     setStep(1)
   };
 
-
   // ? ===================== SOUMISSION DE LA FORMULAIRE  =====================
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     onSubmite((validateData: any) => {
-      editingStudent && editingStudent?.id_eleve ? dispatch(updateRegistration({ datas: validateData, id: editingStudent.id_eleve })) : dispatch(createRegistration(validateData));
+      editingStudent && editingStudent?.id_eleve ? '' : dispatch(createRegistration(validateData));
     }, e);
   };
 
-  // Wizard navigation
+  // ! Wizard navigation
   const handleNext = (toStep?: number) => {
     const formulaire = document.querySelector<HTMLFormElement>('#__formulaire_eleve');
     if (formulaire) {
@@ -161,12 +151,9 @@ const Registration: React.FC = () => {
       }
     }
   };
-
   const handlePrev = () => {
     setStep((prev) => Math.max(prev - 1, 1));
   };
-
-
 
   // Ajout du handler pour les inputs (sauf type file)
   const handleInputValueChange = (label: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -188,7 +175,7 @@ const Registration: React.FC = () => {
     }
   };
 
-  // ===================== EFFETS =====================
+  // ? ===================== EFFETS =====================
   useEffect(() => {
     dispatch(getAllRegistrations());
   }, [dispatch]);
@@ -230,31 +217,63 @@ const Registration: React.FC = () => {
 
   // ===================== TABLEAUX =====================
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: handleEdit, color: 'blue' },
-    { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
     { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
 
   const columns = [
     {
-      key: 'nom',
+      key: 'nom_eleve',
       label: 'Profil',
       render: (value: string, item: RegistrationType) => (
         <div className="flex items-center space-x-3 relative">
           <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer">
-            {item.photo && <img src={item.photo} alt="" className="w-full h-full object-cover" />}
+            {item.photo && <img src={baseUrl(item.photo)} alt="" className="w-full h-full object-cover" />}
           </div>
           <div>
             <div className="font-medium text-gray-900">{value} {item.prenom}</div>
-            <div className="text-sm text-gray-500">{item.email}</div>
+            <div className="text-xs text-gray-500">{item.matricule_etudiant}</div>
           </div>
         </div>
       )
     },
-    { key: 'classe', label: 'Classe' },
-    { key: 'date_naissance', label: "Date de naissance" },
-    { key: 'sexe', label: 'Sexe' },
+    {
+      key: 'denomination',
+      label: 'Classe',
+      render: (value: string, item: any) => (
+        <div className="flex flex-col">
+          <span className={clsx({
+            'hidden': !item.niveau
+          }, 'text-xs italic text-blue-600')}>
+            {item.niveau}
+          </span>
+          {value}
+        </div>
+      )
+    },
+    { key: 'annee_scolaire_nom', label: 'Année scolaire' },
+    {
+      key: 'date_inscription', label: 'date d\'inscription ',
+      render: (value: string) => (
+        <div className="">
+          {value ? new Date(value).toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          }) : 'N/A'}
+        </div>
+      )
+    },
     { key: 'telephone', label: 'Téléphone' },
+    {
+      key: 'is_droit_payed', label: 'Droit d\'inscription ', render: (value: string) => (
+        <div className={clsx({
+          'bg-green-300 text-green-800': value === '1',
+          'bg-red-300 text-red-800': value !== '1',
+        }, 'rounded-full text-xs text-center italic w-20 mx-auto')}>
+          {value === '1' ? 'Payé' : 'Non payé'}
+        </div>
+      )
+    }
   ];
 
   return (
@@ -751,7 +770,7 @@ const Registration: React.FC = () => {
         onClose={() => setShowConfirmDialog(false)}
         onConfirm={handleConfirmArchive}
         title="Archiver l'élève"
-        message={`Êtes-vous sûr de vouloir archiver l'élève ${studentToArchive?.prenom} ${studentToArchive?.nom} ?`}
+        message={`Êtes-vous sûr de vouloir archiver l'élève ${dataToDelete?.prenom} ${dataToDelete?.nom_eleve} ?`}
       />
     </div>
   );

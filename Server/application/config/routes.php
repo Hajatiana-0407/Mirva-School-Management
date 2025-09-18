@@ -102,4 +102,6 @@ $route['api/admin/school-year/change-active'] = 'AnneeScolaireController/changeA
 
 
 // ******************* ROUTE INSCRIPTION  ********************** //
+$route['api/admin/registration'] = 'InscriptionController';
 $route['api/admin/registration-student'] = 'InscriptionController/create';
+$route['api/admin/registration/delete'] = 'InscriptionController/delete';

@@ -8,16 +8,29 @@ class InscriptionController extends CI_Controller
     {
         parent::__construct();
         $this->load->model('InscriptionModel');
+        $this->load->model('EleveModel');
     }
 
     public function index()
     {
-        // $data = $this->MatiereModel->findAll();
-        // echo json_encode($data);
+        $data = $this->InscriptionModel->findAll();
+        echo json_encode($data);
     }
 
+    // ? Creation d'une nouvel inscription 
     public function create()
     {
+        $this->load->helper('matricule');
+        //? Creation d'un matricule unique 
+        $lasted = $this->EleveModel->findLasted();
+        $matricule = '';
+        if ($lasted) {
+            $matricule = generateMatricule(STUDENT_PRIFIX, $lasted["matricule_etudiant"]);
+        } else {
+            $matricule = generateMatricule(STUDENT_PRIFIX);
+        }
+
+
         // ================== INFORMATIONS DES PARENTS ==================
         $tuteur_type = $this->input->post('tuteur_type');
 
@@ -96,9 +109,9 @@ class InscriptionController extends CI_Controller
         // ? Photo d'identité de l'étudiant
         $photo_indetite = '';
         if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
-            $photoIndetityUpload = upload_file('photo', './public/uploads/etudiant/photos');
+            $photoIndetityUpload = upload_file('photo', STUDENT_UPLOAD_DIR . 'photos');
             if ($photoIndetityUpload['success']) {
-                $photo_indetite = '/public/uploads/etudiant/photos/' . $photoIndetityUpload['file_name'];
+                $photo_indetite = STUDENT_UPLOAD_DIR . 'photos/' . $photoIndetityUpload['file_name'];
             } else {
                 echo json_encode(['error' => true, 'message' => "Erreur upload photo d'identité de l'étudiant : " . $photoIndetityUpload['error']]);
                 return;
@@ -142,6 +155,7 @@ class InscriptionController extends CI_Controller
         }
 
         $etudiant = [
+            'matricule_etudiant' => $matricule,
             'nom' => $this->input->post('nom'),
             'prenom' => $this->input->post('prenom'),
             'adresse' => $this->input->post('adresse'),
@@ -166,7 +180,6 @@ class InscriptionController extends CI_Controller
 
         // ! Enregistrement de l'etudiant dans la base de données
         $eleve_id = null;
-        $this->load->model('EleveModel');
         $etudiantIsered =  $this->EleveModel->insert($etudiant);
         if ($etudiantIsered) {
             $eleve_id = $etudiantIsered['id_eleve'];
@@ -193,58 +206,29 @@ class InscriptionController extends CI_Controller
         } else {
             echo json_encode(['error' => true, 'message' => "Erreur lors de l'enregistrement de l'inscription"]);
         };
-        return ;
+        return;
     }
+    
+    // ! Suppression d'une inscription
+    public function delete()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            $input = json_decode(file_get_contents('php://input'), true);
+            if (!empty($input[$this->pk])) {
+                $id = $input[$this->pk];
 
-    // public function update()
-    // {
+                $data = $this->InscriptionModel->delete($id);
 
-    //     $id = $this->input->post($this->pk);
-    //     $data = [
-    //         'denomination' => $this->input->post('denomination'),
-    //         'abbreviation' => $this->input->post('abbreviation'),
-    //         'description' => $this->input->post('description'),
-    //         'couleur' => $this->input->post('couleur'),
-    //     ];
-
-
-    //     if ($this->MatiereModel->isExist([
-    //         'denomination' => $data['denomination'],
-    //         // 'abbreviation' => $data['abbreviation'],
-    //     ], $id)) {
-    //         echo json_encode(['error' => true, 'message' => 'La matière existe déjà.']);
-    //     } else {
-    //         $data =  $this->MatiereModel->update($id, $data);
-    //         if ($data) {
-    //             echo json_encode(['error' => false, 'data' => $data]);
-    //         } else {
-    //             echo json_encode(['error' => true, 'message' => 'Une erreur c\'est produite.']);
-    //         }
-    //     }
-    // }
-
-    // public function delete()
-    // {
-
-    //     if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-
-    //         $input = json_decode(file_get_contents('php://input'), true);
-
-    //         if (!empty($input[$this->pk])) {
-    //             $id = $input[$this->pk];
-
-    //             $data = $this->MatiereModel->delete($id);
-
-    //             if ($data) {
-    //                 echo json_encode(['error' => false, 'data' => $data]);
-    //             } else {
-    //                 echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
-    //             }
-    //         } else {
-    //             echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
-    //         }
-    //     } else {
-    //         echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
-    //     }
-    // }
+                if ($data) {
+                    echo json_encode(['error' => false, 'data' => $data]);
+                } else {
+                    echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                }
+            } else {
+                echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+            }
+        } else {
+            echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+        }
+    }
 }
