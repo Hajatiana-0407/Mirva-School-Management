@@ -18,14 +18,15 @@ class PersonnelController extends CI_Controller
 
     public function create()
     {
-
-        // Creation d'un matricule unique si non fourni
+        $this->load->helper('matricule');
+        
+        //? Creation d'un matricule unique si non fourni
         $lasted = $this->PersonnelModel->findLasted();
-        $matricule = 'EMP00001';
+        $matricule = '';
         if ($lasted) {
-            $last_id = intval(preg_replace('/[^0-9]/', '', $lasted["matricule_personnel"]));
-            $new_id = $last_id + 1;
-            $matricule = 'EMP' . str_pad($new_id, 5, '0', STR_PAD_LEFT);
+            $matricule = generateMatricule( EMPLOYEE_PREFIX , $lasted["matricule_personnel"]);
+        } else {
+            $matricule = generateMatricule( EMPLOYEE_PREFIX );
         }
 
         // Récupération des données du formulaire

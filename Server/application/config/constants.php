@@ -73,6 +73,8 @@ defined('FOPEN_READ_WRITE_CREATE_STRICT')       OR define('FOPEN_READ_WRITE_CREA
 |       http://tldp.org/LDP/abs/html/exitcodes.html
 |
 */
+
+
 defined('EXIT_SUCCESS')        OR define('EXIT_SUCCESS', 0); // no errors
 defined('EXIT_ERROR')          OR define('EXIT_ERROR', 1); // generic error
 defined('EXIT_CONFIG')         OR define('EXIT_CONFIG', 3); // configuration error
@@ -87,6 +89,10 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 
 /* My constants */
+// ? PREFIX POUR LES MATRICULE EMPLOYE
+defined('EMPLOYEE_PREFIX') OR define('EMPLOYEE_PREFIX' , 'EPM-') ; 
+defined('STUDENT_PRIFIX') OR define('STUDENT_PRIFIX' , 'ST-') ; 
+
 defined('UPLOAD_DIR_PERSONNEL') OR define('UPLOAD_DIR_PERSONNEL', 'public/uploads/personnel/');
 defined('UPLOAD_DIR_ETUDIANTS') OR define('UPLOAD_DIR_ETUDIANTS',  'public/uploads/etudiant/') ; 
 

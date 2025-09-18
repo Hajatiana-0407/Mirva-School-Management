@@ -18,8 +18,8 @@ const schoolInfoSchema = object({
         .required('Le nom de l\'établissement est obligatoire.'),
     adresse: string()
         .required('La adresse est obligatoire.'),
-    prefix: string()
-        .required('Veuillez ajouter un préfixe afin d’assurer l’unicité des matricules.'),
+    // prefix: string()
+    //     .required('Veuillez ajouter un préfixe afin d’assurer l’unicité des matricules.'),
     telephone: string()
         .required('Le téléphone est obligatoire.'),
     slogan: string()
