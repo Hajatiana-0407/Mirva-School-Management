@@ -12,6 +12,8 @@ class AppFixtures extends CI_Controller
 
         $this->load->model('FixturesModel', 'model');
         $this->load->model('PersonnelModel', 'personnelModel');
+        $this->load->model('EleveModel');
+        $this->load->helper('matricule');
     }
 
     public function loadFixtures()
@@ -39,8 +41,6 @@ class AppFixtures extends CI_Controller
             'depense'
         ]);
 
-
-
         // Insertion des données sur l'etablissement
         $this->model->insertFixture('etablissement', [
             'nom' => 'Mada School',
@@ -53,7 +53,7 @@ class AppFixtures extends CI_Controller
             'created_at' => date('Y-m-d H:i:s'),
             'site_web' => 'www.madaschool.com',
             'description' => 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.',
-
+            "prefix" => '',
             'facebook' => 'https://www.facebook.com/madaschool',
             'twitter' => 'https://www.twitter.com/madaschool',
             'instagram' => 'https://www.instagram.com/madaschool',
@@ -214,15 +214,25 @@ class AppFixtures extends CI_Controller
                 'adresse' => $faker->address,
                 'pc_cin_pere' => $faker->numerify('#########'),
                 'pc_cin_mere' => $faker->numerify('#########'),
-                'type' => $faker->randomElement(['Père', 'Mère'])
+                'type' => $faker->randomElement(['parent', 'tuteur']),
+                'tuteur_email' => $faker->email
             ]);
         }
 
         $parents = $this->model->getIds('parent', 'id_parent');
 
         // 9. eleve
-        for ($i = 0; $i < 10; $i++) {
+        // ? Creation de matricule pour l'etudiant
+        $lastStudent = $this->EleveModel->findLasted();
+        $lastStudentMatricule = '';
+        if (isset($lastStudent) && isset($lastStudent->matricule_etudiant)) {
+            $lastStudentMatricule = $lastStudent->matricule_etudiant;
+        }
+
+        for ($i = 0; $i < 5; $i++) {
+            $matriculeStudent = generateMatricule(STUDENT_PRIFIX, $lastStudentMatricule);
             $this->model->insertFixture('eleve', [
+                'matricule_etudiant' => $matriculeStudent,
                 'nom' => $faker->lastName,
                 'prenom' => $faker->firstName,
                 'adresse' => $faker->address,
@@ -230,10 +240,10 @@ class AppFixtures extends CI_Controller
                 'parent_id_parent' => $faker->randomElement($parents),
                 'date_naissance' => $faker->date(),
                 'sexe' => $faker->randomElement(['Homme', 'Femme']),
-                'maladie' => $faker->word,
-                'photo' => 'default.jpg',
+                'maladies' => $faker->word,
                 'created_at' => date('Y-m-d H:i:s')
             ]);
+            $lastStudentMatricule = $matriculeStudent;
         }
 
         $eleves = $this->model->getIds('eleve', 'id_eleve');
@@ -252,17 +262,14 @@ class AppFixtures extends CI_Controller
         $userIds = 1;
         // Récupérer le dernier matricule enregistré
         $lasted = $this->personnelModel->findLasted();
-        $last_id = 0;
-
+        $lasteMatricule = '';
         if ($lasted && !empty($lasted->matricule_personnel)) {
-            // Extraire uniquement la partie numérique du matricule
-            $last_id = intval(preg_replace('/[^0-9]/', '', $lasted->matricule_personnel));
+            $lasteMatricule = $lasted->matricule_personnel;
         }
 
         // Générer 5 nouveaux employés
         for ($i = 0; $i < 20; $i++) {
-            $new_id = $last_id + 1;
-            $matricule = 'EMP' . str_pad($new_id, 5, '0', STR_PAD_LEFT);
+            $matricule = generateMatricule(EMPLOYEE_PREFIX, $lasteMatricule);
 
             $this->model->insertFixture('personnel', [
                 'matricule_personnel' => $matricule,
@@ -284,7 +291,7 @@ class AppFixtures extends CI_Controller
                 'created_at' => date('Y-m-d H:i:s'),
             ]);
 
-            $last_id++; // incrémenter pour le prochain matricule
+            $lasteMatricule = $matricule;
         }
 
 
@@ -321,12 +328,11 @@ class AppFixtures extends CI_Controller
             $eleve = $faker->randomElement($eleves);
             $parent = $faker->randomElement($parents);
             $this->model->insertFixture('inscription', [
-                'is_passed' => $faker->randomElement(['oui', 'non']),
                 'date_inscription' => $faker->date(),
                 'classe_id_classe' => $faker->randomElement($classes),
                 'annee_scolaire_id_annee_scolaire' => $faker->randomElement($annees),
                 'eleve_id_eleve' => $eleve,
-                'image' => 'default.jpg',
+                'ancienne_ecole' => $faker->company(),
                 'is_droit_payed' => $faker->randomElement(['oui', 'non']),
                 'created_at' => date('Y-m-d H:i:s')
             ]);

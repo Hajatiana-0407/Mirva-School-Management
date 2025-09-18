@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : lun. 01 sep. 2025 à 10:49
+-- Généré le : jeu. 18 sep. 2025 à 19:43
 -- Version du serveur : 10.4.22-MariaDB
 -- Version de PHP : 8.0.14
 
@@ -31,7 +31,10 @@ CREATE TABLE `annee_scolaire` (
   `id_annee_scolaire` int(11) NOT NULL,
   `date_debut` date DEFAULT NULL,
   `date_fin` date DEFAULT NULL,
-  `created_at` date DEFAULT NULL
+  `created_at` date DEFAULT NULL,
+  `nom` varchar(50) NOT NULL,
+  `description` text NOT NULL,
+  `isActif` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -109,16 +112,26 @@ CREATE TABLE `ecolage` (
 
 CREATE TABLE `eleve` (
   `id_eleve` int(11) NOT NULL,
+  `matricule_etudiant` varchar(50) NOT NULL,
   `nom` varchar(45) DEFAULT NULL,
   `prenom` varchar(45) DEFAULT NULL,
   `adresse` varchar(45) DEFAULT NULL,
   `telephone` varchar(45) DEFAULT NULL,
-  `parent_id_parent` int(11) NOT NULL,
+  `parent_id_parent` int(11) DEFAULT NULL,
   `date_naissance` date DEFAULT NULL,
+  `lieu_naissance` varchar(100) NOT NULL,
   `sexe` varchar(45) DEFAULT NULL,
-  `maladie` varchar(45) DEFAULT NULL,
-  `photo` varchar(45) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `maladies` text DEFAULT NULL,
+  `photo` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `email` varchar(200) NOT NULL,
+  `nationalite` varchar(50) NOT NULL,
+  `pc_pi` text NOT NULL,
+  `pc_act_naissance` text NOT NULL,
+  `bulletin` text NOT NULL,
+  `urgence_nom` varchar(100) NOT NULL,
+  `urgence_tel` varchar(50) NOT NULL,
+  `urgence_lien` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -138,6 +151,7 @@ CREATE TABLE `etablissement` (
   `logo` text NOT NULL,
   `site_web` varchar(255) NOT NULL,
   `description` text NOT NULL,
+  `prefix` varchar(20) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `facebook` varchar(200) NOT NULL,
   `twitter` varchar(200) NOT NULL,
@@ -150,8 +164,8 @@ CREATE TABLE `etablissement` (
 -- Déchargement des données de la table `etablissement`
 --
 
-INSERT INTO `etablissement` (`id_etablissement`, `nom`, `code`, `adresse`, `telephone`, `email`, `slogan`, `logo`, `site_web`, `description`, `created_at`, `facebook`, `twitter`, `instagram`, `linkedin`, `youtube`) VALUES
-(6, 'Mada School', 'MIRV2024', '123 Rue de l\'Éducation, Ville, Pays', '+1234567890', 'mada.shool@gmail.com', 'Apprendre, Grandir, Réussir', '', 'www.madaschool.com', 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.', '2025-09-01 08:38:49', 'https://www.facebook.com/madaschool', 'https://www.twitter.com/madaschool', 'https://www.instagram.com/madaschool', 'https://www.linkedin.com/company/madaschool', 'https://www.youtube.com/madaschool');
+INSERT INTO `etablissement` (`id_etablissement`, `nom`, `code`, `adresse`, `telephone`, `email`, `slogan`, `logo`, `site_web`, `description`, `prefix`, `created_at`, `facebook`, `twitter`, `instagram`, `linkedin`, `youtube`) VALUES
+(18, 'Mada School', 'MIRV2024', '123 Rue de l\'Éducation, Ville, Pays', '+1234567890', 'mada.shool@gmail.com', 'Apprendre, Grandir, Réussir', '', 'www.madaschool.com', 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.', '', '2025-09-18 13:08:40', 'https://www.facebook.com/madaschool', 'https://www.twitter.com/madaschool', 'https://www.instagram.com/madaschool', 'https://www.linkedin.com/company/madaschool', 'https://www.youtube.com/madaschool');
 
 -- --------------------------------------------------------
 
@@ -161,14 +175,14 @@ INSERT INTO `etablissement` (`id_etablissement`, `nom`, `code`, `adresse`, `tele
 
 CREATE TABLE `inscription` (
   `id_inscription` int(11) NOT NULL,
-  `is_passed` tinyint(1) DEFAULT NULL,
   `date_inscription` date DEFAULT NULL,
+  `niveau_id_niveau` int(11) DEFAULT NULL,
   `classe_id_classe` int(11) NOT NULL,
   `annee_scolaire_id_annee_scolaire` int(11) NOT NULL,
   `eleve_id_eleve` int(11) NOT NULL,
-  `image` varchar(45) DEFAULT NULL,
   `is_droit_payed` tinyint(1) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `ancienne_ecole` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -259,9 +273,14 @@ CREATE TABLE `parent` (
   `telephone_pere` varchar(45) DEFAULT NULL,
   `telephone_mere` varchar(45) DEFAULT NULL,
   `adresse` varchar(45) DEFAULT NULL,
-  `pc_cin_pere` varchar(45) DEFAULT NULL,
-  `pc_cin_mere` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL
+  `pc_cin_pere` text DEFAULT NULL,
+  `pc_cin_mere` text DEFAULT NULL,
+  `type` varchar(45) DEFAULT NULL,
+  `tuteur_email` varchar(150) NOT NULL,
+  `tuteur_tel` varchar(50) NOT NULL,
+  `tuteur_nom` varchar(150) NOT NULL,
+  `tuteur_lien` varchar(50) NOT NULL,
+  `pc_cin_tuteur` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -388,7 +407,7 @@ ALTER TABLE `ecolage`
 -- Index pour la table `eleve`
 --
 ALTER TABLE `eleve`
-  ADD PRIMARY KEY (`id_eleve`,`parent_id_parent`),
+  ADD PRIMARY KEY (`id_eleve`),
   ADD KEY `fk_eleve_parent1_idx` (`parent_id_parent`);
 
 --
@@ -404,7 +423,8 @@ ALTER TABLE `inscription`
   ADD PRIMARY KEY (`id_inscription`),
   ADD KEY `fk_inscription_classe1_idx` (`classe_id_classe`),
   ADD KEY `fk_inscription_annee_scolaire1_idx` (`annee_scolaire_id_annee_scolaire`),
-  ADD KEY `fk_inscription_eleve_idx` (`eleve_id_eleve`);
+  ADD KEY `fk_inscription_eleve_idx` (`eleve_id_eleve`),
+  ADD KEY `fk_inscription_nievau` (`niveau_id_niveau`);
 
 --
 -- Index pour la table `matiere`
@@ -477,85 +497,85 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `annee_scolaire`
 --
 ALTER TABLE `annee_scolaire`
-  MODIFY `id_annee_scolaire` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `id_annee_scolaire` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=146;
 
 --
 -- AUTO_INCREMENT pour la table `classe`
 --
 ALTER TABLE `classe`
-  MODIFY `id_classe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=234;
+  MODIFY `id_classe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=287;
 
 --
 -- AUTO_INCREMENT pour la table `depense`
 --
 ALTER TABLE `depense`
-  MODIFY `id_depense` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=194;
+  MODIFY `id_depense` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=254;
 
 --
 -- AUTO_INCREMENT pour la table `droit_inscription`
 --
 ALTER TABLE `droit_inscription`
-  MODIFY `id_droit_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `id_droit_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
 
 --
 -- AUTO_INCREMENT pour la table `ecolage`
 --
 ALTER TABLE `ecolage`
-  MODIFY `id_ecolage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=333;
+  MODIFY `id_ecolage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=417;
 
 --
 -- AUTO_INCREMENT pour la table `eleve`
 --
 ALTER TABLE `eleve`
-  MODIFY `id_eleve` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=561;
+  MODIFY `id_eleve` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=681;
 
 --
 -- AUTO_INCREMENT pour la table `etablissement`
 --
 ALTER TABLE `etablissement`
-  MODIFY `id_etablissement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_etablissement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT pour la table `inscription`
 --
 ALTER TABLE `inscription`
-  MODIFY `id_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=231;
+  MODIFY `id_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=303;
 
 --
 -- AUTO_INCREMENT pour la table `matiere`
 --
 ALTER TABLE `matiere`
-  MODIFY `id_matiere` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=487;
+  MODIFY `id_matiere` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=607;
 
 --
 -- AUTO_INCREMENT pour la table `niveau`
 --
 ALTER TABLE `niveau`
-  MODIFY `id_niveau` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=336;
+  MODIFY `id_niveau` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=422;
 
 --
 -- AUTO_INCREMENT pour la table `note`
 --
 ALTER TABLE `note`
-  MODIFY `id_note` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=441;
+  MODIFY `id_note` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=561;
 
 --
 -- AUTO_INCREMENT pour la table `paiement`
 --
 ALTER TABLE `paiement`
-  MODIFY `id_paiement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=189;
+  MODIFY `id_paiement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=249;
 
 --
 -- AUTO_INCREMENT pour la table `parent`
 --
 ALTER TABLE `parent`
-  MODIFY `id_parent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=281;
+  MODIFY `id_parent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=357;
 
 --
 -- AUTO_INCREMENT pour la table `personnel`
 --
 ALTER TABLE `personnel`
-  MODIFY `id_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=403;
+  MODIFY `id_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=651;
 
 --
 -- AUTO_INCREMENT pour la table `type_personnel`
@@ -606,18 +626,13 @@ ALTER TABLE `ecolage`
   ADD CONSTRAINT `fk_ecolage_classe_groupe1` FOREIGN KEY (`niveau_id_niveau`) REFERENCES `niveau` (`id_niveau`) ON DELETE CASCADE;
 
 --
--- Contraintes pour la table `eleve`
---
-ALTER TABLE `eleve`
-  ADD CONSTRAINT `fk_eleve_parent1` FOREIGN KEY (`parent_id_parent`) REFERENCES `parent` (`id_parent`);
-
---
 -- Contraintes pour la table `inscription`
 --
 ALTER TABLE `inscription`
   ADD CONSTRAINT `fk_inscription_annee_scolaire` FOREIGN KEY (`annee_scolaire_id_annee_scolaire`) REFERENCES `annee_scolaire` (`id_annee_scolaire`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_inscription_classe` FOREIGN KEY (`classe_id_classe`) REFERENCES `classe` (`id_classe`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_inscription_eleve_correct` FOREIGN KEY (`eleve_id_eleve`) REFERENCES `eleve` (`id_eleve`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_inscription_eleve_correct` FOREIGN KEY (`eleve_id_eleve`) REFERENCES `eleve` (`id_eleve`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_inscription_nievau` FOREIGN KEY (`niveau_id_niveau`) REFERENCES `niveau` (`id_niveau`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `matiere_niveau`
