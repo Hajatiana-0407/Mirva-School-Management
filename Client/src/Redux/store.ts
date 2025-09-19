@@ -10,6 +10,8 @@ import TeacherReducer from '../components/Teachers/redux/TeachersSlice';
 import SchoolReducer from '../components/Settings/School/redux/SchoolSlice';
 import SchoolYearReducer from '../components/School-Year/redux/SchoolYearSlice';
 import RegisterSlice from '../components/Registrations/redux/registerSlice';
+import StudentReducer from '../components/Students/redux/StudentSlice'
+
 export const store = configureStore({
     reducer: {
         app: AppReducer,
@@ -22,7 +24,8 @@ export const store = configureStore({
         typeEmployees: TypeEmployeesReducer,
         school : SchoolReducer,
         schoolYears : SchoolYearReducer,
-        registration : RegisterSlice, 
+        registration : RegisterSlice,
+        student : StudentReducer  
     }
 });
 

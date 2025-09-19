@@ -204,6 +204,7 @@ export const schoolYearInitialValue: SchoolYearType = {
 // Students ( Eleve )
 export type StudentType = {
     id_eleve?: number;
+    matricule_etudiant?: string;
     nom: string;
     prenom: string;
     adresse?: string;
@@ -218,10 +219,18 @@ export type StudentType = {
     photo?: string;
     created_at?: string;
     email?: string;
+
     pc_pi?: string;
+    pc_act_naissance?: string;
+    bulletin?: string;
+
+    maladies?: string;
+    urgence_nom?: string;
+    urgence_tel?: string;
+    urgence_lien?: string;
 }
 
-export const initialStudent: StudentType = {
+export const StudentInitialValue: StudentType = {
     id_eleve: undefined,
     nom: "",
     prenom: "",
@@ -279,12 +288,7 @@ export type RegistrationType = {
     tuteur_tel?: string;
     tuteur_email?: string;
     // Médical
-    groupe_sanguin?: string;
-    allergies?: string;
     maladies?: string;
-    traitements?: string;
-    medecin?: string;
-    medecin_contact?: string;
     urgence_nom?: string;
     urgence_lien?: string;
     urgence_tel?: string;
@@ -336,12 +340,7 @@ export const registrationInitialValue: RegistrationType = {
     tuteur_lien: '',
     tuteur_tel: '',
     tuteur_email: '',
-    groupe_sanguin: '',
-    allergies: '',
     maladies: '',
-    traitements: '',
-    medecin: '',
-    medecin_contact: '',
     urgence_nom: '',
     urgence_lien: '',
     urgence_tel: '',

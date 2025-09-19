@@ -26,6 +26,7 @@ import SchoolYear from './components/School-Year/SchoolYear';
 import { getSchoolYearState } from './components/School-Year/redux/SchoolYearSlice';
 import { getAllSchoolYear } from './components/School-Year/redux/SchoolYearAsyncThunk';
 import Registration from './components/Registrations/Registration';
+import Student from './components/Students/Student';
 
 
 
@@ -64,7 +65,7 @@ function App() {
       <Routes>
         <Route index element={<Dashboard />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="students" element={<Students />} />
+        <Route path="students" element={<Student />} />
         <Route path="registration" element={<Registration />} />
         <Route path="teachers" element={<Teachers />} />
         <Route path="employees"  >

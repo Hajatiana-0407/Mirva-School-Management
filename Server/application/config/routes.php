@@ -105,3 +105,10 @@ $route['api/admin/school-year/change-active'] = 'AnneeScolaireController/changeA
 $route['api/admin/registration'] = 'InscriptionController';
 $route['api/admin/registration-student'] = 'InscriptionController/create';
 $route['api/admin/registration/delete'] = 'InscriptionController/delete';
+
+// ******************* ROUTE ETUDIANT ********************** //
+$route['api/admin/etudiant'] = 'EtudiantController';
+$route['api/admin/etudiant/update'] = 'EtudiantController/update';
+$route['api/admin/etudiant/create'] = 'EtudiantController/create';
+$route['api/admin/etudiant/delete'] = 'EtudiantController/delete';
+$route['api/admin/etudiant/statistique'] = 'EtudiantController/getStatistique';
