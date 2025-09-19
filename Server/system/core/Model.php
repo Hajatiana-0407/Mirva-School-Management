@@ -192,4 +192,15 @@ class CI_Model
     {
         return $this->db->insert_batch($this->table, $data);
     }
+    
+    // ======= COUNT =======
+    // ? Statistique 
+    public function getCount($where = [])
+    {
+        $this->db->from($this->table);
+        foreach ($where as $key => $value) {
+            $this->db->where($key, $value);
+        }
+        return $this->db->count_all_results();
+    }
 }
