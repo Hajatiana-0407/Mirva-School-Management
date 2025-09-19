@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Filter, Archive, Camera, User, UserCheck, CalendarDays, MapPin, Home, Phone, Mail, Globe, Eye, Edit, Activity, Users, FolderOpen } from 'lucide-react';
+import { Search, Filter, Archive, User, UserCheck, CalendarDays, MapPin, Home, Phone, Mail, Globe, Eye, Edit, Activity, Users, FolderOpen, Focus } from 'lucide-react';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import Table from '../Table';
@@ -236,16 +236,17 @@ const Student = () => {
           <InputError message={error} />
           {/* Information personnel */}
           <div className="flex flex-col sm:flex-row gap-5 space-y-2">
+
             {/* PHOTO D IDENTITE */}
             <div className="relative flex flex-col items-center justify-center">
               <label htmlFor="photo-upload" className="cursor-pointer flex flex-col items-center justify-center w-56 h-56 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 transition-all">
                 {photoPreview ? (
                   <img src={photoPreview} alt="Photo" className="w-52 h-52 rounded-md object-cover" />
                 ) : (
-                  <>
-                    <Camera className="w-8 h-8 text-gray-400 mb-1" />
-                    <span className="text-xs text-gray-500  ">Photo d'identité</span>
-                  </>
+                  <div className="flex flex-col justify-center items-center">
+                    <Focus className="w-20 h-20 text-gray-400 mb-1" />
+                    <span className="text-gray-400 text-sm">Aucune photo trouvé</span>
+                  </div>
                 )}
                 <input
                   id="photo-upload"
@@ -389,9 +390,25 @@ const Student = () => {
               label='Copie de l’acte de naissance'
               name='acte_naissance'
               defaultValue={editingStudent?.pc_act_naissance || ''}
-              icon={FolderOpen} errorMessage={formErrors?.pc_act_naissance}
+              icon={FolderOpen}
               iconColor='text-amber-500'
               type='file' />
+
+            <Input
+              label='Copie de la pièce d’identité'
+              name='piece_identite'
+              defaultValue={editingStudent?.pc_pi || ''} icon={FolderOpen}
+              iconColor='text-amber-500'
+              type='file'
+            />
+            <Input
+              label='Bulletins scolaires / dernier diplôme'
+              name='bulletin'
+              defaultValue={editingStudent?.bulletin || ''}
+              icon={FolderOpen}
+              iconColor='text-amber-500'
+              type='file'
+            />
           </div>
           <div className="flex justify-end space-x-3 pt-4">
             <button
