@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Archive, User, Camera, UserCheck, CalendarDays, Phone, Mail, Check, MapPin, Globe, Home, ArrowRight, ArrowLeft, Activity, FolderOpen, HeartPulse, GraduationCap, Focus, } from 'lucide-react';
+import { Plus, Search, Archive, User,  UserCheck, CalendarDays, Phone, Mail, Check, MapPin, Globe, Home, ArrowRight, ArrowLeft, Activity, FolderOpen, HeartPulse, GraduationCap, Focus, } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
@@ -18,6 +18,7 @@ import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
 import { getSchoolYearState } from '../School-Year/redux/SchoolYearSlice';
 import { getAppState } from '../../Redux/AppSlice';
 import { Link } from 'react-router-dom';
+import InputError from '../ui/InputError';
 
 const RegistrationSchema = object({
   // Élève
@@ -69,7 +70,7 @@ const Registration: React.FC = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<any>({ parentType: 'parent' });
   const [formValues, setFormValues] = useState<StudentFormDataType>(fakeStudentData);
-  const { datas: registrations, action } = useSelector(getRegistrationState);
+  const { datas: registrations, action  ,error } = useSelector(getRegistrationState);
   const { onSubmite, formErrors, resetError, forceError } = useForm<RegistrationType>(RegistrationSchema, registrationInitialValue);
   const [formTitle, setFormTitle] = useState("Nouvel élève")
   const { datas: levelDatas } = useSelector(getLevelState);
@@ -320,7 +321,7 @@ const Registration: React.FC = () => {
       >
         <form id='__formulaire_eleve' onSubmit={handleSubmit}>
           <div className='space-y-6'>
-
+            <InputError message={error} />
             {/* Etape 1 : Informations sur l'élève */}
             <div className={clsx({ 'hidden': step !== 1 })}>
               <div className="flex flex-col sm:flex-row gap-5 space-y-2">
