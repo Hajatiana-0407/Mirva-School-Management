@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Archive, User, Camera, UserCheck, CalendarDays, Phone, Mail, Check, MapPin, Globe, Home, ArrowRight, ArrowLeft, Activity, FolderOpen, HeartPulse, GraduationCap, } from 'lucide-react';
+import { Plus, Search, Archive, User, Camera, UserCheck, CalendarDays, Phone, Mail, Check, MapPin, Globe, Home, ArrowRight, ArrowLeft, Activity, FolderOpen, HeartPulse, GraduationCap, Focus, } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
@@ -17,6 +17,7 @@ import { getLevelState } from '../Levels/redux/LevelSlice';
 import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
 import { getSchoolYearState } from '../School-Year/redux/SchoolYearSlice';
 import { getAppState } from '../../Redux/AppSlice';
+import { Link } from 'react-router-dom';
 
 const RegistrationSchema = object({
   // Élève
@@ -222,15 +223,15 @@ const Registration: React.FC = () => {
 
   const columns = [
     {
-      key: 'nom_eleve',
-      label: 'Profil',
-      render: (value: string, item: RegistrationType) => (
+      key: 'nom_eleve', label: 'Profil', render: (value: string, item: RegistrationType) => (
         <div className="flex items-center space-x-3 relative">
           <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer">
             {item.photo && <img src={baseUrl(item.photo)} alt="" className="w-full h-full object-cover" />}
           </div>
           <div>
-            <div className="font-medium text-gray-900">{value} {item.prenom}</div>
+            <div className="font-medium text-blue-500 hover:underline">
+              <Link to={`/students/${item.matricule_etudiant}`}>{value} {item.prenom}</Link>
+            </div>
             <div className="text-xs text-gray-500">{item.matricule_etudiant}</div>
           </div>
         </div>
@@ -269,7 +270,7 @@ const Registration: React.FC = () => {
         <div className={clsx({
           'bg-green-300 text-green-800': value === '1',
           'bg-red-300 text-red-800': value !== '1',
-        }, 'rounded-full text-xs text-center italic w-20 mx-auto')}>
+        }, 'rounded-full text-xs text-center italic w-20')}>
           {value === '1' ? 'Payé' : 'Non payé'}
         </div>
       )
@@ -329,10 +330,10 @@ const Registration: React.FC = () => {
                     {photoPreview ? (
                       <img src={photoPreview} alt="Photo" className="w-52 h-52 rounded-md object-cover" />
                     ) : (
-                      <>
-                        <Camera className="w-8 h-8 text-gray-400 mb-1" />
-                        <span className="text-xs text-gray-500  ">Photo d'identité</span>
-                      </>
+                      <div className="flex flex-col justify-center items-center">
+                        <Focus className="w-20 h-20 text-gray-400 mb-1" />
+                        <span className="text-gray-400 text-sm">Aucune photo trouvé</span>
+                      </div>
                     )}
                     <input
                       id="photo-upload"
@@ -574,32 +575,11 @@ const Registration: React.FC = () => {
                         className="w-[11rem] h-[11rem] rounded-md object-cover"
                       />
                     ) : (
-                      <>
-                        <Camera className="w-8 h-8 text-gray-400 mb-1" />
-                        <span className="text-xs text-gray-500">Photo d'identité</span>
-                      </>
+                      <div className="flex flex-col justify-center items-center">
+                        <Focus className="w-20 h-20 text-gray-400 mb-1" />
+                        <span className="text-gray-400 text-sm">Aucune photo trouvé</span>
+                      </div>
                     )}
-                    <input
-                      id="photo-upload"
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      name="photo"
-                      onChange={(e) => {
-                        const file = e.target.files && e.target.files[0];
-                        if (file) {
-                          const reader = new FileReader();
-                          reader.onloadend = () => {
-                            setPhotoPreview(reader.result as string);
-                            setFormData((prev: any) => ({
-                              ...prev,
-                              photo: reader.result,
-                            }));
-                          };
-                          reader.readAsDataURL(file);
-                        }
-                      }}
-                    />
                   </label>
                 </div>
 
@@ -784,7 +764,7 @@ type InfoBlockPropsType = {
   important?: boolean
 }
 
-const InfoBlock = ({ icon, label, value, important }: InfoBlockPropsType) => (
+export const InfoBlock = ({ icon, label, value, important }: InfoBlockPropsType) => (
   <div className={clsx({
     'border-l-4 border-blue-500 bg-blue-50': important,
     'border-gray-200 bg-white': !important,
