@@ -1,4 +1,4 @@
-import { BookOpen, GraduationCap, Plus, Save } from "lucide-react"
+import { ArrowRight, BookOpen, GraduationCap, Save } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { getLevelState } from "./redux/LevelSlice";
@@ -174,12 +174,10 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                                 >
                                     <span>{subject.denomination}</span>
                                     <button
-                                        type="button"
-                                        className="text-gray-500 bg- px-2 py-1 bg-gray-50 transition-all duration-200 cursor-pointer hover:bg-blue-500 hover:text-white hover:border-transparent flex gap-2 border rounded-lg"
                                         onClick={() => { handleAddSubjectInLevel(subject) }}
+                                        className="bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-gray-700 transition-colors"
                                     >
-                                        <Plus />
-                                        <span>Ajouter</span>
+                                        <ArrowRight className="inline-block ms-1 h-5 w-5" />
                                     </button>
                                 </div>
                             } else {
