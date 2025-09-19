@@ -93,12 +93,13 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 defined('EMPLOYEE_PREFIX') OR define('EMPLOYEE_PREFIX' , 'EPM-') ; 
 defined('STUDENT_PRIFIX') OR define('STUDENT_PRIFIX' , 'ST-') ; 
 
-defined('UPLOAD_DIR_PERSONNEL') OR define('UPLOAD_DIR_PERSONNEL', 'public/uploads/personnel/');
+
+// ? DIRECTORY UPLOAD FILE 
+defined('PERSONNEL_UPLOAD_DIR') OR define('PERSONNEL_UPLOAD_DIR', 'public/uploads/personnel/');
 defined('STUDENT_UPLOAD_DIR') OR define('STUDENT_UPLOAD_DIR',  'public/uploads/etudiant/') ; 
+defined('PARENT_UPLOAD_DIR') OR define('PARENT_UPLOAD_DIR',  'public/uploads/parents/') ; 
 defined('MAX_UPLOAD_FILE') OR define('MAX_UPLOAD_FILE',  9000) ; 
 
 // ************************************************* //
-defined('PERSONNEL_PROFIL_UPLOAD_DIR') OR define('PERSONNEL_PROFIL_UPLOAD_DIR', UPLOAD_DIR_PERSONNEL . "profil/");
-defined('PERSONNEL_PC_CIN_UPLOAD_DIR') OR define('PERSONNEL_PC_CIN_UPLOAD_DIR', UPLOAD_DIR_PERSONNEL . "pc_cin/");
 defined('ETABLISSEMENT_UPLOAD_DIRECTORY') OR define('ETABLISSEMENT_UPLOAD_DIRECTORY', 'public/uploads/etablissement/');
 

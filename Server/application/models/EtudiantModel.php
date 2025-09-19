@@ -40,4 +40,18 @@ class EtudiantModel extends CI_Model
             ->row_array();
     }
 
+    public function findDetailsByMat($matricule = '')
+    {
+        if (!!!$matricule)  return null;
+        return $this->db->select($this->table . '.* , c.* , n.* , p.* , p.adresse as parent_adresse')
+            ->from($this->table)
+            ->join('inscription i', 'i.eleve_id_eleve = ' . $this->table . '.' . $this->primaryKey, 'left')
+            ->join('classe c', 'c.id_classe = i.classe_id_classe', 'left')
+            ->join('niveau n', ' n.id_niveau = c.niveau_id_niveau', 'left')
+            ->join('parent p', ' p.id_parent = ' . $this->table . '.parent_id_parent', 'left')
+            ->where($this->table . '.matricule_etudiant', $matricule)
+            ->order_by($this->primaryKey, 'DESC')
+            ->get()
+            ->row_array();
+    }
 }

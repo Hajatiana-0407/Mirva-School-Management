@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ApiReturnInitial, ApiReturnType, StudentType } from "../../../Utils/Types";
+import { ApiReturnInitial, ApiReturnType, StudentInitialValue, StudentType } from "../../../Utils/Types";
 import api from "../../../Utils/api";
 import { setHiddeModalValue } from "../../../Redux/AppSlice";
 import { toast } from "react-toastify";
@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 // STATISTIQUE
 export const getStatistique = createAsyncThunk('etudiant/getStatistique', async (): Promise<any> => {
-    let datas: any ;
+    let datas: any;
     await api.get('admin/etudiant/statistique')
         .then(response => {
             datas = response.data
@@ -30,13 +30,22 @@ export const getAllStudent = createAsyncThunk('etudiant/getAll', async (): Promi
         });
     return datas;
 })
+export const getStudent = createAsyncThunk('etudiant/getOne', async (matricule: string): Promise<StudentType> => {
+    let datas: StudentType = StudentInitialValue;
+    await api.get(`admin/etudiant/${matricule}`)
+        .then(response => {
+            datas = response.data
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération des données:', error);
+        });
+    return datas;
+})
 
 // UPDATE
 export const updateStudent = createAsyncThunk('etudiant/modification', async ({ student, id }: { student: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
-
     student.append('id_eleve', id.toString());
-
     await api.post('admin/etudiant/update', student, {
         headers: { 'Content-Type': 'multipart/form-data' }
     }).then(response => {
@@ -87,4 +96,5 @@ export const deleteStudent = createAsyncThunk('etudiant/suppression', async (id_
     }
     return data;
 })
+
 

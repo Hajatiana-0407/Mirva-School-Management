@@ -12,14 +12,13 @@ class AppFixtures extends CI_Controller
 
         $this->load->model('FixturesModel', 'model');
         $this->load->model('PersonnelModel', 'personnelModel');
-        $this->load->model('EleveModel');
+        $this->load->model('EtudiantModel');
         $this->load->helper('matricule');
     }
 
     public function loadFixtures()
     {
         $faker = \Faker\Factory::create('fr_FR');
-
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
             // 'etablissement',
@@ -223,7 +222,7 @@ class AppFixtures extends CI_Controller
 
         // 9. eleve
         // ? Creation de matricule pour l'etudiant
-        $lastStudent = $this->EleveModel->findLasted();
+        $lastStudent = $this->EtudiantModel->findLasted();
         $lastStudentMatricule = '';
         if (isset($lastStudent) && isset($lastStudent->matricule_etudiant)) {
             $lastStudentMatricule = $lastStudent->matricule_etudiant;
@@ -239,9 +238,12 @@ class AppFixtures extends CI_Controller
                 'telephone' => $faker->phoneNumber,
                 'parent_id_parent' => $faker->randomElement($parents),
                 'date_naissance' => $faker->date(),
+                'lieu_naissance' => $faker->address(),
                 'sexe' => $faker->randomElement(['Homme', 'Femme']),
                 'maladies' => $faker->word,
-                'created_at' => date('Y-m-d H:i:s')
+                'created_at' => date('Y-m-d H:i:s') , 
+                'nationalite' => 'Malagasy' , 
+                'email' => $faker->email()
             ]);
             $lastStudentMatricule = $matriculeStudent;
         }

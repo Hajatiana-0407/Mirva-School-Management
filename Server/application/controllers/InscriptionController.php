@@ -37,31 +37,46 @@ class InscriptionController extends CI_Controller
         // ? Piece d'identité des parents / tuteur
         $pere_pi = '';
         if (isset($_FILES['pc_cin_pere']) && $_FILES['pc_cin_pere']['error'] == 0) {
-            $piPereUpload = upload_file('pc_cin_pere', './public/uploads/parents');
+            $piPereUpload = upload_file('pc_cin_pere', PARENT_UPLOAD_DIR );
             if ($piPereUpload['success']) {
-                $pere_pi = '/public/uploads/parents/' . $piPereUpload['file_name'];
+                $pere_pi = $piPereUpload['file_name'];
             } else {
-                echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité du parent: " . $piPereUpload['error']]);
+                echo json_encode([
+                    'error' => true,
+                    'type' => 'fileSize',
+                    'message' => "Erreur lors de l' upload pièce d'identité du parent: ",
+                    'details' => $piPereUpload['error']
+                ]);
                 return;
             }
         }
         $mere_pi = '';
         if (isset($_FILES['pc_cin_mere']) && $_FILES['pc_cin_mere']['error'] == 0) {
-            $piMereUpload = upload_file('pc_cin_mere', './public/uploads/parents');
+            $piMereUpload = upload_file('pc_cin_mere', PARENT_UPLOAD_DIR );
             if ($piMereUpload['success']) {
-                $mere_pi = '/public/uploads/parents/' . $piMereUpload['file_name'];
+                $mere_pi = $piMereUpload['file_name'];
             } else {
-                echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité du parent: " . $piMereUpload['error']]);
+                echo json_encode([
+                    'error' => true,
+                    'type' => 'fileSize',
+                    'message' => "Erreur lors de l' upload pièce d'identité du parent: ",
+                    'details' => $piMereUpload['error']
+                ]);
                 return;
             }
         }
         $tuteur_pi = '';
         if (isset($_FILES['pc_cin_tuteur']) && $_FILES['pc_cin_tuteur']['error'] == 0) {
-            $piTuteurUpload = upload_file('pc_cin_tuteur', './public/uploads/parents');
+            $piTuteurUpload = upload_file('pc_cin_tuteur', PARENT_UPLOAD_DIR);
             if ($piTuteurUpload['success']) {
-                $tuteur_pi = '/public/uploads/parents/' . $piTuteurUpload['file_name'];
+                $tuteur_pi =  $piTuteurUpload['file_name'];
             } else {
-                echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité du parent: " . $piTuteurUpload['error']]);
+                echo json_encode([
+                    'error' => true,
+                    'type' => 'fileSize',
+                    'message' => "Erreur lors de l' upload pièce d'identité du parent: ",
+                    'details' => $piTuteurUpload['error']
+                ]);
                 return;
             }
         }
@@ -111,9 +126,14 @@ class InscriptionController extends CI_Controller
         if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
             $photoIndetityUpload = upload_file('photo', STUDENT_UPLOAD_DIR . 'photos');
             if ($photoIndetityUpload['success']) {
-                $photo_indetite = STUDENT_UPLOAD_DIR . 'photos/' . $photoIndetityUpload['file_name'];
+                $photo_indetite = $photoIndetityUpload['file_name'];
             } else {
-                echo json_encode(['error' => true, 'message' => "Erreur upload photo d'identité de l'étudiant : " . $photoIndetityUpload['error']]);
+                echo json_encode([
+                    'error' => true,
+                    'type' => 'fileSize',
+                    'message' => "Erreur lors de l' upload photo d'identité de l'étudiant : ",
+                    'details' => $photoIndetityUpload['error']
+                ]);
                 return;
             }
         }
@@ -121,11 +141,16 @@ class InscriptionController extends CI_Controller
         // ? Photocopie de l'acte de naissance 
         $act_naissance = '';
         if (isset($_FILES['acte_naissance']) && $_FILES['acte_naissance']['error'] == 0) {
-            $pcActeNassanceUpload = upload_file('acte_naissance', './public/uploads/etudiant/pi');
+            $pcActeNassanceUpload = upload_file('acte_naissance', STUDENT_UPLOAD_DIR .'pi');
             if ($pcActeNassanceUpload['success']) {
-                $act_naissance = '/public/uploads/etudiant/pi/' . $pcActeNassanceUpload['file_name'];
+                $act_naissance = $pcActeNassanceUpload['file_name'];
             } else {
-                echo json_encode(['error' => true, 'message' => "Erreur upload acte de naissace de l'etudiant : " . $pcActeNassanceUpload['error']]);
+                echo json_encode([
+                    'error' => true,
+                    'type' => 'fileSize',
+                    'message' => "Erreur lors de l' upload acte de naissace de l'etudiant : ",
+                    'details' => $pcActeNassanceUpload['error']
+                ]);
                 return;
             }
         }
@@ -133,11 +158,16 @@ class InscriptionController extends CI_Controller
         // ? Photocopie de la Piece d'identité de l'etudiant
         $pieceIndetite = '';
         if (isset($_FILES['piece_identite']) && $_FILES['piece_identite']['error'] == 0) {
-            $pcPieceIdentiteUpload = upload_file('piece_identite', './public/uploads/etudiant/pi');
+            $pcPieceIdentiteUpload = upload_file('piece_identite', STUDENT_UPLOAD_DIR . 'pi');
             if ($pcPieceIdentiteUpload['success']) {
-                $pieceIndetite = '/public/uploads/etudiant/pi/' . $pcPieceIdentiteUpload['file_name'];
+                $pieceIndetite =  $pcPieceIdentiteUpload['file_name'];
             } else {
-                echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité de l'etudiant : " . $pcPieceIdentiteUpload['error']]);
+                echo json_encode([
+                    'error' => true,
+                    'type' => 'fileSize',
+                    'message' => "Erreur lors de l' upload pièce d'identité de l'etudiant : ",
+                    'details' => $pcPieceIdentiteUpload['error']
+                ]);
                 return;
             }
         }
@@ -145,11 +175,16 @@ class InscriptionController extends CI_Controller
         // ? Photocopie du dernier bultin si l'etudiant est nouveau
         $bulletin = '';
         if (isset($_FILES['bulletin']) && $_FILES['bulletin']['error'] == 0) {
-            $pcBulletinUpload = upload_file('bulletin', './public/uploads/etudiant/bulletins');
+            $pcBulletinUpload = upload_file('bulletin', STUDENT_UPLOAD_DIR . 'bulletins');
             if ($pcBulletinUpload['success']) {
-                $bulletin = '/public/uploads/etudiant/bulletins/' . $pcBulletinUpload['file_name'];
+                $bulletin = $pcBulletinUpload['file_name'];
             } else {
-                echo json_encode(['error' => true, 'message' => "Erreur upload du bulletin de note de l'etudiant : " . $pcBulletinUpload['error']]);
+                echo json_encode([
+                    'error' => true,
+                    'type' => 'fileSize',
+                    'message' => "Erreur lors de l' upload du bulletin de note de l'etudiant : ",
+                    'details' => $pcBulletinUpload['error']
+                ]);
                 return;
             }
         }
@@ -185,8 +220,6 @@ class InscriptionController extends CI_Controller
             $eleve_id = $etudiantIsered['id_eleve'];
         }
 
-
-
         $inscription = [
             'date_inscription' => $this->input->post('date_inscription'),
             'niveau_id_niveau' => $this->input->post('niveau'),
@@ -208,7 +241,7 @@ class InscriptionController extends CI_Controller
         };
         return;
     }
-    
+
     // ! Suppression d'une inscription
     public function delete()
     {

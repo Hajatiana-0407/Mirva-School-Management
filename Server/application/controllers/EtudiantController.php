@@ -16,6 +16,12 @@ class EtudiantController extends CI_Controller
         echo json_encode($data);
     }
 
+    public function findOne($matricule = '')
+    {
+        $data = $this->EtudiantModel->findDetailsByMat($matricule);
+        echo json_encode($data);
+    }
+
     public function create() {}
 
     public function update()
@@ -28,7 +34,7 @@ class EtudiantController extends CI_Controller
         if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
             $photoIndetityUpload = upload_file('photo', STUDENT_UPLOAD_DIR . 'photos');
             if ($photoIndetityUpload['success']) {
-                $photo_indetite = STUDENT_UPLOAD_DIR . 'photos/' . $photoIndetityUpload['file_name'];
+                $photo_indetite = $photoIndetityUpload['file_name'];
             } else {
                 echo json_encode(['error' => true, 'message' => "Erreur upload photo d'identité de l'étudiant : " . $photoIndetityUpload['error']]);
                 return;
@@ -38,9 +44,9 @@ class EtudiantController extends CI_Controller
         // ? Photocopie de l'acte de naissance 
         $act_naissance = '';
         if (isset($_FILES['acte_naissance']) && $_FILES['acte_naissance']['error'] == 0) {
-            $pcActeNassanceUpload = upload_file('acte_naissance', './public/uploads/etudiant/pi');
+            $pcActeNassanceUpload = upload_file('acte_naissance', STUDENT_UPLOAD_DIR . 'pi');
             if ($pcActeNassanceUpload['success']) {
-                $act_naissance = '/public/uploads/etudiant/pi/' . $pcActeNassanceUpload['file_name'];
+                $act_naissance = $pcActeNassanceUpload['file_name'];
             } else {
                 echo json_encode(['error' => true, 'message' => "Erreur upload acte de naissace de l'etudiant : " . $pcActeNassanceUpload['error']]);
                 return;
@@ -50,9 +56,9 @@ class EtudiantController extends CI_Controller
         // ? Photocopie de la Piece d'identité de l'etudiant
         $pieceIndetite = '';
         if (isset($_FILES['piece_identite']) && $_FILES['piece_identite']['error'] == 0) {
-            $pcPieceIdentiteUpload = upload_file('piece_identite', './public/uploads/etudiant/pi');
+            $pcPieceIdentiteUpload = upload_file('piece_identite', STUDENT_UPLOAD_DIR . 'pi');
             if ($pcPieceIdentiteUpload['success']) {
-                $pieceIndetite = '/public/uploads/etudiant/pi/' . $pcPieceIdentiteUpload['file_name'];
+                $pieceIndetite =  $pcPieceIdentiteUpload['file_name'];
             } else {
                 echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité de l'etudiant : " . $pcPieceIdentiteUpload['error']]);
                 return;
@@ -62,9 +68,9 @@ class EtudiantController extends CI_Controller
         // ? Photocopie du dernier bultin si l'etudiant est nouveau
         $bulletin = '';
         if (isset($_FILES['bulletin']) && $_FILES['bulletin']['error'] == 0) {
-            $pcBulletinUpload = upload_file('bulletin', './public/uploads/etudiant/bulletins');
+            $pcBulletinUpload = upload_file('bulletin', STUDENT_UPLOAD_DIR . 'bulletins');
             if ($pcBulletinUpload['success']) {
-                $bulletin = '/public/uploads/etudiant/bulletins/' . $pcBulletinUpload['file_name'];
+                $bulletin = $pcBulletinUpload['file_name'];
             } else {
                 echo json_encode(['error' => true, 'message' => "Erreur upload du bulletin de note de l'etudiant : " . $pcBulletinUpload['error']]);
                 return;
@@ -94,7 +100,7 @@ class EtudiantController extends CI_Controller
             $etudiant['photo'] = $photo_indetite;
         }
         if ($act_naissance !== '') {
-            $etudiant['act_naissance'] = $act_naissance;
+            $etudiant['pc_act_naissance'] = $act_naissance;
         }
         if ($pieceIndetite !== '') {
             $etudiant['pc_pi'] = $pieceIndetite;
@@ -104,10 +110,10 @@ class EtudiantController extends CI_Controller
         }
 
         // ! Enregistrement de l'etudiant dans la base de données
-        $etudiantIsered =  $this->EtudiantModel->update($id,  $etudiant);
+        $etudiantUpdated =  $this->EtudiantModel->update($id,  $etudiant);
 
-        if ($etudiantIsered) {
-            echo json_encode(['error' => false, 'data' => $etudiantIsered]);
+        if ($etudiantUpdated) {
+            echo json_encode(['error' => false, 'data' => $etudiantUpdated]);
         } else {
             echo json_encode([
                 'error' => true,

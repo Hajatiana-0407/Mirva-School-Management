@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import Dashboard from './components/Dashboard';
-import Students from './components/Students';
 import Classes from './components/Classes/Classes';
 import Levels from './components/Levels/Levels';
 import Subjects from './components/Subjects/Subjects';
@@ -27,6 +26,7 @@ import { getSchoolYearState } from './components/School-Year/redux/SchoolYearSli
 import { getAllSchoolYear } from './components/School-Year/redux/SchoolYearAsyncThunk';
 import Registration from './components/Registrations/Registration';
 import Student from './components/Students/Student';
+import StudentSinglePage from './components/Students/StudentSinglePage';
 
 
 
@@ -65,7 +65,10 @@ function App() {
       <Routes>
         <Route index element={<Dashboard />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="students" element={<Student />} />
+        <Route path="students"  >
+          <Route index element={<Student />} />
+          <Route path=':id' element={<StudentSinglePage />} />
+        </Route>
         <Route path="registration" element={<Registration />} />
         <Route path="teachers" element={<Teachers />} />
         <Route path="employees"  >

@@ -201,6 +201,45 @@ export const schoolYearInitialValue: SchoolYearType = {
     description: '',
 };
 
+// Parents ( Parent )
+export type ParentType = {
+    id_parent?: string;
+    nom_pere?: string;
+    nom_mere?: string;
+    profession_pere?: string;
+    profession_mere?: string;
+    telephone_pere?: string;
+    telephone_mere?: string;
+    adresse?: string;
+    parent_adresse?: string;
+    pc_cin_pere?: string;
+    pc_cin_mere?: string;
+    type?: string;
+    tuteur_email?: string;
+    tuteur_tel?: string;
+    tuteur_nom?: string;
+    tuteur_lien?: string;
+    pc_cin_tuteur?: string;
+}
+
+export const ParentInitialValue: ParentType = {
+    id_parent: '',
+    nom_pere: '',
+    nom_mere: '',
+    profession_pere: '',
+    profession_mere: '',
+    telephone_pere: '',
+    telephone_mere: '',
+    adresse: '',
+    pc_cin_pere: '',
+    pc_cin_mere: '',
+    type: '',
+    tuteur_email: '',
+    tuteur_tel: '',
+    tuteur_nom: '',
+    tuteur_lien: '',
+    pc_cin_tuteur: '',
+}
 // Students ( Eleve )
 export type StudentType = {
     id_eleve?: number;

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Filter, Archive, Camera, User, UserCheck, CalendarDays, MapPin, Home, Phone, Mail, Globe, Eye, Edit, Activity, Users } from 'lucide-react';
+import { Search, Filter, Archive, Camera, User, UserCheck, CalendarDays, MapPin, Home, Phone, Mail, Globe, Eye, Edit, Activity, Users, FolderOpen } from 'lucide-react';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import Table from '../Table';
 import { useDispatch, useSelector } from 'react-redux';
 import useForm from '../../Hooks/useForm';
-import { StudentType, StudentInitialValue } from '../../Utils/Types';
+import { StudentType, StudentInitialValue, RegistrationType } from '../../Utils/Types';
 import { object, string } from 'yup';
 import { AppDispatch } from '../../Redux/store';
 import { createStudent, deleteStudent, getAllStudent, getStatistique, updateStudent } from './redux/StudentAsyncThunk';
@@ -15,6 +15,7 @@ import { getStudentState } from './redux/StudentSlice';
 import clsx from 'clsx';
 import { baseUrl } from '../../Utils/Utils';
 import Input from '../ui/Input';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Validation de donnée avec yup 
 const StudentSchema = object({
@@ -41,6 +42,7 @@ const Student = () => {
   const [studentToArchive, setStudentToArchive] = useState<StudentType | null>(null);
   const [statistique, setStatistique] = useState<any>(null)
   const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
 
 
 
@@ -101,11 +103,10 @@ const Student = () => {
 
   // ===================== TABLEAUX =====================
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
+    { icon: Eye, label: 'Voir', onClick: (item: RegistrationType) => navigate('/students/' + item.matricule_etudiant), color: 'blue' },
     { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
     { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
-
 
   const columns = [
     {
@@ -115,7 +116,9 @@ const Student = () => {
             {item.photo && <img src={baseUrl(item.photo)} alt="" className="w-full h-full object-cover" />}
           </div>
           <div>
-            <div className="font-medium text-gray-900">{value} {item.prenom}</div>
+            <div className="font-medium text-blue-500 hover:underline">
+              <Link to={`/students/${item.matricule_etudiant}`}>{value} {item.prenom}</Link>
+            </div>
             <div className="text-xs text-gray-500">{item.matricule_etudiant}</div>
           </div>
         </div>
@@ -143,8 +146,7 @@ const Student = () => {
     },
     {
       key: 'adresse', label: 'Adresse', render: (value: string) => (
-        <div className='text-blue-500' >
-          <MapPin className='w-5 h-5 inline-block me-1 text-blue-600' />
+        <div className='' >
           {value}
         </div>
       )
@@ -382,6 +384,14 @@ const Student = () => {
               defaultValue={editingStudent?.urgence_tel || ''}
               icon={Phone} errorMessage={formErrors?.urgence_tel}
             />
+
+            <Input
+              label='Copie de l’acte de naissance'
+              name='acte_naissance'
+              defaultValue={editingStudent?.pc_act_naissance || ''}
+              icon={FolderOpen} errorMessage={formErrors?.pc_act_naissance}
+              iconColor='text-amber-500'
+              type='file' />
           </div>
           <div className="flex justify-end space-x-3 pt-4">
             <button
