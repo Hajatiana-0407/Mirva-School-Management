@@ -11,31 +11,25 @@ if (!function_exists('upload_file')) {
      * @param int $max_size Taille max (KB)
      * @return array ['success' => bool, 'file_name' => string, 'error' => string]
      */
-    function upload_file($field_name, $upload_path, $allowed_types = ['jpg', 'jpeg', 'png', 'gif'], $max_size = MAX_UPLOAD_FILE )
+    function upload_file($field_name, $upload_path, $allowed_types = ['jpg', 'jpeg', 'png', 'gif'], $max_size = MAX_UPLOAD_FILE)
     {
-        $CI = &get_instance();
+        try {
+            $filename = $_FILES[$field_name]['name'];
+            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+            $unique_name = time() . '_' . uniqid('file_', true) . '.' . $ext;
 
-        // Config upload
-        $config['upload_path']   = FCPATH .  $upload_path;
-        $config['allowed_types'] = implode('|', $allowed_types);
-        $config['max_size']      = $max_size;
-        $ext = pathinfo($_FILES[$field_name]['name'], PATHINFO_EXTENSION);
-        $config['file_name']     = uniqid() . '_' . time() . '.' . $ext;
+            $photo = move_uploaded_file($_FILES[$field_name]['tmp_name'], $upload_path . '/' . $unique_name);
 
-        $CI->load->library('upload', $config);
-
-        if (!$CI->upload->do_upload($field_name)) {
-            return [
-                'success' => false,
-                'error'   => $CI->upload->display_errors()
-            ];
-        } else {
-            $uploadData = $CI->upload->data();
             return [
                 'success'   => true,
-                'file_name' => $uploadData['file_name'],
-                'ext' => $uploadData['file_ext'],
+                'file_name' => $upload_path . '/' . $unique_name,
                 'error'     => null
+            ];
+        } catch (\Throwable $th) {
+            //throw $th;
+            return [
+                'success' => false,
+                'error'   => $th->getMessage()
             ];
         }
     }
