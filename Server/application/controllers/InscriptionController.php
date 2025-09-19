@@ -8,7 +8,7 @@ class InscriptionController extends CI_Controller
     {
         parent::__construct();
         $this->load->model('InscriptionModel');
-        $this->load->model('EleveModel');
+        $this->load->model('EtudiantModel');
     }
 
     public function index()
@@ -22,7 +22,7 @@ class InscriptionController extends CI_Controller
     {
         $this->load->helper('matricule');
         //? Creation d'un matricule unique 
-        $lasted = $this->EleveModel->findLasted();
+        $lasted = $this->EtudiantModel->findLasted();
         $matricule = '';
         if ($lasted) {
             $matricule = generateMatricule(STUDENT_PRIFIX, $lasted["matricule_etudiant"]);
@@ -180,7 +180,7 @@ class InscriptionController extends CI_Controller
 
         // ! Enregistrement de l'etudiant dans la base de données
         $eleve_id = null;
-        $etudiantIsered =  $this->EleveModel->insert($etudiant);
+        $etudiantIsered =  $this->EtudiantModel->insert($etudiant);
         if ($etudiantIsered) {
             $eleve_id = $etudiantIsered['id_eleve'];
         }
