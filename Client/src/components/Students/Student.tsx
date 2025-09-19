@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Filter, Archive, User, UserCheck, CalendarDays, MapPin, Home, Phone, Mail, Globe, Eye, Edit, Activity, Users, FolderOpen, Focus } from 'lucide-react';
+import { Search, Filter, Archive, User, UserCheck, CalendarDays, MapPin, Home, Phone, Mail, Globe, Eye, Edit, Activity, Users, FolderOpen, Focus, TrendingUp, TrendingDown } from 'lucide-react';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import Table from '../Table';
@@ -160,38 +160,70 @@ const Student = () => {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Liste des étudiants</h1>
       </div>
+
+      {/* Girl statistique */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Fille</p>
-              <p className="text-2xl font-bold text-gray-900"> {parseInt(statistique?.girl?.percent) || 0} %</p>
+              <p className="text-2xl font-bold text-gray-900"> {parseInt(statistique?.girl?.nbr) || 0}</p>
             </div>
             <div className={`w-12 h-12 rounded-full flex items-center justify-center bg-rose-100`}>
               <User className={`w-6 h-6 text-rose-500`} />
             </div>
           </div>
+          <div className="mt-4 flex items-center">
+            {statistique?.girl.nbr >= statistique?.boy.nbr ? (
+              <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
+            ) : (
+              <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
+            )}
+            <span className={`text-sm ${statistique?.girl.nbr >= statistique?.boy.nbr ? 'text-green-600' : 'text-red-600'}`}>
+              {parseInt(statistique?.girl?.percent)} %
+            </span>
+          </div>
         </div>
+
+        {/* Boy statistique */}
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Garçcon</p>
-              <p className="text-2xl font-bold text-gray-900"> {parseInt(statistique?.boy?.percent) || 0} %</p>
+              <p className="text-sm font-medium text-gray-600">Graçon</p>
+              <p className="text-2xl font-bold text-gray-900"> {parseInt(statistique?.boy?.nbr) || 0}</p>
             </div>
             <div className={`w-12 h-12 rounded-full flex items-center justify-center bg-blue-100`}>
               <User className={`w-6 h-6 text-blue-500`} />
             </div>
           </div>
+          <div className="mt-4 flex items-center">
+            {statistique?.boy.nbr >= statistique?.girl.nbr ? (
+              <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
+            ) : (
+              <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
+            )}
+            <span className={`text-sm ${statistique?.boy.nbr >= statistique?.girl.nbr ? 'text-green-600' : 'text-red-600'}`}>
+              {parseInt(statistique?.boy?.percent)} %
+            </span>
+          </div>
         </div>
+
+        {/* Total */}
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Total</p>
-              <p className="text-2xl font-bold text-gray-900"> {statistique?.all?.percent || 0} %</p>
+              <p className="text-2xl font-bold text-gray-900"> {statistique?.all?.nbr || 0}</p>
             </div>
             <div className={`w-12 h-12 rounded-full flex items-center justify-center bg-green-100`}>
               <Users className={`w-6 h-6 text-green-500`} />
             </div>
+          </div>
+          <div className="mt-4 flex items-center">
+            <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
+            <span className={`text-sm text-green-600`}>
+              {parseInt(statistique?.all?.percent)} %
+            </span>
           </div>
         </div>
       </div>
