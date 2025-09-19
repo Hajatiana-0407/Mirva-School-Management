@@ -95,6 +95,7 @@ defined('STUDENT_PRIFIX') OR define('STUDENT_PRIFIX' , 'ST-') ;
 
 defined('UPLOAD_DIR_PERSONNEL') OR define('UPLOAD_DIR_PERSONNEL', 'public/uploads/personnel/');
 defined('STUDENT_UPLOAD_DIR') OR define('STUDENT_UPLOAD_DIR',  'public/uploads/etudiant/') ; 
+defined('MAX_UPLOAD_FILE') OR define('MAX_UPLOAD_FILE',  9000) ; 
 
 // ************************************************* //
 defined('PERSONNEL_PROFIL_UPLOAD_DIR') OR define('PERSONNEL_PROFIL_UPLOAD_DIR', UPLOAD_DIR_PERSONNEL . "profil/");

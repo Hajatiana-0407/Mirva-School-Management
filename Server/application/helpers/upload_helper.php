@@ -11,7 +11,7 @@ if (!function_exists('upload_file')) {
      * @param int $max_size Taille max (KB)
      * @return array ['success' => bool, 'file_name' => string, 'error' => string]
      */
-    function upload_file($field_name, $upload_path, $allowed_types = ['jpg', 'jpeg', 'png', 'gif'], $max_size = 4096)
+    function upload_file($field_name, $upload_path, $allowed_types = ['jpg', 'jpeg', 'png', 'gif'], $max_size = MAX_UPLOAD_FILE )
     {
         $CI = &get_instance();
 
