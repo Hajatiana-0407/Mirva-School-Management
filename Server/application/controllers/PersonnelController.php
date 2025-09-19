@@ -48,9 +48,9 @@ class PersonnelController extends CI_Controller
 
         // Gestion de l'upload de la photo de profil
         if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
-            $photo_result = upload_file('photo', PERSONNEL_PROFIL_UPLOAD_DIR);
+            $photo_result = upload_file('photo', PERSONNEL_UPLOAD_DIR . 'photos');
             if ($photo_result['success']) {
-                $data['photo'] = PERSONNEL_PROFIL_UPLOAD_DIR . $photo_result['file_name'];
+                $data['photo'] =  $photo_result['file_name'];
             } else {
                 echo json_encode(['error' => true, 'message' => "Erreur upload photo : " . $photo_result['error']]);
                 return;
@@ -59,9 +59,9 @@ class PersonnelController extends CI_Controller
 
         // Gestion de l'upload de la pièce d'identité (pc_cin)
         if (isset($_FILES['pc_cin']) && $_FILES['pc_cin']['error'] == 0) {
-            $cin_result = upload_file('pc_cin', PERSONNEL_PROFIL_UPLOAD_DIR);
+            $cin_result = upload_file('pc_cin', PERSONNEL_UPLOAD_DIR . 'pi');
             if ($cin_result['success']) {
-                $data['pc_cin'] = PERSONNEL_PROFIL_UPLOAD_DIR . $cin_result['file_name'];
+                $data['pc_cin'] =  $cin_result['file_name'];
             } else {
                 echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité : " . $cin_result['error']]);
                 return;
@@ -122,9 +122,9 @@ class PersonnelController extends CI_Controller
 
         // Gestion de l'upload de la photo de profil (optionnel)
         if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
-            $photo_result = upload_file('photo', './uploads/personnel/');
+            $photo_result = upload_file('photo', PERSONNEL_UPLOAD_DIR . 'photos');
             if ($photo_result['success']) {
-                $data['photo'] = 'uploads/personnel/' . $photo_result['file_name'];
+                $data['photo'] =  $photo_result['file_name'];
             } else {
                 echo json_encode(['error' => true, 'message' => "Erreur upload photo : " . $photo_result['error']]);
                 return;
@@ -133,9 +133,9 @@ class PersonnelController extends CI_Controller
 
         // Gestion de l'upload de la pièce d'identité (pc_cin) (optionnel)
         if (isset($_FILES['pc_cin']) && $_FILES['pc_cin']['error'] == 0) {
-            $cin_result = upload_file('pc_cin', './uploads/personnel/');
+            $cin_result = upload_file('pc_cin', PERSONNEL_UPLOAD_DIR . 'pi');
             if ($cin_result['success']) {
-                $data['pc_cin'] = 'uploads/personnel/' . $cin_result['file_name'];
+                $data['pc_cin'] = $cin_result['file_name'];
             } else {
                 echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité : " . $cin_result['error']]);
                 return;
