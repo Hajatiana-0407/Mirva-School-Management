@@ -88,23 +88,12 @@ const StudentSinglePage = () => {
     }, [hiddeTheModalActive]);
 
     if (isLoading) return <Loading />
-    if (!student?.id_classe) return <div className="px-5 py-5  text-gray-400 h-full flex flex-col gap-2 items-center justify-center">
-        <h2 className="text-3xl">404 Not found</h2>
-        <button
-            onClick={() => navigate(-1)}
-            type="button"
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
-        >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Revenir</span>
-        </button>
-    </div>
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-gray-900">
                     <ArrowLeft className="h-6 w-6 inline-block me-1 cursor-pointer" onClick={() => navigate(-1)} />
-                    Inscription des élèves
+                    { student?.nom.toUpperCase() } { student?.prenom } ( { student?.matricule_etudiant } )
                 </h1>
                 <button
                     onClick={() => {
