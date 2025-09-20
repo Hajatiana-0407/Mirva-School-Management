@@ -111,10 +111,6 @@ class ParentController extends CI_Controller
             $parents['pc_cin_tuteur'] = $tuteur_pi;
         }
         $data =  $this->ParentModel->insert($parents);
-        // echo '<pre>';
-        // var_dump($data['id_parent']);
-        // echo '</pre>';
-        // die;
         if ($data) {
             $this->load->model('EtudiantModel');
             // Attibuer les parent a l'tudiant 
@@ -123,7 +119,7 @@ class ParentController extends CI_Controller
             ]);
             echo json_encode([
                 'error' => false,
-                'data' => $this->ParentModel->findOneById( $data['id_parent'])
+                'data' => $this->ParentModel->findOneById($data['id_parent'])
             ]);
         } else {
             echo json_encode(['error' => true, 'message' => 'Une erreur c\'est produite.']);
@@ -137,6 +133,9 @@ class ParentController extends CI_Controller
 
         $id = $this->input->post($this->pk);
 
+        $deleteParent = $this->input->post('to_delete_parent');
+        $deleteTuteur = $this->input->post('to_delete_tuteur');
+
         if (!isset($id)) {
             echo json_encode([
                 'error' => true,
@@ -147,6 +146,7 @@ class ParentController extends CI_Controller
         }
 
         $tuteur_type = $this->input->post('tuteur_type');
+
         // ? Piece d'identité des parents / tuteur
         $pere_pi = '';
         if (isset($_FILES['pc_cin_pere']) && $_FILES['pc_cin_pere']['error'] == 0) {
@@ -195,6 +195,7 @@ class ParentController extends CI_Controller
         }
 
         $parents = [];
+        $setToNull = [];
         if ($tuteur_type === 'parent') {
             // ? Parents
             $parents = [
@@ -214,19 +215,58 @@ class ParentController extends CI_Controller
                 'tuteur_nom' => $this->input->post('tuteur_nom'),
                 'tuteur_lien' => $this->input->post('tuteur_lien'),
                 'tuteur_tel' => $this->input->post('tuteur_tel'),
+                'adresse' => $this->input->post('adresse'),
                 'tuteur_email' => $this->input->post('tuteur_email'),
                 'type' => $tuteur_type,
             ];
         }
+
+        // ! Information sur le tuteur a effacer
+        if ($deleteTuteur === 'true') {
+            $setToNull = [
+                'tuteur_nom',
+                'tuteur_lien',
+                'tuteur_tel',
+                'pc_cin_tuteur',
+            ];
+        }
+
+        // ! Information sur les parent a effacer
+        if ($deleteParent === 'true') {
+            $setToNull = [
+                'nom_pere',
+                'profession_pere',
+                'telephone_pere',
+                'nom_mere',
+                'profession_mere',
+                'telephone_mere',
+            ];
+        }
+
+
+
         // ? Pieces jointes
-        if ($pere_pi) {
+        if ($pere_pi || $deleteParent) {
             $parents['pc_cin_pere'] = $pere_pi;
         }
-        if ($mere_pi) {
+        if ($mere_pi || $deleteParent) {
             $parents['pc_cin_mere'] = $mere_pi;
         }
-        if ($tuteur_pi) {
+        if ($tuteur_pi || $deleteTuteur) {
             $parents['pc_cin_tuteur'] = $tuteur_pi;
+        }
+
+
+        // ! Si les information sur les parent et le tutuer sont garder ( type = parent/tuteur )
+        if ($tuteur_type === 'parent' && $deleteTuteur !== 'true') {
+            $parents['type'] = 'parent/tuteur';
+        }
+        if ($tuteur_type === 'tuteur' && $deleteParent !== 'true') {
+            $parents['type'] = 'parent/tuteur';
+        }
+
+        foreach ($setToNull as  $key) {
+            $parents[$key] = '';
         }
 
         $data =  $this->ParentModel->update($id, $parents);

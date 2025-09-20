@@ -6,10 +6,3 @@
 - Adresse
 - Relation
 
-
-# Onglets 
-[ 
-    key: ''
-    component : ''
-]
-
