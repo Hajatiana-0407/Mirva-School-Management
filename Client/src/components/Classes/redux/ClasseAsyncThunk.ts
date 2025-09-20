@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ApiReturnInitial, ApiReturnType, ClasseType, LevelSubjectType } from "../../../Utils/Types";
+import { ApiReturnInitial, ApiReturnType, ClasseType } from "../../../Utils/Types";
 import api from "../../../Utils/api";
 import { setHiddeModalValue } from "../../../Redux/AppSlice";
 

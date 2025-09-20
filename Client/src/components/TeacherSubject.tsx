@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Check, Clock, Trash2, X, Pencil } from "lucide-react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { Check, Clock, Trash2, X, Pencil, BookOpen, ArrowRight } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSubjectState } from "./Subjects/redux/SubjectSlice";
 import { ClasseType, SubjectType } from "../Utils/Types";
@@ -7,6 +7,8 @@ import { AppDispatch } from "../Redux/store";
 import { getAllSubject } from "./Subjects/redux/SubjectAsyncThunk";
 import { getAllClasse, getSubjectLevelByIdSubject } from "./Classes/redux/ClasseAsyncThunk";
 import Table from "./Table";
+import Input from "./ui/Input";
+import { Link } from "react-router-dom";
 
 type AssignationType = {
     id_matiere?: number | string;
@@ -17,15 +19,14 @@ type AssignationType = {
 };
 
 type TeacherSubjectPropsType = {
-    setParentAssignation :  React.Dispatch<any>; 
+    setParentAssignation: React.Dispatch<any>;
 };
-
+type subjectOptionsType = { label: string, value: number | string }[] | any[];
 const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
     const [assignations, setAssignations] = useState<AssignationType[]>([]);
     const [selectedSubject, setSelectedSubject] = useState<string>("");
     const [selectedClasses, setSelectedClasses] = useState<{ [key: string]: boolean }>({});
     const [hoursByClass, setHoursByClass] = useState<{ [key: string]: number }>({});
-    const [hideTous, setHideTous] = useState(false);
     const [editIndex, setEditIndex] = useState<number | null>(null);
     const [editHour, setEditHour] = useState<number>(1);
     const [classes, setClasses] = useState<ClasseType[]>([])
@@ -34,15 +35,44 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
 
     const dispatch: AppDispatch = useDispatch();
 
+    const [subjectOptions, setsubjectOptions] = useState<subjectOptionsType>([]);
+
     useEffect(() => {
         if (subjects.length === 0) dispatch(getAllSubject());
-        if (classes.length === 0) dispatch(getAllClasse());
-    }, [dispatch, subjects.length, classes.length]);
+    }, [dispatch, subjects.length]);
 
     // Gestion du soumission au parent
     useEffect(() => {
         setParentAssignation(assignations);
     }, [assignations, setParentAssignation]);
+
+    useEffect(() => {
+        if (classes.length === 0) {
+            dispatch(getAllClasse()).then((res: any) => {
+                const allClasses = res.payload as ClasseType[];
+                setClasses(allClasses);
+                setSelectedSubject('tous');
+            });
+        }
+    }, [dispatch])
+
+
+    useEffect(() => {
+        let options: subjectOptionsType = [];
+        // ? Creation de la liste options matiere
+        assignations.length ? '' : options = [{ label: 'Tous', value: 'tous' }];
+
+        if (!assignations.some((assignation: AssignationType) => assignation.matiere == 'Tous')) {
+            subjects.map((subject) => {
+                options = [
+                    ...options,
+                    { label: `${subject.denomination} ${subject.abbreviation.toUpperCase()}`, value: subject.id_matiere as number }
+                ]
+            })
+        }
+        setsubjectOptions(options);
+    }, [assignations])
+
 
     // Vérifier si une classe a déjà la matière assignée
     const isClassAlreadyAssigned = (classeId: number) => {
@@ -90,6 +120,7 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
         }
     };
 
+
     // Gestion des heures par classe
     const handleHoursChange = (id: number, value: number) => {
         setHoursByClass(prev => ({
@@ -127,7 +158,6 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
             }
         });
 
-        if (selectedSubject === "tous") setHideTous(true);
 
         setSelectedSubject("");
         setSelectedClasses({});
@@ -191,7 +221,11 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
                         />
                         <button
                             className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
-                            onClick={() => handleSaveHour(item.index)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                handleSaveHour(item.index);
+                            }}
                             type="button"
                         >
                             <Check className="w-4 h-4" />
@@ -216,14 +250,14 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
 
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 p-4">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
             {/* Colonne 1 */}
             <div className="col-span-2 rounded p-1">
                 <h2 className="text-xl font-bold text-gray-800 mb-4">Attribuer une matière à des classes</h2>
-                <div className="col-span-2 rounded p-4 bg-white shadow flex flex-col gap-4">
+                <div className="col-span-2 rounded  bg-white flex flex-col gap-4">
                     {/* Choix matière */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Choisissez une matière :</label>
+                        {/* <label className="block text-sm font-medium text-gray-700 mb-1">Choisissez une matière :</label>
                         <select
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 cursor-pointer"
                             value={selectedSubject}
@@ -236,13 +270,22 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
                                     {subj.denomination} ({subj.abbreviation})
                                 </option>
                             ))}
-                        </select>
+                        </select> */}
+
+                        <Input
+                            label="Matières"
+                            name=""
+                            icon={BookOpen}
+                            type="select"
+                            options={subjectOptions}
+                            onChange={handleSubjectChange as (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void}
+                        />
                     </div>
 
                     {/* Sélection classes toujours affichée */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Classes :</label>
-                        <div className="rounded-2xl shadow-md p-4 mb-2">
+                        <div className="rounded mb-2">
                             <div className="flex px-4 py-2 border-b text-base font-semibold mb-2 rounded-t-2xl">
                                 <div className="w-10"></div>
                                 <div className="flex-1">Nom</div>
@@ -258,7 +301,7 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
                                     return (
                                         <label
                                             key={classe.id_classe || idx}
-                                            className={`flex items-center px-4 py-2 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition mb-1 cursor-pointer ${disabled ? "opacity-50 pointer-events-none" : ""}`}
+                                            className={`flex items-center px-4 py-2 bg-white rounded border border-gray-200 hover:shadow-sm transition mb-1 cursor-pointer ${disabled ? "opacity-50 pointer-events-none" : ""}`}
                                             htmlFor={`__classe_input_${classe.id_classe}`}
                                         >
                                             {/* Checkbox */}
@@ -292,24 +335,30 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
                                         </label>
                                     );
                                 })}
+
+                                {!classes.length && <>
+                                    <div className="text-gray-400 text-center p-5 border rounded bg-gray-50 shadow-inner">
+                                        <h6>Aucune classe trouver pour ce matière</h6>
+                                        <Link to={'/levels/level-subject'} className="text-blue-500 underline">Click ici pour ajouter</Link>
+                                    </div>
+                                </>}
                             </div>
                             {/* Boutons */}
                             <div className="flex gap-2 justify-end mt-3">
-                                <button
-                                    className={`bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors ${isValidateDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"}`}
-                                    onClick={handleValidate}
-                                    disabled={isValidateDisabled}
-                                >
-                                    <Check className="w-4 h-4" />
-                                    <span>Valider</span>
-                                </button>
                                 <button
                                     className="bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-gray-300 transition-colors"
                                     onClick={handleCancel}
                                     disabled={isValidateDisabled && !selectedSubject && !Object.values(selectedClasses).some(Boolean)}
                                 >
                                     <X className="w-4 h-4" />
-                                    <span>Annuler</span>
+                                </button>
+                                <button
+                                    className={`bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors ${isValidateDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"}`}
+                                    onClick={handleValidate}
+                                    disabled={isValidateDisabled}
+                                >
+                                    <span>Valider</span>
+                                    <ArrowRight className="w-4 h-4" />
                                 </button>
                             </div>
                         </div>
@@ -318,7 +367,7 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
             </div>
 
             {/* Colonne 2 : Tableau récapitulatif */}
-            <div className="col-span-3">
+            <div className="col-span-3 max-lg:border-t lg:border-l">
                 <Table
                     columns={columns}
                     data={assignations.map((a, i) => ({ ...a, index: i }))}

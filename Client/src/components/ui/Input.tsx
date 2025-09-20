@@ -70,7 +70,7 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                     {/* Labele du haut */}
                     <span
                         className={clsx({
-                            'hidden transition-all duration-700': (!isEmpty || !icon) && type !== 'date',
+                            'hidden transition-all duration-700': ((!isEmpty && type !== 'select') || !icon) && type !== 'date',
 
                         }, "transition-all duration-700 absolute left-3  top-0 -translate-y-1/2 text-sm text-blue-400 pointer-events-none bg-white z-20")}
                     >

@@ -13,6 +13,7 @@ import InputError from '../ui/InputError';
 import { getAppState } from '../../Redux/AppSlice';
 import LevelSubject from './LevelSubject';
 import LevelListe from './LevelListe';
+import { useParams } from 'react-router-dom';
 
 // Validation de donnée avec yup 
 const LevelSchema = object({
@@ -22,16 +23,19 @@ const LevelSchema = object({
 })
 
 const Levels = () => {
+  const { active } = useParams();
+
   const dispatch: AppDispatch = useDispatch();
   const { onSubmite, formErrors } = useForm<levelType>(LevelSchema, { niveau: '', cycle: '', description: '' });
   const { hiddeTheModalActive } = useSelector(getAppState);
-  const [activeTab, setActiveTab] = useState<'levelSbject' | 'listeLevel'>('listeLevel');
+  const [activeTab, setActiveTab] = useState<'levelSbject' | 'listeLevel'>(active !== undefined ? 'levelSbject' : 'listeLevel');
   const [showModal, setShowModal] = useState(false);
   const [editingLevel, setEditingLevel] = useState<levelType | null>(null);
   const [isActiveAutoGenationClasse, setIsActiveAutoGenationClasse] = useState(false)
   const [idLevelToAddSubject, setIdLevelToAddSubject] = useState<number>(0);
   const { error } = useSelector(getLevelState);
-  
+
+
   // HANDLERS
   const handleEdit = (level: levelType) => {
     setEditingLevel(level);
@@ -50,7 +54,7 @@ const Levels = () => {
     }, e)
   }
 
-  
+
   // EFFET
   useEffect(() => {
     if (showModal && hiddeTheModalActive) {
@@ -60,15 +64,15 @@ const Levels = () => {
 
   useEffect(() => {
     dispatch(getAllLevel());
-  }, [dispatch , activeTab  ]);
+  }, [dispatch, activeTab]);
 
-  useEffect(( ) => {
-    if( activeTab =='listeLevel' ){
-      setIdLevelToAddSubject(0) ; 
+  useEffect(() => {
+    if (activeTab == 'listeLevel') {
+      setIdLevelToAddSubject(0);
     }
-  } , [activeTab ])
+  }, [activeTab])
 
-  
+
 
   return (
 
@@ -109,7 +113,7 @@ const Levels = () => {
         </nav>
       </div>
       {/* CONTENUE DES DEUX ONGLETS */}
-      {activeTab === "listeLevel" && <LevelListe handleEdit={handleEdit} setActiveTab={setActiveTab} setIdLevelToAddSubject={setIdLevelToAddSubject}  />}
+      {activeTab === "listeLevel" && <LevelListe handleEdit={handleEdit} setActiveTab={setActiveTab} setIdLevelToAddSubject={setIdLevelToAddSubject} />}
       {activeTab === 'levelSbject' && <LevelSubject idLevelToAddSubject={idLevelToAddSubject} />}
 
       {/* MOADALE POUR FORMULAIRE AJOUT / MODIF */}
@@ -195,7 +199,7 @@ const Levels = () => {
         </form>
       </Modal>
 
-      
+
     </div>
   );
 };

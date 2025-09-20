@@ -76,7 +76,10 @@ function App() {
           <Route path=':id' element={<EmployeesSinglePage />} />
         </Route>
         <Route path="classes" element={<Classes />} />
-        <Route path="levels" element={<Levels />} />
+        <Route path='levels'>
+          <Route index element={<Levels />} />
+          <Route path=':active' element={<Levels />} />
+        </Route>
         <Route path="subjects" element={<Subjects />} />
         <Route path="schedule" element={<Schedule />} />
         <Route path="attendance" element={<Attendance />} />

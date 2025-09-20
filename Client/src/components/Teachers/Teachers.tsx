@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive, Eye, BookOpen, User, Users, Shield, Brush, Library, Calculator, Truck, Camera, HeartPulse, UserCheck, CalendarDays, Phone, Mail, MapPinned, X, ChevronRight, ChevronLeft, Check, SquarePen, FolderOpen, Handshake } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Archive, Eye, BookOpen, User, Users, Shield, Brush, Library, Calculator, Truck, Camera, HeartPulse, UserCheck, CalendarDays, Phone, Mail, MapPinned, X, Check, SquarePen, FolderOpen, Handshake, ArrowLeft, ArrowRight } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
@@ -185,7 +185,7 @@ const Teachers: React.FC = () => {
         setPage(v => v + 1)
         resetError();
       } else {
-        // Forcer les erreurs
+        //? Forcer les erreurs
         forceError(errors);
       }
     }
@@ -350,12 +350,11 @@ const Teachers: React.FC = () => {
       <Modal
         isOpen={showModal}
         onClose={handleCloseModal}
-        title={editingEmployees ? "Modifier l'employé" : 'Nouvel employé'}
+        title={editingEmployees ? "Modifier l'enseigant" : 'Nouvel enseigant'}
         size='lg'
       >
         <form onSubmit={handleSubmit} id='__formulaire_personnel'>
           {/* Page numero 1  */}
-
           {/* Photo de profil de l'employé */}
           <div className={clsx({
             'sr-only': (page !== 1)
@@ -544,22 +543,22 @@ const Teachers: React.FC = () => {
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 flex gap-1 items-center "
+                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50  "
               >
-                <X size={25} />
+                <X className='h-5 w-5 inline-block me-1' />
                 Annuler
               </button>
               <button
                 type={!editingEmployees ? 'button' : 'submit'}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex gap-1 items-center"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 onClick={handleNext}
               >
                 {/* Icone si le mot est modifier */}
-                {editingEmployees && <SquarePen />}
+                {editingEmployees && <SquarePen className='h-5 w-5 inline-block me-1' />}
                 {/* Icone si le mot est Ajouter */}
                 {editingEmployees ? 'Modifier' : 'Suivant'}
                 {/* Icone si le mot suivant */}
-                {!!!editingEmployees && <ChevronRight size={25} />}
+                {!!!editingEmployees && <ArrowRight className='h-5 w-5 inline-block ms-1' />}
               </button>
             </div>
           </div>
@@ -572,20 +571,20 @@ const Teachers: React.FC = () => {
             <TeacherSubject setParentAssignation={setAssignations} />
 
             {/* Boutons de validation et retour dans l'assignation des matieres et classes pour le prof actuel */}
-            <div className='flex items-center justify-between'>
+            <div className='flex items-center justify-between mt-4'>
               <button
-                className="bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg flex items-center hover:bg-gray-300 transition-colors  gap-01 "
+                className="bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg  hover:bg-gray-300 transition-colors  gap-01 "
                 onClick={() => { setPage(v => v - 1) }}
                 type='button'
               >
-                <ChevronLeft size={25} />
+                <ArrowLeft className='h-5 w-5 inline-block me-1' />
                 <span>Percedent</span>
               </button>
               <button
-                className={`bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-1 transition-colors hover:bg-blue-700`}
+                className={`bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg  gap-1 transition-colors hover:bg-blue-700`}
                 type='submit'
               >
-                <Check size={25} />
+                <Check className='h-5 w-5 inline-block me-1' />
                 <span>Valider</span>
               </button>
             </div>

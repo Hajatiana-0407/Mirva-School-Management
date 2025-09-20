@@ -19,7 +19,7 @@ interface TableProps {
   isLoading: boolean
 }
 
-const Table = ({ data, columns, actions, searchTerm = '', isLoading = false  }: TableProps) => {
+const Table = ({ data, columns, actions, searchTerm = '', isLoading = false }: TableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
@@ -52,7 +52,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false  }: 
     return colors[color as keyof typeof colors] || 'text-gray-600 hover:text-gray-800';
   };
 
-  
+
 
   return (
     <div className="space-y-4">
@@ -71,7 +71,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false  }: 
             </tr>
           </thead>
           <tbody>
-            {(isLoading && !currentItems.length  ) ?
+            {(isLoading && !currentItems.length) ?
               <tr >
                 <td colSpan={columns.length + 1} className=''>
                   <Loading />
@@ -119,6 +119,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false  }: 
           </div>
           <div className="flex items-center space-x-2">
             <button
+              type='button'
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
               className="p-2 rounded border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
@@ -133,6 +134,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false  }: 
                   ? 'bg-blue-600 text-white'
                   : 'border hover:bg-gray-50'
                   }`}
+                type='button'
               >
                 {page}
               </button>
@@ -140,6 +142,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false  }: 
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
+              type='button'
               className="p-2 rounded border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
             >
               <ChevronRight className="w-4 h-4" />
