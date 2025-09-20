@@ -7,7 +7,6 @@ import Subjects from './components/Subjects/Subjects';
 import Schedule from './components/Schedule';
 import Attendance from './components/Attendance';
 import Exams from './components/Exams';
-import Parents from './components/Parents';
 import Payments from './components/Payments';
 import Messages from './components/Messages';
 import Settings from './components/Settings/Settings';
@@ -27,6 +26,7 @@ import { getAllSchoolYear } from './components/School-Year/redux/SchoolYearAsync
 import Registration from './components/Registrations/Registration';
 import Student from './components/Students/Student';
 import StudentSinglePage from './components/Students/StudentSinglePage';
+import Parents from './components/Parents/Parents';
 
 
 

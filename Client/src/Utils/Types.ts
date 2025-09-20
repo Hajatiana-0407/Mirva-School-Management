@@ -203,7 +203,7 @@ export const schoolYearInitialValue: SchoolYearType = {
 
 // Parents ( Parent )
 export type ParentType = {
-    id_parent?: string;
+    id_parent?: number;
     nom_pere?: string;
     nom_mere?: string;
     profession_pere?: string;
@@ -223,7 +223,7 @@ export type ParentType = {
 }
 
 export const ParentInitialValue: ParentType = {
-    id_parent: '',
+    id_parent: undefined ,
     nom_pere: '',
     nom_mere: '',
     profession_pere: '',

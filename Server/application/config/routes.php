@@ -113,3 +113,9 @@ $route['api/admin/etudiant/create'] = 'EtudiantController/create';
 $route['api/admin/etudiant/delete'] = 'EtudiantController/delete';
 $route['api/admin/etudiant/statistique'] = 'EtudiantController/getStatistique';
 $route['api/admin/etudiant/(:any)'] = 'EtudiantController/findOne/$1';
+
+// ******************* ROUTE PARENT ********************** //
+$route['api/admin/parent'] = 'ParentController';
+$route['api/admin/parent/update'] = 'ParentController/update';
+$route['api/admin/parent/create'] = 'ParentController/create';
+$route['api/admin/parent/delete'] = 'ParentController/delete';

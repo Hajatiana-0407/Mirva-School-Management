@@ -11,6 +11,7 @@ import SchoolReducer from '../components/Settings/School/redux/SchoolSlice';
 import SchoolYearReducer from '../components/School-Year/redux/SchoolYearSlice';
 import RegisterSlice from '../components/Registrations/redux/registerSlice';
 import StudentReducer from '../components/Students/redux/StudentSlice'
+import ParentReducer from '../components/Parents/redux/ParentSlice'
 
 export const store = configureStore({
     reducer: {
@@ -25,7 +26,8 @@ export const store = configureStore({
         school : SchoolReducer,
         schoolYears : SchoolYearReducer,
         registration : RegisterSlice,
-        student : StudentReducer  
+        student : StudentReducer  , 
+        parent: ParentReducer
     }
 });
 

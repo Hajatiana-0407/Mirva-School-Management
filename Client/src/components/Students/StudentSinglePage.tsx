@@ -16,7 +16,7 @@ import InputError from "../ui/InputError";
 import { getStudentState } from "./redux/StudentSlice";
 import { getAppState } from "../../Redux/AppSlice";
 import clsx from "clsx";
-type StudentDetailsType = StudentType & ParentType & levelType & ClasseType;
+export type StudentDetailsType = StudentType & ParentType & levelType & ClasseType;
 
 // Validation de donnée avec yup 
 const StudentSchema = object({

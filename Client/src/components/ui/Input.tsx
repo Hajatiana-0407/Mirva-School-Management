@@ -121,7 +121,7 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                                 "bg-background border border-gray-300 text-primary text-sm rounded focus:ring-gray-300/50 focus:border-gray-300/50 focus:outline-1 block w-full p-2 py-2.5"
                             )}
                             name={name}
-                            placeholder={icon ? label : placeholder}
+                            placeholder={placeholder || label }
                             required={required}
                             value={value}
                             onChange={onInputChange}
