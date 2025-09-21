@@ -7,7 +7,7 @@ import { AppDispatch } from "../../Redux/store";
 import Loading from "../ui/Loading";
 import { baseUrl } from "../../Utils/Utils";
 import { InfoBlock } from "../Registrations/Registration";
-import { Activity, ArrowLeft, CalendarDays, ChevronDown, ChevronUp, Focus, FolderOpen, Globe, GraduationCap, HeartPulse, Home, Mail, MapPin, PenBox, Phone, Tag, User, UserCheck } from "lucide-react";
+import { Activity, ArrowLeft, CalendarDays, Check, ChevronDown, ChevronUp, Focus, FolderOpen, Globe, GraduationCap, HeartPulse, Home, Mail, MapPin, PenBox, Phone, Tag, User, UserCheck, X } from "lucide-react";
 import Modal from "../Modal";
 import { object, string } from "yup";
 import useForm from "../../Hooks/useForm";
@@ -93,7 +93,7 @@ const StudentSinglePage = () => {
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-gray-900">
                     <ArrowLeft className="h-6 w-6 inline-block me-1 cursor-pointer" onClick={() => navigate(-1)} />
-                    { student?.nom.toUpperCase() } { student?.prenom } ( { student?.matricule_etudiant } )
+                    {student?.nom.toUpperCase()} {student?.prenom} ( {student?.matricule_etudiant} )
                 </h1>
                 <button
                     onClick={() => {
@@ -434,12 +434,18 @@ const StudentSinglePage = () => {
                             onClick={handleCloseModal}
                             className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
                         >
+                            <X className='inline-block w-5 h-5 me-1' />
                             Annuler
                         </button>
                         <button
                             type="submit"
                             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                         >
+                            {student ?
+                                <PenBox className='inline-block w-5 h-5 me-1' /> :
+                                <Check className='inline-block w-5 h-5 me-1' />
+                            }
+
                             {student ? 'Modifier' : 'Ajouter'}
                         </button>
                     </div>

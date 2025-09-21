@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Filter, Archive, User, UserCheck, CalendarDays, MapPin, Home, Phone, Mail, Globe, Eye, Edit, Activity, Users, FolderOpen, Focus, TrendingUp, TrendingDown } from 'lucide-react';
+import { Search, Filter, Archive, User, UserCheck, CalendarDays, MapPin, Home, Phone, Mail, Globe, Eye, Edit, Activity, Users, FolderOpen, Focus, TrendingUp, TrendingDown, X, PenBox, Check } from 'lucide-react';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import Table from '../Table';
@@ -15,7 +15,8 @@ import { getStudentState } from './redux/StudentSlice';
 import clsx from 'clsx';
 import { baseUrl } from '../../Utils/Utils';
 import Input from '../ui/Input';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Profile from '../ui/Profile';
 
 // Validation de donnée avec yup 
 const StudentSchema = object({
@@ -111,17 +112,12 @@ const Student = () => {
   const columns = [
     {
       key: 'nom', label: 'Profil', render: (value: string, item: StudentType) => (
-        <div className="flex items-center space-x-3 relative">
-          <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer">
-            {item.photo && <img src={baseUrl(item.photo)} alt="" className="w-full h-full object-cover" />}
-          </div>
-          <div>
-            <div className="font-medium text-blue-500 hover:underline">
-              <Link to={`/students/${item.matricule_etudiant}`}>{value} {item.prenom}</Link>
-            </div>
-            <div className="text-xs text-gray-500">{item.matricule_etudiant}</div>
-          </div>
-        </div>
+        <Profile
+          fullName={`${value} ${item.prenom}`}
+          identification={item.matricule_etudiant}
+          photo={item.photo as string}
+          link={`/students/${item.matricule_etudiant}`}
+        />
       )
     },
     {
@@ -448,12 +444,18 @@ const Student = () => {
               onClick={handleCloseModal}
               className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
             >
+              <X className='inline-block w-5 h-5 me-1' />
               Annuler
             </button>
             <button
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
+              {editingStudent ?
+                <PenBox className='inline-block w-5 h-5 me-1' /> :
+                <Check className='inline-block w-5 h-5 me-1' />
+              }
+
               {editingStudent ? 'Modifier' : 'Ajouter'}
             </button>
           </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Archive, User,  UserCheck, CalendarDays, Phone, Mail, Check, MapPin, Globe, Home, ArrowRight, ArrowLeft, Activity, FolderOpen, HeartPulse, GraduationCap, Focus, } from 'lucide-react';
+import { Plus, Search, Archive, User, UserCheck, CalendarDays, Phone, Mail, Check, MapPin, Globe, Home, ArrowRight, ArrowLeft, Activity, FolderOpen, HeartPulse, GraduationCap, Focus, } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
@@ -12,13 +12,13 @@ import { createRegistration, deleteRegistration, getAllRegistrations } from './r
 import useForm from '../../Hooks/useForm';
 import Input from '../ui/Input';
 import clsx from 'clsx';
-import { baseUrl, fakeStudentData } from '../../Utils/Utils';
+import {  fakeStudentData } from '../../Utils/Utils';
 import { getLevelState } from '../Levels/redux/LevelSlice';
 import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
 import { getSchoolYearState } from '../School-Year/redux/SchoolYearSlice';
 import { getAppState } from '../../Redux/AppSlice';
-import { Link } from 'react-router-dom';
 import InputError from '../ui/InputError';
+import Profile from '../ui/Profile';
 
 const RegistrationSchema = object({
   // Élève
@@ -70,7 +70,7 @@ const Registration: React.FC = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<any>({ parentType: 'parent' });
   const [formValues, setFormValues] = useState<StudentFormDataType>(fakeStudentData);
-  const { datas: registrations, action  ,error } = useSelector(getRegistrationState);
+  const { datas: registrations, action, error } = useSelector(getRegistrationState);
   const { onSubmite, formErrors, resetError, forceError } = useForm<RegistrationType>(RegistrationSchema, registrationInitialValue);
   const [formTitle, setFormTitle] = useState("Nouvel élève")
   const { datas: levelDatas } = useSelector(getLevelState);
@@ -225,17 +225,12 @@ const Registration: React.FC = () => {
   const columns = [
     {
       key: 'nom_eleve', label: 'Profil', render: (value: string, item: RegistrationType) => (
-        <div className="flex items-center space-x-3 relative">
-          <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer">
-            {item.photo && <img src={baseUrl(item.photo)} alt="" className="w-full h-full object-cover" />}
-          </div>
-          <div>
-            <div className="font-medium text-blue-500 hover:underline">
-              <Link to={`/students/${item.matricule_etudiant}`}>{value} {item.prenom}</Link>
-            </div>
-            <div className="text-xs text-gray-500">{item.matricule_etudiant}</div>
-          </div>
-        </div>
+        <Profile
+          fullName={`${value} ${item.prenom}`}
+          identification={item.matricule_etudiant}
+          photo={item.photo as string}
+          link={`/students/${item.matricule_etudiant}`}
+        />
       )
     },
     {
