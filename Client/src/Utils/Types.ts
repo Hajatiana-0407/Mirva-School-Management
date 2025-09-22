@@ -131,6 +131,7 @@ export type LevelSubjectType = {
 // Employee ( EMPLOYE )
 export type EmployeeType = {
     id_personnel?: number;
+    matricule_personnel?: string;
     nom: string;
     prenom: string;
     addresse: string;
@@ -223,7 +224,7 @@ export type ParentType = {
 }
 
 export const ParentInitialValue: ParentType = {
-    id_parent: undefined ,
+    id_parent: undefined,
     nom_pere: '',
     nom_mere: '',
     profession_pere: '',

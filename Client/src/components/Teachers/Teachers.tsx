@@ -18,6 +18,7 @@ import TeacherSubject from '../TeacherSubject';
 import { getTeacherState } from './redux/TeachersSlice';
 import { getAllTeachers } from './redux/TeacherAsyncThunk';
 import { createEmployees, deleteEmployees, updateEmployees } from '../Employees/redux/EmployeAsyncThunk';
+import Profile from '../ui/Profile';
 
 // Mapping des types à des couleurs de fond
 const typeBgColors: Record<string, string> = {
@@ -195,7 +196,7 @@ const Teachers: React.FC = () => {
 
   // TABLEAUX 
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: (item: EmployeeType) => navigate("/employees/" + item.id_personnel), color: 'blue' },
+    { icon: Eye, label: 'Voir', onClick: (item: EmployeeType) => navigate("/employees/" + item.matricule_personnel), color: 'blue' },
     { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
     { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
@@ -206,20 +207,12 @@ const Teachers: React.FC = () => {
       key: 'nom',
       label: 'Profil',
       render: (value: string, item: EmployeeType) => (
-        <div className="flex items-center space-x-3 relative">
-          {/* Image miniature */}
-          <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer">
-            <img
-              src={baseUrl(item.photo)}
-              alt=""
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div>
-            <div className="font-medium text-gray-900">{value} {item.prenom}</div>
-            <div className="text-sm text-gray-500">{item.email}</div>
-          </div>
-        </div>
+        <Profile
+          fullName={`${value} ${item.prenom}`}
+          identification={item.matricule_personnel}
+          photo={item.photo as string}
+          link={`/employees/${item.matricule_personnel}`}
+        />
       )
     },
     { key: 'matricule_personnel', label: 'Matricule' },
@@ -239,7 +232,12 @@ const Teachers: React.FC = () => {
     },
     { key: 'date_embauche', label: "Date d'embauche" },
     { key: 'addresse', label: 'Addrèsse' },
-    { key: 'telephone', label: 'Téléphone' },
+    { key: 'telephone', label: 'Contact' ,  render:( value: string , item: EmployeeType ) => (
+      <div>
+        { value }
+        <span className='block text-sm text-blue-500'>{ item.email } </span>
+      </div>
+    ) },
     // Statut employé
     {
       key: 'status',

@@ -9,6 +9,7 @@ import { getAllClasse, getSubjectLevelByIdSubject } from "./Classes/redux/Classe
 import Table from "./Table";
 import Input from "./ui/Input";
 import { Link } from "react-router-dom";
+import clsx from "clsx";
 
 type AssignationType = {
     id_matiere?: number | string;
@@ -39,7 +40,8 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
 
     useEffect(() => {
         if (subjects.length === 0) dispatch(getAllSubject());
-    }, [dispatch, subjects.length]);
+
+    }, [dispatch]);
 
     // Gestion du soumission au parent
     useEffect(() => {
@@ -71,7 +73,7 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
             })
         }
         setsubjectOptions(options);
-    }, [assignations])
+    }, [assignations, subjects])
 
 
     // Vérifier si une classe a déjà la matière assignée
@@ -110,17 +112,13 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
     // Gestion des cases à cocher
     const handleClassCheck = (id: number) => {
         if (isClassAlreadyAssigned(id)) return;
-        if (selectedSubject === "tous") {
-            setSelectedClasses({ [id]: true });
-        } else {
-            setSelectedClasses(prev => ({
-                ...prev,
-                [id]: !prev[id]
-            }));
-        }
+
+        setSelectedClasses(prev => ({
+            ...prev,
+            [id]: !prev[id]
+        }));
     };
-
-
+    
     // Gestion des heures par classe
     const handleHoursChange = (id: number, value: number) => {
         setHoursByClass(prev => ({
@@ -253,27 +251,12 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
             {/* Colonne 1 */}
             <div className="col-span-2 rounded p-1">
-                <h2 className="text-xl font-bold text-gray-800 mb-4">Attribuer une matière à des classes</h2>
+                <h2 className='text-sm col-span-2 text-gray-500 italic mb-4'>Attribution matière(s) et classe(s) a cette enseigant </h2>
                 <div className="col-span-2 rounded  bg-white flex flex-col gap-4">
                     {/* Choix matière */}
                     <div>
-                        {/* <label className="block text-sm font-medium text-gray-700 mb-1">Choisissez une matière :</label>
-                        <select
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 cursor-pointer"
-                            value={selectedSubject}
-                            onChange={handleSubjectChange}
-                        >
-                            <option value="">-- Sélectionnez --</option>
-                            {!hideTous && <option value="tous">Tous</option>}
-                            {subjects.map((subj: SubjectType) => (
-                                <option key={subj.id_matiere} value={subj.id_matiere}>
-                                    {subj.denomination} ({subj.abbreviation})
-                                </option>
-                            ))}
-                        </select> */}
-
                         <Input
-                            label="Matières"
+                            label="Sélectionnez une matière"
                             name=""
                             icon={BookOpen}
                             type="select"
@@ -324,7 +307,10 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
                                                 <input
                                                     type="number"
                                                     min={1}
-                                                    className="w-full border border-gray-800 rounded-lg px-3 py-1 bg-gray-50 focus:ring-2 focus:ring-blue-200 font-medium"
+                                                    className={clsx({
+                                                        'border border-gray-500': checked,
+                                                        'border border-gray-200': !checked,
+                                                    }, "w-full  px-3 py-1 bg-gray-50 focus:ring-2 focus:ring-blue-200 font-medium")}
                                                     placeholder="1"
                                                     value={hoursByClass[classe.id_classe as number] || ""}
                                                     onChange={e => handleHoursChange(classe.id_classe as number, Number(e.target.value))}
@@ -337,7 +323,7 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
                                 })}
 
                                 {!classes.length && <>
-                                    <div className="text-gray-400 text-center p-5 border rounded bg-gray-50 shadow-inner">
+                                    <div className="text-gray-500 bg-blue-100 text-center p-5 border rounded shadow-inner">
                                         <h6>Aucune classe trouver pour ce matière</h6>
                                         <Link to={'/levels/level-subject'} className="text-blue-500 underline">Click ici pour ajouter</Link>
                                     </div>

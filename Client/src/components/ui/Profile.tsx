@@ -33,9 +33,9 @@ const Profile: React.FC<ProfilePropsType> = ({ photo, fullName, link, copy = tru
                 <div className="text-xs text-gray-500 ">
                     {identification}
                     {copy &&
-                        <div className='relative w-max inline-block'>
+                        <div className='relative w-max inline-block overflow-visible'>
                             <Copy
-                                className='w-5 h-5 inline-block ml-3 cursor-pointer active:text-blue-400'
+                                className='w-5 h-5 inline-block ml-3 cursor-pointer active:text-blue-400 '
                                 onClick={() => {
                                     if (identification) {
                                         navigator.clipboard.writeText(identification);
