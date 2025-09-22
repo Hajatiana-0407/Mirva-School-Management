@@ -102,7 +102,7 @@ const EmployeSlice = createSlice({
                 toast.error("Erreur de connexion au server");
             })
 
-        // // ************************************* Delete ************************************* //
+        // ! ************************************* Delete ************************************* //
 
         builder
             .addCase(deleteEmployees.pending, (state) => {
