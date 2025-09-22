@@ -9,16 +9,18 @@ type ProfilePropsType = {
     link?: string;
     fullName: string;
     copy?: boolean;
-    identification?: string
+    identification?: string;
+    addPhoto?: boolean
 }
-const Profile: React.FC<ProfilePropsType> = ({ photo, fullName, link, copy = true, identification }) => {
+const Profile: React.FC<ProfilePropsType> = ({ photo, fullName, link, copy = true, identification , addPhoto= true }) => {
 
     const [copied, setCopied] = React.useState(false);
     return (
         <div className="flex items-center space-x-3 relative">
-            {photo &&
-                <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer">
+            {addPhoto  &&
+                <div className="w-10 h-10 rounded-full bg-gray-white flex items-center justify-center overflow-hidden cursor-pointer">
                     {photo && <img src={baseUrl(photo)} alt="" className="w-full h-full object-cover" />}
+                    {!photo && <img src={baseUrl('/public/images/user.png')} alt="" className="w-full h-full object-cover" />}
                 </div>
             }
             <div>
