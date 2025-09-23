@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react'
 import Input from '../ui/Input';
-import { Plus, User, Calculator, Camera, UserCheck, CalendarDays, Phone, Mail, MapPinned, X, SquarePen, ChevronLeft, Check, FolderOpen, Handshake, ArrowRight } from 'lucide-react';
+import { Plus, User, Calculator, UserCheck, CalendarDays, Phone, Mail, MapPinned, X, SquarePen, Check, FolderOpen, Handshake, ArrowRight, MapPin, BadgeCheck, Flag, Briefcase, Layers, Award, UserPlus, Focus, ArrowLeft } from 'lucide-react';
 import clsx from 'clsx';
 import { object, string } from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,25 +13,42 @@ import TeacherSubject from '../TeacherSubject';
 import { baseUrl } from '../../Utils/Utils';
 import { getEmployeState } from '../Employees/redux/EmployeSlice';
 
-
-
 // ? VALIDATION DES DONNÉ AVEC YUP
 const EmployeSchema = object({
     nom: string()
-        .required('Le nom est obligatoire.'),
+        .required('Veuillez renseigner le nom.'),
     prenom: string()
-        .required('La prénom est obligatoire.'),
+        .required('Veuillez renseigner le prénom.'),
     addresse: string()
-        .required('La adresse est obligatoire.'),
+        .required('Veuillez renseigner l’adresse complète.'),
     date_naissance: string()
-        .required("La date de naissance est obligatoire."),
+        .required("Veuillez indiquer la date de naissance."),
+    lieu_naissance: string()
+        .required("Veuillez préciser le lieu de naissance."),
     date_embauche: string()
-        .required("La date d'embauche est obligatoire."),
+        .required("Veuillez indiquer la date d’embauche."),
     telephone: string()
-        .required('Le téléphone est obligatoire.'),
+        .required('Veuillez saisir le numéro de téléphone.'),
+    nationalite: string()
+        .required('Veuillez indiquer la nationalité.'),
+    type_contrat: string()
+        .required('Veuillez sélectionner le type de contrat.'),
     type_personnel: string()
-        .required('Veuillez choisir un type.'),
+        .required('Veuillez sélectionner le type de personnel.'),
+    numero_cin: string()
+        .required('Veuillez saisir le numéro de la carte d’identité ou du passeport.'),
 });
+
+
+export const contrats = [
+    { label: 'CDI', value: 'cdi' },
+    { label: 'CDD', value: 'cdd' },
+    { label: 'Vacataire', value: 'vacataire' },
+    { label: 'Stage', value: 'stage' },
+    { label: 'Apprentissage / Alternance', value: 'apprentissage' },
+    { label: 'Temporaire / Intérim', value: 'interim' },
+    { label: 'Prestation de service', value: 'prestation' },
+];
 
 type EmployeFormPropsType = {
     handleClose?: () => void;
@@ -90,21 +107,14 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
     // changement du selection du  type de personnel
     const handleTypeEmployeesChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
-
-        let teste = false;
-        TypesEmployees.map((type: TypePersonnelType) => {
-            if ((type.id_type_personnel as number).toString() == value && type.type.toLowerCase() === 'enseignant') {
-                teste = true;
-            }
-        })
-        setIsTeacher(teste);
+        // ?  si le poste est enseignant
+        setIsTeacher(TypesEmployees.some((type) => ((type.id_type_personnel as number).toString()) == value && type.type.toLowerCase() === 'enseignant'));
     }
 
     // Passer a la page suivant si le type est enseignant
     const handleNext = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 
         const formulaire = document.querySelector<HTMLFormElement>('#__formulaire_personnel');
-
         if (formulaire && e.currentTarget.type === 'button') {
             const elements = formulaire.elements; // HTMLFormControlsCollection
             let canNext = true;
@@ -163,6 +173,10 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
     };
 
 
+    console.log(formErrors);
+
+
+
     return (
         <form onSubmit={handleSubmit} id='__formulaire_personnel'>
             {/* Page numero 1  */}
@@ -177,10 +191,10 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                             {photoPreview ? (
                                 <img src={photoPreview} alt="Photo" className="w-56 h-56 rounded-md object-cover" />
                             ) : (
-                                <>
-                                    <Camera className="w-8 h-8 text-gray-400 mb-1" />
-                                    <span className="text-xs text-gray-500 text-center ">Ajouter une photo de profil </span>
-                                </>
+                                <div className="flex flex-col justify-center items-center">
+                                    <Focus className="w-20 h-20 text-gray-400 mb-1" />
+                                    <span className="text-gray-400 text-sm">Aucune photo trouvé</span>
+                                </div>
                             )}
                             <input
                                 id="photo-upload"
@@ -204,33 +218,42 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
 
                     {/* Information personnel sur l'employer  */}
                     <div className='flex-1 space-y-4' >
-                        <Input
-                            label='Nom'
-                            name='nom'
-                            defaultValue={editingEmployees?.nom || 'dshfkjdshfkdshf '}
-                            icon={User}
-                            errorMessage={formErrors?.nom}
-                        />
-                        <Input
-                            label='Prénom'
-                            name='prenom'
-                            defaultValue={editingEmployees?.prenom || 'dshfkjdshfkdshf  '}
-                            icon={UserCheck}
-                            errorMessage={formErrors?.prenom}
-                        />
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                            <Input
+                                label='Nom'
+                                name='nom'
+                                defaultValue={editingEmployees?.nom || ''}
+                                icon={User}
+                                errorMessage={formErrors?.nom}
+                            />
+                            <Input
+                                label='Prénom'
+                                name='prenom'
+                                defaultValue={editingEmployees?.prenom || ''}
+                                icon={UserCheck}
+                                errorMessage={formErrors?.prenom}
+                            />
+
+                        </div>
                         <Input
                             label='Date de naissance'
                             name='date_naissance'
-                            defaultValue={editingEmployees?.date_naissance || 'dshfkjdshfkdshf  '}
+                            defaultValue={editingEmployees?.date_naissance || ''}
                             icon={CalendarDays}
                             errorMessage={formErrors?.date_naissance}
                             type='date'
                         />
-
+                        <Input
+                            label='Lieu de naissance'
+                            name='lieu_naissance'
+                            defaultValue={editingEmployees?.lieu_naissance || ''}
+                            icon={MapPin}
+                            errorMessage={formErrors?.lieu_naissance}
+                        />
                         <Input
                             label='Genre'
                             name='sexe'
-                            defaultValue={editingEmployees?.sexe || 'dshfkjdshfkdshf    '}
+                            defaultValue={editingEmployees?.sexe || ''}
                             icon={UserCheck}
                             errorMessage={formErrors?.sexe}
                             type='select'
@@ -239,13 +262,41 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                     </div>
                 </div>
 
+                <Input
+                    label='Numéro CIN ou Numéro de passeport'
+                    name='numero_cin'
+                    defaultValue={editingEmployees?.numero_cin || ''}
+                    icon={BadgeCheck}
+                    errorMessage={formErrors?.numero_cin}
+                />
+                <Input
+                    label='Natinalité'
+                    name='nationalite'
+                    defaultValue={editingEmployees?.nationalite || ''}
+                    icon={Flag}
+                    errorMessage={formErrors?.nationalite}
+                />
+                {/* Engagement  */}
+                <Input
+                    label='État civil'
+                    name='engagement'
+                    defaultValue={editingEmployees?.engagement || 'Célibataire'}
+                    icon={Handshake}
+                    type='select'
+                    options={[
+                        { label: 'Célibataire', value: 'Célibataire' },
+                        { label: 'Marié', value: 'Marié' },
+                        { label: 'Divorcé', value: 'Divorcé' },
+                    ]}
+                />
+
                 {/* Information sur les coordonner de l'employer */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <h2 className='text-sm col-span-2 text-gray-500 italic'>Information sur les coordonner</h2>
+                    <h2 className=' text-md  col-span-2 text-sky-500 italic'>Information sur les coordonner</h2>
                     <Input
                         label='Email'
                         name='email'
-                        defaultValue={editingEmployees?.email || 'dshfkjdshfkdshf   '}
+                        defaultValue={editingEmployees?.email || ''}
                         icon={Mail}
                         errorMessage={formErrors?.email}
                     />
@@ -253,15 +304,15 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                     <Input
                         label='Téléphone'
                         name='telephone'
-                        defaultValue={editingEmployees?.telephone || 'dshfkjdshfkdshf   '}
+                        defaultValue={editingEmployees?.telephone || ''}
                         icon={Phone}
                         errorMessage={formErrors?.telephone}
                     />
                     <div className='col-span-2'>
                         <Input
-                            label='Addresse'
+                            label='Adresse'
                             name='addresse'
-                            defaultValue={editingEmployees?.addresse || 'dshfkjdshfkdshf    '}
+                            defaultValue={editingEmployees?.addresse || ''}
                             icon={MapPinned}
                             errorMessage={formErrors?.addresse}
                         />
@@ -270,48 +321,57 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
 
                 {/* Information sur les Autres informations */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <h2 className='text-sm col-span-2 text-gray-500 italic'>Autres informations</h2>
+                    <h2 className=' text-md  col-span-2 text-sky-500 italic'>Informations professionnelles</h2>
                     <Input
                         label="Date d'embauche"
                         name='date_embauche'
-                        defaultValue={editingEmployees?.date_embauche || 'dshfkjdshfkdshf   '}
+                        defaultValue={editingEmployees?.date_embauche || ''}
                         type='date'
                         icon={CalendarDays}
                         errorMessage={formErrors?.date_embauche}
                     />
-
                     <Input
                         label='Salaire de base'
                         name='salaire_base'
-                        defaultValue={editingEmployees?.salaire_base ? editingEmployees?.salaire_base.toString() : 'dshfkjdshfkdshf '}
+                        defaultValue={editingEmployees?.salaire_base ? editingEmployees?.salaire_base.toString() : ''}
                         icon={Calculator}
                         type='number'
                     />
 
-                    {/* Engagement  */}
-                    <Input
-                        label='État civil'
-                        name='engagement'
-                        defaultValue={editingEmployees?.engagement || 'Célibataire'}
-                        icon={Handshake}
-                        type='select'
-                        options={[
-                            { label: 'Célibataire', value: 'Célibataire' },
-                            { label: 'Marié', value: 'Marié' },
-                            { label: 'Divorcé', value: 'Divorcé' },
-                        ]}
-                    />
-
                     {/* Fonctions du personnel  */}
                     <Input
-                        label='Type du personnel'
+                        label='Poste'
                         name='type_personnel'
                         defaultValue={editingEmployees?.engagement || typePersonnelOptions[0]?.value}
-                        icon={Handshake}
+                        icon={Briefcase}
                         errorMessage={formErrors?.type_personnel} type='select'
                         options={typePersonnelOptions}
                         onChange={(e) => { handleTypeEmployeesChange(e as ChangeEvent<HTMLSelectElement>) }}
                     />
+                    <Input
+                        label='Type de contrat'
+                        name='type_contrat'
+                        defaultValue={editingEmployees?.type_contrat || 'cdd'}
+                        icon={Check}
+                        errorMessage={formErrors?.type_contrat} type='select'
+                        options={contrats}
+                    />
+                    <div className='col-span-2 space-y-4'>
+                        <Input
+                            label='Spécialisation'
+                            name='specialisation'
+                            defaultValue={editingEmployees?.specialisation || ''}
+                            icon={Layers}
+                            errorMessage={formErrors?.specialisation}
+                        />
+                        <Input
+                            label='Certifications'
+                            name='certification'
+                            defaultValue={editingEmployees?.certification || ''}
+                            icon={Award}
+                            errorMessage={formErrors?.certification}
+                        />
+                    </div>
 
                     <div className='col-span-2'>
                         <Input
@@ -327,10 +387,50 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                             ]}
                         />
                     </div>
+
                 </div>
 
                 {/* Photocopie CIN  */}
-                <Input label="Pièce d'indetité (SVG, PNG, JPG, GIF)" name='pc_cin' icon={FolderOpen} iconColor='text-amber-500' type='file' />
+                <Input
+                    label="Pièce d'indetité (SVG, PNG, JPG, GIF)"
+                    name='pc_cin'
+                    icon={FolderOpen} iconColor='text-amber-500'
+                    type='file'
+                />
+
+                <div className='space-y-4'>
+                    <h2 className='text-md  col-span-2 text-sky-500 italic'>Informations sur le contacte d'urgence</h2>
+                    <Input
+                        label="Nom et prénom de la personne à contacter en cas d’urgence"
+                        name='urgence_nom'
+                        defaultValue={editingEmployees?.urgence_nom || ''}
+                        icon={User}
+                        errorMessage={formErrors?.urgence_nom}
+                    />
+                    <Input
+                        label="Lien"
+                        name='urgence_lien'
+                        defaultValue={editingEmployees?.urgence_lien || ''}
+                        icon={UserPlus}
+                        errorMessage={formErrors?.urgence_lien}
+                    />
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                        <Input
+                            label="Télephone"
+                            name='urgence_tel'
+                            defaultValue={editingEmployees?.urgence_tel || ''}
+                            icon={Phone}
+                            errorMessage={formErrors?.urgence_tel}
+                        />
+                        <Input
+                            label="Email"
+                            name='urgence_email'
+                            defaultValue={editingEmployees?.urgence_email || ''}
+                            icon={Mail}
+                            errorMessage={formErrors?.urgence_email}
+                        />
+                    </div>
+                </div>
 
                 {/* Boutons de validation , d'annulation et pour passer au  suivant  */}
                 <div className="flex justify-end space-x-3 pt-4">
@@ -378,7 +478,7 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                         onClick={() => { setPage(v => v - 1) }}
                         type='button'
                     >
-                        <ChevronLeft className='h-5 w-5 inline-block me-1' />
+                        <ArrowLeft className='h-5 w-5 inline-block me-1' />
                         <span>Percedent</span>
                     </button>
                     <button

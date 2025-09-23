@@ -16,81 +16,116 @@ class PersonnelController extends CI_Controller
         echo json_encode($data);
     }
 
+    public function findOneByMatricule($matricule)
+    {
+        if ($matricule !== '') {
+            $matricule = trim(strip_tags($matricule));
+        }
+
+        if ($matricule === '') {
+            echo json_encode([
+                'error' => true,
+                'message' => "Aucun matricule trouvé.",
+                'details' => 'Le matricule n\'est pas defini'
+            ]);
+            return;
+        }
+
+
+        $employe = $this->PersonnelModel->findOneDetailsByMatricule($matricule);
+        if (!$employe) {
+            echo json_encode([
+                'error' => true,
+                'message' => "Aucun matricule trouvé.",
+                'details' => 'Le matricule n\'est pas defini'
+            ]);
+            return;
+        } else {
+            echo json_encode([
+                'error' => false,
+                'data' => $employe
+            ]);
+            return;
+        }
+    }
+
     public function create()
     {
-        $this->load->helper('matricule');
-        
-        //? Creation d'un matricule unique si non fourni
-        $lasted = $this->PersonnelModel->findLasted();
-        $matricule = '';
-        if ($lasted) {
-            $matricule = generateMatricule( EMPLOYEE_PREFIX , $lasted["matricule_personnel"]);
-        } else {
-            $matricule = generateMatricule( EMPLOYEE_PREFIX );
-        }
 
-        // Récupération des données du formulaire
-        $data = [
-            'nom'               => $this->input->post('nom'),
-            'prenom'            => $this->input->post('prenom'),
-            'addresse'          => $this->input->post('addresse'),
-            'telephone'         => $this->input->post('telephone'),
-            'date_naissance'    => $this->input->post('date_naissance'),
-            'sexe'              => $this->input->post('sexe'),
-            'engagement'        => $this->input->post('engagement'),
-            'email'             => $this->input->post('email'),
-            'id_type_personnel'    => $this->input->post('type_personnel'),
-            'salaire_base'     => $this->input->post('salaire_base') ?: 0,
-            'status'            => $this->input->post('status') ?: 'Actif',
-            'date_embauche'     => $this->input->post('date_embauche') ?: date('Y-m-d'),
-            'matricule_personnel'         => $matricule,
-        ];
-
-        // Gestion de l'upload de la photo de profil
-        if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
-            $photo_result = upload_file('photo', PERSONNEL_UPLOAD_DIR . 'photos');
-            if ($photo_result['success']) {
-                $data['photo'] =  $photo_result['file_name'];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->load->helper('matricule');
+            //? Creation d'un matricule unique si non fourni
+            $lasted = $this->PersonnelModel->findLasted();
+            $matricule = '';
+            if ($lasted) {
+                $matricule = generateMatricule(EMPLOYEE_PREFIX, $lasted["matricule_personnel"]);
             } else {
-                echo json_encode(['error' => true, 'message' => "Erreur upload photo : " . $photo_result['error']]);
-                return;
+                $matricule = generateMatricule(EMPLOYEE_PREFIX);
             }
-        }
 
-        // Gestion de l'upload de la pièce d'identité (pc_cin)
-        if (isset($_FILES['pc_cin']) && $_FILES['pc_cin']['error'] == 0) {
-            $cin_result = upload_file('pc_cin', PERSONNEL_UPLOAD_DIR . 'pi');
-            if ($cin_result['success']) {
-                $data['pc_cin'] =  $cin_result['file_name'];
-            } else {
-                echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité : " . $cin_result['error']]);
-                return;
-            }
-        }
-
-        // Création du personnel
-        $result = $this->PersonnelModel->insert($data);
-
-        if ($result) {
-
-            $assignations = $this->input->post('assignations');
-            if ($assignations) {
-                $this->load->model('MatiereClasseProfModel');
-                $assignation_data = [];
-                foreach ($assignations as $assignation) {
-                    $assignation_data[] = [
-                        'professeur_id_professeur' => $result->id_personnel,
-                        'classe_id_classe'    => $assignation['id_classe'],
-                        'matiere_id_matiere'  => $assignation['id_matiere'],
-                        'heure_semaine'      => $assignation['heures'],
-                    ];
+            // ? Recuperation des données
+            $data = [];
+            $data['matricule_personnel'] = $matricule;
+            $data['id_type_personnel'] = $this->input->post('type_personnel');
+            foreach ($_POST as $key => $value) {
+                if ($key !== 'type_personnel' && $key !== 'assignations') {
+                    $data[$key] = $this->input->post($key);
                 }
-                $this->MatiereClasseProfModel->insertBatch($assignation_data);
             }
 
-            echo json_encode(['error' => false, 'data' => $result]);
+            // Gestion de l'upload de la photo de profil
+            if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
+                $photo_result = upload_file('photo', PERSONNEL_UPLOAD_DIR . 'photos');
+                if ($photo_result['success']) {
+                    $data['photo'] =  $photo_result['file_name'];
+                } else {
+                    echo json_encode(['error' => true, 'message' => "Erreur upload photo : " . $photo_result['error']]);
+                    return;
+                }
+            }
+
+            // Gestion de l'upload de la pièce d'identité (pc_cin)
+            if (isset($_FILES['pc_cin']) && $_FILES['pc_cin']['error'] == 0) {
+                $cin_result = upload_file('pc_cin', PERSONNEL_UPLOAD_DIR . 'pi');
+                if ($cin_result['success']) {
+                    $data['pc_cin'] =  $cin_result['file_name'];
+                } else {
+                    echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité : " . $cin_result['error']]);
+                    return;
+                }
+            }
+
+            // Création du personnel
+            $result = $this->PersonnelModel->insert($data);
+
+            if ($result) {
+
+                // ? Teste si le type est proffesseur ( enseignant ) 
+                $assignations = $this->input->post('assignations');
+                if ($assignations) {
+                    $this->load->model('MatiereClasseProfModel');
+                    $assignation_data = [];
+                    foreach ($assignations as $assignation) {
+                        $assignation_data[] = [
+                            'professeur_id_professeur' => $result->id_personnel,
+                            'classe_id_classe'    => $assignation['id_classe'],
+                            'matiere_id_matiere'  => $assignation['id_matiere'],
+                            'heure_semaine'      => $assignation['heures'],
+                        ];
+                    }
+                    $this->MatiereClasseProfModel->insertBatch($assignation_data);
+                }
+
+                echo json_encode(['error' => false, 'data' => $result]);
+            } else {
+                echo json_encode(['error' => true, 'message' => "Erreur lors de l'enregistrement"]);
+            }
         } else {
-            echo json_encode(['error' => true, 'message' => "Erreur lors de l'enregistrement"]);
+            echo json_encode([
+                'error' => true,
+                'message' => "Erreur lors de l'enregistrement",
+                'details' => 'La méthode est non autorisé'
+            ]);
         }
     }
 
@@ -98,57 +133,60 @@ class PersonnelController extends CI_Controller
     {
         $id = $this->input->post('id_personnel');
         if (!$id) {
-            echo json_encode(['error' => true, 'message' => "ID manquant"]);
+            echo json_encode(['error' => true, 'message' => "Erreur lors de la modification"]);
             return;
         }
 
-
-
-        // Récupération des données du formulaire
-        $data = [
-            'nom'               => $this->input->post('nom'),
-            'prenom'            => $this->input->post('prenom'),
-            'addresse'          => $this->input->post('addresse'),
-            'telephone'         => $this->input->post('telephone'),
-            'date_naissance'    => $this->input->post('date_naissance'),
-            'sexe'              => $this->input->post('sexe'),
-            'engagement'        => $this->input->post('engagement'),
-            'email'             => $this->input->post('email'),
-            'id_type_personnel'    => $this->input->post('type_personnel'),
-            'salaire_base'     => $this->input->post('salaire_base') ?: 0,
-            'status'            => $this->input->post('status') ?: 'Actif',
-            'date_embauche'     => $this->input->post('date_embauche') ?: date('Y-m-d'),
-        ];
-
-        // Gestion de l'upload de la photo de profil (optionnel)
-        if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
-            $photo_result = upload_file('photo', PERSONNEL_UPLOAD_DIR . 'photos');
-            if ($photo_result['success']) {
-                $data['photo'] =  $photo_result['file_name'];
-            } else {
-                echo json_encode(['error' => true, 'message' => "Erreur upload photo : " . $photo_result['error']]);
-                return;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // ? Recuperation des données
+            $data = [];
+            $data['id_type_personnel'] = $this->input->post('type_personnel');
+            foreach ($_POST as $key => $value) {
+                if ($key !== 'type_personnel') {
+                    $data[$key] = $this->input->post($key);
+                }
             }
-        }
 
-        // Gestion de l'upload de la pièce d'identité (pc_cin) (optionnel)
-        if (isset($_FILES['pc_cin']) && $_FILES['pc_cin']['error'] == 0) {
-            $cin_result = upload_file('pc_cin', PERSONNEL_UPLOAD_DIR . 'pi');
-            if ($cin_result['success']) {
-                $data['pc_cin'] = $cin_result['file_name'];
-            } else {
-                echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité : " . $cin_result['error']]);
-                return;
+            // Gestion de l'upload de la photo de profil
+            if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
+                $photo_result = upload_file('photo', PERSONNEL_UPLOAD_DIR . 'photos');
+                if ($photo_result['success']) {
+                    $data['photo'] =  $photo_result['file_name'];
+                } else {
+                    echo json_encode(['error' => true, 'message' => "Erreur upload photo : " . $photo_result['error']]);
+                    return;
+                }
             }
-        }
 
-        // Mise à jour du personnel
-        $result = $this->PersonnelModel->update($id, $data);
+            // Gestion de l'upload de la pièce d'identité (pc_cin)
+            if (isset($_FILES['pc_cin']) && $_FILES['pc_cin']['error'] == 0) {
+                $cin_result = upload_file('pc_cin', PERSONNEL_UPLOAD_DIR . 'pi');
+                if ($cin_result['success']) {
+                    $data['pc_cin'] =  $cin_result['file_name'];
+                } else {
+                    echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité : " . $cin_result['error']]);
+                    return;
+                }
+            }
 
-        if ($result) {
-            echo json_encode(['error' => false, 'data' => $result]);
+            // Création du personnel
+            $result = $this->PersonnelModel->update($id,  $data);
+
+            if ($result) {
+                echo json_encode(['error' => false, 'data' => $result]);
+            } else {
+                echo json_encode([
+                    'error' => true,
+                    'message' => "Erreur lors de la mise à jour",
+                    'deetails' => 'Le personnel non trouvé'
+                ]);
+            }
         } else {
-            echo json_encode(['error' => true, 'message' => "Erreur lors de la mise à jour"]);
+            echo json_encode([
+                'error' => true,
+                'message' => "Erreur lors de l'enregistrement",
+                'details' => 'La méthode est non autorisé'
+            ]);
         }
     }
 
