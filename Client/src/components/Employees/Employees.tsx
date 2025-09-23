@@ -13,6 +13,7 @@ import { getAppState } from '../../Redux/AppSlice';
 import { useNavigate } from 'react-router-dom';
 import Profile from '../ui/Profile';
 import EmployeForm from '../Forms/EmployeForm';
+import { getShortDate } from '../../Utils/Utils';
 
 // Mapping des types à des couleurs de fond
 const typeBgColors: Record<string, string> = {
@@ -113,7 +114,13 @@ const Employees: React.FC = () => {
         );
       }
     },
-    { key: 'date_embauche', label: "Date d'embauche" },
+    {
+      key: 'date_embauche', label: "Date d'embauche", render: (value: string) => (
+        <div>
+          {getShortDate(value)}
+        </div>
+      )
+    },
     { key: 'addresse', label: 'Addrèsse' },
     {
       key: 'telephone', label: 'Contact', render: (value: string, item: EmployeeType) => (

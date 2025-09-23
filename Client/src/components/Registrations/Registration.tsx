@@ -12,7 +12,7 @@ import { createRegistration, deleteRegistration, getAllRegistrations } from './r
 import useForm from '../../Hooks/useForm';
 import Input from '../ui/Input';
 import clsx from 'clsx';
-import {  fakeStudentData } from '../../Utils/Utils';
+import {  fakeStudentData, getShortDate } from '../../Utils/Utils';
 import { getLevelState } from '../Levels/redux/LevelSlice';
 import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
 import { getSchoolYearState } from '../School-Year/redux/SchoolYearSlice';
@@ -252,11 +252,7 @@ const Registration: React.FC = () => {
       key: 'date_inscription', label: 'date d\'inscription ',
       render: (value: string) => (
         <div className="">
-          {value ? new Date(value).toLocaleDateString('fr-FR', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-          }) : 'N/A'}
+          { getShortDate( value )}
         </div>
       )
     },

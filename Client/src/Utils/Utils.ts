@@ -1,20 +1,21 @@
+import { string } from "yup";
 import { StudentFormDataType } from "./Types";
 
-export const cycles =  ['Primaire', 'Collège', 'Lycée'];
-export const hexToRgba = (hex: string , alpha = 1): string  => {
+export const cycles = ['Primaire', 'Collège', 'Lycée'];
+export const hexToRgba = (hex: string, alpha = 1): string => {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
-export const baseUrl = ( uri: string | undefined ) => {
-  const serverUrl = 'http://localhost/Mirva-School-Management/Server/' ; 
+export const baseUrl = (uri: string | undefined) => {
+  const serverUrl = 'http://localhost/Mirva-School-Management/Server/';
 
-  if ( uri !== undefined  ){ 
-    return `${ serverUrl }${ uri }` ; 
-  }else { 
-    return `${ serverUrl }` ; 
+  if (uri !== undefined) {
+    return `${serverUrl}${uri}`;
+  } else {
+    return `${serverUrl}`;
   }
 }
 
@@ -56,3 +57,46 @@ export const fakeStudentData: StudentFormDataType = {
   urgence_lien: { label: "Lien avec l’élève (urgence)", value: "Grand-père" },
   urgence_tel: { label: "Téléphone urgence", value: "+261344444444" },
 };
+
+
+export const getAge = (dateNaissance: string) => {
+  const birthDate = new Date(dateNaissance);
+  const today = new Date();
+
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  const dayDiff = today.getDate() - birthDate.getDate();
+
+  // Ajuster si la date d'anniversaire n'est pas encore passée cette année
+  if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+    age--;
+  }
+  return age;
+};
+
+
+export const getLongDate = (date: string) => {
+  if (date !== '') {
+    const theDate = new Date(date).toLocaleDateString('fr-FR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+    
+    return theDate;
+  } else {
+    return 'N/A';
+  }
+}
+export const getShortDate = (date: string) => {
+  if (date !== '') {
+    const theDate = new Date(date).toLocaleDateString('fr-FR', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    })
+    return theDate;
+  } else {
+    return 'N/A';
+  }
+}
