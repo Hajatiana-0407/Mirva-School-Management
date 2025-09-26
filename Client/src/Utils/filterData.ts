@@ -1,4 +1,4 @@
-import { FilterType } from "../components/ui/TabFilter";
+import { FilterType } from "../Pages/ui/TabFilter";
 
 // ? Liste de filtre a affiché
 export const RegisterFilters : FilterType = {

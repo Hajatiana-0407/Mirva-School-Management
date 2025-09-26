@@ -14,8 +14,6 @@ import Modal from "../Modal";
 import { getAppState } from "../../Redux/AppSlice";
 import EmployeForm from "../Forms/EmployeForm";
 import HeadingSmall from "../ui/HeadingSmall";
-import { typeBgColors, typeIcons } from "./Employees";
-import clsx from "clsx";
 
 const EmployeesSinglePage = () => {
     const { id } = useParams();
@@ -41,9 +39,6 @@ const EmployeesSinglePage = () => {
             handleCloseModal();
         }
     }, [hiddeTheModalActive]);
-
-    const Icon = typeIcons[employee?.type as string];
-    const IconClasse = typeBgColors[employee?.type as string];
 
 
     // ! Gestion des erreurs 

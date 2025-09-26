@@ -1,17 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 import AppReducer from './AppSlice';
-import LevelReducer from '../components/Levels/redux/LevelSlice';
-import LevelsubjectReducer from '../components/Levels/redux/LevelSubjectSlice';
-import SubjectReducer from '../components/Subjects/redux/SubjectSlice';
-import ClasseReducer from '../components/Classes/redux/ClasseSlice';
-import EmployeReducer from '../components/Employees/redux/EmployeSlice';
+import LevelReducer from '../Pages/Levels/redux/LevelSlice';
+import LevelsubjectReducer from '../Pages/Levels/redux/LevelSubjectSlice';
+import SubjectReducer from '../Pages/Subjects/redux/SubjectSlice';
+import ClasseReducer from '../Pages/Classes/redux/ClasseSlice';
+import EmployeReducer from '../Pages/Employees/redux/EmployeSlice';
 import TypeEmployeesReducer from '../Redux/Other/slices/TypeEmployeesSlice';
-import TeacherReducer from '../components/Teachers/redux/TeachersSlice';
-import SchoolReducer from '../components/Settings/School/redux/SchoolSlice';
-import SchoolYearReducer from '../components/School-Year/redux/SchoolYearSlice';
-import RegisterSlice from '../components/Registrations/redux/registerSlice';
-import StudentReducer from '../components/Students/redux/StudentSlice'
-import ParentReducer from '../components/Parents/redux/ParentSlice'
+import TeacherReducer from '../Pages/Teachers/redux/TeachersSlice';
+import SchoolReducer from '../Pages/Settings/School/redux/SchoolSlice';
+import SchoolYearReducer from '../Pages/School-Year/redux/SchoolYearSlice';
+import RegisterSlice from '../Pages/Registrations/redux/registerSlice';
+import StudentReducer from '../Pages/Students/redux/StudentSlice'
+import ParentReducer from '../Pages/Parents/redux/ParentSlice'
 
 export const store = configureStore({
     reducer: {
