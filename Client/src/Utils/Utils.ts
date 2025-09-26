@@ -82,7 +82,7 @@ export const getLongDate = (date: string) => {
       month: 'long',
       day: 'numeric'
     })
-    
+
     return theDate;
   } else {
     return 'N/A';
@@ -99,4 +99,11 @@ export const getShortDate = (date: string) => {
   } else {
     return 'N/A';
   }
+}
+
+// ? format de numbre 
+export const NumberFormat = (
+  amount: number,
+): string => {
+  return amount ? amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") : '0';
 }
