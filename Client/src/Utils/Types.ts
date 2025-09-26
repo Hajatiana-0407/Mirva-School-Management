@@ -137,6 +137,7 @@ export type EmployeeType = {
     addresse: string;
     telephone: string;
     date_naissance: string;
+    lieu_naissance: string;
     sexe: string;
     email?: string;
     engagement?: string;
@@ -147,6 +148,18 @@ export type EmployeeType = {
     type_personnel?: string;
 
     status?: 'Actif' | 'Suspendu' | 'Démissionnaire';
+    numero_cin: string,
+    nationalite: string,
+    type_contrat: string,
+    specialisation?: string,
+    certification?: string,
+
+    // ? Urgence 
+    urgence_nom?: string,
+    urgence_lien?: string,
+    urgence_tel?: string,
+    urgence_email?: string,
+
     date_embauche?: string;
     salaire_base?: number;
     created_at?: string;
@@ -159,6 +172,10 @@ export const employeeInitialValue: EmployeeType = {
     addresse: '',
     telephone: '',
     date_naissance: '',
+    lieu_naissance: '',
+    nationalite: 'Malagasy',
+    numero_cin: '',
+    type_contrat: '',
     sexe: '',
     email: '',
     engagement: '',

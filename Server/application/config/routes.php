@@ -86,6 +86,8 @@ $route['api/admin/personnel/update'] = 'PersonnelController/update';
 $route['api/admin/personnel/create'] = 'PersonnelController/create';
 $route['api/admin/personnel/delete'] = 'PersonnelController/delete';
 
+$route['api/admin/personnel/(:any)'] = 'PersonnelController/findOneByMatricule/$1';
+
 // ******************* ROUTE ENSEIGNANT ********************** //
 $route['api/admin/teachers'] = 'EnseigantsController';
 

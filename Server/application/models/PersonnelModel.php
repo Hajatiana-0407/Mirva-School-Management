@@ -30,4 +30,15 @@ class PersonnelModel extends CI_Model
             ->get();
         return $query->row();
     }
+
+    public function findOneDetailsByMatricule($matricule = '')
+    {
+        if ($matricule === '' || !$matricule) return false;
+        $query = $this->db->select('*')
+            ->from($this->table)
+            ->where('matricule_personnel', $matricule )
+            ->join('type_personnel', "{$this->table}.id_type_personnel = type_personnel.id_type_personnel", 'left')
+            ->get();
+        return $query->row();
+    }
 }

@@ -70,3 +70,19 @@ export const deleteEmployees = createAsyncThunk('personnel/suppression', async (
     return data;
 })
 
+
+
+// Get one by matricule 
+export const getEmployeByMatricule = createAsyncThunk('personnel/getOne', async (matricule: string,): Promise<ApiReturnType> => {
+    let data: ApiReturnType = ApiReturnInitial;
+    if (matricule) {
+        await api.delete( `admin/personnel/${matricule}`, {
+            headers: { 'Content-Type': 'application/json' }
+        }).then(response => {
+            data = response.data;
+        }).catch(error => {
+            console.error('Erreur lors de la récupération:', error.getMessage());
+        });
+    }    
+    return data;
+})

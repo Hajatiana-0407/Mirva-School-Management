@@ -241,8 +241,8 @@ class AppFixtures extends CI_Controller
                 'lieu_naissance' => $faker->address(),
                 'sexe' => $faker->randomElement(['Homme', 'Femme']),
                 'maladies' => $faker->word,
-                'created_at' => date('Y-m-d H:i:s') , 
-                'nationalite' => 'Malagasy' , 
+                'created_at' => date('Y-m-d H:i:s'),
+                'nationalite' => 'Malagasy',
                 'email' => $faker->email()
             ]);
             $lastStudentMatricule = $matriculeStudent;
@@ -269,7 +269,7 @@ class AppFixtures extends CI_Controller
             $lasteMatricule = $lasted->matricule_personnel;
         }
 
-        // Générer 5 nouveaux employés
+        // Générer 20 nouveaux employés
         for ($i = 0; $i < 20; $i++) {
             $matricule = generateMatricule(EMPLOYEE_PREFIX, $lasteMatricule);
 
@@ -280,17 +280,27 @@ class AppFixtures extends CI_Controller
                 'addresse' => $faker->address,
                 'telephone' => $faker->phoneNumber,
                 'date_naissance' => $faker->date(),
+                'lieu_naissance' => $faker->city(),
                 'sexe' => $faker->randomElement(['Homme', 'Femme']),
                 'engagement' => 'Permanent',
                 'email' => $faker->email,
                 'password' => password_hash('123456', PASSWORD_DEFAULT),
-                'pc_cin' => $faker->numerify('#########'),
-                'photo' => 'default.jpg',
                 'id_type_personnel' => $faker->randomElement($types),
-                'date_embauche' => $faker->date(),
                 'salaire_base' => $faker->numberBetween(200000, 800000),
                 "status" => $faker->randomElement(['Actif', 'Suspendu', "Démissionnaire"]),
+                'numero_cin' => $faker->randomNumber(),
+                'nationalite' => $faker->country(),
+                'type_contrat' => $faker->randomElement(['CDD', 'CDI', 'Stagiaire']),
+                'specialisation' => $faker->jobTitle(),
+                'certification' => $faker->sentence(),
+                'date_embauche' => $faker->date() ,
                 'created_at' => date('Y-m-d H:i:s'),
+
+                // Urgence 
+                'urgence_nom' => $faker->firstName() . ' ' . $faker->lastName(),
+                'urgence_lien' => $faker->word(),
+                'urgence_tel' => $faker->phoneNumber(),
+                'urgence_email' => $faker->email()
             ]);
 
             $lasteMatricule = $matricule;

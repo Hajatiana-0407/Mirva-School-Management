@@ -16,7 +16,7 @@ import EmployeForm from '../Forms/EmployeForm';
 import { getShortDate } from '../../Utils/Utils';
 
 // Mapping des types à des couleurs de fond
-const typeBgColors: Record<string, string> = {
+export const typeBgColors: Record<string, string> = {
   'Enseignant': 'bg-blue-100 text-blue-800',
   'Secrétaire': 'bg-green-100 text-green-800',
   'Gardin': 'bg-yellow-100 text-yellow-800',
@@ -27,7 +27,7 @@ const typeBgColors: Record<string, string> = {
   'Chauffeur': 'bg-teal-100 text-teal-800',
 };
 // Mapping des types à des icônes Lucide
-const typeIcons: Record<string, any> = {
+export const typeIcons: Record<string, any> = {
   'Enseignant': BookOpen,
   'Secrétaire': User,
   'Gardin': Shield,

@@ -1,15 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionIntialValue, ActionType, ApiReturnType, EmployeeType } from "../../../Utils/Types";
+import { ActionIntialValue, ActionType, ApiReturnType, EmployeeType, TypePersonnelType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
-import { createEmployees, deleteEmployees, getAllEmployees, updateEmployees } from "./EmployeAsyncThunk";
+import { createEmployees, deleteEmployees, getAllEmployees, getEmployeByMatricule, updateEmployees } from "./EmployeAsyncThunk";
 
 
 type initialStateType = {
     action: ActionType,
     datas: EmployeeType[],
     page: number,
-    error: string
+    error: string;
+    single: {
+        data?: EmployeeType & TypePersonnelType ;
+        action: ActionType
+    }
 }
 
 const initialState: initialStateType = {
@@ -17,6 +21,7 @@ const initialState: initialStateType = {
     datas: [],
     page: 1,
     error: '',
+    single: { action: ActionIntialValue }
 }
 
 const EmployeSlice = createSlice({
@@ -121,6 +126,29 @@ const EmployeSlice = createSlice({
             })
             .addCase(deleteEmployees.rejected, (state) => {
                 state.action.isDeleting = false;
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
+            })
+
+
+
+        // ? Employé single page 
+        builder
+            .addCase(getEmployeByMatricule.pending, (state) => {
+                state.single.action.isLoading = true;
+                state.error = '';
+            })
+            .addCase(getEmployeByMatricule.fulfilled, (state, action: { payload: ApiReturnType }) => {
+                state.single.action.isLoading = false;
+                const { error, data: employe, message } = action.payload;
+                if (error) {
+                    state.error = message as string;
+                } else {
+                    state.single.data = employe;
+                }
+            })
+            .addCase(getEmployeByMatricule.rejected, (state) => {
+                state.single.action.isLoading = false;
                 state.error = 'Erreur de connexion au server';
                 toast.error("Erreur de connexion au server");
             })

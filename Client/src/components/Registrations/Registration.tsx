@@ -758,14 +758,14 @@ type InfoBlockPropsType = {
 
 export const InfoBlock = ({ icon, label, value, important }: InfoBlockPropsType) => (
   <div className={clsx({
-    'border-l-4 border-blue-500 bg-blue-50': important,
-    'border-gray-200 bg-white': !important,
-  }, "flex border rounded-lg items-center overflow-hidden hover:shadow-sm transition-all ")} >
+    '': important,
+    '': !important,
+  }, "flex rounded-lg items-center overflow-hidden hover:shadow-sm transition-all bg-white")} >
     {/* Icône avec fond léger */}
     <div className={clsx({
-      ' bg-blue-100': important,
-      'bg-gray-50': !important,
-    }, "flex items-center justify-center w-12 h-12")}>
+      ' bg-red-100': important,
+      'bg-white border-e border-gray-50': !important,
+    }, "flex items-center justify-center w-12 h-full")}>
       {icon}
     </div>
 
