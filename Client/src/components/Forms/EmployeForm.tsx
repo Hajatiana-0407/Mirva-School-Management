@@ -12,6 +12,7 @@ import { getTypeEmployeesState } from '../../Redux/Other/slices/TypeEmployeesSli
 import TeacherSubject from '../TeacherSubject';
 import { baseUrl } from '../../Utils/Utils';
 import { getEmployeState } from '../Employees/redux/EmployeSlice';
+import HeadingSmall from '../ui/HeadingSmall';
 
 // ? VALIDATION DES DONNÉ AVEC YUP
 const EmployeSchema = object({
@@ -82,10 +83,6 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
             typePersonnelOptions = TypesEmployees.map((type) => ({ value: type.id_type_personnel as number, label: type.type }));
             break;
     }
-
-    console.log('loading', action.isLoading);
-
-
     // Fermer la modale
     const handleCloseModal = () => {
         setPhotoPreview(null);
@@ -172,11 +169,6 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
         }
     };
 
-
-    console.log(formErrors);
-
-
-
     return (
         <form onSubmit={handleSubmit} id='__formulaire_personnel'>
             {/* Page numero 1  */}
@@ -187,7 +179,7 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
             }, 'space-y-6')} >
                 <div className="flex flex-col sm:flex-row gap-5  space-y-2">
                     <div className="relative flex flex-col items-center justify-center">
-                        <label htmlFor="photo-upload" className="cursor-pointer flex flex-col items-center justify-center w-60 h-60 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 transition-all">
+                        <label htmlFor="photo-upload" className="cursor-pointer flex flex-col items-center justify-center w-56 h-56 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 transition-all">
                             {photoPreview ? (
                                 <img src={photoPreview} alt="Photo" className="w-56 h-56 rounded-md object-cover" />
                             ) : (
@@ -291,104 +283,109 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                 />
 
                 {/* Information sur les coordonner de l'employer */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <h2 className=' text-md  col-span-2 text-sky-500 italic'>Information sur les coordonner</h2>
-                    <Input
-                        label='Email'
-                        name='email'
-                        defaultValue={editingEmployees?.email || ''}
-                        icon={Mail}
-                        errorMessage={formErrors?.email}
-                    />
-
-                    <Input
-                        label='Téléphone'
-                        name='telephone'
-                        defaultValue={editingEmployees?.telephone || ''}
-                        icon={Phone}
-                        errorMessage={formErrors?.telephone}
-                    />
-                    <div className='col-span-2'>
+                <div className="space-y-4">
+                    <HeadingSmall title='Information sur les coordonner :' />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Input
-                            label='Adresse'
-                            name='addresse'
-                            defaultValue={editingEmployees?.addresse || ''}
-                            icon={MapPinned}
-                            errorMessage={formErrors?.addresse}
+                            label='Email'
+                            name='email'
+                            defaultValue={editingEmployees?.email || ''}
+                            icon={Mail}
+                            errorMessage={formErrors?.email}
                         />
+
+                        <Input
+                            label='Téléphone'
+                            name='telephone'
+                            defaultValue={editingEmployees?.telephone || ''}
+                            icon={Phone}
+                            errorMessage={formErrors?.telephone}
+                        />
+                        <div className='col-span-2'>
+                            <Input
+                                label='Adresse'
+                                name='addresse'
+                                defaultValue={editingEmployees?.addresse || ''}
+                                icon={MapPinned}
+                                errorMessage={formErrors?.addresse}
+                            />
+                        </div>
                     </div>
                 </div>
 
                 {/* Information sur les Autres informations */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <h2 className=' text-md  col-span-2 text-sky-500 italic'>Informations professionnelles</h2>
-                    <Input
-                        label="Date d'embauche"
-                        name='date_embauche'
-                        defaultValue={editingEmployees?.date_embauche || ''}
-                        type='date'
-                        icon={CalendarDays}
-                        errorMessage={formErrors?.date_embauche}
-                    />
-                    <Input
-                        label='Salaire de base'
-                        name='salaire_base'
-                        defaultValue={editingEmployees?.salaire_base ? editingEmployees?.salaire_base.toString() : ''}
-                        icon={Calculator}
-                        type='number'
-                    />
-
-                    {/* Fonctions du personnel  */}
-                    <Input
-                        label='Poste'
-                        name='type_personnel'
-                        defaultValue={editingEmployees?.engagement || typePersonnelOptions[0]?.value}
-                        icon={Briefcase}
-                        errorMessage={formErrors?.type_personnel} type='select'
-                        options={typePersonnelOptions}
-                        onChange={(e) => { handleTypeEmployeesChange(e as ChangeEvent<HTMLSelectElement>) }}
-                    />
-                    <Input
-                        label='Type de contrat'
-                        name='type_contrat'
-                        defaultValue={editingEmployees?.type_contrat || 'cdd'}
-                        icon={Check}
-                        errorMessage={formErrors?.type_contrat} type='select'
-                        options={contrats}
-                    />
-                    <div className='col-span-2 space-y-4'>
+                <div className='space-y-4'>
+                    <HeadingSmall title='Informations professionnelles :' />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Input
-                            label='Spécialisation'
-                            name='specialisation'
-                            defaultValue={editingEmployees?.specialisation || ''}
-                            icon={Layers}
-                            errorMessage={formErrors?.specialisation}
+                            label="Date d'embauche"
+                            name='date_embauche'
+                            defaultValue={editingEmployees?.date_embauche || ''}
+                            type='date'
+                            icon={CalendarDays}
+                            errorMessage={formErrors?.date_embauche}
                         />
                         <Input
-                            label='Certifications'
-                            name='certification'
-                            defaultValue={editingEmployees?.certification || ''}
-                            icon={Award}
-                            errorMessage={formErrors?.certification}
+                            label='Salaire de base'
+                            name='salaire_base'
+                            defaultValue={editingEmployees?.salaire_base ? editingEmployees?.salaire_base.toString() : ''}
+                            icon={Calculator}
+                            type='number'
                         />
-                    </div>
 
-                    <div className='col-span-2'>
+                        {/* Fonctions du personnel  */}
                         <Input
-                            label='Status'
-                            name='status'
-                            defaultValue={editingEmployees?.status || 'Actif'}
+                            label='Poste'
+                            name='type_personnel'
+                            defaultValue={editingEmployees?.engagement || typePersonnelOptions[0]?.value}
+                            icon={Briefcase}
+                            errorMessage={formErrors?.type_personnel} type='select'
+                            options={typePersonnelOptions}
+                            onChange={(e) => { handleTypeEmployeesChange(e as ChangeEvent<HTMLSelectElement>) }}
+                        />
+                        <Input
+                            label='Type de contrat'
+                            name='type_contrat'
+                            defaultValue={editingEmployees?.type_contrat || 'cdd'}
                             icon={Check}
-                            errorMessage={formErrors?.status} type='select'
-                            options={[
-                                { label: 'Actif', value: 'Actif' },
-                                { label: 'Suspendu', value: 'Suspendu' },
-                                { label: 'Démissionnaire', value: 'Démissionnaire' },
-                            ]}
+                            errorMessage={formErrors?.type_contrat} type='select'
+                            options={contrats}
                         />
-                    </div>
+                        <div className='col-span-2 space-y-4'>
+                            <Input
+                                label='Spécialisation'
+                                name='specialisation'
+                                defaultValue={editingEmployees?.specialisation || ''}
+                                icon={Layers}
+                                errorMessage={formErrors?.specialisation}
+                            />
+                            <Input
+                                label='Certifications'
+                                name='certification'
+                                defaultValue={editingEmployees?.certification || ''}
+                                icon={Award}
+                                errorMessage={formErrors?.certification}
+                            />
+                        </div>
 
+                        <div className='col-span-2'>
+                            <Input
+                                label='Status'
+                                name='status'
+                                defaultValue={editingEmployees?.status || 'Actif'}
+                                icon={Check}
+                                errorMessage={formErrors?.status} type='select'
+                                options={[
+                                    { label: 'Actif', value: 'Actif' },
+                                    { label: 'Suspendu', value: 'Suspendu' },
+                                    { label: 'Démissionnaire', value: 'Démissionnaire' },
+                                ]}
+                            />
+                        </div>
+
+                    </div>
                 </div>
+
 
                 {/* Photocopie CIN  */}
                 <Input
@@ -399,7 +396,7 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                 />
 
                 <div className='space-y-4'>
-                    <h2 className='text-md  col-span-2 text-sky-500 italic'>Informations sur le contacte d'urgence</h2>
+                    <HeadingSmall title="Informations sur le contacte d'urgence :" />
                     <Input
                         label="Nom et prénom de la personne à contacter en cas d’urgence"
                         name='urgence_nom'
