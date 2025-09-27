@@ -12,13 +12,14 @@ import { createRegistration, deleteRegistration, getAllRegistrations } from './r
 import useForm from '../../Hooks/useForm';
 import Input from '../../Components/ui/Input';
 import clsx from 'clsx';
-import {  fakeStudentData, getShortDate } from '../../Utils/Utils';
+import { fakeStudentData, getShortDate } from '../../Utils/Utils';
 import { getLevelState } from '../Levels/redux/LevelSlice';
 import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
 import { getSchoolYearState } from '../School-Year/redux/SchoolYearSlice';
 import { getAppState } from '../../Redux/AppSlice';
 import InputError from '../../Components/ui/InputError';
 import Profile from '../../Components/ui/Profile';
+import ImageProfile from '../../Components/ui/ImageProfile';
 
 const RegistrationSchema = object({
   // Élève
@@ -252,7 +253,7 @@ const Registration: React.FC = () => {
       key: 'date_inscription', label: 'date d\'inscription ',
       render: (value: string) => (
         <div className="">
-          { getShortDate( value )}
+          {getShortDate(value)}
         </div>
       )
     },
@@ -316,37 +317,13 @@ const Registration: React.FC = () => {
             {/* Etape 1 : Informations sur l'élève */}
             <div className={clsx({ 'hidden': step !== 1 })}>
               <div className="flex flex-col sm:flex-row gap-5 space-y-2">
+
                 {/* PHOTO D IDENTITE */}
-                <div className="relative flex flex-col items-center justify-center">
-                  <label htmlFor="photo-upload" className="cursor-pointer flex flex-col items-center justify-center w-56 h-56 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 transition-all">
-                    {photoPreview ? (
-                      <img src={photoPreview} alt="Photo" className="w-52 h-52 rounded-md object-cover" />
-                    ) : (
-                      <div className="flex flex-col justify-center items-center">
-                        <Focus className="w-20 h-20 text-gray-400 mb-1" />
-                        <span className="text-gray-400 text-sm">Aucune photo trouvé</span>
-                      </div>
-                    )}
-                    <input
-                      id="photo-upload"
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      name='photo'
-                      onChange={e => {
-                        const file = e.target.files && e.target.files[0];
-                        if (file) {
-                          const reader = new FileReader();
-                          reader.onloadend = () => {
-                            setPhotoPreview(reader.result as string);
-                            setFormData((prev: any) => ({ ...prev, photo: reader.result }));
-                          };
-                          reader.readAsDataURL(file);
-                        }
-                      }}
-                    />
-                  </label>
+                <div className='w-[14rem] h-[14rem]'>
+                  <ImageProfile />
                 </div>
+
+                {/* INFORMATION PERSONNEL */}
                 <div className='flex-1 space-y-4'>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Input

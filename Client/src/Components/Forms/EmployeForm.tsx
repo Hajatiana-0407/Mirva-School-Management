@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react'
 import Input from '../ui/Input';
-import { Plus, User, Calculator, UserCheck, CalendarDays, Phone, Mail, MapPinned, X, SquarePen, Check, FolderOpen, Handshake, ArrowRight, MapPin, BadgeCheck, Flag, Briefcase, Layers, Award, UserPlus, Focus, ArrowLeft } from 'lucide-react';
+import { Plus, User, Calculator, UserCheck, CalendarDays, Phone, Mail, MapPinned, X, SquarePen, Check, FolderOpen, Handshake, ArrowRight, MapPin, BadgeCheck, Flag, Briefcase, Layers, Award, UserPlus, ArrowLeft } from 'lucide-react';
 import clsx from 'clsx';
 import { object, string } from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,9 +10,9 @@ import { employeeInitialValue, EmployeeType, TypePersonnelType } from '../../Uti
 import { createEmployees, updateEmployees } from '../../Pages/Employees/redux/EmployeAsyncThunk';
 import { getTypeEmployeesState } from '../../Redux/Other/slices/TypeEmployeesSlice';
 import TeacherSubject from '../../Pages/TeacherSubject';
-import { baseUrl } from '../../Utils/Utils';
 import { getEmployeState } from '../../Pages/Employees/redux/EmployeSlice';
 import HeadingSmall from '../ui/HeadingSmall';
+import ImageProfile from '../ui/ImageProfile';
 
 // ? VALIDATION DES DONNÉ AVEC YUP
 const EmployeSchema = object({
@@ -65,7 +65,6 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
     const { action } = useSelector(getEmployeState);
     const [isTeacher, setIsTeacher] = useState(type == 'teacher' ? true : false);
     const [page, setPage] = useState(1)
-    const [photoPreview, setPhotoPreview] = useState<string | null>(editingEmployees?.photo ? baseUrl(editingEmployees?.photo) : null);
     const { onSubmite, formErrors, resetError, forceError } = useForm<EmployeeType>(EmployeSchema, employeeInitialValue);
     const dispatch: AppDispatch = useDispatch();
     const sexe = [
@@ -85,7 +84,6 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
     }
     // Fermer la modale
     const handleCloseModal = () => {
-        setPhotoPreview(null);
         setIsTeacher(false);
         setPage(1);
         resetError();
@@ -171,41 +169,16 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
 
     return (
         <form onSubmit={handleSubmit} id='__formulaire_personnel'>
-            {/* Page numero 1  */}
 
-            {/* Photo de profil de l'employé */}
+            {/* Page numero 1  */}
             <div className={clsx({
                 'sr-only': (page !== 1)
             }, 'space-y-6')} >
                 <div className="flex flex-col sm:flex-row gap-5  space-y-2">
-                    <div className="relative flex flex-col items-center justify-center">
-                        <label htmlFor="photo-upload" className="cursor-pointer flex flex-col items-center justify-center w-56 h-56 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 transition-all">
-                            {photoPreview ? (
-                                <img src={photoPreview} alt="Photo" className="w-56 h-56 rounded-md object-cover" />
-                            ) : (
-                                <div className="flex flex-col justify-center items-center">
-                                    <Focus className="w-20 h-20 text-gray-400 mb-1" />
-                                    <span className="text-gray-400 text-sm">Aucune photo trouvé</span>
-                                </div>
-                            )}
-                            <input
-                                id="photo-upload"
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                name='photo'
-                                onChange={e => {
-                                    const file = e.target.files && e.target.files[0];
-                                    if (file) {
-                                        const reader = new FileReader();
-                                        reader.onloadend = () => {
-                                            setPhotoPreview(reader.result as string);
-                                        };
-                                        reader.readAsDataURL(file);
-                                    }
-                                }}
-                            />
-                        </label>
+
+                    {/* Photo de profil de l'employé */}
+                    <div className='w-[14rem] h-[14rem]'>
+                        <ImageProfile url={editingEmployees?.photo} />
                     </div>
 
                     {/* Information personnel sur l'employer  */}

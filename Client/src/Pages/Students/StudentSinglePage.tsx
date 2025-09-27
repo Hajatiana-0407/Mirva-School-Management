@@ -7,7 +7,7 @@ import { AppDispatch } from "../../Redux/store";
 import Loading from "../../Components/ui/Loading";
 import { baseUrl } from "../../Utils/Utils";
 import { InfoBlock } from "../Registrations/Registration";
-import { Activity, ArrowLeft, CalendarDays, Check, ChevronDown, ChevronUp, Focus, FolderOpen, Globe, GraduationCap, HeartPulse, Home, Mail, MapPin, PenBox, Phone, Tag, User, UserCheck, X } from "lucide-react";
+import { Activity, ArrowLeft, CalendarDays, Check, ChevronDown, ChevronUp, FolderOpen, Globe, GraduationCap, HeartPulse, Home, Mail, MapPin, PenBox, Phone, Tag, User, UserCheck, X } from "lucide-react";
 import Modal from "../Modal";
 import { object, string } from "yup";
 import useForm from "../../Hooks/useForm";
@@ -16,6 +16,7 @@ import InputError from "../../Components/ui/InputError";
 import { getStudentState } from "./redux/StudentSlice";
 import { getAppState } from "../../Redux/AppSlice";
 import clsx from "clsx";
+import ImageProfile from "../../Components/ui/ImageProfile";
 export type StudentDetailsType = StudentType & ParentType & levelType & ClasseType;
 
 // Validation de donnée avec yup 
@@ -41,13 +42,11 @@ const StudentSinglePage = () => {
     const [showModal, setShowModal] = useState(false);
     const { onSubmite, formErrors } = useForm<StudentType>(StudentSchema, StudentInitialValue);
     const dispatch: AppDispatch = useDispatch();
-    const [photoPreview, setPhotoPreview] = useState<string | null>(null);
     const [sexe, setSexe] = useState({ homme: false, femme: true });
 
     useEffect(() => {
         if (student) {
             setSexe(student?.sexe === 'Homme' ? { homme: true, femme: false } : { homme: false, femme: true });
-            setPhotoPreview(student.photo !== "" ? baseUrl(student.photo) : '');
         }
     }, [matricule])
 
@@ -62,7 +61,7 @@ const StudentSinglePage = () => {
         }, e)
     }
 
-
+    
     useEffect(() => {
         if (matricule !== '') {
             dispatch(getStudent(matricule as string)).then((action) => {
@@ -98,7 +97,6 @@ const StudentSinglePage = () => {
                 <button
                     onClick={() => {
                         setShowModal(true);
-                        setPhotoPreview(null);
                     }}
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
                 >
@@ -110,19 +108,9 @@ const StudentSinglePage = () => {
 
                 {/* Bloc principal : Photo + Identité */}
                 <div className="flex gap-6 items-start">
-
                     {/* PHOTO D IDENTITE */}
-                    <div className="relative flex flex-col items-center justify-center">
-                        <label htmlFor="photo-upload" className="cursor-pointer flex flex-col items-center justify-center w-56 h-56 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 transition-all">
-                            {student?.photo ? (
-                                <img src={baseUrl(student?.photo)} alt="Photo" className="w-52 h-52 rounded-md object-cover" />
-                            ) : (
-                                <div className="flex flex-col justify-center items-center">
-                                    <Focus className="w-20 h-20 text-gray-400 mb-1" />
-                                    <span className="text-gray-400 text-sm">Aucune photo trouvé</span>
-                                </div>
-                            )}
-                        </label>
+                    <div className='w-[15.2rem] h-[15.2rem]'>
+                        <ImageProfile url={student?.photo} isInput={false} />
                     </div>
 
                     {/* Identité + infos importantes */}
@@ -147,6 +135,16 @@ const StudentSinglePage = () => {
                             value={student?.nationalite}
                         />
 
+                        {/* Niveau & Classe */}
+                        <InfoBlock
+                            icon={<GraduationCap className="w-6 h-6 text-green-600" />}
+                            label="Niveau & Classe"
+                            value={
+                                <span className="text-blue-700 font-semibold">
+                                    {student?.niveau && student.denomination ? `${student.niveau} • ${student.denomination}` : ''}
+                                </span>
+                            }
+                        />
                     </div>
                 </div>
 
@@ -161,16 +159,7 @@ const StudentSinglePage = () => {
                         }
                     />
 
-                    {/* Niveau & Classe */}
-                    <InfoBlock
-                        icon={<GraduationCap className="w-6 h-6 text-green-600" />}
-                        label="Niveau & Classe"
-                        value={
-                            <span className="text-blue-700 font-semibold">
-                                {student?.niveau && student.denomination ? `${student.niveau} • ${student.denomination}` : ''}
-                            </span>
-                        }
-                    />
+
                 </div>
 
                 {/* Coordonnées */}
@@ -256,35 +245,10 @@ const StudentSinglePage = () => {
                     {/* Information personnel */}
                     <div className="flex flex-col sm:flex-row gap-5 space-y-2">
                         {/* PHOTO D IDENTITE */}
-                        <div className="relative flex flex-col items-center justify-center">
-                            <label htmlFor="photo-upload" className="cursor-pointer flex flex-col items-center justify-center w-56 h-56 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 transition-all">
-                                {(photoPreview || student?.photo) ? (
-                                    <img src={photoPreview || baseUrl(student?.photo)} alt="Photo" className="w-52 h-52 rounded-md object-cover" />
-                                ) : (
-                                    <div className="flex flex-col justify-center items-center">
-                                        <Focus className="w-20 h-20 text-gray-400 mb-1" />
-                                        <span className="text-gray-400 text-sm">Aucune photo trouvé</span>
-                                    </div>
-                                )}
-                                <input
-                                    id="photo-upload"
-                                    type="file"
-                                    accept="image/*"
-                                    className="hidden"
-                                    name='photo'
-                                    onChange={e => {
-                                        const file = e.target.files && e.target.files[0];
-                                        if (file) {
-                                            const reader = new FileReader();
-                                            reader.onloadend = () => {
-                                                setPhotoPreview(reader.result as string);
-                                            };
-                                            reader.readAsDataURL(file);
-                                        }
-                                    }}
-                                />
-                            </label>
+                        <div className='w-[15.2rem] h-[15.2rem]'>
+                            <ImageProfile url={student?.photo} isInput={false} />
                         </div>
+
                         <div className='flex-1 space-y-4'>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <Input

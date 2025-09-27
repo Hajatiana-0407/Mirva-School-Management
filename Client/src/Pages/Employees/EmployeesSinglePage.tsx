@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getEmployeByMatricule } from "./redux/EmployeAsyncThunk";
 import Loading from "../../Components/ui/Loading";
 import Page_404 from "../Page_404";
-import { ArrowLeft, Award, BadgeInfo, CalendarDays, Focus, Globe, Home, PenBox, Phone, Tag, Target, User, Workflow } from "lucide-react";
+import { ArrowLeft, Award, BadgeInfo, CalendarDays, Globe, Home, PenBox, Phone, Tag, Target, User, Workflow } from "lucide-react";
 import { baseUrl, getAge, getShortDate, NumberFormat } from "../../Utils/Utils";
 import { InfoBlock } from "../Registrations/Registration";
 import { PhotoComponent } from "../Students/StudentSinglePage";
@@ -14,6 +14,7 @@ import Modal from "../Modal";
 import { getAppState } from "../../Redux/AppSlice";
 import EmployeForm from "../../Components/Forms/EmployeForm";
 import HeadingSmall from "../../Components/ui/HeadingSmall";
+import ImageProfile from "../../Components/ui/ImageProfile";
 
 const EmployeesSinglePage = () => {
     const { id } = useParams();
@@ -66,18 +67,9 @@ const EmployeesSinglePage = () => {
                 {/* Bloc principal : Photo + Identité */}
                 <div className="flex gap-6 items-start">
 
-                    {/* PHOTO D' IDENTITE */}
-                    <div className="relative flex flex-col items-center justify-center">
-                        <label htmlFor="photo-upload" className="cursor-pointer flex flex-col items-center justify-center w-[15.9rem] h-[15.9rem] rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 transition-all">
-                            {employee?.photo ? (
-                                <img src={baseUrl(employee?.photo)} alt="Photo" className="w-52 h-52 rounded-md object-cover" />
-                            ) : (
-                                <div className="flex flex-col justify-center items-center">
-                                    <Focus className="w-20 h-20 text-gray-400 mb-1" />
-                                    <span className="text-gray-400 text-sm">Aucune photo trouvé</span>
-                                </div>
-                            )}
-                        </label>
+                    {/* Photo de profile  */}
+                    <div className='w-[15.2rem] h-[15.2rem]'>
+                        <ImageProfile isInput={false} url={employee?.photo} />
                     </div>
 
                     {/* Identité + infos importantes */}
