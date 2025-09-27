@@ -12,7 +12,7 @@ import { InfoBlock } from "../Registrations/Registration";
 import { PhotoComponent } from "../Students/StudentSinglePage";
 import Modal from "../Modal";
 import { getAppState } from "../../Redux/AppSlice";
-import EmployeForm from "../Forms/EmployeForm";
+import EmployeForm from "../../Components/Forms/EmployeForm";
 import HeadingSmall from "../../Components/ui/HeadingSmall";
 
 const EmployeesSinglePage = () => {

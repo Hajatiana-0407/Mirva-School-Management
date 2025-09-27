@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from 'react'
-import Input from '../../Components/ui/Input';
+import Input from '../ui/Input';
 import { Plus, User, Calculator, UserCheck, CalendarDays, Phone, Mail, MapPinned, X, SquarePen, Check, FolderOpen, Handshake, ArrowRight, MapPin, BadgeCheck, Flag, Briefcase, Layers, Award, UserPlus, Focus, ArrowLeft } from 'lucide-react';
 import clsx from 'clsx';
 import { object, string } from 'yup';
@@ -7,12 +7,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import useForm from '../../Hooks/useForm';
 import { AppDispatch } from '../../Redux/store';
 import { employeeInitialValue, EmployeeType, TypePersonnelType } from '../../Utils/Types';
-import { createEmployees, updateEmployees } from '../Employees/redux/EmployeAsyncThunk';
+import { createEmployees, updateEmployees } from '../../Pages/Employees/redux/EmployeAsyncThunk';
 import { getTypeEmployeesState } from '../../Redux/Other/slices/TypeEmployeesSlice';
-import TeacherSubject from '../TeacherSubject';
+import TeacherSubject from '../../Pages/TeacherSubject';
 import { baseUrl } from '../../Utils/Utils';
-import { getEmployeState } from '../Employees/redux/EmployeSlice';
-import HeadingSmall from '../../Components/ui/HeadingSmall';
+import { getEmployeState } from '../../Pages/Employees/redux/EmployeSlice';
+import HeadingSmall from '../ui/HeadingSmall';
 
 // ? VALIDATION DES DONNÉ AVEC YUP
 const EmployeSchema = object({

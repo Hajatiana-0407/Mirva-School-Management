@@ -12,7 +12,7 @@ import { getTypeEmployeesState } from '../../Redux/Other/slices/TypeEmployeesSli
 import { getAppState } from '../../Redux/AppSlice';
 import { useNavigate } from 'react-router-dom';
 import Profile from '../../Components/ui/Profile';
-import EmployeForm from '../Forms/EmployeForm';
+import EmployeForm from '../../Components/Forms/EmployeForm';
 import { getShortDate } from '../../Utils/Utils';
 
 // Mapping des types à des couleurs de fond
