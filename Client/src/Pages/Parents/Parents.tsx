@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive, Eye, User, Users,  User2 } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Archive, Eye, User, Users, User2 } from 'lucide-react';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import Table from '../Table';
@@ -14,11 +14,13 @@ import { getAppState } from '../../Redux/AppSlice';
 import InputError from '../../Components/ui/InputError';
 import Input from '../../Components/ui/Input';
 import { StudentDetailsType } from '../Students/StudentSinglePage';
-import { getStudent } from '../Students/redux/StudentAsyncThunk';
+import { getStudentByMatricule } from '../Students/redux/StudentAsyncThunk';
 import Onglet from '../../Components/ui/Onglet';
 import Profile from '../../Components/ui/Profile';
 import ParentForm from '../../Components/Forms/ParentForm';
-import TuteurForm from './TuteurForm';
+import TuteurForm from '../../Components/Forms/TuteurForm';
+import { getStudentState } from '../Students/redux/StudentSlice';
+import Loading from '../../Components/ui/Loading';
 
 const SearchFormSchema = object({
   matricule_etudiant: string().required('le matricule ne peut pas être vide .'),
@@ -58,19 +60,21 @@ type ParentStudentType = ParentType & StudentType;
 
 const Parents = () => {
   const { datas: parents, action, error } = useSelector(getParentState);
+  const { single: studendSingle } = useSelector(getStudentState);
+
   const { hiddeTheModalActive } = useSelector(getAppState);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
-  // const [searchLoading, setSearchLoading] = useState(false)
+
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [parentToArchive, setParentToArchive] = useState<ParentStudentType | null>(null);
-  const [sutudentToAddParent, setSutudentToAddParent] = useState<StudentDetailsType | null>(null);
+  const [studentToAddParent, setStudentToAddParent] = useState<StudentDetailsType | null>(null);
   const { onSubmite: onSearchMatSubmit, formErrors: searMatchFormErrors } = useForm(SearchFormSchema, { matricule_etudiant: '' });
   const dispatch: AppDispatch = useDispatch();
 
 
   const handleEdit = (student: StudentDetailsType) => {
-    setSutudentToAddParent(student);
+    setStudentToAddParent(student);
     setShowModal(true);
   };
 
@@ -89,38 +93,28 @@ const Parents = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setSutudentToAddParent(null);
+    setStudentToAddParent(null);
   };
 
   // ? Rechercher l'etudiant 
   const handleSearcheStudent = (e: React.FormEvent<HTMLFormElement>) => {
-    setSutudentToAddParent(null);
+    setStudentToAddParent(null);
     onSearchMatSubmit((validateData: any) => {
-      dispatch(getStudent(validateData.get('matricule_etudiant') as string)).then((action) => {
-        if (getStudent.pending.match(action)) {
-          // setSearchLoading(true);
-        }
-        if (getStudent.fulfilled.match(action)) {
-          const response = action.payload;
-          // setSearchLoading(false);
-          if (response) {
-            setSutudentToAddParent(action.payload as StudentDetailsType);
-          } else {
-            setSutudentToAddParent(null);
-          }
-        }
-      }).catch((action) => {
-        console.error(`Erreur lors la recuperation de l\'étudiant ${validateData.get('matricule_etudiant')}`, action.payload);
-      })
+      dispatch(getStudentByMatricule(validateData.get('matricule_etudiant') as string))
     }, e);
   }
 
+  useEffect(() => {
+    if (studendSingle) {
+      setStudentToAddParent(studendSingle.data as StudentDetailsType)
+    }
+  }, [studendSingle])
 
   // Modal
   useEffect(() => {
     if (showModal && hiddeTheModalActive) {
       handleCloseModal();
-      setSutudentToAddParent(null);
+      setStudentToAddParent(null);
     }
   }, [hiddeTheModalActive]);
 
@@ -199,7 +193,10 @@ const Parents = () => {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Parents et Tuteurs</h1>
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => {
+            setStudentToAddParent(null);
+            setShowModal(true);
+          }}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
@@ -240,7 +237,7 @@ const Parents = () => {
       <Modal
         isOpen={showModal}
         onClose={handleCloseModal}
-        title={sutudentToAddParent?.id_parent ? `Modification Parent de ${sutudentToAddParent.prenom}` : 'Ajout Parent / Tuteur'}
+        title={studentToAddParent?.id_parent ? `Modification Parent de ${studentToAddParent?.prenom}` : 'Ajout Parent / Tuteur'}
         size='lg'
       >
         <div className="space-y-4">
@@ -255,7 +252,7 @@ const Parents = () => {
                   name='matricule_etudiant'
                   icon={Search}
                   placeholder="Rechercher le matricule de l'étudiant"
-                  defaultValue={sutudentToAddParent?.matricule_etudiant}
+                  defaultValue={studentToAddParent?.matricule_etudiant}
                 />
               </div>
               <button
@@ -271,35 +268,40 @@ const Parents = () => {
             </div>
           </form>
           {/* Si il n'y a pas d'etudiant et pas de modification  */}
-          {sutudentToAddParent === null &&
+          {studentToAddParent === null && !studendSingle.action.isLoading &&
             <div className='bg-gray-50  p-6 border border-gray-100 rounded flex items-center justify-center text-lg text-gray-400 italic'>
               <div>Acune étudiant trouvé...</div>
             </div>
           }
-          {sutudentToAddParent !== null &&
+          {studendSingle.action.isLoading &&
+            <Loading />
+          }
+
+          {studentToAddParent !== null  &&
             <div className='w-full py-5 mb-5 flex justify-center bg-blue-50 border border-blue-200 rounded'>
               <Profile
-                fullName={sutudentToAddParent.nom ? `${sutudentToAddParent.nom} ${sutudentToAddParent.prenom}` : ''}
-                photo={sutudentToAddParent.photo as string}
+                fullName={studentToAddParent?.nom ? `${studentToAddParent?.nom} ${studentToAddParent?.prenom}` : ''}
+                photo={studentToAddParent?.photo as string}
                 copy={false}
-                identification={sutudentToAddParent.matricule_etudiant}
+                identification={studentToAddParent?.matricule_etudiant}
               />
             </div>
           }
         </div>
-        {sutudentToAddParent !== null &&
+
+        {studentToAddParent !== null && !studendSingle.action.isLoading  &&
           <div className='mt-5'>
             <Onglet onlgets={[
               {
                 key: 'Parent',
                 component: <ParentForm
-                  student={sutudentToAddParent as StudentDetailsType}
+                  student={studentToAddParent as StudentDetailsType}
                   handleCloseModal={handleCloseModal}
                 />
               },
               {
                 key: 'Tuteur', component: <TuteurForm
-                  student={sutudentToAddParent as StudentDetailsType}
+                  student={studentToAddParent as StudentDetailsType}
                   handleCloseModal={handleCloseModal}
                 />
               },

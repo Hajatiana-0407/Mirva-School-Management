@@ -75,7 +75,7 @@ const EmployeSlice = createSlice({
                 toast.error("Erreur de connexion au server");
             })
 
-        // // ************************************* Update ************************************* //
+        //  ************************************* Update ************************************* //
         builder
             .addCase(updateEmployees.pending, (state) => {
                 state.action.isUpdating = true;
@@ -129,7 +129,6 @@ const EmployeSlice = createSlice({
                 state.error = 'Erreur de connexion au server';
                 toast.error("Erreur de connexion au server");
             })
-
 
 
         // ? Employé single page 
