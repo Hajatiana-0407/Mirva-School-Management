@@ -11,13 +11,13 @@ import { object, string } from 'yup';
 import { AppDispatch } from '../../Redux/store';
 import { createParent, deleteParent, getAllParent, updateParent } from './redux/ParentAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
-import InputError from '../ui/InputError';
+import InputError from '../../Components/ui/InputError';
 import { baseUrl } from '../../Utils/Utils';
 import { Link } from 'react-router-dom';
-import Input from '../ui/Input';
+import Input from '../../Components/ui/Input';
 import { StudentDetailsType } from '../Students/StudentSinglePage';
 import { getStudent } from '../Students/redux/StudentAsyncThunk';
-import Onglet from '../ui/Onglet';
+import Onglet from '../../Components/ui/Onglet';
 
 const SearchFormSchema = object({
   matricule_etudiant: string().required('le matricule ne peut pas être vide .'),

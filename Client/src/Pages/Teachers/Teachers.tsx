@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { getTeacherState } from './redux/TeachersSlice';
 import { getAllTeachers } from './redux/TeacherAsyncThunk';
 import { deleteEmployees } from '../Employees/redux/EmployeAsyncThunk';
-import Profile from '../ui/Profile';
+import Profile from '../../Components/ui/Profile';
 import EmployeForm from '../Forms/EmployeForm';
 import { getShortDate } from '../../Utils/Utils';
 

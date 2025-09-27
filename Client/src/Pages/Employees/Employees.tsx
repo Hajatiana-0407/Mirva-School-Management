@@ -11,7 +11,7 @@ import { deleteEmployees, getAllEmployees } from './redux/EmployeAsyncThunk';
 import { getTypeEmployeesState } from '../../Redux/Other/slices/TypeEmployeesSlice';
 import { getAppState } from '../../Redux/AppSlice';
 import { useNavigate } from 'react-router-dom';
-import Profile from '../ui/Profile';
+import Profile from '../../Components/ui/Profile';
 import EmployeForm from '../Forms/EmployeForm';
 import { getShortDate } from '../../Utils/Utils';
 

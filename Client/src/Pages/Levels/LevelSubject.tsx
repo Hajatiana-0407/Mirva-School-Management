@@ -7,7 +7,7 @@ import { getSubjectState } from "../Subjects/redux/SubjectSlice";
 import { getLelvelSubjectByIdNiveau, registerSubjectLevelCoef } from "./redux/LevelAsyncThunk";
 import { AppDispatch } from "../../Redux/store";
 import { getLevelSubjectState } from "./redux/LevelSubjectSlice";
-import Loading from "../ui/Loading";
+import Loading from "../../Components/ui/Loading";
 import { hexToRgba } from "../../Utils/Utils";
 import { getAllSubject } from "../Subjects/redux/SubjectAsyncThunk";
 import SubjectComponent from "./SubjectComponent";

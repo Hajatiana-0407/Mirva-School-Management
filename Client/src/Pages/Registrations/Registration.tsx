@@ -10,15 +10,15 @@ import { ClasseType, registrationInitialValue, RegistrationType, StudentFormData
 import { AppDispatch } from '../../Redux/store';
 import { createRegistration, deleteRegistration, getAllRegistrations } from './redux/registerAsyncThunk';
 import useForm from '../../Hooks/useForm';
-import Input from '../ui/Input';
+import Input from '../../Components/ui/Input';
 import clsx from 'clsx';
 import {  fakeStudentData, getShortDate } from '../../Utils/Utils';
 import { getLevelState } from '../Levels/redux/LevelSlice';
 import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
 import { getSchoolYearState } from '../School-Year/redux/SchoolYearSlice';
 import { getAppState } from '../../Redux/AppSlice';
-import InputError from '../ui/InputError';
-import Profile from '../ui/Profile';
+import InputError from '../../Components/ui/InputError';
+import Profile from '../../Components/ui/Profile';
 
 const RegistrationSchema = object({
   // Élève

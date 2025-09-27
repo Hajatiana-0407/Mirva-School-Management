@@ -13,7 +13,7 @@ import { getAppState } from '../../Redux/AppSlice';
 import { getClasseState } from './redux/ClasseSlice';
 import { getLevelState } from '../Levels/redux/LevelSlice';
 import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
-import InputError from '../ui/InputError';
+import InputError from '../../Components/ui/InputError';
 
 // Validation de donnée avec yup 
 const LevelSchema = object({

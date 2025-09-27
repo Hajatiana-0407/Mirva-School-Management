@@ -9,7 +9,7 @@ import { cycles } from '../../Utils/Utils';
 import { levelType } from '../../Utils/Types';
 import { object, string } from 'yup';
 import useForm from '../../Hooks/useForm';
-import InputError from '../ui/InputError';
+import InputError from '../../Components/ui/InputError';
 import { getAppState } from '../../Redux/AppSlice';
 import LevelSubject from './LevelSubject';
 import LevelListe from './LevelListe';

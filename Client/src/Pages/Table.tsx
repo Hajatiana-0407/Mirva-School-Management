@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import Loading from './ui/Loading';
+import Loading from '../Components/ui/Loading';
 
 interface TableProps {
   data: any[];
@@ -16,7 +16,7 @@ interface TableProps {
     color: string;
   }>;
   searchTerm?: string;
-  isLoading: boolean
+  isLoading?: boolean
 }
 
 const Table = ({ data, columns, actions, searchTerm = '', isLoading = false }: TableProps) => {

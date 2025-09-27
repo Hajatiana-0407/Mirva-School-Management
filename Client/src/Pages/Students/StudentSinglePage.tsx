@@ -4,15 +4,15 @@ import { ClasseType, levelType, ParentType, StudentInitialValue, StudentType } f
 import { useDispatch, useSelector } from "react-redux";
 import { getStudent, updateStudent } from "./redux/StudentAsyncThunk";
 import { AppDispatch } from "../../Redux/store";
-import Loading from "../ui/Loading";
+import Loading from "../../Components/ui/Loading";
 import { baseUrl } from "../../Utils/Utils";
 import { InfoBlock } from "../Registrations/Registration";
 import { Activity, ArrowLeft, CalendarDays, Check, ChevronDown, ChevronUp, Focus, FolderOpen, Globe, GraduationCap, HeartPulse, Home, Mail, MapPin, PenBox, Phone, Tag, User, UserCheck, X } from "lucide-react";
 import Modal from "../Modal";
 import { object, string } from "yup";
 import useForm from "../../Hooks/useForm";
-import Input from "../ui/Input";
-import InputError from "../ui/InputError";
+import Input from "../../Components/ui/Input";
+import InputError from "../../Components/ui/InputError";
 import { getStudentState } from "./redux/StudentSlice";
 import { getAppState } from "../../Redux/AppSlice";
 import clsx from "clsx";

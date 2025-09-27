@@ -11,7 +11,7 @@ import { object, string } from 'yup';
 import { AppDispatch } from '../../Redux/store';
 import { createSchoolYear, deleteSchoolYear, getAllSchoolYear, updateSchoolYear } from './redux/SchoolYearAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
-import InputError from '../ui/InputError';
+import InputError from '../../Components/ui/InputError';
 import { schoolYearInitialValue, SchoolYearType } from '../../Utils/Types';
 
 

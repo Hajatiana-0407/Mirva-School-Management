@@ -7,7 +7,7 @@ import { AppDispatch } from "../Redux/store";
 import { getAllSubject } from "./Subjects/redux/SubjectAsyncThunk";
 import { getAllClasse, getSubjectLevelByIdSubject } from "./Classes/redux/ClasseAsyncThunk";
 import Table from "./Table";
-import Input from "./ui/Input";
+import Input from "../Components/ui/Input";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 

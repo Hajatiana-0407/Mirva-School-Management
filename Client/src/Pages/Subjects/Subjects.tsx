@@ -11,7 +11,7 @@ import { object, string } from 'yup';
 import { AppDispatch } from '../../Redux/store';
 import { createSubject, deleteSubject, getAllSubject, updateSubject } from './redux/SubjectAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
-import InputError from '../ui/InputError';
+import InputError from '../../Components/ui/InputError';
 
 // Validation de donnée avec yup 
 const SubjectSchema = object({

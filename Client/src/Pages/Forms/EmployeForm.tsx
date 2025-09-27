@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from 'react'
-import Input from '../ui/Input';
+import Input from '../../Components/ui/Input';
 import { Plus, User, Calculator, UserCheck, CalendarDays, Phone, Mail, MapPinned, X, SquarePen, Check, FolderOpen, Handshake, ArrowRight, MapPin, BadgeCheck, Flag, Briefcase, Layers, Award, UserPlus, Focus, ArrowLeft } from 'lucide-react';
 import clsx from 'clsx';
 import { object, string } from 'yup';
@@ -12,7 +12,7 @@ import { getTypeEmployeesState } from '../../Redux/Other/slices/TypeEmployeesSli
 import TeacherSubject from '../TeacherSubject';
 import { baseUrl } from '../../Utils/Utils';
 import { getEmployeState } from '../Employees/redux/EmployeSlice';
-import HeadingSmall from '../ui/HeadingSmall';
+import HeadingSmall from '../../Components/ui/HeadingSmall';
 
 // ? VALIDATION DES DONNÉ AVEC YUP
 const EmployeSchema = object({

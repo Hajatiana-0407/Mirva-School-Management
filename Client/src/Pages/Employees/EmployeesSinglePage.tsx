@@ -4,7 +4,7 @@ import { AppDispatch } from "../../Redux/store";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getEmployeByMatricule } from "./redux/EmployeAsyncThunk";
-import Loading from "../ui/Loading";
+import Loading from "../../Components/ui/Loading";
 import Page_404 from "../Page_404";
 import { ArrowLeft, Award, BadgeInfo, CalendarDays, Focus, Globe, Home, PenBox, Phone, Tag, Target, User, Workflow } from "lucide-react";
 import { baseUrl, getAge, getShortDate, NumberFormat } from "../../Utils/Utils";
@@ -13,7 +13,7 @@ import { PhotoComponent } from "../Students/StudentSinglePage";
 import Modal from "../Modal";
 import { getAppState } from "../../Redux/AppSlice";
 import EmployeForm from "../Forms/EmployeForm";
-import HeadingSmall from "../ui/HeadingSmall";
+import HeadingSmall from "../../Components/ui/HeadingSmall";
 
 const EmployeesSinglePage = () => {
     const { id } = useParams();

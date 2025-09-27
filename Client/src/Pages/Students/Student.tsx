@@ -10,13 +10,13 @@ import { object, string } from 'yup';
 import { AppDispatch } from '../../Redux/store';
 import { createStudent, deleteStudent, getAllStudent, getStatistique, updateStudent } from './redux/StudentAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
-import InputError from '../ui/InputError';
+import InputError from '../../Components/ui/InputError';
 import { getStudentState } from './redux/StudentSlice';
 import clsx from 'clsx';
 import { baseUrl } from '../../Utils/Utils';
-import Input from '../ui/Input';
+import Input from '../../Components/ui/Input';
 import { useNavigate } from 'react-router-dom';
-import Profile from '../ui/Profile';
+import Profile from '../../Components/ui/Profile';
 
 // Validation de donnée avec yup 
 const StudentSchema = object({

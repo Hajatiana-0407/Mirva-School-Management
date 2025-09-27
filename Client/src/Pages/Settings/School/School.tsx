@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from "react-redux"
 import { getSchoolState } from "./redux/SchoolSlice";
-import Loading from "../../ui/Loading";
+import Loading from "../../../Components/ui/Loading";
 import { useEffect, useState } from "react";
 import { Facebook, Focus, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
-import Input from "../../ui/Input";
+import Input from "../../../Components/ui/Input";
 import { object, string } from "yup";
-import InputError from "../../ui/InputError";
+import InputError from "../../../Components/ui/InputError";
 import useForm from "../../../Hooks/useForm";
 import { SchoolInfoInitialValue } from "../../../Utils/Types";
 import { AppDispatch } from "../../../Redux/store";
