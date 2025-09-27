@@ -1,5 +1,5 @@
 import { Check, FolderOpen, Home, Mail, PenBox, Phone, User, UserCheck, X } from "lucide-react";
-import Input from "../../Components/ui/Input";
+import Input from "../ui/Input";
 import { object, string } from "yup";
 import { StudentDetailsType } from "../../Pages/Students/StudentSinglePage";
 import { ParentInitialValue, ParentType } from "../../Utils/Types";
@@ -45,7 +45,7 @@ const TuteurForm: React.FC<TuteurFormPropsType> = ({ student, handleCloseModal }
                     value={'tuteur'}
                 />
                 <input type="hidden"
-                    name='id_eleve' value={student.id_eleve}
+                    name='id_eleve' value={student?.id_eleve}
                     onChange={() => { }}
                 />
                 <Input

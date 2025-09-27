@@ -42,7 +42,7 @@ const ParentForm: React.FC<ParentFormPropsType> = ({ student, handleCloseModal }
                     name='tuteur_type' value={'parent'}
                 />
                 <input type="hidden"
-                    name='id_eleve' value={student.id_eleve}
+                    name='id_eleve' value={student?.id_eleve}
                     onChange={() => { }}
                 />
                 <Input
