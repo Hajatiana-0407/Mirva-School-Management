@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ApiReturnInitial, ApiReturnType, StudentInitialValue, StudentType } from "../../../Utils/Types";
+import { ApiReturnInitial, ApiReturnType, StudentType } from "../../../Utils/Types";
 import api from "../../../Utils/api";
 import { setHiddeModalValue } from "../../../Redux/AppSlice";
 import { toast } from "react-toastify";
@@ -30,16 +30,16 @@ export const getAllStudent = createAsyncThunk('etudiant/getAll', async (): Promi
         });
     return datas;
 })
-export const getStudent = createAsyncThunk('etudiant/getOne', async (matricule: string): Promise<StudentType> => {
-    let datas: StudentType = StudentInitialValue;
+export const getStudentByMatricule = createAsyncThunk('etudiant/getOne', async (matricule: string): Promise<ApiReturnType> => {
+    let data: ApiReturnType = ApiReturnInitial ;
     await api.get(`admin/etudiant/${matricule}`)
         .then(response => {
-            datas = response.data
+            data.data = response.data
         })
         .catch(error => {
             console.error('Erreur lors de la récupération des données:', error);
         });
-    return datas;
+    return data;
 })
 
 // UPDATE

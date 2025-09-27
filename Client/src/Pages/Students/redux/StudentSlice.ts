@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ActionIntialValue, ActionType, ApiReturnType, StudentType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
-import { createStudent, deleteStudent, getAllStudent, updateStudent } from "./StudentAsyncThunk";
+import { createStudent, deleteStudent, getAllStudent, getStudentByMatricule, updateStudent } from "./StudentAsyncThunk";
+import { StudentDetailsType } from "../StudentSinglePage";
 
 
 type initialStateType = {
@@ -10,6 +11,10 @@ type initialStateType = {
     datas: StudentType[],
     page: number,
     error: string
+    single: {
+        data?: StudentDetailsType;
+        action: ActionType
+    }
 }
 
 const initialState: initialStateType = {
@@ -17,6 +22,7 @@ const initialState: initialStateType = {
     datas: [],
     page: 1,
     error: '',
+    single: { action: ActionIntialValue }
 }
 
 const StudentSlice = createSlice({
@@ -30,7 +36,7 @@ const StudentSlice = createSlice({
     },
     extraReducers(builder) {
 
-        // // // ************************************* Read ************************************* //
+        // ? ************************************* Read ************************************* //
         builder
             .addCase(getAllStudent.pending, (state) => {
                 state.action.isLoading = true;
@@ -44,10 +50,10 @@ const StudentSlice = createSlice({
             .addCase(getAllStudent.rejected, (state) => {
                 state.action.isLoading = false;
                 state.error = 'Erreur de connexion au server'
-                toast.error("Erreur de connexion au server")  ; 
-            }) ; 
+                toast.error("Erreur de connexion au server");
+            });
 
-        // ************************************* Create ************************************* //
+        // ? ************************************* Create ************************************* //
         builder
             .addCase(createStudent.pending, (state) => {
                 state.action.isLoading = true;
@@ -66,11 +72,11 @@ const StudentSlice = createSlice({
             })
             .addCase(createStudent.rejected, (state) => {
                 state.action.isLoading = false;
-                state.error = 'Erreur de connexion au server'; 
-                toast.error("Erreur de connexion au server") ; 
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
             })
 
-        // // ************************************* Update ************************************* //
+        // ************************************* Update ************************************* //
         builder
             .addCase(updateStudent.pending, (state) => {
                 state.action.isUpdating = true;
@@ -97,11 +103,11 @@ const StudentSlice = createSlice({
             })
             .addCase(updateStudent.rejected, (state) => {
                 state.action.isUpdating = false
-                state.error = 'Erreur de connexion au server'; 
-                toast.error("Erreur de connexion au server") ; 
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
             })
 
-        // // ************************************* Delete ************************************* //
+        // ! ************************************* Delete ************************************* //
 
         builder
             .addCase(deleteStudent.pending, (state) => {
@@ -120,8 +126,31 @@ const StudentSlice = createSlice({
             })
             .addCase(deleteStudent.rejected, (state) => {
                 state.action.isDeleting = false;
-                state.error = 'Erreur de connexion au server'; 
-                toast.error("Erreur de connexion au server") ; 
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
+            })
+
+
+        // ? ************************************* Student single  ************************************* //
+        builder
+            .addCase(getStudentByMatricule.pending, (state) => {
+                state.single.action.isLoading = true;
+                state.error = '';
+            })
+            .addCase(getStudentByMatricule.fulfilled, (state, action: { payload: ApiReturnType }) => {
+                state.single.action.isLoading = false;
+                const { error, data: employe, message } = action.payload;
+                
+                if (error) {
+                    state.error = message as string;
+                } else {
+                    state.single.data = employe;
+                }
+            })
+            .addCase(getStudentByMatricule.rejected, (state) => {
+                state.single.action.isLoading = false;
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
             })
     }
 })

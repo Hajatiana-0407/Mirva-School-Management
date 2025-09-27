@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import { ClasseType, levelType, ParentType, StudentInitialValue, StudentType } from "../../Utils/Types";
 import { useDispatch, useSelector } from "react-redux";
-import { getStudent, updateStudent } from "./redux/StudentAsyncThunk";
+import { getStudentByMatricule, updateStudent } from "./redux/StudentAsyncThunk";
 import { AppDispatch } from "../../Redux/store";
 import Loading from "../../Components/ui/Loading";
 import { baseUrl } from "../../Utils/Utils";
@@ -32,23 +32,28 @@ const StudentSchema = object({
 });
 const StudentSinglePage = () => {
     const { id: matricule } = useParams();
-    const [student, setStudent] = useState<StudentDetailsType | null>(null);
-    const [isLoading, setisLoading] = useState(false);
-    const [isUpdating, setIsUpdating] = useState(false)
     const navigate = useNavigate();
     const { hiddeTheModalActive } = useSelector(getAppState);
-    const { error: formUpdateError } = useSelector(getStudentState)
+    const { error: formUpdateError, single: { data: student, action: { isLoading } } } = useSelector(getStudentState)
     // ? Modale
     const [showModal, setShowModal] = useState(false);
     const { onSubmite, formErrors } = useForm<StudentType>(StudentSchema, StudentInitialValue);
     const dispatch: AppDispatch = useDispatch();
     const [sexe, setSexe] = useState({ homme: false, femme: true });
 
+
+    useEffect(() => {
+        if (matricule) {
+            dispatch(getStudentByMatricule(matricule as string));
+        }
+    }, [matricule])
+
+
     useEffect(() => {
         if (student) {
             setSexe(student?.sexe === 'Homme' ? { homme: true, femme: false } : { homme: false, femme: true });
         }
-    }, [matricule])
+    }, [student])
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -57,28 +62,10 @@ const StudentSinglePage = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         onSubmite((validateData) => {
             dispatch(updateStudent({ student: validateData, id: student?.id_eleve as number }));
-            setIsUpdating(true);
         }, e)
     }
 
-    
-    useEffect(() => {
-        if (matricule !== '') {
-            dispatch(getStudent(matricule as string)).then((action) => {
-                if (getStudent.pending.match(action)) {
-                    setisLoading(true);
-                }
-                if (getStudent.fulfilled.match(action)) {
-                    setisLoading(false);
-                    setIsUpdating(false);
-                    setStudent(action.payload as StudentDetailsType)
-                }
-            }).catch((action) => {
-                setisLoading(false);
-                console.error(`Erreur lors la recuperation de l\'étudiant ${matricule}`, action.payload);
-            })
-        }
-    }, [matricule, isUpdating]);
+
     // Modal
     useEffect(() => {
         if (showModal && hiddeTheModalActive) {
@@ -144,11 +131,12 @@ const StudentSinglePage = () => {
                                     {student?.niveau && student.denomination ? `${student.niveau} • ${student.denomination}` : ''}
                                 </span>
                             }
+                            important
                         />
                     </div>
                 </div>
 
-                <div className="space-y-4 ">
+                <div className="space-y-4 grid">
                     <InfoBlock
                         icon={<Tag className="w-6 h-6 text-green-600" />}
                         label="Matricule"
@@ -157,9 +145,8 @@ const StudentSinglePage = () => {
                                 {student?.matricule_etudiant}
                             </span>
                         }
+                        important
                     />
-
-
                 </div>
 
                 {/* Coordonnées */}
