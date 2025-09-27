@@ -22,8 +22,8 @@ import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getSchoolState } from '../Settings/School/redux/SchoolSlice';
-import { getSchoolYearState } from '../School-Year/redux/SchoolYearSlice';
+import { getSchoolState } from '../../Pages/Settings/School/redux/SchoolSlice';
+import { getSchoolYearState } from '../../Pages/School-Year/redux/SchoolYearSlice';
 
 interface MenuItemType {
   id: string;
