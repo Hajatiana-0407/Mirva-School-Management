@@ -4,24 +4,22 @@ import { toast } from "react-toastify";
 import { ValidationError, type AnyObjectSchema } from 'yup'
 import { AppDispatch } from "../Redux/store";
 import { setHiddeModalValue } from "../Redux/AppSlice";
+import { nestData } from "../Utils/Utils";
 
+type SchemaInput = AnyObjectSchema | AnyObjectSchema[];
 
-/**
- * Fonction pour les formlaire 
- * @param schemaValidation 
- * @param initial 
- * @returns 
- */
-export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T): {
+export default function useForm<T>(
+    schemaValidation: SchemaInput,
+    initial: T
+): {
     formValue: T;
     setFormValue: (e: React.ChangeEvent<HTMLInputElement>) => void;
     formErrors?: Partial<Record<keyof T, string>>;
     onSubmite: (next: (data: T) => void, e: React.FormEvent<HTMLFormElement>) => Promise<void>;
     handleInputFileChange: (e: React.ChangeEvent<HTMLInputElement>) => string | undefined;
-    resetError: () => void ; 
-    forceError: (errors: Partial<Record<keyof T, string>>) => void  
+    resetError: () => void;
+    forceError: (errors: Partial<Record<keyof T, string>>) => void;
 } {
-
     const [formValue, setAllFormValue] = useState(initial);
     const [formErrors, setFormErrors] = useState<Partial<Record<keyof T, string>>>();
     const dispatch: AppDispatch = useDispatch();
@@ -35,9 +33,8 @@ export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T
                 [name]: value
             });
         }
-    }
+    };
 
-    // ************************* Type file  ************************* //
     const handleInputFileChange = (e: React.ChangeEvent<HTMLInputElement>): string | undefined => {
         if (e.target.type === 'file') {
             const file = e.target.files?.[0];
@@ -50,8 +47,8 @@ export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T
                 });
             }
         }
-        return
-    }
+        return;
+    };
 
     const onSubmite = async (next: (data: T) => void, e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         dispatch(setHiddeModalValue(false));
@@ -82,7 +79,7 @@ export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T
                 } else if (element instanceof HTMLInputElement && element.type === 'radio') {
                     if (element.checked) {
                         data[name] = element.value;
-                        formData.append(name, element.value)
+                        formData.append(name, element.value);
                     }
                 } else {
                     formData.append(name, element.value);
@@ -94,37 +91,50 @@ export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T
         if (data) {
             setAllFormValue(data as T);
         }
+
         const toastId = toast.loading('Veuillez patienter...');
         try {
-            await schemaValidation.validate(data as T, { abortEarly: false })
-            setFormErrors({});
-            next(formData as any);
-            toast.dismiss(toastId);
-        } catch (error) {
-            const errors: Partial<Record<keyof T, string>> = {};
-            if (error instanceof ValidationError) {
-                error.inner.forEach((err) => {
-                    if (err.path) {
-                        errors[err.path as keyof T] = err.message;
+            const schemas = Array.isArray(schemaValidation)
+                ? schemaValidation
+                : [schemaValidation];
+
+            // Fusion des erreurs de plusieurs schémas
+            const allErrors: Partial<Record<keyof T, string>> = {};
+
+            for (const schema of schemas) {
+                try {
+                    const dataNested = nestData(data);
+                    await schema.validate(dataNested as T, { abortEarly: false });
+                } catch (error) {
+                    if (error instanceof ValidationError) {
+                        error.inner.forEach((err) => {
+                            if (err.path) {
+                                allErrors[err.path as keyof T] = err.message;
+                            }
+                        });
                     }
-                });
-                setFormErrors(errors);
+                }
+            }
+
+            if (Object.keys(allErrors).length > 0) {
+                setFormErrors(allErrors);
+            } else {
+                setFormErrors({});
+                next(formData as any);
             }
             toast.dismiss(toastId);
+        } catch (error) {
+            toast.dismiss(toastId);
         }
-    }
+    };
 
-    // Effacer toutes les erreur 
     const resetError = () => {
         setFormErrors({});
-    }
+    };
 
-    // Forcer les erreurs 
     const forceError = (errors: Partial<Record<keyof T, string>>) => {
         setFormErrors(errors);
-    }
-
-
+    };
 
     return {
         formValue,
@@ -132,7 +142,7 @@ export default function useForm<T>(schemaValidation: AnyObjectSchema, initial: T
         formErrors,
         onSubmite,
         handleInputFileChange,
-        resetError , 
+        resetError,
         forceError
-    }
+    };
 }

@@ -1,4 +1,3 @@
-import { string } from "yup";
 import { StudentFormDataType } from "./Types";
 
 export const cycles = ['Primaire', 'Collège', 'Lycée'];
@@ -107,3 +106,46 @@ export const NumberFormat = (
 ): string => {
   return amount ? amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") : '0';
 }
+
+
+
+/**
+ * Transforme un objet plat contenant des clés de type "parent[child]"
+ * en un objet imbriqué { parent: { child: value } } compatible avec Yup.
+ *
+ * Exemple :
+ *   const flatData = {
+ *     "pere[nom]": "Jean",
+ *     "pere[prenom]": "Paul",
+ *     "mere[nom]": "Marie"
+ *   };
+ *
+ *   const nested = nestData(flatData);
+ *   console.log(nested);
+ *    {
+ *      pere: { nom: "Jean", prenom: "Paul" },
+ *      mere: { nom: "Marie" }
+ *    }
+ *
+ * @param flatData - Objet plat provenant du formulaire, avec des noms d'input type "parent[child]"
+ * @returns Objet imbriqué prêt pour la validation avec Yup
+ */
+export const nestData = (flatData: Record<string, any>): Record<string, any> => {
+  const nestedData: Record<string, any> = {};
+
+  Object.keys(flatData).forEach((key) => {
+    // Cherche les clés de type "parent[child]"
+    const match = key.match(/^(\w+)\[(\w+)\]$/);
+    if (match) {
+      const parent = match[1]; // "pere"
+      const child = match[2];  // "nom"
+      if (!nestedData[parent]) nestedData[parent] = {};
+      nestedData[parent][child] = flatData[key];
+    } else {
+      // Si pas de crochet, garde la clé telle quelle
+      nestedData[key] = flatData[key];
+    }
+  });
+
+  return nestedData;
+};
