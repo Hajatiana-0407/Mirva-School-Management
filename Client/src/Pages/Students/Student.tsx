@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Filter, Archive, User, UserCheck, CalendarDays, MapPin, Home, Phone, Mail, Globe, Eye, Edit, Activity, Users, FolderOpen, Focus, TrendingUp, TrendingDown, X, PenBox, Check } from 'lucide-react';
+import { Search, Filter, Archive, User, UserCheck, CalendarDays, MapPin, Home, Phone, Mail, Globe, Eye, Edit, Activity, Users, FolderOpen, Focus, TrendingUp, TrendingDown, X, PenBox, Check, Plus } from 'lucide-react';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import Table from '../Table';
@@ -17,6 +17,7 @@ import { baseUrl } from '../../Utils/Utils';
 import Input from '../../Components/ui/Input';
 import { useNavigate } from 'react-router-dom';
 import Profile from '../../Components/ui/Profile';
+import RegisterForm from '../../Components/Forms/RegisterForm';
 
 // Validation de donnée avec yup 
 const StudentSchema = object({
@@ -37,6 +38,7 @@ const Student = () => {
   const { hiddeTheModalActive } = useSelector(getAppState);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [showModalRegister, setShowModalRegister] = useState(false);
   const [editingStudent, setEditingStudent] = useState<StudentType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
@@ -71,6 +73,9 @@ const Student = () => {
     setShowModal(false);
     setEditingStudent(null);
   };
+  const handleCloseModalRegister = () => {
+    setShowModalRegister(false);
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     onSubmite((validateData) => {
@@ -82,6 +87,11 @@ const Student = () => {
   useEffect(() => {
     if (showModal && hiddeTheModalActive) {
       handleCloseModal();
+    }
+  }, [hiddeTheModalActive]);
+  useEffect(() => {
+    if (showModalRegister && hiddeTheModalActive) {
+      handleCloseModalRegister();
     }
   }, [hiddeTheModalActive]);
 
@@ -155,6 +165,13 @@ const Student = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Liste des étudiants</h1>
+        <button
+          onClick={() => setShowModalRegister(true)}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+        >
+          <Plus className="w-4 h-4" />
+          <span>Nouvelle inscription  </span>
+        </button>
       </div>
 
       {/* Girl statistique */}
@@ -460,6 +477,17 @@ const Student = () => {
             </button>
           </div>
         </form>
+      </Modal>
+
+
+      {/* Formulaire d'inscription */}
+      <Modal
+        isOpen={showModalRegister}
+        onClose={handleCloseModalRegister}
+        title={editingStudent ? "Modifier l'élève" : "Nouvelle inscription"}
+        size='lg'
+      >
+        <RegisterForm />
       </Modal>
 
       {/* Dialog de confirmation */}

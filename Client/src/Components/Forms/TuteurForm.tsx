@@ -11,7 +11,7 @@ export const TuteurSchema = Yup.object({
     tuteur: personSchema,
 });
 
-type TuteurFormPropsType = { student: StudentDetailsType, formErrors: any | undefined };
+type TuteurFormPropsType = { student?: StudentDetailsType, formErrors: any | undefined };
 const TuteurForm: React.FC<TuteurFormPropsType> = ({ student, formErrors }) => {
 
     return (

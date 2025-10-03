@@ -302,7 +302,7 @@ export const StudentInitialValue: StudentType = {
 };
 
 // Student details 
-export type StudentDetailsType = StudentType & levelType & ClasseType & { mere: ParentType, pere: ParentType, tuteur: ParentType }
+export type StudentDetailsType = StudentType & levelType & ClasseType & { mere?: ParentType, pere?: ParentType, tuteur?: ParentType }
 
 // Registration ( INSCRIPTION )
 export type RegistrationType = {
@@ -418,6 +418,7 @@ type Field = {
     value: string;
 };
 export type StudentFormDataType = {
+    photo?: string;
     nom: Field;
     prenom: Field;
     date_naissance: Field;

@@ -88,11 +88,6 @@ class EtudiantController extends CI_Controller
             'maladies' => $this->input->post('maladies'),
             'email' => $this->input->post('email'),
             'nationalite' => $this->input->post('nationalite'),
-
-            // Informations supplémentaires
-            'urgence_nom' => $this->input->post('urgence_nom'),
-            'urgence_lien' => $this->input->post('urgence_lien'),
-            'urgence_tel' => $this->input->post('urgence_tel'),
         ];
 
         // ? Piece joint

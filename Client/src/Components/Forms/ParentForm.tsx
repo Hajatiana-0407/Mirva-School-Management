@@ -53,7 +53,7 @@ export const ParentSchema = Yup.object({
     mere: personSchema,
 });
 
-type ParentFormPropsType = { student: StudentDetailsType, formErrors: any | undefined };
+type ParentFormPropsType = { student?: StudentDetailsType, formErrors: any | undefined };
 const ParentForm: React.FC<ParentFormPropsType> = ({ student, formErrors }) => {
     return (
         <div >

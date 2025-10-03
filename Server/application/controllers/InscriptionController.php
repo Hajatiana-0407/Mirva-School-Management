@@ -31,94 +31,64 @@ class InscriptionController extends CI_Controller
         }
 
 
-        // ================== INFORMATIONS DES PARENTS ==================
-        $tuteur_type = $this->input->post('tuteur_type');
-
-        // ? Piece d'identité des parents / tuteur
-        $pere_pi = '';
-        if (isset($_FILES['pc_cin_pere']) && $_FILES['pc_cin_pere']['error'] == 0) {
-            $piPereUpload = upload_file('pc_cin_pere', PARENT_UPLOAD_DIR );
-            if ($piPereUpload['success']) {
-                $pere_pi = $piPereUpload['file_name'];
-            } else {
-                echo json_encode([
-                    'error' => true,
-                    'type' => 'fileSize',
-                    'message' => "Erreur lors de l' upload pièce d'identité du parent: ",
-                    'details' => $piPereUpload['error']
-                ]);
-                return;
+        // ? ================== INFORMATIONS DES PARENTS ==================
+        $dataPost = $this->input->post(null, true);
+        function getParentData($parentData, $defaultType)
+        {
+            if (empty($parentData['nom'])) {
+                return null;
             }
-        }
-        $mere_pi = '';
-        if (isset($_FILES['pc_cin_mere']) && $_FILES['pc_cin_mere']['error'] == 0) {
-            $piMereUpload = upload_file('pc_cin_mere', PARENT_UPLOAD_DIR );
-            if ($piMereUpload['success']) {
-                $mere_pi = $piMereUpload['file_name'];
-            } else {
-                echo json_encode([
-                    'error' => true,
-                    'type' => 'fileSize',
-                    'message' => "Erreur lors de l' upload pièce d'identité du parent: ",
-                    'details' => $piMereUpload['error']
-                ]);
-                return;
-            }
-        }
-        $tuteur_pi = '';
-        if (isset($_FILES['pc_cin_tuteur']) && $_FILES['pc_cin_tuteur']['error'] == 0) {
-            $piTuteurUpload = upload_file('pc_cin_tuteur', PARENT_UPLOAD_DIR);
-            if ($piTuteurUpload['success']) {
-                $tuteur_pi =  $piTuteurUpload['file_name'];
-            } else {
-                echo json_encode([
-                    'error' => true,
-                    'type' => 'fileSize',
-                    'message' => "Erreur lors de l' upload pièce d'identité du parent: ",
-                    'details' => $piTuteurUpload['error']
-                ]);
-                return;
-            }
-        }
 
-        $parents = [];
-        if ($tuteur_type === 'parent') {
-            // ? Parents
-            $parents = [
-                'nom_pere' => $this->input->post('pere_nom'),
-                'profession_pere' => $this->input->post('pere_profession'),
-                'telephone_pere' => $this->input->post('pere_tel'),
-                'nom_mere' => $this->input->post('mere_nom'),
-                'profession_mere' => $this->input->post('mere_profession'),
-                'telephone_mere' => $this->input->post('mere_tel'),
-                'adresse' => $this->input->post('adresse_parents'),
-                'type' => $tuteur_type,
-                'tuteur_email' => $this->input->post('tuteur_email'), // si tuteur et parents email identique
-
-                'pc_cin_pere' => $pere_pi,
-                'pc_cin_mere' => $mere_pi,
-            ];
-        } else {
-            // ? Tuteur légal
-            $parents = [
-                'tuteur_nom' => $this->input->post('tuteur_nom'),
-                'tuteur_lien' => $this->input->post('tuteur_lien'),
-                'tuteur_tel' => $this->input->post('tuteur_tel'),
-                'tuteur_email' => $this->input->post('tuteur_email'),
-                'type' => $tuteur_type,
-                'pc_cin_tuteur' => $tuteur_pi,
+            return [
+                'id_parent' => isset($parentData['id_parent']) ? (int)$parentData['id_parent'] : 0,
+                'nom' => htmlspecialchars($parentData['nom']),
+                'prenom' => isset($parentData['prenom']) ? htmlspecialchars($parentData['prenom']) : '',
+                'profession' => isset($parentData['profession']) ? htmlspecialchars($parentData['profession']) : '',
+                'adresse' => isset($parentData['adresse']) ? htmlspecialchars($parentData['adresse']) : '',
+                'telephone' => isset($parentData['telephone']) ? htmlspecialchars($parentData['telephone']) : '',
+                'email' => isset($parentData['email']) ? htmlspecialchars($parentData['email']) : ''
             ];
         }
 
-        // ! Enregistrer les informations des parents dans la base de données
-        $parent_id = null;
-        if ($tuteur_type !== '' && ($this->input->post('pere_nom') !== "" || $this->input->post('nom_mere') !== '' || $this->input->post('tuteur_nom') !== '')) {
-            $this->load->model('ParentModel');
-            $parentInfo = $this->ParentModel->insert($parents);
-            if ($parentInfo) {
-                $parent_id = $parentInfo['id_parent'];
+        $parents = [
+            'pere' => isset($dataPost['pere']) ? getParentData($dataPost['pere'], 'père') : null,
+            'mere' => isset($dataPost['mere']) ? getParentData($dataPost['mere'], 'mère') : null,
+            'tuteur' => isset($dataPost['tuteur']) ? getParentData($dataPost['tuteur'], 'tuteur') : null
+        ];
+
+        $parent_eleve = [] ; 
+        foreach ($parents as $key => $parent) {
+            if ($parent !== null) {
+                $this->load->model('ParentModel');
+                // ===================== Gesetion du Piece d'identité  ===================== //
+                if (isset($_FILES[$key]) && $_FILES[$key]['error']['pc_cin'] == 0) {
+                    $piTuteurUpload = upload_file($key . "[pc_cin]", PARENT_UPLOAD_DIR);
+                    if ($piTuteurUpload['success']) {
+                        $parent['pc_cin'] =  $piTuteurUpload['file_name'];
+                    } else {
+                        echo json_encode([
+                            'error' => true,
+                            'type' => 'fileSize',
+                            'message' => "Erreur lors de l' upload pièce d'identité du parent: ",
+                            'details' => $piTuteurUpload['error']
+                        ]);
+                        return;
+                    }
+                }
+                // =====================  ===================== //
+
+                // ===================== Create ===================== //
+                unset($parent['id_parent']);
+                $resInsert = $this->ParentModel->insert($parent);
+                if ($resInsert) {
+                    $parent_eleve[] = [
+                        'parent_id_parent' => $resInsert['id_parent'],
+                        'type' => $key === 'pere' ? 'père' : ($key === 'mere' ? 'mère' : 'tuteur')
+                    ];
+                }
             }
         }
+        // ? =====================  ===================== //
 
         // ================== INFORMATIONS DE L'ELEVE ==================
         // ? Photo d'identité de l'étudiant
@@ -141,7 +111,7 @@ class InscriptionController extends CI_Controller
         // ? Photocopie de l'acte de naissance 
         $act_naissance = '';
         if (isset($_FILES['acte_naissance']) && $_FILES['acte_naissance']['error'] == 0) {
-            $pcActeNassanceUpload = upload_file('acte_naissance', STUDENT_UPLOAD_DIR .'pi');
+            $pcActeNassanceUpload = upload_file('acte_naissance', STUDENT_UPLOAD_DIR . 'pi');
             if ($pcActeNassanceUpload['success']) {
                 $act_naissance = $pcActeNassanceUpload['file_name'];
             } else {
@@ -195,7 +165,6 @@ class InscriptionController extends CI_Controller
             'prenom' => $this->input->post('prenom'),
             'adresse' => $this->input->post('adresse'),
             'telephone' => $this->input->post('telephone'),
-            'parent_id_parent' => $parent_id, // ? Indetification des parents ou du tuteur 
             'date_naissance' => $this->input->post('date_naissance'),
             'lieu_naissance' => $this->input->post('lieu_naissance'),
             'sexe' => $this->input->post('sexe'),
@@ -207,10 +176,6 @@ class InscriptionController extends CI_Controller
             'pc_pi' => $pieceIndetite,
             'bulletin' => $bulletin,
 
-            // Informations supplémentaires
-            'urgence_nom' => $this->input->post('urgence_nom'),
-            'urgence_lien' => $this->input->post('urgence_lien'),
-            'urgence_tel' => $this->input->post('urgence_tel'),
         ];
 
         // ! Enregistrement de l'etudiant dans la base de données
@@ -218,6 +183,15 @@ class InscriptionController extends CI_Controller
         $etudiantIsered =  $this->EtudiantModel->insert($etudiant);
         if ($etudiantIsered) {
             $eleve_id = $etudiantIsered['id_eleve'];
+        }
+
+        //! Enregistrement de la liaison parent eleve dans la base de donnée
+        if ( !empty( $parent_eleve ) && $eleve_id ) { 
+            $this->load->model('ParentEleveModele') ; 
+            for ($i=0; $i < count($parent_eleve) ; $i++) { 
+                $parent_eleve[ $i ]['eleve_id_eleve'] = $eleve_id ; 
+            }
+            $this->ParentEleveModele->insertBatch( $parent_eleve ) ; 
         }
 
         $inscription = [
