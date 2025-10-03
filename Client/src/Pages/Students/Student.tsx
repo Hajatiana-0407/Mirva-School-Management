@@ -254,7 +254,7 @@ const Student = () => {
       <Modal
         isOpen={showModal}
         onClose={handleCloseModal}
-        title={editingStudent ? 'Modifier de l\'étudiant' : 'Nouvelle étudiant'}
+        title={editingStudent ? `${ editingStudent.nom } ${ editingStudent.prenom } ( ${ editingStudent.matricule_etudiant } )` : 'Nouvelle étudiant'}
         size='lg'
       >
         <StudentForm

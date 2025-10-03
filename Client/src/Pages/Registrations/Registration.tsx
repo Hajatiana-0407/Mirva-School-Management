@@ -170,7 +170,7 @@ const Registration: React.FC = () => {
 /* Composant InfoBlock modernisé */
 type InfoBlockPropsType = {
   icon: React.ReactNode;
-  label: string;
+  label: React.ReactNode;
   value: React.ReactNode;
   important?: boolean
 }

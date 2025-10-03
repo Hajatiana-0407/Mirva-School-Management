@@ -6,13 +6,14 @@ import { AppDispatch } from "../../Redux/store";
 import Loading from "../../Components/ui/Loading";
 import { baseUrl } from "../../Utils/Utils";
 import { InfoBlock } from "../Registrations/Registration";
-import {  ArrowLeft, CalendarDays, ChevronDown, ChevronUp, Globe, GraduationCap, HeartPulse, Home,  PenBox, Phone, Tag, User} from "lucide-react";
+import { ArrowLeft, CalendarDays, ChevronDown, ChevronUp, Globe, GraduationCap, HeartPulse, Home, PenBox, Phone, Tag, User } from "lucide-react";
 import Modal from "../Modal";
 import { getStudentState } from "./redux/StudentSlice";
 import { getAppState } from "../../Redux/AppSlice";
 import clsx from "clsx";
 import ImageProfile from "../../Components/ui/ImageProfile";
 import StudentForm from "../../Components/Forms/StudentForm";
+import HeadingSmall from "../../Components/ui/HeadingSmall";
 
 
 const StudentSinglePage = () => {
@@ -64,7 +65,7 @@ const StudentSinglePage = () => {
             <div className="space-y-4">
 
                 {/* Bloc principal : Photo + Identité */}
-                <div className="flex gap-6 items-start">
+                <div className="flex gap-4 items-start">
                     {/* PHOTO D IDENTITE */}
                     <div className='w-[15.2rem] h-[15.2rem]'>
                         <ImageProfile url={student?.photo} isInput={false} />
@@ -98,7 +99,7 @@ const StudentSinglePage = () => {
                             label="Niveau & Classe"
                             value={
                                 <span className="text-blue-700 font-semibold">
-                                    {student?.niveau && student.denomination ? `${student.niveau} • ${student.denomination}` : ''}
+                                    {student?.niveau && student.denomination ? `${student.niveau} • ${student.denomination}` : '--'}
                                 </span>
                             }
                             important
@@ -120,81 +121,191 @@ const StudentSinglePage = () => {
                 </div>
 
                 {/* Coordonnées */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <InfoBlock
-                        icon={<Home className="w-6 h-6 text-orange-500" />}
-                        label="Adresse"
-                        value={student?.adresse}
-                    />
-                    <InfoBlock
-                        icon={<Phone className="w-6 h-6 text-teal-500" />}
-                        label="Téléphone & Email"
-                        value={
-                            <span className="text-blue-700 font-semibold">
-                                {student?.telephone} • {student?.email}
-                            </span>
-                        }
-                    />
-                </div>
-
-                {/* Parents */}
-                {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <InfoBlock
-                        icon={<User className="w-6 h-6 text-blue-500" />}
-                        label="Père"
-                        value={`${student?.nom_pere} • ${student?.profession_pere}`}
-                    />
-                    <InfoBlock
-                        icon={<User className="w-6 h-6 text-pink-500" />}
-                        label="Mère"
-                        value={`${student?.nom_mere} • ${student?.profession_mere}`}
-                    />
+                <div className="space-y-2">
                     <div className="col-span-2">
+                        <HeadingSmall title="Coordonnées : " />
+                    </div>
+                    <div className="space-y-4">
                         <InfoBlock
                             icon={<Home className="w-6 h-6 text-orange-500" />}
-                            label="Adresse des parents"
-                            value={student?.parent_adresse}
+                            label="Adresse"
+                            value={student?.adresse}
+                        />
+                        <InfoBlock
+                            icon={<Phone className="w-6 h-6 text-teal-500" />}
+                            label="Téléphone & Email"
+                            value={
+                                <span className="text-blue-700 font-semibold">
+                                    {student?.telephone} • {student?.email}
+                                </span>
+                            }
                         />
                     </div>
-                </div> */}
+                </div>
+
+
+                {/* Informations sur les parents */}
+                <div className="space-y-2">
+                    <div className="col-span-2">
+                        <HeadingSmall title="Informations sur les parent : " />
+                    </div>
+                    <div className="space-y-4">
+                        {student?.mere &&
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <InfoBlock
+                                    icon={<User className="w-6 h-6 text-cyan-500" />}
+                                    label={
+                                        <span>
+                                            Mère
+                                            {student.mere.contact_urgence == '1' &&
+                                                <span className="text-red-500 font-bold"> ( Contact d'urgence ) </span>
+                                            }
+                                        </span>
+                                    }
+                                    value={
+                                        <span className="font-semibold">
+                                            {student.mere.nom} {student.mere.prenom}
+                                        </span>
+                                    }
+                                    important={student.mere.contact_urgence == "1"}
+                                />
+                                <InfoBlock
+                                    icon={<Phone className="w-6 h-6 text-teal-500" />}
+                                    label={
+                                        <span>
+                                            Contact de la mère
+                                            {student.mere.contact_urgence == '1' &&
+                                                <span className="text-red-500 font-bold"> ( Contact d'urgence ) </span>
+                                            }
+                                        </span>
+                                    }
+                                    value={
+                                        <span className="text-blue-700 font-semibold">
+                                            {student.mere.telephone} • {student?.mere.email}
+                                        </span>
+                                    }
+
+                                    important={student.mere.contact_urgence == "1"}
+                                />
+                            </div>
+                        }
+                        {student?.pere &&
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <InfoBlock
+                                    icon={<User className="w-6 h-6 text-cyan-500" />}
+                                    label={
+                                        <span>
+                                            Père
+                                            {student.pere.contact_urgence == '1' &&
+                                                <span className="text-red-500 font-bold"> ( Contact d'urgence ) </span>
+                                            }
+                                        </span>
+                                    }
+                                    value={
+                                        <span className="font-semibold">
+                                            {student.pere.nom} {student.pere.prenom}
+                                        </span>
+                                    }
+                                    important={student.pere.contact_urgence == "1"}
+                                />
+                                <InfoBlock
+                                    icon={<Phone className="w-6 h-6 text-teal-500" />}
+                                    label={
+                                        <span>
+                                            Contact du père
+                                            {student.pere.contact_urgence == '1' &&
+                                                <span className="text-red-500 font-bold"> ( Contact d'urgence ) </span>
+                                            }
+                                        </span>
+                                    }
+                                    value={
+                                        <span className="text-blue-700 font-semibold">
+                                            {student.pere.telephone} • {student?.pere.email}
+                                        </span>
+                                    }
+
+                                    important={student.pere.contact_urgence == "1"}
+                                />
+                            </div>
+                        }
+                        {student?.tuteur &&
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <InfoBlock
+                                    icon={<User className="w-6 h-6 text-cyan-500" />}
+                                    label={
+                                        <span>
+                                            Tuteur
+                                            {student.tuteur.contact_urgence == '1' &&
+                                                <span className="text-red-500 font-bold"> ( Contact d'urgence ) </span>
+                                            }
+                                        </span>
+                                    }
+                                    value={
+                                        <span className="font-semibold">
+                                            {student.tuteur.nom} {student.tuteur.prenom}
+                                        </span>
+                                    }
+                                    important={student.tuteur.contact_urgence == "1"}
+                                />
+                                <InfoBlock
+                                    icon={<Phone className="w-6 h-6 text-teal-500" />}
+                                    label={
+                                        <span>
+                                            Contact du Tuteur
+                                            {student.tuteur.contact_urgence == '1' &&
+                                                <span className="text-red-500 font-bold"> ( Contact d'urgence ) </span>
+                                            }
+                                        </span>
+                                    }
+                                    value={
+                                        <span className="text-blue-700 font-semibold">
+                                            {student.tuteur.telephone} • {student?.tuteur.email}
+                                        </span>
+                                    }
+
+                                    important={student.tuteur.contact_urgence == "1"}
+                                />
+                            </div>
+                        }
+                    </div>
+                </div>
+
 
                 {/* Santé + Urgence */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {student?.maladies &&
                     <InfoBlock
                         icon={<HeartPulse className="w-6 h-6 text-red-500" />}
                         label="Maladies"
                         value={student?.maladies}
                     />
-                    <InfoBlock
-                        icon={<Phone className="w-6 h-6 text-indigo-500" />}
-                        label="Contact d’urgence"
-                        value={
-                            <span className="text-blue-700 font-semibold">
-                                {student?.urgence_nom} • {student?.urgence_tel}
-                            </span>
-                        }
-                    />
-                </div>
+                }
 
 
                 {/* Piece jointe */}
-                {student?.pc_act_naissance != '' &&
-                    <PhotoComponent url={baseUrl(student?.pc_act_naissance)} label="Acte de naissance" />
-                }
-                {student?.pc_pi != '' &&
-                    <PhotoComponent url={baseUrl(student?.pc_pi)} label="CIN" />
-                }
+                <div className="space-y-2">
+                    <div>
+                        <HeadingSmall title="Pièces jointes :" />
+                    </div>
+                    <div className="space-y-4">
+                        {student?.pc_act_naissance != '' &&
+                            <PhotoComponent url={baseUrl(student?.pc_act_naissance)} label="Acte de naissance" />
+                        }
+                        {student?.pc_pi != '' &&
+                            <PhotoComponent url={baseUrl(student?.pc_pi)} label="CIN" />
+                        }
 
-                {student?.bulletin != '' &&
-                    <PhotoComponent url={baseUrl(student?.bulletin)} label="Bulletin" />
-                }
+                        {student?.bulletin != '' &&
+                            <PhotoComponent url={baseUrl(student?.bulletin)} label="Bulletin" />
+                        }
+                    </div>
+                </div>
             </div>
 
 
             <Modal
                 isOpen={showModal}
                 onClose={handleCloseModal}
-                title={student ? 'Modifier la matière' : 'Nouvelle matière'}
+                title={student ? `${student.nom} ${student.prenom} ( ${student.matricule_etudiant} )` : 'Nouvelle matière'}
                 size='lg'
             >
                 <StudentForm editingStudent={student} handleCloseModal={handleCloseModal} />
@@ -209,10 +320,10 @@ export const PhotoComponent = ({ url = '', label = 'photo' }: { url: string, lab
     return (
         <div className={clsx({
             'h-[5rem]': !isShow
-        }, "w-full p-6 border rounded bg-white max-h-[24rem] relative overflow-hidden transition-all duration-700")} >
-            <a href={url} target="_blank" className="absolute top-2 left-4 italic px-2 rounded-full bg-green-200 hover:underline cursor-pointer"> {label} </a>
+        }, "w-full p-6 border rounded bg-blue-100  relative overflow-hidden transition-all duration-700")} >
+            <a href={url} target="_blank" className="absolute top-2 left-4 italic px-6 font-bold rounded-full bg-blue-600 text-white hover:underline cursor-pointer"> {label} </a>
             <button
-                className="absolute top-2 right-4 italic px-4 border border-gray-300 rounded-full bg-gray-200 hover:bg-gray-300 translate-all duration-150 cursor-pointer"
+                className="absolute top-2 right-4 italic px-4 border border-blue-600 rounded-full bg-blue-600 text-white hover:bg-blue-500 translate-all duration-150 cursor-pointer"
                 onClick={() => setIsShow(v => !v)}
             >
                 {isShow ? <ChevronUp /> : <ChevronDown />}
@@ -220,7 +331,7 @@ export const PhotoComponent = ({ url = '', label = 'photo' }: { url: string, lab
             <div className={clsx({
                 'h-[2rem] overflow-hidden': !isShow,
                 'overflow-auto': isShow,
-            }, "w-full max-h-[18rem] border")} >
+            }, "w-full max-h-max border")} >
                 <img src={url} className="w-full mx-auto" alt={label} />
             </div>
         </div>

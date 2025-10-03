@@ -99,7 +99,10 @@ const StudentSlice = createSlice({
                             }
                         }
                         return level
-                    })
+                    });
+                    if (state.single.data?.id_eleve === data?.id_eleve) {
+                        state.single.data = data;
+                    }
                 }
             })
             .addCase(updateStudent.rejected, (state) => {
