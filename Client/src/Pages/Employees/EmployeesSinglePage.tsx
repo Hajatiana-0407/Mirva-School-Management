@@ -18,7 +18,7 @@ import ImageProfile from "../../Components/ui/ImageProfile";
 
 const EmployeesSinglePage = () => {
     const { id } = useParams();
-    const { error, single: { data: employee, action }, action: { isUpdating } } = useSelector(getEmployeState);
+    const { error, single: { data: employee, action } } = useSelector(getEmployeState);
     const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
@@ -28,7 +28,7 @@ const EmployeesSinglePage = () => {
         if (id) {
             dispatch(getEmployeByMatricule(id as string));
         }
-    }, [dispatch, isUpdating]);
+    }, [dispatch]);
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -195,7 +195,12 @@ const EmployeesSinglePage = () => {
                     <HeadingSmall title="Urgence :" />
                     <InfoBlock
                         icon={<Phone className="w-6 h-6 text-indigo-500" />}
-                        label="Contact d’urgence"
+                        label={
+                            <span>
+                                {employee?.urgence_lien?.toUpperCase()}
+                                <span className="text-red-500 font-bold"> ( Contact d’urgence ) </span>
+                            </span>
+                        }
                         value={
                             <span className="text-blue-700 font-semibold flex flex-col">
                                 {employee?.urgence_nom} • {employee?.urgence_tel}
@@ -209,9 +214,17 @@ const EmployeesSinglePage = () => {
                 </div>
 
                 {/* Piece jointe */}
-                {!!employee?.pc_cin &&
-                    <PhotoComponent url={baseUrl(employee?.pc_cin)} label="Photocopie CIN" />
+                {employee?.pc_cin &&
+                    <div className="space-y-4">
+                        <div className="">
+                            <HeadingSmall title="Pièces jointes :" />
+                        </div>
+                        {!!employee?.pc_cin &&
+                            <PhotoComponent url={baseUrl(employee?.pc_cin)} label="Photocopie CIN" />
+                        }
+                    </div>
                 }
+
 
             </div>
 

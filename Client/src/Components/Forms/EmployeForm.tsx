@@ -310,7 +310,7 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                         <Input
                             label='Poste'
                             name='type_personnel'
-                            defaultValue={editingEmployees?.engagement || typePersonnelOptions[0]?.value}
+                            defaultValue={editingEmployees?.id_type_personnel || typePersonnelOptions[0]?.value}
                             icon={Briefcase}
                             errorMessage={formErrors?.type_personnel} type='select'
                             options={typePersonnelOptions}

@@ -11,7 +11,7 @@ type initialStateType = {
     page: number,
     error: string;
     single: {
-        data?: EmployeeType & TypePersonnelType ;
+        data?: EmployeeType & TypePersonnelType;
         action: ActionType
     }
 }
@@ -98,7 +98,10 @@ const EmployeSlice = createSlice({
                             }
                         }
                         return level
-                    })
+                    });
+                    if (state.single.data?.id_personnel === data?.id_personnel) {
+                        state.single.data = data;
+                    }
                 }
             })
             .addCase(updateEmployees.rejected, (state) => {
