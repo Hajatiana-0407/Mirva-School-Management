@@ -16,49 +16,21 @@ export default function useForm<T>(
     setFormValue: (e: React.ChangeEvent<HTMLInputElement>) => void;
     formErrors?: Partial<Record<keyof T, string>>;
     onSubmite: (next: (data: T) => void, e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-    handleInputFileChange: (e: React.ChangeEvent<HTMLInputElement>) => string | undefined;
     resetError: () => void;
     forceError: (errors: Partial<Record<keyof T, string>>) => void;
+    HandleValidateSchema: (form: HTMLFormElement) => Promise<boolean>
 } {
     const [formValue, setAllFormValue] = useState(initial);
     const [formErrors, setFormErrors] = useState<Partial<Record<keyof T, string>>>();
     const dispatch: AppDispatch = useDispatch();
 
-    const setFormValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        const name = e.target.name;
-        if (name) {
-            setAllFormValue({
-                ...formValue,
-                [name]: value
-            });
-        }
-    };
-
-    const handleInputFileChange = (e: React.ChangeEvent<HTMLInputElement>): string | undefined => {
-        if (e.target.type === 'file') {
-            const file = e.target.files?.[0];
-            const name = e.target.name
-            if (file) {
-                const imageUrl = URL.createObjectURL(file);
-                setAllFormValue({
-                    ...formValue,
-                    [name]: imageUrl
-                });
-            }
-        }
-        return;
-    };
-
-    const onSubmite = async (next: (data: T) => void, e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-        dispatch(setHiddeModalValue(false));
-        e.preventDefault();
-        const form = e.currentTarget;
-
+    // Extraction des donnée du formulaire 
+    const getDataForm = (form?: HTMLFormElement) => {
         const formData = new FormData();
         let data: Record<string, any> = {};
-        for (let i = 0; i < form.elements.length; i++) {
-            const element = form.elements[i] as HTMLElement;
+        const leng = form?.elements.length || 0;
+        for (let i = 0; i < leng; i++) {
+            const element = form?.elements[i] as HTMLElement;
             if (
                 element instanceof HTMLInputElement
                 || element instanceof HTMLSelectElement
@@ -88,6 +60,17 @@ export default function useForm<T>(
             }
         }
 
+        return {
+            formData, data
+        }
+    }
+
+    // Soumission
+    const onSubmite = async (next: (data: T) => void, e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+        dispatch(setHiddeModalValue(false));
+        e.preventDefault();
+        const form = e.currentTarget;
+        const { data, formData } = getDataForm(form);
         if (data) {
             setAllFormValue(data as T);
         }
@@ -100,7 +83,6 @@ export default function useForm<T>(
 
             // Fusion des erreurs de plusieurs schémas
             const allErrors: Partial<Record<keyof T, string>> = {};
-
             for (const schema of schemas) {
                 try {
                     const dataNested = nestData(data);
@@ -128,6 +110,42 @@ export default function useForm<T>(
         }
     };
 
+    // Seulement pour testé si le schema est valide ( pour des formulaire a plusieur etape )
+    const HandleValidateSchema = async (form: HTMLFormElement) => {
+        const { data } = getDataForm(form);
+        try {
+            const schemas = Array.isArray(schemaValidation)
+                ? schemaValidation
+                : [schemaValidation];
+
+            // Fusion des erreurs de plusieurs schémas
+            const allErrors: Partial<Record<keyof T, string>> = {};
+            for (const schema of schemas) {
+                try {
+                    const dataNested = nestData(data);
+                    await schema.validate(dataNested as T, { abortEarly: false });
+                } catch (error) {
+                    if (error instanceof ValidationError) {
+                        error.inner.forEach((err) => {
+                            if (err.path) {
+                                allErrors[err.path as keyof T] = err.message;
+                            }
+                        });
+                    }
+                }
+            }
+
+            if (Object.keys(allErrors).length > 0) {
+                setFormErrors(allErrors);
+                return false;
+            }
+            setFormErrors(undefined);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
     const resetError = () => {
         setFormErrors({});
     };
@@ -136,13 +154,27 @@ export default function useForm<T>(
         setFormErrors(errors);
     };
 
+
+
+
+    const setFormValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        const name = e.target.name;
+        if (name) {
+            setAllFormValue({
+                ...formValue,
+                [name]: value
+            });
+        }
+    };
+
     return {
         formValue,
         setFormValue,
         formErrors,
         onSubmite,
-        handleInputFileChange,
         resetError,
-        forceError
+        forceError,
+        HandleValidateSchema
     };
 }
