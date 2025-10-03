@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ApiReturnInitial, ApiReturnType, ParentType } from "../../../Utils/Types";
 import api from "../../../Utils/api";
 import { setHiddeModalValue } from "../../../Redux/AppSlice";
+import { toast } from "react-toastify";
 
 
 // READ
@@ -17,6 +18,25 @@ export const getAllParent = createAsyncThunk('parent/getAll', async (): Promise<
     return datas;
 })
 
+// UPSERT
+export const upsertParent = createAsyncThunk('parent/upsert', async (parentData: any, { dispatch }): Promise<ApiReturnType> => {
+
+    let data: ApiReturnType = ApiReturnInitial;
+    await api.post('admin/parent/upsert', parentData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(response => {
+        data = response.data;
+        if (!data.error) {
+            toast.success('Opération effectuée !');
+            dispatch(setHiddeModalValue(true));
+        }
+    }).catch(error => {
+        console.error('Erreur lors de la Modification:', error.getMessage());
+    });
+    return data;
+})
+
+
 // UPDATE
 export const updateParent = createAsyncThunk('parent/modification', async ({ parent, id }: { parent: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
@@ -28,6 +48,7 @@ export const updateParent = createAsyncThunk('parent/modification', async ({ par
     }).then(response => {
         data = response.data;
         if (!data.error) {
+            toast.success('Modification effectuée !');
             dispatch(setHiddeModalValue(true));
         }
     }).catch(error => {
@@ -36,21 +57,21 @@ export const updateParent = createAsyncThunk('parent/modification', async ({ par
     return data;
 })
 
-// CREATE
-export const createParent = createAsyncThunk('parent/ajout', async (parent: ParentType, { dispatch }): Promise<ApiReturnType> => {
-    let data: ApiReturnType = ApiReturnInitial;
-    await api.post('admin/parent/create',
-        parent
-    ).then(response => {
-        data = response.data;
-        if (!data.error) {
-            dispatch(setHiddeModalValue(true));
-        }
-    }).catch(error => {
-        console.error('Erreur lors de la Creation :', error.getMessage());
-    });
-    return data;
-})
+// // CREATE
+// export const createParent = createAsyncThunk('parent/ajout', async (parent: ParentType, { dispatch }): Promise<ApiReturnType> => {
+//     let data: ApiReturnType = ApiReturnInitial;
+//     await api.post('admin/parent/create',
+//         parent
+//     ).then(response => {
+//         data = response.data;
+//         if (!data.error) {
+//             dispatch(setHiddeModalValue(true));
+//         }
+//     }).catch(error => {
+//         console.error('Erreur lors de la Creation :', error.getMessage());
+//     });
+//     return data;
+// })
 
 // DELETE 
 export const deleteParent = createAsyncThunk('parent/suppression', async (id_parent: number, { dispatch }): Promise<ApiReturnType> => {
@@ -62,6 +83,7 @@ export const deleteParent = createAsyncThunk('parent/suppression', async (id_par
         }).then(response => {
             data = response.data;
             if (!data.error) {
+                toast.success('Suppression effectuée !');
                 dispatch(setHiddeModalValue(true));
             }
         }).catch(error => {

@@ -1,26 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive, Eye, User, Users, User2 } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Archive,  User, X, PenBox, Check } from 'lucide-react';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import Table from '../Table';
 import { useDispatch, useSelector } from 'react-redux';
 import { getParentState } from './redux/ParentSlice';
 import useForm from '../../Hooks/useForm';
-import { ParentType, StudentType } from '../../Utils/Types';
+import { ApiReturnType, ParentType, StudentType } from '../../Utils/Types';
 import { object, string } from 'yup';
 import { AppDispatch } from '../../Redux/store';
-import { deleteParent, getAllParent } from './redux/ParentAsyncThunk';
+import { deleteParent, getAllParent, upsertParent } from './redux/ParentAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
 import InputError from '../../Components/ui/InputError';
 import Input from '../../Components/ui/Input';
-import { StudentDetailsType } from '../Students/StudentSinglePage';
+import { StudentDetailsType } from '../../Utils/Types';
 import { getStudentByMatricule } from '../Students/redux/StudentAsyncThunk';
 import Onglet from '../../Components/ui/Onglet';
 import Profile from '../../Components/ui/Profile';
-import ParentForm from '../../Components/Forms/ParentForm';
+import ParentForm, { ParentSchema } from '../../Components/Forms/ParentForm';
 import TuteurForm from '../../Components/Forms/TuteurForm';
-import { getStudentState } from '../Students/redux/StudentSlice';
 import Loading from '../../Components/ui/Loading';
+import ParentModifForm from '../../Components/Forms/ParentModifForm';
+import { baseUrl } from '../../Utils/Utils';
 
 const SearchFormSchema = object({
   matricule_etudiant: string().required('le matricule ne peut pas être vide .'),
@@ -31,36 +32,20 @@ const getParentRelationColor = (status: string) => {
   switch (status) {
     case 'tuteur':
       return 'bg-yellow-100 text-yellow-800';
-    case 'parent':
+    case 'père':
       return 'bg-green-100 text-green-800';
-    case 'parent/tuteur':
+    case 'mère':
       return 'bg-blue-100 text-blue-800';
     default:
       return 'bg-gray-100 text-gray-800';
   }
 };
 
-const getParentRelationIcon = (status: string) => {
-  switch (status) {
-    case 'tuteur':
-      return <User className="w-4 h-4" />;
-    case 'parent':
-      return <Users className="w-4 h-4" />;
-    case 'parent/tuteur':
-      return <User2 className="w-4 h-4" />;
-    default:
-      return null;
-  }
-};
-
-
-
 
 type ParentStudentType = ParentType & StudentType;
 
 const Parents = () => {
   const { datas: parents, action, error } = useSelector(getParentState);
-  const { single: studendSingle } = useSelector(getStudentState);
 
   const { hiddeTheModalActive } = useSelector(getAppState);
   const [searchTerm, setSearchTerm] = useState('');
@@ -71,11 +56,17 @@ const Parents = () => {
   const [studentToAddParent, setStudentToAddParent] = useState<StudentDetailsType | null>(null);
   const { onSubmite: onSearchMatSubmit, formErrors: searMatchFormErrors } = useForm(SearchFormSchema, { matricule_etudiant: '' });
   const dispatch: AppDispatch = useDispatch();
+  const [parentToUpdate, setParentToUpdate] = useState<ParentType | undefined>(undefined);
 
+  const [showModalModif, setShowModalModif] = useState(false)
 
-  const handleEdit = (student: StudentDetailsType) => {
-    setStudentToAddParent(student);
-    setShowModal(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { formErrors, onSubmite } = useForm(ParentSchema, {})
+
+  const handleEdit = (parent: ParentType) => {
+    setParentToUpdate(parent);
+    setShowModalModif(true);
   };
 
   const handleArchive = (parent: any) => {
@@ -96,25 +87,49 @@ const Parents = () => {
     setStudentToAddParent(null);
   };
 
+  const handleCloseModalModif = () => {
+    setShowModalModif(false);
+  }
+
+  const handleSearchByMat = (matricule: string) => {
+    dispatch(getStudentByMatricule(matricule))
+      .unwrap()
+      .then((data: ApiReturnType) => {
+        setStudentToAddParent(data.data);
+      })
+      .catch((err) => {
+        console.error("Erreur lors de la recherche par matricule etudiant", err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
   // ? Rechercher l'etudiant 
   const handleSearcheStudent = (e: React.FormEvent<HTMLFormElement>) => {
     setStudentToAddParent(null);
     onSearchMatSubmit((validateData: any) => {
-      dispatch(getStudentByMatricule(validateData.get('matricule_etudiant') as string))
+      setIsLoading(true);
+      handleSearchByMat(validateData.get('matricule_etudiant') as string);
     }, e);
   }
 
-  useEffect(() => {
-    if (studendSingle) {
-      setStudentToAddParent(studendSingle.data as StudentDetailsType)
-    }
-  }, [studendSingle])
+  // ! ===================== Soumission de la formulaire d'ajout parent ===================== //
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    onSubmite((validateData: any) => {
+      dispatch(upsertParent(validateData));
+    }, e)
+  }
 
   // Modal
   useEffect(() => {
     if (showModal && hiddeTheModalActive) {
       handleCloseModal();
       setStudentToAddParent(null);
+    }
+
+    if (showModalModif && hiddeTheModalActive) {
+      handleCloseModalModif();
     }
   }, [hiddeTheModalActive]);
 
@@ -124,69 +139,47 @@ const Parents = () => {
 
   // ? ================== TABLEAU ===================== //
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
     { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
     { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
   const columns = [
     {
-      key: 'nom', label: 'Etudiant', render: (value: string, item: StudentType) => (
-        <Profile
-          fullName={value ? `${value} ${item.prenom}` : ""}
-          photo={item.photo as string}
-          identification={item.matricule_etudiant}
-          link={`/students/${item.matricule_etudiant}`}
-        />
-      )
-    },
-    {
-      key: 'nom_pere', label: 'Père', render: (value: string, item: ParentType) => (
-        <div>
-          {value !== '' ? <>
-            <div>
-              <span className=''> {item.nom_pere} • </span>
-              <span className='italic text-gray-500'>{item.profession_pere}</span>
-            </div>
-            <span className='text-sm italic text-blue-600'>{item.telephone_pere}</span>
-          </> : <span className='text-gray-400'>Non défini</span>}
-        </div>
-      )
-    },
-    {
-      key: 'nom_mere', label: 'Mère', render: (value: string, item: ParentType) => (
-        <div>
-          {value !== '' ? <>
-            <div>
-              <span className=''> {item.nom_mere} • </span>
-              <span className='italic text-gray-500'>{item.profession_mere}</span>
-            </div>
-            <span className='text-sm italic text-blue-600'>{item.telephone_mere}</span>
-          </> : <span className='text-gray-400'>Non défini</span>}
-        </div>
-      )
-    },
-    {
-      key: 'tuteur_nom', label: 'Tuteur', render: (value: string, item: ParentType) => (
-        <div>
-          {value !== '' ? <>
-            <div>
-              <span className=''> {item.tuteur_nom}</span>
-            </div>
-            <span className='text-sm italic text-blue-600'>{item.tuteur_tel}</span>
-          </> : <span className='text-gray-400'>Non défini</span>}
-        </div>
-      )
-    },
-    { key: 'tuteur_email', label: 'Email' },
-    {
-      key: 'type', label: 'Relation', render: (value: string, item: ParentType) => (
+      key: 'type', label: 'Relation', render: (value: string) => (
         <span className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${getParentRelationColor(value)}`}>
-          {getParentRelationIcon(value)}
-          <span>{value === 'parent/tuteur' ? `PARENT / ${item.tuteur_lien?.toUpperCase()}` : value === 'parent' ? value.toLocaleUpperCase() : item?.tuteur_lien != '' ? item?.tuteur_lien?.toLocaleUpperCase() : value?.toLocaleUpperCase()}</span>
+          <User className="w-4 h-4" />
+          <span>{value?.toUpperCase()}</span>
         </span>
       )
     },
+    {
+      key: 'nom', label: 'Nom complet', render: (value: string, item: ParentType) => (
+        <div>
+          {value !== '' ? <>
+            <div>
+              <span className=''> {item.nom} {item.prenom} • </span>
+              <span className='italic text-gray-500'>{item.profession}</span>
+            </div>
+            <span className='text-sm italic text-blue-600'>{item.telephone}</span>
+          </> : <span className='text-gray-400'>Non défini</span>}
+        </div>
+      )
+    },
+    { key: 'email', label: 'Email' },
+    { key: 'adresse', label: 'Adresse' },
+    {
+      key: 'pc_cin', label: 'CIN', render: (value: string) => (
+        <div>
+          {value &&
+            <a href={baseUrl(value)} target='_blank'>
+              <img src={baseUrl(value)} alt="CIN" className='h-10' />
+            </a>
+          }
+        </div>
+      )
+    }
+
   ];
+
 
   return (
     <div className="space-y-6">
@@ -233,22 +226,23 @@ const Parents = () => {
         />
       </div>
 
-      {/* Modal pour ajouter/modifier une matière */}
+      {/* Modal pour ajouter une Parents */}
       <Modal
         isOpen={showModal}
         onClose={handleCloseModal}
-        title={studentToAddParent?.id_parent ? `Modification Parent de ${studentToAddParent?.prenom}` : 'Ajout Parent / Tuteur'}
+        title={studentToAddParent ? `Modification Parent de ${studentToAddParent?.prenom}` : 'Ajout Parent / Tuteur'}
         size='lg'
       >
+
         <div className="space-y-4">
           <InputError message={error} />
+
           {/* Formulaire pour Rechercher une etudiant */}
           <form className='' onSubmit={handleSearcheStudent}>
             <div className="flex gap-2">
               <div className='flex-1'>
                 <Input
                   label="Matricule de l'étudiant"
-
                   name='matricule_etudiant'
                   icon={Search}
                   placeholder="Rechercher le matricule de l'étudiant"
@@ -256,7 +250,7 @@ const Parents = () => {
                 />
               </div>
               <button
-                // onClick={() => setShowModal(true)}
+                type='submit'
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
               >
                 <Search className="w-4 h-4" />
@@ -267,17 +261,18 @@ const Parents = () => {
               <InputError message={searMatchFormErrors?.matricule_etudiant} />
             </div>
           </form>
+
           {/* Si il n'y a pas d'etudiant et pas de modification  */}
-          {studentToAddParent === null && !studendSingle.action.isLoading &&
+          {studentToAddParent === null && !isLoading &&
             <div className='bg-gray-50  p-6 border border-gray-100 rounded flex items-center justify-center text-lg text-gray-400 italic'>
               <div>Acune étudiant trouvé...</div>
             </div>
           }
-          {studendSingle.action.isLoading &&
+          {isLoading &&
             <Loading />
           }
 
-          {studentToAddParent !== null  &&
+          {studentToAddParent &&
             <div className='w-full py-5 mb-5 flex justify-center bg-blue-50 border border-blue-200 rounded'>
               <Profile
                 fullName={studentToAddParent?.nom ? `${studentToAddParent?.nom} ${studentToAddParent?.prenom}` : ''}
@@ -289,25 +284,64 @@ const Parents = () => {
           }
         </div>
 
-        {studentToAddParent !== null && !studendSingle.action.isLoading  &&
-          <div className='mt-5'>
+        {studentToAddParent &&
+          <form onSubmit={handleSubmit} className='mt-5'>
+            <input type="hidden" name='id_eleve' value={studentToAddParent.id_eleve} />
             <Onglet onlgets={[
               {
                 key: 'Parent',
                 component: <ParentForm
+                  formErrors={formErrors}
                   student={studentToAddParent as StudentDetailsType}
-                  handleCloseModal={handleCloseModal}
                 />
               },
               {
                 key: 'Tuteur', component: <TuteurForm
+                  formErrors={formErrors}
                   student={studentToAddParent as StudentDetailsType}
-                  handleCloseModal={handleCloseModal}
                 />
               },
             ]} />
-          </div>
+
+            <div className="flex justify-end space-x-3 pt-4">
+              <button
+                type="button"
+                onClick={handleCloseModal}
+                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                <X className='h-5 w-5 me-1 inline-block' />
+                Annuler
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+              >
+                {action.isLoading && <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div>}
+                {studentToAddParent?.pere || studentToAddParent?.mere || studentToAddParent?.tuteur ? <>
+                  {!action.isLoading &&
+                    <PenBox className='h-5 w-5 me-1 inline-block' />
+                  }
+                  <span>Modifier</span>
+                </>
+                  : <>
+                    {!action.isLoading &&
+                      <Check className='h-5 w-5 me-1 inline-block' />
+                    }
+                    <span>Ajouter</span>
+                  </>}
+              </button>
+            </div>
+          </form>
         }
+      </Modal>
+
+      <Modal
+        isOpen={showModalModif}
+        onClose={handleCloseModalModif}
+        title={parentToUpdate ? parentToUpdate.nom + ' ' + parentToUpdate.prenom + '( ' + parentToUpdate.type + ' )' : 'Modification'}
+        size='lg'
+      >
+        <ParentModifForm handleCloseModal={handleCloseModalModif} parent={parentToUpdate as ParentType} />
       </Modal>
 
       {/* Dialog de confirmation */}

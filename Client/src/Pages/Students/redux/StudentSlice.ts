@@ -3,7 +3,7 @@ import { ActionIntialValue, ActionType, ApiReturnType, StudentType } from "../..
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
 import { createStudent, deleteStudent, getAllStudent, getStudentByMatricule, updateStudent } from "./StudentAsyncThunk";
-import { StudentDetailsType } from "../StudentSinglePage";
+import { StudentDetailsType } from "../../../Utils/Types";
 
 
 type initialStateType = {

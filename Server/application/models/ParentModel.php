@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class ParentModel extends CI_Model
 {
-    protected $table = 'parent';
+    protected $table = 'parents';
     protected $primaryKey = 'id_parent';
 
     public function __construct()
@@ -14,10 +14,10 @@ class ParentModel extends CI_Model
     // ? ======= READ =======
     public function findAll()
     {
-        return $this->db->select($this->table . '.* , e.nom , e.prenom , e.matricule_etudiant , e.photo')
+        return $this->db->select($this->table . '.* , pe.type')
             ->from($this->table)
-            // ?Eleve
-            ->join('eleve e', 'e.parent_id_parent =' . $this->table . '.' . $this->primaryKey, 'left')
+            // ?Type
+            ->join('parents_eleves pe', 'pe.parent_id_parent =' . $this->table . '.id_parent', 'left')
             ->order_by($this->primaryKey, 'DESC')
             ->group_by($this->table . '.' . $this->primaryKey)
             ->get()
@@ -27,12 +27,13 @@ class ParentModel extends CI_Model
     public function findOneById($id)
     {
         if (!!!$id)  return null;
-        return $this->db->select($this->table . '.* , e.nom , e.prenom , e.matricule_etudiant , e.photo')
+        return $this->db->select($this->table . '.* , pe.type')
             ->from($this->table)
-            // ?Eleve
-            ->join('eleve e', 'e.parent_id_parent =' . $this->table . '.' . $this->primaryKey, 'left')
+            // ?Type
+            ->join('parents_eleves pe', 'pe.parent_id_parent =' . $this->table . '.id_parent', 'left')
             ->where($this->primaryKey, $id)
             ->get()
             ->row_array();
     }
+
 }

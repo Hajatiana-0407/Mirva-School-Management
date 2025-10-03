@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ActionIntialValue, ActionType, ApiReturnType, ParentType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
-import { createParent, deleteParent, getAllParent, updateParent } from "./ParentAsyncThunk";
+import { upsertParent, deleteParent, getAllParent, updateParent } from "./ParentAsyncThunk";
 
 
 type initialStateType = {
@@ -30,7 +30,7 @@ const ParentSlice = createSlice({
     },
     extraReducers(builder) {
 
-        // // ************************************* Read ************************************* //
+        // ? ************************************* Read ************************************* //
         builder
             .addCase(getAllParent.pending, (state) => {
                 state.action.isLoading = true;
@@ -44,15 +44,15 @@ const ParentSlice = createSlice({
             .addCase(getAllParent.rejected, (state) => {
                 state.action.isLoading = false;
                 state.error = 'Erreur de connexion au server'
-                toast.error("Erreur de connexion au server")  ; 
-            }) ; 
+                toast.error("Erreur de connexion au server");
+            });
 
-        // ************************************* Create ************************************* //
+        // ************************************* Upsert ************************************* //
         builder
-            .addCase(createParent.pending, (state) => {
+            .addCase(upsertParent.pending, (state) => {
                 state.action.isLoading = true;
             })
-            .addCase(createParent.fulfilled, (state, action: {
+            .addCase(upsertParent.fulfilled, (state, action: {
                 payload: ApiReturnType
             }) => {
                 state.action.isLoading = false;
@@ -60,18 +60,38 @@ const ParentSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
-                    toast.success('Matière ajoutée !');
                     state.error = '';
-                    state.datas.unshift(data);
+
+                    // ===================== Insertion ===================== //
+                    const inserted: ParentType[] = data?.insert;
+                    inserted.map((parent) => {
+                        state.datas.unshift(parent);
+                    });
+
+                    // ===================== Modification ===================== //
+                    const updated: ParentType[] = data?.update;
+                    updated.map((parent) => {
+                        state.datas = state.datas.map(level => {
+                            if (level.id_parent === parent?.id_parent) {
+                                return {
+                                    ...parent,
+                                    id_parent: level.id_parent
+                                }
+                            }
+                            return level
+                        })
+                    })
                 }
             })
-            .addCase(createParent.rejected, (state) => {
+            .addCase(upsertParent.rejected, (state) => {
                 state.action.isLoading = false;
-                state.error = 'Erreur de connexion au server'; 
-                toast.error("Erreur de connexion au server") ; 
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
             })
 
-        // // ************************************* Update ************************************* //
+
+
+        // ? ************************************* Update ************************************* //
         builder
             .addCase(updateParent.pending, (state) => {
                 state.action.isUpdating = true;
@@ -84,7 +104,6 @@ const ParentSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
-                    toast.success('Matière modifiée !');
                     state.error = '';
                     state.datas = state.datas.map(level => {
                         if (level.id_parent === data?.id_parent) {
@@ -99,11 +118,13 @@ const ParentSlice = createSlice({
             })
             .addCase(updateParent.rejected, (state) => {
                 state.action.isUpdating = false
-                state.error = 'Erreur de connexion au server'; 
-                toast.error("Erreur de connexion au server") ; 
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
             })
 
-        // // ************************************* Delete ************************************* //
+
+
+        // ! ************************************* Delete ************************************* //
 
         builder
             .addCase(deleteParent.pending, (state) => {
@@ -116,15 +137,14 @@ const ParentSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
-                    toast.success('Suppression effectuée');
                     state.error = '';
                     state.datas = state.datas.filter((data: ParentType) => data.id_parent !== id_deleted);
                 }
             })
             .addCase(deleteParent.rejected, (state) => {
                 state.action.isDeleting = false;
-                state.error = 'Erreur de connexion au server'; 
-                toast.error("Erreur de connexion au server") ; 
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
             })
     }
 })

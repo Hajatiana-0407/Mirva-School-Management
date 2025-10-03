@@ -17,7 +17,6 @@ import { getStudentState } from "./redux/StudentSlice";
 import { getAppState } from "../../Redux/AppSlice";
 import clsx from "clsx";
 import ImageProfile from "../../Components/ui/ImageProfile";
-export type StudentDetailsType = StudentType & ParentType & levelType & ClasseType;
 
 // Validation de donnée avec yup 
 const StudentSchema = object({
@@ -168,7 +167,7 @@ const StudentSinglePage = () => {
                 </div>
 
                 {/* Parents */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <InfoBlock
                         icon={<User className="w-6 h-6 text-blue-500" />}
                         label="Père"
@@ -186,7 +185,7 @@ const StudentSinglePage = () => {
                             value={student?.parent_adresse}
                         />
                     </div>
-                </div>
+                </div> */}
 
                 {/* Santé + Urgence */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

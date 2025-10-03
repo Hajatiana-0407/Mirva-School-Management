@@ -30,6 +30,7 @@ export const getAllStudent = createAsyncThunk('etudiant/getAll', async (): Promi
         });
     return datas;
 })
+
 export const getStudentByMatricule = createAsyncThunk('etudiant/getOne', async (matricule: string): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial ;
     await api.get(`admin/etudiant/${matricule}`)

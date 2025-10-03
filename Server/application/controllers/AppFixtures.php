@@ -36,7 +36,7 @@ class AppFixtures extends CI_Controller
             'matiere',
             'niveau',
             'annee_scolaire',
-            'parent',
+            'parents',
             'depense'
         ]);
 
@@ -201,26 +201,7 @@ class AppFixtures extends CI_Controller
             ]);
         }
 
-        // 8. parent
-        for ($i = 0; $i < 5; $i++) {
-            $this->model->insertFixture('parent', [
-                'nom_pere' => $faker->lastName,
-                'nom_mere' => $faker->lastName,
-                'profession_pere' => $faker->jobTitle,
-                'profession_mere' => $faker->jobTitle,
-                'telephone_pere' => $faker->phoneNumber,
-                'telephone_mere' => $faker->phoneNumber,
-                'adresse' => $faker->address,
-                'pc_cin_pere' => $faker->numerify('#########'),
-                'pc_cin_mere' => $faker->numerify('#########'),
-                'type' => $faker->randomElement(['parent', 'tuteur']),
-                'tuteur_email' => $faker->email
-            ]);
-        }
-
-        $parents = $this->model->getIds('parent', 'id_parent');
-
-        // 9. eleve
+        // 8. eleve
         // ? Creation de matricule pour l'etudiant
         $lastStudent = $this->EtudiantModel->findLasted();
         $lastStudentMatricule = '';
@@ -228,7 +209,7 @@ class AppFixtures extends CI_Controller
             $lastStudentMatricule = $lastStudent->matricule_etudiant;
         }
 
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $matriculeStudent = generateMatricule(STUDENT_PRIFIX, $lastStudentMatricule);
             $this->model->insertFixture('eleve', [
                 'matricule_etudiant' => $matriculeStudent,
@@ -236,7 +217,6 @@ class AppFixtures extends CI_Controller
                 'prenom' => $faker->firstName,
                 'adresse' => $faker->address,
                 'telephone' => $faker->phoneNumber,
-                'parent_id_parent' => $faker->randomElement($parents),
                 'date_naissance' => $faker->date(),
                 'lieu_naissance' => $faker->address(),
                 'sexe' => $faker->randomElement(['Homme', 'Femme']),
@@ -249,6 +229,34 @@ class AppFixtures extends CI_Controller
         }
 
         $eleves = $this->model->getIds('eleve', 'id_eleve');
+        // 9. parents
+        foreach ($eleves as $eleve) {
+            // Génère entre 1 et 3 parents/tuteurs par élève
+            $nbParents = rand(1, 3);
+
+            for ($i = 0; $i < $nbParents; $i++) {
+                // Créer un parent dans la table parents
+                $parentId = $this->model->insertFixture('parents', [
+                    'prenom' => $faker->firstName,
+                    'nom' => $faker->lastName,
+                    'telephone' => $faker->phoneNumber,
+                    'email' => $faker->safeEmail,
+                    'adresse' => $faker->address,
+                    'profession' => $faker->jobTitle,
+                    'employeur' => $faker->company,
+                    'telephone_travail' => $faker->phoneNumber,
+                    'contact_urgence' => $faker->boolean(30)
+                ]);
+
+                // Lier ce parent à l'élève dans la table parents_eleves
+                $this->model->insertFixture('parents_eleves', [
+                    'eleve_id_eleve' => $eleve,
+                    'parent_id_parent' => $parentId,
+                    'type' => $faker->randomElement(['père', 'mère', 'tuteur'])
+                ]);
+            }
+        }
+
 
         // Types de personnel
         // foreach ($type_personnels as $type) {
@@ -293,7 +301,7 @@ class AppFixtures extends CI_Controller
                 'type_contrat' => $faker->randomElement(['CDD', 'CDI', 'Stagiaire']),
                 'specialisation' => $faker->jobTitle(),
                 'certification' => $faker->sentence(),
-                'date_embauche' => $faker->date() ,
+                'date_embauche' => $faker->date(),
                 'created_at' => date('Y-m-d H:i:s'),
 
                 // Urgence 
@@ -338,7 +346,6 @@ class AppFixtures extends CI_Controller
         $annees = $this->model->getIds('annee_scolaire', 'id_annee_scolaire');
         for ($i = 0; $i < 5; $i++) {
             $eleve = $faker->randomElement($eleves);
-            $parent = $faker->randomElement($parents);
             $this->model->insertFixture('inscription', [
                 'date_inscription' => $faker->date(),
                 'classe_id_classe' => $faker->randomElement($classes),
