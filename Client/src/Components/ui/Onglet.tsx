@@ -13,19 +13,23 @@ const Onglet: React.FC<OngletPropsType> = ({ onlgets }) => {
     }, [])
     return (
         <div>
-            <div className="border-b">
-                <nav className="flex space-x-8">
+            <div className="border-b border-blue-300">
+                <nav className="flex gap-1">
                     {onlgets.map((ongle) => (
-                        <button
+                        <div
                             key={ongle.key + '_btn'}
                             onClick={() => setActiveTab(ongle.key.toLowerCase())}
-                            className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === ongle.key.toLowerCase()
-                                ? 'border-blue-500 text-blue-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                            className={`py-2 relative cursor-pointer px-2 rounded-t  font-medium text-sm  ${activeTab === ongle.key.toLowerCase()
+                                ? 'border-blue-300 border border-b-0  text-blue-600'
+                                : 'border-gray-200 border border-b-0 text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
                         >
                             {ongle.key}
-                        </button>
+                             {activeTab === ongle.key.toLowerCase() && 
+                             <div className='absolute -bottom-1 left-0 right-0 h-1 bg-white '>
+                             </div>
+                             }
+                        </div>
                     ))}
                 </nav>
             </div>
