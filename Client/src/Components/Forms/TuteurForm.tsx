@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { StudentDetailsType } from "../../Utils/Types";
 import { personSchema } from "./ParentForm";
 import HeadingSmall from "../ui/HeadingSmall";
+import CheckInput from "../ui/CheckInput";
 
 // ! FORMULAIRE POUR LE TYPE TUTEUR
 // Validation de donnée avec yup 
@@ -66,15 +67,22 @@ const TuteurForm: React.FC<TuteurFormPropsType> = ({ student, formErrors }) => {
                     errorMessage={formErrors?.["tuteur.email"]}
                 />
             </div>
-            <Input
-                label="Photocopie CIN du Tuteur"
-                name="tuteur[pc_cin]"
-                defaultValue={student?.tuteur?.pc_cin || ""}
-                icon={FileText}
-                iconColor="text-amber-500"
-                type="file"
-                errorMessage={formErrors?.["tuteur.pc_cin"]}
-            />
+            <div className="space-y-4">
+                <Input
+                    label="Photocopie CIN du Tuteur"
+                    name="tuteur[pc_cin]"
+                    defaultValue={student?.tuteur?.pc_cin || ""}
+                    icon={FileText}
+                    iconColor="text-amber-500"
+                    type="file"
+                    errorMessage={formErrors?.["tuteur.pc_cin"]}
+                />
+                <CheckInput
+                    label="Contact d’urgence"
+                    description="Cocher cette case si ce tuteur doit être contacté en priorité en cas d’urgence."
+                    name="tuteur[contact_urgence]"
+                />
+            </div>
         </div>
     )
 }

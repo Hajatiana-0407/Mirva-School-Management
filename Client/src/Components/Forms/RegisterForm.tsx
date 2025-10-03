@@ -8,7 +8,6 @@ import { InfoBlock } from '../../Pages/Registrations/Registration';
 import { object, string } from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { ClasseType, registrationInitialValue, RegistrationType, StudentFormDataInitialValue, StudentFormDataType } from '../../Utils/Types';
-import { fakeStudentData } from '../../Utils/Utils';
 import useForm from '../../Hooks/useForm';
 import { getLevelState } from '../../Pages/Levels/redux/LevelSlice';
 import { AppDispatch } from '../../Redux/store';
@@ -20,6 +19,7 @@ import HeadingSmall from '../ui/HeadingSmall';
 import Onglet from '../ui/Onglet';
 import ParentForm, { personSchema } from './ParentForm';
 import TuteurForm from './TuteurForm';
+import CheckInput from '../ui/CheckInput';
 
 // ?  ===================== Schema de validation pour le formulaire  ===================== //
 const RegistrationSchema = object({
@@ -77,8 +77,6 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
     const levelOptions = levelDatas.map((level) => ({ value: level.id_niveau as number, label: level.niveau }));
     // ! Année scolaire 
     const { activeSchoolYear } = useSelector(getSchoolYearState);
-    // ! Droit d'inscription
-    const [isPayed, setIsPayed] = useState(true)
     const totalSteps = fomrStep.length + 1;
 
 
@@ -457,29 +455,11 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                         </div>
                     </div>
                     <input type="hidden" name='annee_scolaire' value={activeSchoolYear?.id_annee_scolaire} />
-
-                    <div className="flex items-center ps-4 border rounded bg-amber-50 cursor-pointer">
-                        <label
-                            htmlFor='__droit_inscription'
-                            className="flex items-center justify-between w-full p-2 cursor-pointer"
-                        >
-                            <div>
-                                <h4 className="font-medium text-gray-900">Droit d'inscription</h4>
-                                <p className="text-sm text-gray-600">Création des classes automatiquement pour ce niveau.</p>
-                            </div>
-                            <div className="relative inline-flex items-center cursor-pointer">
-                                <input
-                                    type="checkbox"
-                                    className="sr-only peer"
-                                    onChange={(e) => setIsPayed(e.target.checked)} defaultChecked={isPayed}
-                                    value={isPayed ? "1" : "0"}
-                                    name='isDroitPaye'
-                                    id='__droit_inscription'
-                                />
-                                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                            </div>
-                        </label>
-                    </div>
+                    <CheckInput
+                        name='isDroitPaye'
+                        label="Droit d'inscription"
+                        description="Cocher si le droit d' inscription a été réglé"
+                    />
                 </div>
 
                 {/* Navigation boutons */}

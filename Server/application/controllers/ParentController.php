@@ -27,7 +27,8 @@ class ParentController extends CI_Controller
                 'profession' => isset($parentData['profession']) ? htmlspecialchars($parentData['profession']) : '',
                 'adresse' => isset($parentData['adresse']) ? htmlspecialchars($parentData['adresse']) : '',
                 'telephone' => isset($parentData['telephone']) ? htmlspecialchars($parentData['telephone']) : '',
-                'email' => isset($parentData['email']) ? htmlspecialchars($parentData['email']) : ''
+                'email' => isset($parentData['email']) ? htmlspecialchars($parentData['email']) : '',
+                'contact_urgence' => isset($parentData['contact_urgence']) ? htmlspecialchars($parentData['contact_urgence']) : 0
             ];
 
             if (isset($_FILES['pc_cin']) && $_FILES['pc_cin']['error'] == 0) {
@@ -89,7 +90,8 @@ class ParentController extends CI_Controller
                 'profession' => isset($parentData['profession']) ? htmlspecialchars($parentData['profession']) : '',
                 'adresse' => isset($parentData['adresse']) ? htmlspecialchars($parentData['adresse']) : '',
                 'telephone' => isset($parentData['telephone']) ? htmlspecialchars($parentData['telephone']) : '',
-                'email' => isset($parentData['email']) ? htmlspecialchars($parentData['email']) : ''
+                'email' => isset($parentData['email']) ? htmlspecialchars($parentData['email']) : '',
+                'contact_urgence' => isset($parentData['contact_urgence']) ? htmlspecialchars($parentData['contact_urgence']) : 0
             ];
         }
 

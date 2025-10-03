@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getParentState } from '../../Pages/Parents/redux/ParentSlice'
 import { AppDispatch } from '../../Redux/store'
 import { updateParent } from '../../Pages/Parents/redux/ParentAsyncThunk'
+import CheckInput from '../ui/CheckInput'
 
 type ParentModifFormPropsType = {
     parent: ParentType;
@@ -75,14 +76,22 @@ const ParentModifForm: React.FC<ParentModifFormPropsType> = ({ parent, handleClo
                         errorMessage={formErrors?.email}
                     />
                 </div>
-                <Input
-                    label="Photocopie CIN"
-                    name="pc_cin"
-                    icon={FileText}
-                    iconColor="text-amber-500"
-                    type="file"
-                    errorMessage={formErrors?.pc_cin}
-                />
+                <div className='space-y-4'>
+                    <Input
+                        label="Photocopie CIN"
+                        name="pc_cin"
+                        icon={FileText}
+                        iconColor="text-amber-500"
+                        type="file"
+                        errorMessage={formErrors?.pc_cin}
+                    />
+                    <CheckInput
+                        label="Contact d’urgence"
+                        description="Cocher cette case si ce parent doit être contacté en priorité en cas d’urgence."
+                        name="contact_urgence"
+                        defaultValue={parent.contact_urgence == '1' ? true : false}
+                    />
+                </div>
 
                 <div className="flex justify-end space-x-3 pt-4">
                     <button

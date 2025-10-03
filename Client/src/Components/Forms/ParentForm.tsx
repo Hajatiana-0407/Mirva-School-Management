@@ -3,6 +3,7 @@ import Input from "../ui/Input";
 import HeadingSmall from "../ui/HeadingSmall";
 import { StudentDetailsType } from "../../Utils/Types";
 import * as Yup from "yup";
+import CheckInput from "../ui/CheckInput";
 
 export const personSchema = Yup.object({
     nom: Yup.string()
@@ -108,14 +109,23 @@ const ParentForm: React.FC<ParentFormPropsType> = ({ student, formErrors }) => {
                         errorMessage={formErrors?.["pere.email"]}
                     />
                 </div>
-                <Input
-                    label="Photocopie CIN du père"
-                    name="pere[pc_cin]"
-                    icon={FileText}
-                    iconColor="text-amber-500"
-                    type="file"
-                    errorMessage={formErrors?.["pere.pc_cin"]}
-                />
+                <div className="space-y-4">
+                    <Input
+                        label="Photocopie CIN du père"
+                        name="pere[pc_cin]"
+                        icon={FileText}
+                        iconColor="text-amber-500"
+                        type="file"
+                        errorMessage={formErrors?.["pere.pc_cin"]}
+                    />
+                    <CheckInput
+                        label="Contact d’urgence"
+                        description="Cocher cette case si ce parent doit être contacté en priorité en cas d’urgence."
+                        name="pere[contact_urgence]"
+                    />
+                </div>
+
+
 
                 {/* Information sur la mère */}
                 <HeadingSmall title="Information sur la mère : " />
@@ -168,15 +178,22 @@ const ParentForm: React.FC<ParentFormPropsType> = ({ student, formErrors }) => {
                         errorMessage={formErrors?.["mere.email"]}
                     />
                 </div>
-                <Input
-                    label="Photocopie CIN de la mère"
-                    name="mere[pc_cin]"
-                    defaultValue={student?.mere?.pc_cin || ""}
-                    icon={FileText}
-                    iconColor="text-amber-500"
-                    type="file"
-                    errorMessage={formErrors?.["mere.pc_cin"]}
-                />
+                <div className="space-y-4">
+                    <Input
+                        label="Photocopie CIN de la mère"
+                        name="mere[pc_cin]"
+                        defaultValue={student?.mere?.pc_cin || ""}
+                        icon={FileText}
+                        iconColor="text-amber-500"
+                        type="file"
+                        errorMessage={formErrors?.["mere.pc_cin"]}
+                    />
+                    <CheckInput
+                        label="Contact d’urgence"
+                        description="Cocher cette case si ce parent doit être contacté en priorité en cas d’urgence."
+                        name="mere[contact_urgence]"
+                    />
+                </div>
 
             </div>
         </div>
