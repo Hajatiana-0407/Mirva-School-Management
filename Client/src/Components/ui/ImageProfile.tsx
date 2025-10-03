@@ -1,5 +1,5 @@
 import { Focus } from 'lucide-react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { baseUrl } from '../../Utils/Utils';
 
 
@@ -7,18 +7,29 @@ type ImageProfilePropsType = {
     name?: string;
     isInput?: boolean;
     url?: string;
+    setUrl?: (url: string) => void;
+    uri?: string
 }
 
+const ImageProfile: React.FC<ImageProfilePropsType> = ({ name = 'photo', isInput = true, url, setUrl = () => { }, uri }) => {
+    const [photoPreview, setPhotoPreview] = useState('');
 
-const ImageProfile: React.FC<ImageProfilePropsType> = ({ name = 'photo', isInput = true, url }) => {
-    const [photoPreview, setPhotoPreview] = useState(url ? baseUrl(url) : '');
+
+    useEffect(() => {
+        if (uri) {
+            setPhotoPreview(uri);
+        } else if (url) {
+            setPhotoPreview(baseUrl(url));
+        }
+    }, [uri, url])
+
 
     return (
         <div className="relative flex flex-col items-center justify-center h-full">
             <label
                 htmlFor="photo-upload"
                 className={`cursor-pointer flex flex-col items-center justify-center w-full h-full rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 transition-all`}>
-                {photoPreview || url ? (
+                {photoPreview ? (
                     <img
                         src={photoPreview}
                         alt="Photo"
@@ -44,6 +55,7 @@ const ImageProfile: React.FC<ImageProfilePropsType> = ({ name = 'photo', isInput
                                 const reader = new FileReader();
                                 reader.onloadend = () => {
                                     setPhotoPreview(reader.result as string);
+                                    setUrl(reader.result as string)
                                 };
                                 reader.readAsDataURL(file);
                             }
@@ -51,7 +63,7 @@ const ImageProfile: React.FC<ImageProfilePropsType> = ({ name = 'photo', isInput
                     />
                 }
 
-                
+
             </label>
         </div>
     )
