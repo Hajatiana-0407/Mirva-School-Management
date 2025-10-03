@@ -75,7 +75,7 @@ if (!function_exists('upload_file')) {
 
             return [
                 'success'   => true,
-                'file_name' => $upload_path . $unique_name,
+                'file_name' => $upload_path .'/'. $unique_name,
                 'error'     => null
             ];
         } catch (\Throwable $th) {
