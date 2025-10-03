@@ -187,12 +187,29 @@ class CI_Model
 
 
 
-    // ======= INSERT BATCH =======
     public function insertBatch($data = [])
     {
-        return $this->db->insert_batch($this->table, $data);
+        if (empty($data)) {
+            return [];
+        }
+
+        $result = $this->db->insert_batch($this->table, $data);
+
+        if ($result === false) {
+            return [];
+        }
+
+        $insertedData = [];
+        $insertId = $this->db->insert_id();
+        foreach ($data as $index => $row) {
+            $row[$this->primaryKey] = $insertId + $index;
+            $insertedData[] = $row;
+        }
+
+        return $insertedData;
     }
-    
+
+
     // ======= COUNT =======
     // ? Statistique 
     public function getCount($where = [])
