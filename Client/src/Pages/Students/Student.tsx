@@ -1,59 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import { Search, Filter, Archive, User, UserCheck, CalendarDays, MapPin, Home, Phone, Mail, Globe, Eye, Edit, Activity, Users, FolderOpen, Focus, TrendingUp, TrendingDown, X, PenBox, Check, Plus } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Search, Filter, Archive, User, Eye, Edit, Users, TrendingUp, TrendingDown, Plus } from 'lucide-react';
+
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import Table from '../Table';
 import { useDispatch, useSelector } from 'react-redux';
-import useForm from '../../Hooks/useForm';
-import { StudentType, StudentInitialValue, RegistrationType } from '../../Utils/Types';
-import { object, string } from 'yup';
+import { StudentType, RegistrationType } from '../../Utils/Types';
 import { AppDispatch } from '../../Redux/store';
-import { createStudent, deleteStudent, getAllStudent, getStatistique, updateStudent } from './redux/StudentAsyncThunk';
+import { deleteStudent, getAllStudent, getStatistique } from './redux/StudentAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
-import InputError from '../../Components/ui/InputError';
 import { getStudentState } from './redux/StudentSlice';
 import clsx from 'clsx';
-import { baseUrl } from '../../Utils/Utils';
-import Input from '../../Components/ui/Input';
 import { useNavigate } from 'react-router-dom';
 import Profile from '../../Components/ui/Profile';
 import RegisterForm from '../../Components/Forms/RegisterForm';
+import StudentForm from '../../Components/Forms/StudentForm';
 
-// Validation de donnée avec yup 
-const StudentSchema = object({
-  // Élève
-  nom: string().required('Le nom est obligatoire.'),
-  prenom: string().required('Le prénom est obligatoire.'),
-  sexe: string().required('Le sexe est obligatoire.'),
-  date_naissance: string().required("La date de naissance est obligatoire."),
-  lieu_naissance: string().required("Le lieu de naissance est obligatoire."),
-  adresse: string().required('L\'adresse est obligatoire.'),
-  nationalite: string().required('La nationalité est obligatoire.'),
-});
 
 const Student = () => {
-  const [sexe, setSexe] = useState({ homme: false, femme: true });
-  const { datas: students, action, error } = useSelector(getStudentState);
-  const { onSubmite, formErrors } = useForm<StudentType>(StudentSchema, StudentInitialValue);
+  const { datas: students, action } = useSelector(getStudentState);
+
   const { hiddeTheModalActive } = useSelector(getAppState);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showModalRegister, setShowModalRegister] = useState(false);
   const [editingStudent, setEditingStudent] = useState<StudentType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [studentToArchive, setStudentToArchive] = useState<StudentType | null>(null);
   const [statistique, setStatistique] = useState<any>(null)
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
+  console.log(students[0]);
+  
 
 
   const handleEdit = (student: StudentType) => {
     setEditingStudent(student);
-    setPhotoPreview(baseUrl(student.photo as string))
     setShowModal(true);
-    setSexe(student?.sexe === 'Homme' ? { homme: true, femme: false } : { homme: false, femme: true });
   };
 
   const handleArchive = (student: any) => {
@@ -77,11 +61,7 @@ const Student = () => {
     setShowModalRegister(false);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    onSubmite((validateData) => {
-      editingStudent ? dispatch(updateStudent({ student: validateData, id: editingStudent?.id_eleve as number })) : dispatch(createStudent(validateData))
-    }, e)
-  }
+
 
   // Modal
   useEffect(() => {
@@ -274,209 +254,13 @@ const Student = () => {
       <Modal
         isOpen={showModal}
         onClose={handleCloseModal}
-        title={editingStudent ? 'Modifier la matière' : 'Nouvelle matière'}
+        title={editingStudent ? 'Modifier de l\'étudiant' : 'Nouvelle étudiant'}
         size='lg'
       >
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <InputError message={error} />
-          {/* Information personnel */}
-          <div className="flex flex-col sm:flex-row gap-5 space-y-2">
-
-            {/* PHOTO D IDENTITE */}
-            <div className="relative flex flex-col items-center justify-center">
-              <label htmlFor="photo-upload" className="cursor-pointer flex flex-col items-center justify-center w-56 h-56 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 transition-all">
-                {photoPreview ? (
-                  <img src={photoPreview} alt="Photo" className="w-52 h-52 rounded-md object-cover" />
-                ) : (
-                  <div className="flex flex-col justify-center items-center">
-                    <Focus className="w-20 h-20 text-gray-400 mb-1" />
-                    <span className="text-gray-400 text-sm">Aucune photo trouvé</span>
-                  </div>
-                )}
-                <input
-                  id="photo-upload"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  name='photo'
-                  onChange={e => {
-                    const file = e.target.files && e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        setPhotoPreview(reader.result as string);
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                />
-              </label>
-            </div>
-            <div className='flex-1 space-y-4'>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  label='Nom'
-                  name='nom'
-                  defaultValue={editingStudent?.nom || ''}
-                  icon={User}
-                  errorMessage={formErrors?.nom}
-                />
-                <Input
-                  label='Prénom'
-                  name='prenom'
-                  defaultValue={editingStudent?.prenom || ''}
-                  icon={UserCheck}
-                  errorMessage={formErrors?.prenom}
-                />
-                <Input
-                  label='Date de naissance'
-                  name='date_naissance'
-                  defaultValue={editingStudent?.date_naissance || ''}
-                  icon={CalendarDays}
-                  errorMessage={formErrors?.date_naissance} type='date'
-                />
-                <Input
-                  label='Lieu de naissance'
-                  name='lieu_naissance'
-                  defaultValue={editingStudent?.lieu_naissance || ''}
-                  icon={MapPin}
-                  errorMessage={formErrors?.lieu_naissance}
-                />
-              </div>
-              <div className='w-full'>
-                <Input
-                  label='Adresse complète'
-                  name='adresse'
-                  defaultValue={editingStudent?.adresse || ''}
-                  icon={Home}
-                  errorMessage={formErrors?.adresse}
-                />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  label='Téléphone'
-                  name='telephone'
-                  defaultValue={editingStudent?.telephone || ''}
-                  icon={Phone}
-                  errorMessage={formErrors?.telephone}
-                />
-                <Input
-                  label='Email'
-                  name='email'
-                  defaultValue={editingStudent?.email || ''}
-                  icon={Mail}
-                  errorMessage={formErrors?.email}
-                />
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className="flex items-center gap-6 px-1 py-2">
-              <label className="inline-flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name='sexe'
-                  value='Homme'
-                  checked={sexe.homme}
-                  onChange={(e) => { setSexe({ homme: e.target.checked, femme: !e.target.checked }) }}
-                  className="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
-                <span className="ml-2 text-gray-700">Homme</span>
-              </label>
-              <label className="inline-flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name='sexe'
-                  value='Femme'
-                  checked={sexe.femme}
-                  onChange={(e) => { setSexe({ homme: !e.target.checked, femme: e.target.checked }) }}
-                  className="form-checkbox h-4 w-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
-                />
-                <span className="ml-2 text-gray-700">Femme</span>
-              </label>
-            </div>
-            <Input
-              label='Nationalité'
-              name='nationalite'
-              defaultValue={editingStudent?.nationalite || ''}
-              icon={Globe}
-              errorMessage={formErrors?.nationalite}
-            />
-          </div>
-          <div className='space-y-4'>
-            {/* Alergies ou Maladies chroniques   */}
-            <h2 className='text-sm text-gray-500 italic'>Autres informations : </h2>
-            <Input
-              label='Alergies ou Maladies chroniques '
-              name='maladies'
-              defaultValue={editingStudent?.maladies || ''}
-              icon={Activity} errorMessage={formErrors?.maladies}
-            />
-            <Input
-              label='Personne à contacter en cas d’urgence'
-              name='urgence_nom' defaultValue={editingStudent?.urgence_nom || ''}
-              icon={User}
-              errorMessage={formErrors?.urgence_nom}
-            />
-            <Input
-              label='Lien avec l’élève (urgence)'
-              name='urgence_lien'
-              defaultValue={editingStudent?.urgence_lien || ''}
-              icon={UserCheck} errorMessage={formErrors?.urgence_lien}
-            />
-            <Input
-              label='Téléphone urgence'
-              name='urgence_tel'
-              defaultValue={editingStudent?.urgence_tel || ''}
-              icon={Phone} errorMessage={formErrors?.urgence_tel}
-            />
-
-            <Input
-              label='Copie de l’acte de naissance'
-              name='acte_naissance'
-              defaultValue={editingStudent?.pc_act_naissance || ''}
-              icon={FolderOpen}
-              iconColor='text-amber-500'
-              type='file' />
-
-            <Input
-              label='Copie de la pièce d’identité'
-              name='piece_identite'
-              defaultValue={editingStudent?.pc_pi || ''} icon={FolderOpen}
-              iconColor='text-amber-500'
-              type='file'
-            />
-            <Input
-              label='Bulletins scolaires / dernier diplôme'
-              name='bulletin'
-              defaultValue={editingStudent?.bulletin || ''}
-              icon={FolderOpen}
-              iconColor='text-amber-500'
-              type='file'
-            />
-          </div>
-          <div className="flex justify-end space-x-3 pt-4">
-            <button
-              type="button"
-              onClick={handleCloseModal}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              <X className='inline-block w-5 h-5 me-1' />
-              Annuler
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              {editingStudent ?
-                <PenBox className='inline-block w-5 h-5 me-1' /> :
-                <Check className='inline-block w-5 h-5 me-1' />
-              }
-
-              {editingStudent ? 'Modifier' : 'Ajouter'}
-            </button>
-          </div>
-        </form>
+        <StudentForm
+          editingStudent={editingStudent as StudentType}
+          handleCloseModal={handleCloseModal}
+        />
       </Modal>
 
 
