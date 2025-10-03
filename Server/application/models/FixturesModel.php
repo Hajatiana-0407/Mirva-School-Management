@@ -7,6 +7,7 @@ class FixturesModel extends CI_Model
         if (!$result) {
             log_message('error', 'Erreur insertion dans ' . $table . ' : ' . json_encode($this->db->error()));
         }
+        return $this->db->insert_id();
     }
 
     public function getIds($table, $idField)
