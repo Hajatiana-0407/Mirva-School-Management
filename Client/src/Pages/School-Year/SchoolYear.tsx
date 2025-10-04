@@ -33,9 +33,6 @@ const SchoolYear = () => {
   const [schoolYearToArchive, setSchoolYearToArchive] = useState<SchoolYearType | null>(null);
   const dispatch: AppDispatch = useDispatch();
 
-  console.log(schoolYears);
-  
-
   const columns = [
     { key: 'nom', label: 'Année scolaire' },
     {

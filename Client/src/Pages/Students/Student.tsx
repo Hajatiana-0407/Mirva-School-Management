@@ -31,10 +31,6 @@ const Student = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log(students[0]);
-  
-
-
   const handleEdit = (student: StudentType) => {
     setEditingStudent(student);
     setShowModal(true);

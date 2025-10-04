@@ -8,8 +8,8 @@ import Loading from "../../Components/ui/Loading";
 import Page_404 from "../Page_404";
 import { ArrowLeft, Award, BadgeInfo, CalendarDays, Globe, Home, PenBox, Phone, Tag, Target, User, Workflow } from "lucide-react";
 import { baseUrl, getAge, getShortDate, NumberFormat } from "../../Utils/Utils";
-import { InfoBlock } from "../Registrations/Registration";
-import { PhotoComponent } from "../Students/StudentSinglePage";
+import InfoBlock from "../../Components/InfoBlock";
+import DocumentImage from "../../Components/DocumentImage";
 import Modal from "../Modal";
 import { getAppState } from "../../Redux/AppSlice";
 import EmployeForm from "../../Components/Forms/EmployeForm";
@@ -68,7 +68,7 @@ const EmployeesSinglePage = () => {
                 <div className="flex gap-6 items-start">
 
                     {/* Photo de profile  */}
-                    <div className='w-[15.2rem] h-[15.2rem]'>
+                    <div className='w-[16.2rem] h-[16.2rem]'>
                         <ImageProfile isInput={false} url={employee?.photo} />
                     </div>
 
@@ -220,7 +220,7 @@ const EmployeesSinglePage = () => {
                             <HeadingSmall title="Pièces jointes :" />
                         </div>
                         {!!employee?.pc_cin &&
-                            <PhotoComponent url={baseUrl(employee?.pc_cin)} label="Photocopie CIN" />
+                            <DocumentImage url={baseUrl(employee?.pc_cin)} label="Photocopie CIN" />
                         }
                     </div>
                 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive,  User, X, PenBox, Check } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Archive,  User, X, PenBox, Check, Users } from 'lucide-react';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import Table from '../Table';
@@ -293,13 +293,15 @@ const Parents = () => {
                 component: <ParentForm
                   formErrors={formErrors}
                   student={studentToAddParent as StudentDetailsType}
-                />
+                /> , 
+                Icon: Users 
               },
               {
                 key: 'Tuteur', component: <TuteurForm
                   formErrors={formErrors}
                   student={studentToAddParent as StudentDetailsType}
-                />
+                /> , 
+                Icon: User 
               },
             ]} />
 

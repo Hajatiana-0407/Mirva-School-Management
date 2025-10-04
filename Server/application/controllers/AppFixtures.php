@@ -73,15 +73,37 @@ class AppFixtures extends CI_Controller
             ]);
         }
 
-        // 2. niveau
-        $cycles = ['Primaire', 'Collège', 'Lycée'];
-        for ($i = 0; $i < 7; $i++) {
-            $this->model->insertFixture('niveau', [
-                'niveau' => $faker->word . ' ' . $faker->numberBetween(1, 6),
-                'cycle' => $faker->randomElement($cycles),
-                'description' => $faker->sentence(4),
-                'created_at' => date('Y-m-d H:i:s')
-            ]);
+        // 2. niveaux scolaires réalistes
+        $niveaux = [
+            'Primaire' => [
+                'CP',
+                'CE1',
+                'CE2',
+                'CM1',
+                'CM2'
+            ],
+            'Collège' => [
+                '6ème',
+                '5ème',
+                '4ème',
+                '3ème'
+            ],
+            'Lycée' => [
+                'Seconde',
+                'Première',
+                'Terminale'
+            ]
+        ];
+
+        foreach ($niveaux as $cycle => $classes) {
+            foreach ($classes as $classe) {
+                $this->model->insertFixture('niveau', [
+                    'niveau' => $classe,
+                    'cycle' => $cycle,
+                    'description' => "Classe de $classe du cycle $cycle",
+                    'created_at' => date('Y-m-d H:i:s')
+                ]);
+            }
         }
 
         // 3. matiere
@@ -172,14 +194,25 @@ class AppFixtures extends CI_Controller
             }
         }
 
-        // 5. classe
-        for ($i = 0; $i < 4; $i++) {
-            $this->model->insertFixture('classe', [
-                'denomination' => 'Classe ' . $faker->word,
-                'niveau_id_niveau' => $faker->randomElement($niveaux),
-                'created_at' => date('Y-m-d H:i:s')
-            ]);
+        // 5. classes
+        $sections = ['A', 'B', 'C', 'D', 'S1', 'S2'];
+
+        foreach ($niveaux as $niveau_id) {
+            // on génère entre 2 et 3 classes par niveau
+            $nbClasses = rand(2, 3);
+
+            for ($i = 0; $i < $nbClasses; $i++) {
+                $section = $faker->randomElement($sections);
+
+                $this->model->insertFixture('classe', [
+                    'denomination'     => 'Classe ' . $section,  
+                    'niveau_id_niveau' => $niveau_id,          
+                    'created_at'       => date('Y-m-d H:i:s')
+                ]);
+            }
         }
+
+
 
         $classes = $this->model->getIds('classe', 'id_classe');
 

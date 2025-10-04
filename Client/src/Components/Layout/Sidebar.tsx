@@ -187,7 +187,7 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
               <button
                 type="button"
                 className={clsx(
-                  "w-full flex items-center py-3 px-6 text-left transition-colors font-medium text-gray-700 hover:bg-blue-100 bg-gray-100",
+                  "w-full flex items-center py-3 px-6 text-left transition-colors font-medium text-gray-800 hover:bg-gray-400/60 bg-gray-300/50",
                   collapsed ? "justify-center px-4" : "",
                   level > 0 ? "pl-8" : ""
                 )}
@@ -215,7 +215,7 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
               </button>
             )}
             {hasChildren && isOpen && !collapsed && (
-              <div className="mx-1 mb-1 rounded mt-0.5 shadow-inner border-2 ">
+              <div className="mx-1 mb-1 rounded mt-0.5 shadow-inner  border-2 border-gray-300 ">
                 {renderMenuItems(menu.children!, level + 1)}
               </div>
             )}

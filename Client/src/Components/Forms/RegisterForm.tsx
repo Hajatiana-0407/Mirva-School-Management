@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import Input from '../../Components/ui/Input';
 import InputError from '../../Components/ui/InputError';
 import ImageProfile from '../../Components/ui/ImageProfile';
-import { User, UserCheck, CalendarDays, Phone, Mail, Check, MapPin, Globe, Home, ArrowRight, ArrowLeft, Activity, FolderOpen, GraduationCap, Timer } from 'lucide-react';
+import { User, UserCheck, CalendarDays, Phone, Mail, Check, MapPin, Globe, Home, ArrowRight, ArrowLeft, Activity, FolderOpen, GraduationCap, Timer, Users } from 'lucide-react';
 import clsx from 'clsx';
-import { InfoBlock } from '../../Pages/Registrations/Registration';
+import InfoBlock from '../InfoBlock';
 import { object, string } from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { ClasseType, registrationInitialValue, RegistrationType, StudentFormDataInitialValue, StudentFormDataType } from '../../Utils/Types';
@@ -400,12 +400,14 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                             key: 'Parent',
                             component: <ParentForm
                                 formErrors={formErrors}
-                            />
+                            />,
+                            Icon: Users
                         },
                         {
                             key: 'Tuteur', component: <TuteurForm
-                                formErrors={formErrors}
-                            />
+                            formErrors={formErrors}
+                            /> , 
+                            Icon: User
                         },
                     ]} />
                 </div>
@@ -417,7 +419,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                     <div className="flex gap-6 items-start">
 
                         {/* PHOTO D IDENTITE */}
-                        <div className='w-[15.3rem] h-[15.3rem]'>
+                        <div className='w-[16.2rem] h-[16.2rem]'>
                             <ImageProfile uri={formValues.photo} isInput={false} />
                         </div>
 

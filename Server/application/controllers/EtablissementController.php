@@ -57,7 +57,7 @@ class EtablissementController extends CI_Controller
         if (isset($_FILES['logo']) && $_FILES['logo']['error'] == 0) {
             $photo_result = upload_file('logo', ETABLISSEMENT_UPLOAD_DIRECTORY);
             if ($photo_result['success']) {
-                $data['logo'] = ETABLISSEMENT_UPLOAD_DIRECTORY . $photo_result['file_name'];
+                $data['logo'] = $photo_result['file_name'];
             } else {
                 echo json_encode(['error' => true, 'message' => "Erreur upload photo : " . $photo_result['error']]);
                 return;

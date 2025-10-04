@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Plus } from 'lucide-react';
+import { BookOpenCheck, ListChecks, Plus } from 'lucide-react';
 import Modal from '../Modal';
 import { AppDispatch } from '../../Redux/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ import { getAppState } from '../../Redux/AppSlice';
 import LevelSubject from './LevelSubject';
 import LevelListe from './LevelListe';
 import { useParams } from 'react-router-dom';
+import Onglet from '../../Components/ui/Onglet';
 
 // Validation de donnée avec yup 
 const LevelSchema = object({
@@ -90,7 +91,21 @@ const Levels = () => {
       </div>
 
       {/* ONGLETS */}
-      <div className="border-b">
+      <Onglet
+        onlgets={[
+          {
+            key: 'Listes des niveaux',
+            component: <LevelListe handleEdit={handleEdit} setActiveTab={setActiveTab} setIdLevelToAddSubject={setIdLevelToAddSubject} />,
+            Icon: ListChecks
+          },
+          {
+            key: 'Niveau & Matiere',
+            component: <LevelSubject idLevelToAddSubject={idLevelToAddSubject} />,
+            Icon : BookOpenCheck
+          },
+        ]}
+      />
+      {/* <div className="border-b">
         <nav className="flex space-x-8">
           <button
             onClick={() => setActiveTab('listeLevel')}
@@ -111,10 +126,10 @@ const Levels = () => {
             Niveau & Matiere
           </button>
         </nav>
-      </div>
+      </div> */}
       {/* CONTENUE DES DEUX ONGLETS */}
-      {activeTab === "listeLevel" && <LevelListe handleEdit={handleEdit} setActiveTab={setActiveTab} setIdLevelToAddSubject={setIdLevelToAddSubject} />}
-      {activeTab === 'levelSbject' && <LevelSubject idLevelToAddSubject={idLevelToAddSubject} />}
+      {/* {activeTab === "listeLevel" && }
+      {activeTab === 'levelSbject' && } */}
 
       {/* MOADALE POUR FORMULAIRE AJOUT / MODIF */}
       <Modal

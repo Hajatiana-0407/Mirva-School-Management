@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import React, { useEffect, useState } from 'react'
+import React, { type ComponentType, type SVGProps, useEffect, useState } from 'react'
 
 type OngletPropsType = {
-    onlgets: { key: string, component: JSX.Element }[]
+    onlgets: { key: string, component: JSX.Element, Icon?: ComponentType<SVGProps<SVGSVGElement>> }[]
 }
 const Onglet: React.FC<OngletPropsType> = ({ onlgets }) => {
     const [activeTab, setActiveTab] = useState('');
@@ -12,30 +12,29 @@ const Onglet: React.FC<OngletPropsType> = ({ onlgets }) => {
         }
     }, [])
     return (
-        <div>
-            <div className="border-b border-blue-300">
-                <nav className="flex gap-1">
-                    {onlgets.map((ongle) => (
-                        <div
-                            key={ongle.key + '_btn'}
-                            onClick={() => setActiveTab(ongle.key.toLowerCase())}
-                            className={`py-2 relative cursor-pointer px-2 rounded-t  font-medium text-sm  ${activeTab === ongle.key.toLowerCase()
-                                ? 'border-blue-300 border border-b-0  text-blue-600'
-                                : 'border-gray-200 bg-gray-50 border border-b-0 text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                }`}
-                        >
-                            {ongle.key}
-                             {activeTab === ongle.key.toLowerCase() && 
-                             <div className='absolute -bottom-1 left-0 right-0 h-1 bg-white '>
-                             </div>
-                             }
-                        </div>
-                    ))}
+        <div className="bg-white rounded-lg shadow-sm border">
+            <div className="border-b">
+                <nav className="flex space-x-8 px-6">
+                    {onlgets.map((tab) => {
+                        const Icon = tab.Icon;
+                        return (
+                            <button
+                                key={tab.key + '_btn'}
+                                onClick={() => setActiveTab(tab.key.toLowerCase())}
+                                className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${activeTab === tab.key.toLowerCase()
+                                    ? 'border-blue-500 text-blue-600'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                    }`}
+                            >
+                                {Icon && < Icon className="w-4 h-4" />}
+                                <span>{tab.key}</span>
+                            </button>
+                        );
+                    })}
                 </nav>
-            </div>
+            </div >
 
-            {/* Composant */}
-            <div className='py-4'>
+            <div className="p-6">
                 {onlgets.map((onglet) => (
                     <div
                         key={onglet.key + '_container'}
@@ -46,7 +45,7 @@ const Onglet: React.FC<OngletPropsType> = ({ onlgets }) => {
                     </div>
                 ))}
             </div>
-        </div>
+        </div >
     )
 }
 

@@ -167,36 +167,4 @@ const Registration: React.FC = () => {
   );
 };
 
-/* Composant InfoBlock modernisé */
-type InfoBlockPropsType = {
-  icon: React.ReactNode;
-  label: React.ReactNode;
-  value: React.ReactNode;
-  important?: boolean
-}
-
-export const InfoBlock = ({ icon, label, value, important }: InfoBlockPropsType) => (
-  <div className={clsx({
-    '': important,
-    '': !important,
-  }, "flex rounded-lg items-center overflow-hidden hover:shadow-sm transition-all bg-white")} >
-    {/* Icône avec fond léger */}
-    <div className={clsx({
-      ' bg-red-100': important,
-      'bg-white border-e border-gray-50': !important,
-    }, "flex items-center justify-center w-12 h-full")}>
-      {icon}
-    </div>
-
-    {/* Texte */}
-    <div className="flex flex-col px-4 py-2">
-      <span className="text-xs uppercase tracking-wide text-gray-500">
-        {label}
-      </span>
-      <span className="text-sm font-semibold text-gray-800">{value}</span>
-    </div>
-  </div>
-);
-
-
 export default Registration;

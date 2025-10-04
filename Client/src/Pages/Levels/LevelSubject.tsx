@@ -13,6 +13,7 @@ import { getAllSubject } from "../Subjects/redux/SubjectAsyncThunk";
 import SubjectComponent from "./SubjectComponent";
 import useForm from "../../Hooks/useForm";
 import { object } from "yup";
+import AlertDialog from "../../Components/ui/AlertDialog";
 
 const LevelSubjectSchema = object({})
 const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) => {
@@ -29,6 +30,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
     // Matiere a supprimer 
     const [subjectCoefToDelete, setSubjectCoefToDelete] = useState<number[]>([]);
     const { onSubmite } = useForm<any>(LevelSubjectSchema, {});
+    const [isAlertOpen, setIsAlertOpen] = useState(false)
 
     useEffect(() => {
         const allLevelActiveSubject = [];
@@ -123,7 +125,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
      * @param subject 
      */
     const handleAddSubjectInLevel = (subject: SubjectType) => {
-        if (idActiveLevel !== 0) {
+        if (idActiveLevel != 0) {
             setAllSubjectCoefAdded([
                 subject,
                 ...allSubjectCoefAdded
@@ -132,6 +134,8 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
             // Verification si la matière est dans la liste a supprimer 
             const testeIdToDeleteListe = subjectCoefToDelete.filter((id: number) => subject.id_matiere as number != id)
             setSubjectCoefToDelete(testeIdToDeleteListe);
+        } else {
+            setIsAlertOpen(true);
         }
     }
 
@@ -170,12 +174,12 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                                     && !subjectCoefToDelete.includes(subject.id_matiere)) && !idAllSubjectCoefAdded.includes(subject.id_matiere as number) // si la matiere a ete supprimer de la liste 
                             ) {
                                 return <div key={key} className={`w-full p-4 border-b flex justify-between  hover:bg-gray-50`}
-                                    style={{ backgroundColor: hexToRgba(subject.couleur, 0.1) }}
+                                    style={{ backgroundColor: hexToRgba(subject.couleur, 0.4) }}
                                 >
                                     <span>{subject.denomination}</span>
                                     <button
                                         onClick={() => { handleAddSubjectInLevel(subject) }}
-                                        className="bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-gray-700 transition-colors"
+                                        className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
                                     >
                                         <ArrowRight className="inline-block ms-1 h-5 w-5" />
                                     </button>
@@ -255,6 +259,15 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                     </div>
                 </div>
             </div>
+
+
+            {/* Alert Modal */}
+            <AlertDialog
+                isOpen={isAlertOpen}
+                message="Vous devez sélectionner un niveau"
+                title="Aucun niveau n'a été sélectionné"
+                onClose={() => setIsAlertOpen(false)}
+            />
         </div>
     )
 }

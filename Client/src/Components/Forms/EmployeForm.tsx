@@ -65,7 +65,7 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
     const { action } = useSelector(getEmployeState);
     const [isTeacher, setIsTeacher] = useState(type == 'teacher' ? true : false);
     const [page, setPage] = useState(1)
-    const { onSubmite, formErrors, resetError, forceError } = useForm<EmployeeType>(EmployeSchema, employeeInitialValue);
+    const { onSubmite, formErrors, resetError, HandleValidateSchema } = useForm<EmployeeType>(EmployeSchema, employeeInitialValue);
     const dispatch: AppDispatch = useDispatch();
     const sexe = [
         { label: 'Homme', value: 'Homme' },
@@ -107,62 +107,13 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
     }
 
     // Passer a la page suivant si le type est enseignant
-    const handleNext = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleNext = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 
         const formulaire = document.querySelector<HTMLFormElement>('#__formulaire_personnel');
         if (formulaire && e.currentTarget.type === 'button') {
-            const elements = formulaire.elements; // HTMLFormControlsCollection
-            let canNext = true;
-            let errors = {};
-            for (let i = 0; i < elements.length; i++) {
-                const element = elements[i] as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-                switch (element.name) {
-                    case 'nom':
-                        if (element.value == '') {
-                            canNext = false
-                            errors = { nom: "Le nom est obligatoire." };
-                        }
-                        break;
-                    case 'prenom':
-                        if (element.value == '') {
-                            canNext = false
-                            errors = { ...errors, prenom: "Le prénom est obligatoire." };
-                        }
-                        break;
-                    case 'addresse':
-                        if (element.value == '') {
-                            canNext = false
-                            errors = { ...errors, addresse: "L'addresse est obligatoire." };
-                        }
-                        break;
-                    case 'telephone':
-                        if (element.value == '') {
-                            canNext = false
-                            errors = { ...errors, telephone: "Le téléphone est obligatoire." };
-                        }
-                        break;
-                    case 'date_naissance':
-                        if (element.value == '') {
-                            canNext = false
-                            errors = { ...errors, date_naissance: "La date de naissance est obligatoire." };
-                        }
-                        break;
-                    case 'date_embauche':
-                        if (element.value == '') {
-                            canNext = false
-                            errors = { ...errors, date_embauche: "La date d'embauche est obligatoire." }
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            if (canNext) {
-                setPage(v => v + 1)
-                resetError();
-            } else {
-                // Forcer les erreurs
-                forceError(errors);
+            const isValide = await HandleValidateSchema(formulaire);
+            if (isValide) {
+                setPage(v => v + 1);
             }
         }
     };

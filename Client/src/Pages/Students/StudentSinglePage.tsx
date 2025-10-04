@@ -5,16 +5,15 @@ import { getStudentByMatricule } from "./redux/StudentAsyncThunk";
 import { AppDispatch } from "../../Redux/store";
 import Loading from "../../Components/ui/Loading";
 import { baseUrl } from "../../Utils/Utils";
-import { InfoBlock } from "../Registrations/Registration";
-import { ArrowLeft, CalendarDays, ChevronDown, ChevronUp, Globe, GraduationCap, HeartPulse, Home, PenBox, Phone, Tag, User } from "lucide-react";
+import InfoBlock from "../../Components/InfoBlock";
+import { ArrowLeft, CalendarDays, Globe, GraduationCap, HeartPulse, Home, PenBox, Phone, Tag, User } from "lucide-react";
 import Modal from "../Modal";
 import { getStudentState } from "./redux/StudentSlice";
 import { getAppState } from "../../Redux/AppSlice";
-import clsx from "clsx";
 import ImageProfile from "../../Components/ui/ImageProfile";
 import StudentForm from "../../Components/Forms/StudentForm";
 import HeadingSmall from "../../Components/ui/HeadingSmall";
-
+import DocumentImage from "../../Components/DocumentImage";
 
 const StudentSinglePage = () => {
     const { id: matricule } = useParams();
@@ -67,7 +66,7 @@ const StudentSinglePage = () => {
                 {/* Bloc principal : Photo + Identité */}
                 <div className="flex gap-4 items-start">
                     {/* PHOTO D IDENTITE */}
-                    <div className='w-[15.2rem] h-[15.2rem]'>
+                    <div className='w-[16.2rem] h-[16.2rem]'>
                         <ImageProfile url={student?.photo} isInput={false} />
                     </div>
 
@@ -288,14 +287,14 @@ const StudentSinglePage = () => {
                     </div>
                     <div className="space-y-4">
                         {student?.pc_act_naissance != '' &&
-                            <PhotoComponent url={baseUrl(student?.pc_act_naissance)} label="Acte de naissance" />
+                            <DocumentImage url={baseUrl(student?.pc_act_naissance)} label="Acte de naissance" />
                         }
                         {student?.pc_pi != '' &&
-                            <PhotoComponent url={baseUrl(student?.pc_pi)} label="CIN" />
+                            <DocumentImage url={baseUrl(student?.pc_pi)} label="CIN" />
                         }
 
                         {student?.bulletin != '' &&
-                            <PhotoComponent url={baseUrl(student?.bulletin)} label="Bulletin" />
+                            <DocumentImage url={baseUrl(student?.bulletin)} label="Bulletin" />
                         }
                     </div>
                 </div>
@@ -315,25 +314,3 @@ const StudentSinglePage = () => {
 }
 export default StudentSinglePage
 
-export const PhotoComponent = ({ url = '', label = 'photo' }: { url: string, label?: string }) => {
-    const [isShow, setIsShow] = useState(false)
-    return (
-        <div className={clsx({
-            'h-[5rem]': !isShow
-        }, "w-full p-6 border rounded bg-blue-100  relative overflow-hidden transition-all duration-700")} >
-            <a href={url} target="_blank" className="absolute top-2 left-4 italic px-6 font-bold rounded-full bg-blue-600 text-white hover:underline cursor-pointer"> {label} </a>
-            <button
-                className="absolute top-2 right-4 italic px-4 border border-blue-600 rounded-full bg-blue-600 text-white hover:bg-blue-500 translate-all duration-150 cursor-pointer"
-                onClick={() => setIsShow(v => !v)}
-            >
-                {isShow ? <ChevronUp /> : <ChevronDown />}
-            </button>
-            <div className={clsx({
-                'h-[2rem] overflow-hidden': !isShow,
-                'overflow-auto': isShow,
-            }, "w-full max-h-max border")} >
-                <img src={url} className="w-full mx-auto" alt={label} />
-            </div>
-        </div>
-    )
-}

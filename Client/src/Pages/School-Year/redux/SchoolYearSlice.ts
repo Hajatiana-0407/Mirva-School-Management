@@ -139,10 +139,12 @@ const SchoolYearSlice = createSlice({
             });
 
         // Change the active school-year 
-        builder.addCase(changeActiveSchoolYear.pending, (state) => {
-            state.action.isUpdating = true;
-        })
+        builder
+            .addCase(changeActiveSchoolYear.pending, (state) => {
+                state.action.isUpdating = true;
+            })
             .addCase(changeActiveSchoolYear.fulfilled, (state, action: { payload: ApiReturnType }) => {
+                state.action.isUpdating = false;
                 const { error, data: id_annee_scolaire } = action.payload;
                 if (!error) {
                     state.datas = state.datas.map((data: SchoolYearType) => {
@@ -152,10 +154,14 @@ const SchoolYearSlice = createSlice({
                         }
                         return { ...data, isActif: '0' };
                     })
-                    console.log('Teste', state.datas);
 
                 }
             })
+            .addCase(changeActiveSchoolYear.rejected, (state) => {
+                state.action.isUpdating = false;
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
+            });
     }
 });
 
