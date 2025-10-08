@@ -127,3 +127,73 @@ $route['api/admin/parent'] = 'ParentController';
 $route['api/admin/parent/update'] = 'ParentController/update';
 $route['api/admin/parent/upsert'] = 'ParentController/upsert';
 $route['api/admin/parent/delete'] = 'ParentController/delete';
+
+
+
+// ===================== Sécurisation des routes ===================== //
+// ===================== Routes sécurisées ===================== //
+$GLOBALS['secure'] = [
+    // Établissement
+    'api/admin/school' => true,
+    'api/admin/school/update' => true,
+
+    // Classe
+    'api/admin/classe' => true,
+    'api/admin/classe/update' => true,
+    'api/admin/classe/create' => true,
+    'api/admin/classe/delete' => true,
+    'api/admin/matiere-classe/*' => true,
+
+    // Niveau
+    'api/admin/niveau' => true,
+    'api/admin/niveau/update' => true,
+    'api/admin/niveau/create' => true,
+    'api/admin/niveau/delete' => true,
+    'api/admin/niveau-matiere/*' => true,
+    'api/admin/niveau-matiere/enrigistrer' => true,
+
+    // Matière
+    'api/admin/matiere' => true,
+    'api/admin/matiere/update' => true,
+    'api/admin/matiere/create' => true,
+    'api/admin/matiere/delete' => true,
+
+    // Personnel
+    'api/admin/personnel' => true,
+    'api/admin/personnel/update' => true,
+    'api/admin/personnel/create' => true,
+    'api/admin/personnel/delete' => true,
+    'api/admin/personnel/*' => true, // findOneByMatricule
+
+    // Enseignants
+    'api/admin/teachers' => true,
+
+    // Type personnel
+    'api/admin/type-personnel' => true,
+
+    // Année scolaire
+    'api/admin/school-year' => true,
+    'api/admin/school-year/update' => true,
+    'api/admin/school-year/create' => true,
+    'api/admin/school-year/delete' => true,
+    'api/admin/school-year/change-active' => true,
+
+    // Inscription
+    'api/admin/registration' => true,
+    'api/admin/registration-student' => true,
+    'api/admin/registration/delete' => true,
+
+    // Étudiant
+    'api/admin/etudiant' => true,
+    'api/admin/etudiant/update' => true,
+    'api/admin/etudiant/create' => true,
+    'api/admin/etudiant/delete' => true,
+    'api/admin/etudiant/statistique' => true,
+    'api/admin/etudiant/*' => true,
+
+    // Parent
+    'api/admin/parent' => true,
+    'api/admin/parent/update' => true,
+    'api/admin/parent/upsert' => true,
+    'api/admin/parent/delete' => true,
+];
