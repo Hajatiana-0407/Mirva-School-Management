@@ -1,7 +1,26 @@
 import { Bell, Search, User, LogOut, Settings } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { getAuthState, logout } from '../../Pages/Auth/redux/AuthSlice';
+import ConfirmDialog from '../../Pages/ConfirmDialog';
+import { useState } from 'react';
+import { AppDispatch } from '../../Redux/store';
 
 const Header = () => {
+  const { datas: { user } } = useSelector(getAuthState);
+  const [isOpentDialog, setIsOpentDialog] = useState(false);
+  const dispatch: AppDispatch = useDispatch();
+
+
+  // ===================== DECONNEXIO ===================== //
+  const onConfirmLogout = () => {
+    dispatch(logout())
+  }
+
+  const handleLogoutclick = () => {
+    setIsOpentDialog(true);
+  }
+
   return (
     <header className="bg-white shadow-sm border-b px-6 py-4">
       <div className="flex items-center justify-between">
@@ -15,7 +34,7 @@ const Header = () => {
             />
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-4">
           <Link to={'/settings'} className="relative p-2 text-gray-500 hover:text-gray-700 transition-colors">
             <Settings className="w-5 h-5" />
@@ -25,21 +44,32 @@ const Header = () => {
             <Bell className="w-5 h-5" />
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
           </button>
-          
+
           <div className="flex items-center space-x-3">
             <div className="text-right">
-              <p className="text-sm font-medium text-gray-700">Marie Dubois</p>
-              <p className="text-xs text-gray-500">Directrice</p>
+              <p className="text-sm font-medium text-gray-700"> {user?.email || 'email'} </p>
+              <p className="text-xs text-gray-500">{user?.role || 'Role'}</p>
             </div>
             <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
               <User className="w-4 h-4 text-white" />
             </div>
-            <button className="p-2 text-gray-500 hover:text-gray-700 transition-colors">
+            <button
+              onClick={handleLogoutclick}
+              className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+            >
               <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={isOpentDialog}
+        title="Confirmer la déconnexion"
+        message="Êtes-vous sûr de vouloir vous déconnecter ?"
+        onConfirm={onConfirmLogout}
+        onClose={() => setIsOpentDialog(false)}
+      />
     </header>
   );
 };

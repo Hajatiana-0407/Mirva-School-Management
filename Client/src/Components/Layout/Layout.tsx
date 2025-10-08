@@ -1,11 +1,10 @@
-import  { PropsWithChildren, useState } from 'react';
+import { useState } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
+import { Outlet } from 'react-router-dom';
 
-type LayoutPropsType = PropsWithChildren
 
-
-const Layout = ({ children }: LayoutPropsType ) => {
+const Layout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
@@ -17,7 +16,7 @@ const Layout = ({ children }: LayoutPropsType ) => {
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header />
         <main className="flex-1 overflow-y-auto p-6">
-          { children }
+          <Outlet />
         </main>
       </div>
     </div>
@@ -27,4 +26,3 @@ const Layout = ({ children }: LayoutPropsType ) => {
 export default Layout;
 
 
- 

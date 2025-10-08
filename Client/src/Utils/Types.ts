@@ -18,6 +18,25 @@ export const AppInitialValue: AppStateType = {
     hiddeTheModalActive: false
 }
 
+
+export type AuthStateType = { 
+    user?: { 
+        id ? : number  ;
+        email?: string  ;
+        nom?: string ;
+        is_active?: boolean ; 
+        role?: string
+    } 
+    isLoggedIn?: boolean ;
+    token?: string ;
+}
+
+export const AuthInitialValue: AuthStateType = {
+    user: undefined,
+    isLoggedIn: false,
+    token: ''
+}
+
 // BACK'S OBJECT RETURN 
 export type ApiReturnType = {
     'error': boolean;

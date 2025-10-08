@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+
 /*
 | -------------------------------------------------------------------------
 | URI ROUTING
@@ -52,6 +53,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+
+// ===================== Authentification  ===================== //
+$route['api/auth/login'] = 'AuthController/login';
+// ===================== **************** ===================== //
 
 // ******************* ROUTE ETABLISSEMENT ********************** //
 $route['api/admin/school'] = 'EtablissementController/getEtablissementInfo';

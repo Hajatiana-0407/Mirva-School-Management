@@ -1,4 +1,5 @@
-import { StudentFormDataType } from "./Types";
+import { jwtDecode } from "jwt-decode";
+import { AuthStateType, StudentFormDataType } from "./Types";
 
 export const cycles = ['Primaire', 'Collège', 'Lycée'];
 export const hexToRgba = (hex: string, alpha = 1): string => {
@@ -149,3 +150,18 @@ export const nestData = (flatData: Record<string, any>): Record<string, any> => 
 
   return nestedData;
 };
+
+
+type DecodePropsType = {
+  exp: number;
+  iat: number;
+  data: AuthStateType['user'];
+}
+export const decodeToken = (token: string): DecodePropsType => {
+  const tokenDecode: {
+    exp: number;
+    iat: number;
+    data: AuthStateType['user'];
+  } = jwtDecode(token);
+  return tokenDecode;
+}

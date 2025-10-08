@@ -12,6 +12,7 @@ import SchoolYearReducer from '../Pages/School-Year/redux/SchoolYearSlice';
 import RegisterSlice from '../Pages/Registrations/redux/registerSlice';
 import StudentReducer from '../Pages/Students/redux/StudentSlice'
 import ParentReducer from '../Pages/Parents/redux/ParentSlice'
+import AuthReduce from '../Pages/Auth/redux/AuthSlice'
 
 export const store = configureStore({
     reducer: {
@@ -23,11 +24,12 @@ export const store = configureStore({
         employes: EmployeReducer,
         teacher: TeacherReducer,
         typeEmployees: TypeEmployeesReducer,
-        school : SchoolReducer,
-        schoolYears : SchoolYearReducer,
-        registration : RegisterSlice,
-        student : StudentReducer  , 
-        parent: ParentReducer
+        school: SchoolReducer,
+        schoolYears: SchoolYearReducer,
+        registration: RegisterSlice,
+        student: StudentReducer,
+        parent: ParentReducer,
+        auth: AuthReduce
     }
 });
 

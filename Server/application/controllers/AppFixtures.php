@@ -37,8 +37,18 @@ class AppFixtures extends CI_Controller
             'niveau',
             'annee_scolaire',
             'parents',
-            'depense'
-        ]);die ; 
+            'depense',
+            'users'
+        ]);
+
+
+        // ===================== UTILISATEURS ===================== //
+        $this->model->insertFixture('users', [
+            'role' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'password' => password_hash('admin123', PASSWORD_DEFAULT)
+        ]);
+
 
         // Insertion des données sur l'etablissement
         $this->model->insertFixture('etablissement', [
@@ -419,15 +429,15 @@ class AppFixtures extends CI_Controller
         }
 
         // 14. depense
-        for ($i = 0; $i < 5; $i++) {
-            $this->model->insertFixture('depense', [
-                'raison' => $faker->sentence(3),
-                'montant' => $faker->randomFloat(2, 500, 5000),
-                'date' => $faker->date(),
-                'user_id_user' => $userIds,
-                'created_at' => date('Y-m-d H:i:s')
-            ]);
-        }
+        // for ($i = 0; $i < 5; $i++) {
+        //     $this->model->insertFixture('depense', [
+        //         'raison' => $faker->sentence(3),
+        //         'montant' => $faker->randomFloat(2, 500, 5000),
+        //         'date' => $faker->date(),
+        //         'user_id_user' => $userIds,
+        //         'created_at' => date('Y-m-d H:i:s')
+        //     ]);
+        // }
 
         // 15. paiement
         $droitIds = $this->model->getIds('droit_inscription', 'id_droit_inscription');
