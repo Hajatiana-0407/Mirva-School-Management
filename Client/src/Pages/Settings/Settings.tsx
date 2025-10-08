@@ -1,5 +1,5 @@
 import React from 'react';
-import { Save,  Calendar, Shield } from 'lucide-react';
+import { Save, Calendar, Shield } from 'lucide-react';
 import School from './School/School';
 import GeneralSettings from './General/GeneralSettings';
 import { getSchoolYearState } from '../School-Year/redux/SchoolYearSlice';
@@ -20,13 +20,11 @@ const Settings: React.FC = () => {
 
 
   const handleSave = () => {
-    let form = document.getElementById('__etablissement-form') as HTMLFormElement;
-    if (!form) {
-      form = document.getElementById('__form-to-change-active-schoolYear') as HTMLFormElement;
-    }
-    if (form) {
-      form.requestSubmit();
-    }
+    let form: HTMLFormElement[] = [
+      document.getElementById('__etablissement-form') as HTMLFormElement,
+      document.getElementById('__form-to-change-active-schoolYear') as HTMLFormElement
+    ];
+    form.forEach(f => f?.requestSubmit());
   }
 
   return (
@@ -50,6 +48,7 @@ const Settings: React.FC = () => {
       {/* Contenue */}
       <Onglet
         onlgets={tabs}
+        type='delete'
       />
     </div>
   );

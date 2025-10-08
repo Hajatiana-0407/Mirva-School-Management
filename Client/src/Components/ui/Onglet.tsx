@@ -2,9 +2,10 @@ import clsx from 'clsx';
 import React, { type ComponentType, type SVGProps, useEffect, useState } from 'react'
 
 type OngletPropsType = {
-    onlgets: { key: string, component: JSX.Element, Icon?: ComponentType<SVGProps<SVGSVGElement>> }[]
+    onlgets: { key: string, component: JSX.Element, Icon?: ComponentType<SVGProps<SVGSVGElement>> }[];
+    type?: 'hidden' | 'delete'
 }
-const Onglet: React.FC<OngletPropsType> = ({ onlgets }) => {
+const Onglet: React.FC<OngletPropsType> = ({ onlgets, type = 'hidden' }) => {
     const [activeTab, setActiveTab] = useState('');
     useEffect(() => {
         if (onlgets[0]) {
@@ -36,12 +37,21 @@ const Onglet: React.FC<OngletPropsType> = ({ onlgets }) => {
 
             <div className="p-6">
                 {onlgets.map((onglet) => (
-                    <div
-                        key={onglet.key + '_container'}
-                        className={clsx({
-                            'hidden': onglet.key.toLowerCase() !== activeTab
-                        })}>
-                        {onglet.component}
+                    <div>
+                        {type === 'hidden' &&
+                            <div
+                                key={onglet.key + '_container'}
+                                className={clsx({
+                                    'hidden': onglet.key.toLowerCase() !== activeTab
+                                })}>
+                                {onglet.component}
+                            </div>
+                        }
+                        {type === 'delete' && onglet.key.toLowerCase() === activeTab && (
+                            <div key={onglet.key + '_container'}>
+                                {onglet.component}
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>
