@@ -25,7 +25,7 @@ class AppFixtures extends CI_Controller
             'paiement',
             'note',
             'inscription',
-            'classe_professeur_matier',
+            'classe_proffesseur_matiere',
             'eleve',
             'personnel',
             // 'type_personnel',
@@ -38,7 +38,7 @@ class AppFixtures extends CI_Controller
             'annee_scolaire',
             'parents',
             'depense'
-        ]);
+        ]);die ; 
 
         // Insertion des données sur l'etablissement
         $this->model->insertFixture('etablissement', [
@@ -73,40 +73,9 @@ class AppFixtures extends CI_Controller
             ]);
         }
 
-        // 2. niveaux scolaires réalistes
-        $niveaux = [
-            'Primaire' => [
-                'CP',
-                'CE1',
-                'CE2',
-                'CM1',
-                'CM2'
-            ],
-            'Collège' => [
-                '6ème',
-                '5ème',
-                '4ème',
-                '3ème'
-            ],
-            'Lycée' => [
-                'Seconde',
-                'Première',
-                'Terminale'
-            ]
-        ];
 
-        foreach ($niveaux as $cycle => $classes) {
-            foreach ($classes as $classe) {
-                $this->model->insertFixture('niveau', [
-                    'niveau' => $classe,
-                    'cycle' => $cycle,
-                    'description' => "Classe de $classe du cycle $cycle",
-                    'created_at' => date('Y-m-d H:i:s')
-                ]);
-            }
-        }
 
-        // 3. matiere
+        // 2. matiere
         $matieresListe = [
             [
                 'denomination' => 'Mathématiques',
@@ -181,6 +150,41 @@ class AppFixtures extends CI_Controller
             ]);
         }
 
+
+        // 3. niveaux scolaires 
+        $niveaux = [
+            'Primaire' => [
+                'CP',
+                'CE1',
+                'CE2',
+                'CM1',
+                'CM2'
+            ],
+            'Collège' => [
+                '6ème',
+                '5ème',
+                '4ème',
+                '3ème'
+            ],
+            'Lycée' => [
+                'Seconde',
+                'Première',
+                'Terminale'
+            ]
+        ];
+
+        foreach ($niveaux as $cycle => $classes) {
+            foreach ($classes as $classe) {
+                $this->model->insertFixture('niveau', [
+                    'niveau' => $classe,
+                    'cycle' => $cycle,
+                    'description' => "Classe de $classe du cycle $cycle",
+                    'created_at' => date('Y-m-d H:i:s')
+                ]);
+            }
+        }
+
+
         // 4. matiere_niveau
         $niveaux = $this->model->getIds('niveau', 'id_niveau');
         $matieres = $this->model->getIds('matiere', 'id_matiere');
@@ -195,18 +199,29 @@ class AppFixtures extends CI_Controller
         }
 
         // 5. classes
-        $sections = ['A', 'B', 'C', 'D', 'S1', 'S2'];
+        $sections = ['A', 'B', 'C', 'D', 'E', 'F'];
 
-        foreach ($niveaux as $niveau_id) {
-            // on génère entre 2 et 3 classes par niveau
+        // On récupère les niveaux avec leur nom
+        $this->load->database();
+        $niveauxData = $this->db->select('id_niveau, niveau')
+            ->from('niveau')
+            ->get()
+            ->result_array();
+
+        foreach ($niveauxData as $niveau) {
+            $niveauId = $niveau['id_niveau'];
+            $nomNiveau = $niveau['niveau'];
+
+            // Génère entre 2 et 3 classes par niveau
             $nbClasses = rand(2, 3);
 
             for ($i = 0; $i < $nbClasses; $i++) {
-                $section = $faker->randomElement($sections);
+                // Utilise l’index pour choisir la lettre (A, B, C…)
+                $section = $sections[$i] ?? $faker->randomElement($sections);
 
                 $this->model->insertFixture('classe', [
-                    'denomination'     => 'Classe ' . $section,  
-                    'niveau_id_niveau' => $niveau_id,          
+                    'denomination'     => $nomNiveau . ' ' . $section, // ex: "5ème A"
+                    'niveau_id_niveau' => $niveauId,
                     'created_at'       => date('Y-m-d H:i:s')
                 ]);
             }
@@ -350,7 +365,7 @@ class AppFixtures extends CI_Controller
 
         $professeurs = $this->model->getIds('personnel', 'id_personnel');
 
-        // 11. classe_professeur_matier
+        // 11. classe_proffesseur_matiere
 
         foreach ($classes as $classe) {
             foreach ($faker->randomElements($matieres, 2) as $matiere) {
@@ -359,11 +374,11 @@ class AppFixtures extends CI_Controller
                 // Vérifie si la combinaison existe déjà dans la BDD
                 $exists = $this->db->where('classe_id_classe', $classe)
                     ->where('professeur_id_professeur', $professeur)
-                    ->get('classe_professeur_matier')
+                    ->get('classe_proffesseur_matiere')
                     ->num_rows() > 0;
 
                 if (!$exists) {
-                    $this->model->insertFixture('classe_professeur_matier', [
+                    $this->model->insertFixture('classe_proffesseur_matiere', [
                         'classe_id_classe' => $classe,
                         'professeur_id_professeur' => $professeur,
                         'matiere_id_matiere' => $matiere,
