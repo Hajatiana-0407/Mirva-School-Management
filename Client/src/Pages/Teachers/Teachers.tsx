@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive, Eye, BookOpen, User, Users, Shield, Brush, Library, Calculator, Truck, HeartPulse } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Archive, Eye, HeartPulse } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import { useDispatch, useSelector } from 'react-redux';
-import { EmployeeType } from '../../Utils/Types';
+import { TeacherType } from '../../Utils/Types';
 import { AppDispatch } from '../../Redux/store';
 import { getAppState } from '../../Redux/AppSlice';
 import { useNavigate } from 'react-router-dom';
@@ -13,46 +13,21 @@ import { getAllTeachers } from './redux/TeacherAsyncThunk';
 import { deleteEmployees } from '../Employees/redux/EmployeAsyncThunk';
 import Profile from '../../Components/ui/Profile';
 import EmployeForm from '../../Components/Forms/EmployeForm';
-import { getShortDate } from '../../Utils/Utils';
-
-// Mapping des types à des couleurs de fond
-const typeBgColors: Record<string, string> = {
-  'Enseignant': 'bg-blue-100 text-blue-800',
-  'Secrétaire': 'bg-green-100 text-green-800',
-  'Gardin': 'bg-yellow-100 text-yellow-800',
-  'Surveillant': 'bg-purple-100 text-purple-800',
-  "Agent d’entretien": 'bg-pink-100 text-pink-800',
-  'Bibliothécaire': 'bg-indigo-100 text-indigo-800',
-  'Comptable': 'bg-orange-100 text-orange-800',
-  'Chauffeur': 'bg-teal-100 text-teal-800',
-};
-// Mapping des types à des icônes Lucide
-const typeIcons: Record<string, any> = {
-  'Enseignant': BookOpen,
-  'Secrétaire': User,
-  'Gardin': Shield,
-  'Surveillant': Users,
-  "Agent d’entretien": Brush,
-  'Bibliothécaire': Library,
-  'Comptable': Calculator,
-  'Chauffeur': Truck,
-};
-
+import { hexToRgba } from '../../Utils/Utils';
 
 const Teachers: React.FC = () => {
   // Nom du fichier pièce d'identité (verso)
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [editingEmployees, setEditingEmployees] = useState<EmployeeType | null>(null);
+  const [editingEmployees, setEditingEmployees] = useState<TeacherType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [teacherToArchive, setTeacherToArchive] = useState<EmployeeType | null>(null);
+  const [teacherToArchive, setTeacherToArchive] = useState<TeacherType | null>(null);
 
   const { hiddeTheModalActive } = useSelector(getAppState);
   // *** //
   const { datas: employees, action } = useSelector(getTeacherState);
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
-
 
   //Handlers
   const handleEdit = (employee: any) => {
@@ -81,11 +56,42 @@ const Teachers: React.FC = () => {
     setEditingEmployees(null);
   };
 
+  const getSubjectLevelContent = (value: string, item: TeacherType) => {
+    return (
+      <div>
+        {value &&
+          item.classes?.slice(0, 3).map((classe, index) => (
+            <div key={index} className="border-b border-gray-300 last:border-0 text-sm flex ">
+              <div className="font-semibold border-r pe-2 py-2 min-w-24">{classe.denomination} </div>
+              <div className="ml-2 py-2">
+                {classe.matieres?.slice(0, 2).map((subject) => (
+                  <div key={subject.id_matiere} className='px-2  py-1 rounded text-xs font-medium  hover:opacity-80' style={{ backgroundColor: hexToRgba(subject.couleur, 0.5) }}>
+                    <span>
+                      {subject.abbreviation}
+                    </span>
+                  </div>
+                ))}
+                <div className='text-center text-gray-400 text-xs'>
+                  {classe.matieres?.length && classe.matieres?.length > 2 ? `+${classe?.matieres?.length - 2}` : ''}
+                </div>
+              </div>
+            </div>
+          ))
+        }
+        {item.classes && item.classes.length > 3 && (
+          <div className="text-sm text-gray-500">
+            et {item.classes.length - 3} autre{item.classes.length - 3 > 1 ? 's' : ''}...
+          </div>
+        )}
+      </div>
+    )
+  }
+
   // TABLEAUX 
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: (item: EmployeeType) => navigate("/employees/" + item.matricule_personnel), color: 'blue' },
+    { icon: Eye, label: 'Voir le détail', onClick: (item: TeacherType) => navigate("/employees/" + item.matricule_personnel), color: 'blue' },
     { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
-    { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
+    { icon: Archive, label: 'Supprimer', onClick: handleArchive, color: 'red' },
   ];
 
   const columns = [
@@ -93,7 +99,7 @@ const Teachers: React.FC = () => {
     {
       key: 'nom',
       label: 'Profil',
-      render: (value: string, item: EmployeeType) => (
+      render: (value: string, item: TeacherType) => (
         <Profile
           fullName={`${value} ${item.prenom}`}
           identification={item.matricule_personnel}
@@ -102,31 +108,9 @@ const Teachers: React.FC = () => {
         />
       )
     },
-    { key: 'matricule_personnel', label: 'Matricule' },
-    // Fonction employé
-    {
-      key: 'type', label: 'Fonction', render: (employeType: string) => {
-        const type = employeType || 'Autre';
-        const color = typeBgColors[type] || 'bg-gray-200 text-gray-800';
-        const Icon = typeIcons[type];
-        return (
-          <span className={`px-2 py-1 rounded-full text-sm flex items-center gap-1 ${color}`}>
-            {Icon && <Icon className="w-4 h-4 mr-1" />}
-            {type}
-          </span>
-        );
-      }
-    },
-    {
-      key: 'date_embauche', label: "Date d'embauche", render: (value: string) => (
-        <div>
-          {getShortDate(value)}
-        </div>
-      )
-    },
     { key: 'addresse', label: 'Addrèsse' },
     {
-      key: 'telephone', label: 'Contact', render: (value: string, item: EmployeeType) => (
+      key: 'telephone', label: 'Contact', render: (value: string, item: TeacherType) => (
         <div>
           {value}
           <span className='block text-sm text-blue-500'>{item.email} </span>
@@ -165,7 +149,8 @@ const Teachers: React.FC = () => {
         );
       }
     },
-    { key: 'sexe', label: 'Sex' },
+
+    { key: 'classes', label: 'Classes et Matières', render: getSubjectLevelContent }
   ];
 
   // Effets
@@ -236,6 +221,7 @@ const Teachers: React.FC = () => {
           columns={columns}
           actions={actions}
           searchTerm={searchTerm}
+          actionType='pop-up'
         />
       </div>
 

@@ -19,16 +19,16 @@ export const AppInitialValue: AppStateType = {
 }
 
 
-export type AuthStateType = { 
-    user?: { 
-        id ? : number  ;
-        email?: string  ;
-        nom?: string ;
-        is_active?: boolean ; 
+export type AuthStateType = {
+    user?: {
+        id?: number;
+        email?: string;
+        nom?: string;
+        is_active?: boolean;
         role?: string
-    } 
-    isLoggedIn?: boolean ;
-    token?: string ;
+    }
+    isLoggedIn?: boolean;
+    token?: string;
 }
 
 export const AuthInitialValue: AuthStateType = {
@@ -207,6 +207,9 @@ export const employeeInitialValue: EmployeeType = {
     salaire_base: 0,
     created_at: ''
 };
+
+export type SubjectClasseAssignmentsType =  ClasseType & { matieres?: SubjectType[] }
+export type TeacherType = EmployeeType & { classes?: SubjectClasseAssignmentsType[]};
 
 
 // Type Personnel ( TYPE PERSONNEL )

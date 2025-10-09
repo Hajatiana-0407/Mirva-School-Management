@@ -134,7 +134,7 @@ $route['api/admin/parent/delete'] = 'ParentController/delete';
 // ===================== Routes sécurisées ===================== //
 $GLOBALS['secure'] = [
     // Établissement
-    'api/admin/school' => true,
+    // 'api/admin/school' => true,
     'api/admin/school/update' => true,
 
     // Classe
@@ -166,7 +166,7 @@ $GLOBALS['secure'] = [
     'api/admin/personnel/*' => true, // findOneByMatricule
 
     // Enseignants
-    'api/admin/teachers' => true,
+    // 'api/admin/teachers' => true,
 
     // Type personnel
     'api/admin/type-personnel' => true,
