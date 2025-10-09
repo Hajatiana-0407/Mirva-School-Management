@@ -29,30 +29,30 @@ import StudentSinglePage from './Pages/Students/StudentSinglePage';
 import Parents from './Pages/Parents/Parents';
 import Signin from './Pages/Auth/Signin';
 import ProtectedRoute from './Security/ProtectedRoute';
-import { testAuthentication } from './Pages/Auth/redux/AuthSlice';
-
-
+import { getAuthState, testAuthentication } from './Pages/Auth/redux/AuthSlice';
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
   const { datas: schoolInfo } = useSelector(getSchoolState)
   const { activeSchoolYear } = useSelector(getSchoolYearState)
+  const { datas: { isLoggedIn } } = useSelector(getAuthState);
 
   // Utils
   useEffect(() => {
-    dispatch(getAllTypePersonnel())
-    // Load school info
-    if (schoolInfo?.code === "") {
-      // Fetch school info only if not already loaded
-      dispatch(getSchoolInfo());
+    if (isLoggedIn) {
+      dispatch(getAllTypePersonnel())
+      // Load school info
+      if (schoolInfo?.code === "") {
+        // Fetch school info only if not already loaded
+        dispatch(getSchoolInfo());
+      }
+      if (!activeSchoolYear) {
+        dispatch(getAllSchoolYear());
+      }
+      // Verification si l'utilisateur est toujours authentifié
+      dispatch(testAuthentication())
     }
-
-    if (!!!activeSchoolYear) {
-      dispatch(getAllSchoolYear());
-    }
-    // Verification si l'utilisateur est toujours authentifié
-    dispatch(testAuthentication())
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     < >
