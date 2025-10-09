@@ -13,6 +13,7 @@ import { loginUser } from "./redux/AuthAsyncThunk"
 import InputError from "../../Components/ui/InputError"
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
+import { getSchoolInfo } from "../Settings/School/redux/SchoolAsyncThunk"
 
 export const LoginSchema = object({
     email: string()
@@ -47,6 +48,12 @@ const Signin = () => {
             navigate('/dashboard');
         }
     }, [datas.isLoggedIn]);
+
+    useEffect(() => {
+        if (!datas.isLoggedIn && !school.id_etablissement) {
+            dispatch(getSchoolInfo());
+        }
+    }, [datas.isLoggedIn])
 
     return (
         <div className="w-screen h-screen pt-[calc(100vh/5)]">
