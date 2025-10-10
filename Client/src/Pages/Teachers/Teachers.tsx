@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive, Eye, HeartPulse } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Archive, Eye, HeartPulse, PlusSquare } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
@@ -13,7 +13,7 @@ import { getAllTeachers } from './redux/TeacherAsyncThunk';
 import { deleteEmployees } from '../Employees/redux/EmployeAsyncThunk';
 import Profile from '../../Components/ui/Profile';
 import EmployeForm from '../../Components/Forms/EmployeForm';
-import { hexToRgba } from '../../Utils/Utils';
+import SubjectLevelContent from '../../Components/SubjectLevelContent';
 
 const Teachers: React.FC = () => {
   // Nom du fichier pièce d'identité (verso)
@@ -56,40 +56,11 @@ const Teachers: React.FC = () => {
     setEditingEmployees(null);
   };
 
-  const getSubjectLevelContent = (value: string, item: TeacherType) => {
-    return (
-      <div>
-        {value &&
-          item.classes?.slice(0, 3).map((classe, index) => (
-            <div key={index} className="border-b border-gray-300 last:border-0 text-sm flex ">
-              <div className="font-semibold border-r pe-2 py-2 min-w-24">{classe.denomination} </div>
-              <div className="ml-2 py-2">
-                {classe.matieres?.slice(0, 2).map((subject) => (
-                  <div key={subject.id_matiere} className='px-2  py-1 rounded text-xs font-medium  hover:opacity-80' style={{ backgroundColor: hexToRgba(subject.couleur, 0.5) }}>
-                    <span>
-                      {subject.abbreviation}
-                    </span>
-                  </div>
-                ))}
-                <div className='text-center text-gray-400 text-xs'>
-                  {classe.matieres?.length && classe.matieres?.length > 2 ? `+${classe?.matieres?.length - 2}` : ''}
-                </div>
-              </div>
-            </div>
-          ))
-        }
-        {item.classes && item.classes.length > 3 && (
-          <div className="text-sm text-gray-500">
-            et {item.classes.length - 3} autre{item.classes.length - 3 > 1 ? 's' : ''}...
-          </div>
-        )}
-      </div>
-    )
-  }
 
   // TABLEAUX 
   const actions = [
     { icon: Eye, label: 'Voir le détail', onClick: (item: TeacherType) => navigate("/employees/" + item.matricule_personnel), color: 'blue' },
+    { icon: PlusSquare, label: 'Classes et Matières', onClick: (item: TeacherType) => navigate("/teachers/" + item.matricule_personnel), color: 'purple' },
     { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
     { icon: Archive, label: 'Supprimer', onClick: handleArchive, color: 'red' },
   ];
@@ -150,7 +121,14 @@ const Teachers: React.FC = () => {
       }
     },
 
-    { key: 'classes', label: 'Classes et Matières', render: getSubjectLevelContent }
+    {
+      key: 'classes', label: 'Classes et Matières', render: (value: any[], item: TeacherType) => (
+        <SubjectLevelContent
+          value={value}
+          item={item}
+        />
+      )
+    }
   ];
 
   // Effets
@@ -170,13 +148,13 @@ const Teachers: React.FC = () => {
 
       {/* Entete */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Gestion des employés</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Gestion des enseignants</h1>
         <button
           onClick={() => setShowModal(true)}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
-          <span>Nouveau enseigant</span>
+          <span>Nouveau enseignant</span>
         </button>
       </div>
 
@@ -194,19 +172,6 @@ const Teachers: React.FC = () => {
                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
-            <select
-              id="countries"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 cursor-pointer"
-              onChange={(e) => {
-                setSearchTerm(e.target.value)
-              }}
-            >
-              <option value="">Tous les Status</option>
-              <option value="Actif">Actif</option>
-              <option value="Suspendu">Suspendu</option>
-              <option value="Démissionnaire">Démissionnaire</option>
-
-            </select>
             <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
               <Filter className="w-4 h-4" />
               <span>Filtres</span>

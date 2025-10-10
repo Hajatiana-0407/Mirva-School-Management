@@ -2,15 +2,19 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ActionIntialValue, ActionType, ApiReturnType, EmployeeType, TypePersonnelType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
-import { getAllTeachers } from "./TeacherAsyncThunk";
-import { createEmployees, deleteEmployees, updateEmployees } from "../../Employees/redux/EmployeAsyncThunk";
-
+import { assignationTeacher, createTeacher, getAllTeachers, getTeacherByMatricule, updateTeacher } from "./TeacherAsyncThunk";
+import { deleteEmployees } from "../../Employees/redux/EmployeAsyncThunk";
+import { AssignationType } from "../../TeacherSubject";
 
 type initialStateType = {
     action: ActionType,
     datas: EmployeeType[],
     page: number,
-    error: string
+    error: string;
+    single: {
+        data?: EmployeeType & TypePersonnelType & { assignations?: AssignationType[] };
+        action: ActionType & { isLoadingAssignation?: boolean }
+    }
 }
 
 const initialState: initialStateType = {
@@ -18,6 +22,9 @@ const initialState: initialStateType = {
     datas: [],
     page: 1,
     error: '',
+    single: {
+        action: ActionIntialValue
+    }
 }
 
 const TeacherSlice = createSlice({
@@ -31,7 +38,7 @@ const TeacherSlice = createSlice({
     },
     extraReducers(builder) {
 
-        // // ************************************* Read ************************************* //
+        // ? ************************************* Read ************************************* //
         builder
             .addCase(getAllTeachers.pending, (state) => {
                 state.action.isLoading = true;
@@ -49,10 +56,10 @@ const TeacherSlice = createSlice({
 
         // ************************************* Create ************************************* //
         builder
-            .addCase(createEmployees.pending, (state) => {
+            .addCase(createTeacher.pending, (state) => {
                 state.action.isLoading = true;
             })
-            .addCase(createEmployees.fulfilled, (state, action: {
+            .addCase(createTeacher.fulfilled, (state, action: {
                 payload: ApiReturnType
             }) => {
                 state.action.isLoading = false;
@@ -67,18 +74,18 @@ const TeacherSlice = createSlice({
                     }
                 }
             })
-            .addCase(createEmployees.rejected, (state) => {
+            .addCase(createTeacher.rejected, (state) => {
                 state.action.isLoading = false;
                 state.error = 'Erreur de connexion au server';
                 toast.error("Erreur de connexion au server");
             })
 
-        // // ************************************* Update ************************************* //
+        // ! ************************************* Update ************************************* //
         builder
-            .addCase(updateEmployees.pending, (state) => {
+            .addCase(updateTeacher.pending, (state) => {
                 state.action.isUpdating = true;
             })
-            .addCase(updateEmployees.fulfilled, (state, action: {
+            .addCase(updateTeacher.fulfilled, (state, action: {
                 payload: ApiReturnType
             }) => {
                 state.action.isUpdating = false;
@@ -98,13 +105,13 @@ const TeacherSlice = createSlice({
                     })
                 }
             })
-            .addCase(updateEmployees.rejected, (state) => {
+            .addCase(updateTeacher.rejected, (state) => {
                 state.action.isUpdating = false
                 state.error = 'Erreur de connexion au server';
                 toast.error("Erreur de connexion au server");
             })
 
-        // // ************************************* Delete ************************************* //
+        // ! ************************************* Delete ************************************* //
 
         builder
             .addCase(deleteEmployees.pending, (state) => {
@@ -126,6 +133,54 @@ const TeacherSlice = createSlice({
                 state.error = 'Erreur de connexion au server';
                 toast.error("Erreur de connexion au server");
             })
+
+
+
+        //? ===================== Teacher detaails ===================== //
+        builder
+            .addCase(getTeacherByMatricule.pending, (state) => {
+                state.single.action.isLoading = true;
+                state.error = '';
+            })
+            .addCase(getTeacherByMatricule.fulfilled, (state, action: { payload: ApiReturnType }) => {
+                state.single.action.isLoading = false;
+                const { error, data: employe, message } = action.payload;
+                if (error) {
+                    state.error = message as string;
+                } else {
+                    state.single.data = employe;
+                }
+            })
+            .addCase(getTeacherByMatricule.rejected, (state) => {
+                state.single.action.isLoading = false;
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
+            })
+
+
+        // ===================== ASSIGNATIONS CLASSE ET MATIÈRE ===================== //
+        builder
+            .addCase(assignationTeacher.pending, (state) => {
+                state.single.action.isLoadingAssignation = true;
+                state.error = '';
+            })
+            .addCase(assignationTeacher.fulfilled, (state, action: { payload: ApiReturnType }) => {
+                state.single.action.isLoadingAssignation = false;
+                const { error, message } = action.payload;
+                console.log(action.payload);
+
+                if (error) {
+                    state.error = message as string;
+                } else {
+                    toast.success("Assignations mise à jour avec succès")
+                }
+            })
+            .addCase(assignationTeacher.rejected, (state) => {
+                state.single.action.isLoadingAssignation = false;
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
+            })
+
     }
 })
 

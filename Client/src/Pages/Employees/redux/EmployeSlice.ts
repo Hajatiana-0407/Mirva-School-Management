@@ -134,7 +134,7 @@ const EmployeSlice = createSlice({
             })
 
 
-        // ? Employé single page 
+        //? ===================== Employé single page  ===================== //
         builder
             .addCase(getEmployeByMatricule.pending, (state) => {
                 state.single.action.isLoading = true;

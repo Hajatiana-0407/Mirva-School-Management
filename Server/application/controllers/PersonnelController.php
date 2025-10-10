@@ -105,13 +105,20 @@ class PersonnelController extends CI_Controller
                 if ($assignations) {
                     $this->load->model('MatiereClasseProfModel');
                     $assignation_data = [];
+                    $isAll = false;
                     foreach ($assignations as $assignation) {
-                        $assignation_data[] = [
-                            'professeur_id_professeur' => $result->id_personnel,
-                            'classe_id_classe'    => $assignation['id_classe'],
-                            'matiere_id_matiere'  => $assignation['id_matiere'],
-                            'heure_semaine'      => $assignation['heures'],
-                        ];
+                        if (!$isAll) {
+                            // Condition pour l'arret du boocle si le matiere et tous 
+                            if ($assignation['id_matiere'] === 'tous') $isAll = true;
+
+                            $assignation_data[] = [
+                                'professeur_id_professeur' => $result->id_personnel,
+                                'classe_id_classe'    => $assignation['id_classe'],
+                                'matiere_id_matiere'  => $assignation['id_matiere'] === 'tous' ? 0 : $assignation['id_matiere'],
+                                'heure_semaine'      => $assignation['heures'],
+                                'is_all_matiere' =>  $assignation['id_matiere'] === 'tous'
+                            ];
+                        }
                     }
                     $this->MatiereClasseProfModel->insertBatch($assignation_data);
                 }
@@ -201,7 +208,6 @@ class PersonnelController extends CI_Controller
                 $id = $input[$this->pk];
 
                 $data = $this->PersonnelModel->delete($id);
-
                 if ($data) {
                     echo json_encode(['error' => false, 'data' => $data]);
                 } else {

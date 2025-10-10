@@ -68,7 +68,6 @@ $route['api/admin/classe'] = 'ClasseController';
 $route['api/admin/classe/update'] = 'ClasseController/update';
 $route['api/admin/classe/create'] = 'ClasseController/create';
 $route['api/admin/classe/delete'] = 'ClasseController/delete';
-
 $route['api/admin/matiere-classe/(:num)'] = 'ClasseController/getAllClasseByIdMatiere/$1';
 
 // ******************* ROUTE NIVEAU ********************** //
@@ -76,7 +75,6 @@ $route['api/admin/niveau'] = 'NiveauController';
 $route['api/admin/niveau/update'] = 'NiveauController/update';
 $route['api/admin/niveau/create'] = 'NiveauController/create';
 $route['api/admin/niveau/delete'] = 'NiveauController/delete';
-
 $route['api/admin/niveau-matiere/(:num)'] = 'NiveauController/niveauMatiere/$1';
 $route['api/admin/niveau-matiere/enrigistrer'] = 'NiveauController/registerCoef';
 
@@ -91,11 +89,15 @@ $route['api/admin/personnel'] = 'PersonnelController';
 $route['api/admin/personnel/update'] = 'PersonnelController/update';
 $route['api/admin/personnel/create'] = 'PersonnelController/create';
 $route['api/admin/personnel/delete'] = 'PersonnelController/delete';
-
 $route['api/admin/personnel/(:any)'] = 'PersonnelController/findOneByMatricule/$1';
 
 // ******************* ROUTE ENSEIGNANT ********************** //
 $route['api/admin/teachers'] = 'EnseigantsController';
+$route['api/admin/teachers/update'] = 'EnseigantsController/update';
+$route['api/admin/teachers/create'] = 'EnseigantsController/create';
+$route['api/admin/teachers/assignations'] = 'EnseigantsController/assignations';
+$route['api/admin/teacher/(:any)'] = 'EnseigantsController/findOneByMatricule/$1';
+
 
 // ******************* ROUTE TYPE PERSONNEL ********************** //
 $route['api/admin/type-personnel'] = 'TypePersonnelController';
@@ -105,7 +107,6 @@ $route['api/admin/school-year'] = 'AnneeScolaireController';
 $route['api/admin/school-year/update'] = 'AnneeScolaireController/update';
 $route['api/admin/school-year/create'] = 'AnneeScolaireController/create';
 $route['api/admin/school-year/delete'] = 'AnneeScolaireController/delete';
-
 $route['api/admin/school-year/change-active'] = 'AnneeScolaireController/changeActiveSchoolYear';
 
 

@@ -23,12 +23,14 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     testAuthentication: (state) => {
-      const token = localStorage.getItem('token');
-      if (token && token !== '') {
-        state.datas = {
-          isLoggedIn: true,
-          token: token,
-          user: decodeToken(token).data
+      if (!state.datas.isLoggedIn) {
+        const token = localStorage.getItem('token');
+        if (token && token !== '') {
+          state.datas = {
+            isLoggedIn: true,
+            token: token,
+            user: decodeToken(token).data
+          }
         }
       }
     },
@@ -69,5 +71,5 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
-export const { testAuthentication , logout } = authSlice.actions;
+export const { testAuthentication, logout } = authSlice.actions;
 export const getAuthState = (state: RootStateType) => state.auth;

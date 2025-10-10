@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : mer. 08 oct. 2025 à 04:59
+-- Généré le : ven. 10 oct. 2025 à 21:14
 -- Version du serveur : 10.4.22-MariaDB
 -- Version de PHP : 8.0.14
 
@@ -60,6 +60,7 @@ CREATE TABLE `classe_proffesseur_matiere` (
   `classe_id_classe` int(11) NOT NULL,
   `professeur_id_professeur` int(11) NOT NULL,
   `matiere_id_matiere` int(11) NOT NULL,
+  `is_all_matiere` tinyint(1) NOT NULL,
   `heure_semaine` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -124,6 +125,7 @@ CREATE TABLE `eleve` (
   `photo` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `email` varchar(200) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `nationalite` varchar(50) NOT NULL,
   `pc_pi` text NOT NULL,
   `pc_act_naissance` text NOT NULL,
@@ -190,7 +192,15 @@ INSERT INTO `etablissement` (`id_etablissement`, `nom`, `code`, `adresse`, `tele
 (44, 'Mada School', 'MIRV2024', '123 Rue de l\'Éducation, Ville, Pays', '+1234567890', 'mada.shool@gmail.com', 'Apprendre, Grandir, Réussir', '', 'www.madaschool.com', 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.', '', '2025-10-03 19:34:05', 'https://www.facebook.com/madaschool', 'https://www.twitter.com/madaschool', 'https://www.instagram.com/madaschool', 'https://www.linkedin.com/company/madaschool', 'https://www.youtube.com/madaschool'),
 (45, 'Mada School', 'MIRV2024', '123 Rue de l\'Éducation, Ville, Pays', '+1234567890', 'mada.shool@gmail.com', 'Apprendre, Grandir, Réussir', '', 'www.madaschool.com', 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.', '', '2025-10-04 03:07:11', 'https://www.facebook.com/madaschool', 'https://www.twitter.com/madaschool', 'https://www.instagram.com/madaschool', 'https://www.linkedin.com/company/madaschool', 'https://www.youtube.com/madaschool'),
 (46, 'Mada School', 'MIRV2024', '123 Rue de l\'Éducation, Ville, Pays', '+1234567890', 'mada.shool@gmail.com', 'Apprendre, Grandir, Réussir', 'public/uploads/etablissement//1759548943_file_68e0960fb930c5.14000815.gif', 'www.madaschool.com', 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.', '', '2025-10-04 03:35:43', 'https://www.facebook.com/madaschool', 'https://www.twitter.com/madaschool', 'https://www.instagram.com/madaschool', 'https://www.linkedin.com/company/madaschool', 'https://www.youtube.com/madaschool'),
-(47, 'Mada School', 'MIRV2024', '123 Rue de l\'Éducation, Ville, Pays', '+1234567890', 'mada.shool@gmail.com', 'Apprendre, Grandir, Réussir', '', 'www.madaschool.com', 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.', '', '2025-10-08 02:52:09', 'https://www.facebook.com/madaschool', 'https://www.twitter.com/madaschool', 'https://www.instagram.com/madaschool', 'https://www.linkedin.com/company/madaschool', 'https://www.youtube.com/madaschool');
+(47, 'Mada School', 'MIRV2024', '123 Rue de l\'Éducation, Ville, Pays', '+1234567890', 'mada.shool@gmail.com', 'Apprendre, Grandir, Réussir', '', 'www.madaschool.com', 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.', '', '2025-10-08 02:52:09', 'https://www.facebook.com/madaschool', 'https://www.twitter.com/madaschool', 'https://www.instagram.com/madaschool', 'https://www.linkedin.com/company/madaschool', 'https://www.youtube.com/madaschool'),
+(48, 'Mada School', 'MIRV2024', '123 Rue de l\'Éducation, Ville, Pays', '+1234567890', 'mada.shool@gmail.com', 'Apprendre, Grandir, Réussir', 'public/uploads/etablissement//1759897746_file_68e5e892ad9f25.13317393.png', 'www.madaschool.com', 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.', '', '2025-10-08 04:29:06', 'https://www.facebook.com/madaschool', 'https://www.twitter.com/madaschool', 'https://www.instagram.com/madaschool', 'https://www.linkedin.com/company/madaschool', 'https://www.youtube.com/madaschool'),
+(49, 'Mada School', 'MIRV2024', '123 Rue de l\'Éducation, Ville, Pays', '+1234567890', 'mada.shool@gmail.com', 'Apprendre, Grandir, Réussir', '', 'www.madaschool.com', 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.', '', '2025-10-08 07:11:35', 'https://www.facebook.com/madaschool', 'https://www.twitter.com/madaschool', 'https://www.instagram.com/madaschool', 'https://www.linkedin.com/company/madaschool', 'https://www.youtube.com/madaschool'),
+(50, 'Mada School', 'MIRV2024', '123 Rue de l\'Éducation, Ville, Pays', '+1234567890', 'mada.shool@gmail.com', 'Apprendre, Grandir, Réussir', '', 'www.madaschool.com', 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.', '', '2025-10-08 07:13:12', 'https://www.facebook.com/madaschool', 'https://www.twitter.com/madaschool', 'https://www.instagram.com/madaschool', 'https://www.linkedin.com/company/madaschool', 'https://www.youtube.com/madaschool'),
+(51, 'Mada School', 'MIRV2024', '123 Rue de l\'Éducation, Ville, Pays', '+1234567890', 'mada.shool@gmail.com', 'Apprendre, Grandir, Réussir', '', 'www.madaschool.com', 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.', '', '2025-10-08 07:13:51', 'https://www.facebook.com/madaschool', 'https://www.twitter.com/madaschool', 'https://www.instagram.com/madaschool', 'https://www.linkedin.com/company/madaschool', 'https://www.youtube.com/madaschool'),
+(52, 'Mada School', 'MIRV2024', '123 Rue de l\'Éducation, Ville, Pays', '+1234567890', 'mada.shool@gmail.com', 'Apprendre, Grandir, Réussir', '', 'www.madaschool.com', 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.', '', '2025-10-08 07:14:32', 'https://www.facebook.com/madaschool', 'https://www.twitter.com/madaschool', 'https://www.instagram.com/madaschool', 'https://www.linkedin.com/company/madaschool', 'https://www.youtube.com/madaschool'),
+(53, 'Mada School', 'MIRV2024', '123 Rue de l\'Éducation, Ville, Pays', '+1234567890', 'mada.shool@gmail.com', 'Apprendre, Grandir, Réussir', 'public/uploads/etablissement//1759943140_file_68e699e4d7e7f1.75152388.png', 'www.madaschool.com', 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.', '', '2025-10-08 17:05:40', 'https://www.facebook.com/madaschool', 'https://www.twitter.com/madaschool', 'https://www.instagram.com/madaschool', 'https://www.linkedin.com/company/madaschool', 'https://www.youtube.com/madaschool'),
+(54, 'Mada School', 'MIRV2024', '123 Rue de l\'Éducation, Ville, Pays', '+1234567890', 'mada.shool@gmail.com', 'Apprendre, Grandir, Réussir', '', 'www.madaschool.com', 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.', '', '2025-10-09 16:59:46', 'https://www.facebook.com/madaschool', 'https://www.twitter.com/madaschool', 'https://www.instagram.com/madaschool', 'https://www.linkedin.com/company/madaschool', 'https://www.youtube.com/madaschool'),
+(55, 'Mirva School', 'MIRV2024', '123 Rue de l\'Éducation, Ville, Pays', '+1234567890', 'mada.shool@gmail.com', 'Apprendre, Grandir, Réussir', '', 'www.madaschool.com', 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.', '', '2025-10-09 18:30:10', 'https://www.facebook.com/madaschool', 'https://www.twitter.com/madaschool', 'https://www.instagram.com/madaschool', 'https://www.linkedin.com/company/madaschool', 'https://www.youtube.com/madaschool');
 
 -- --------------------------------------------------------
 
@@ -394,13 +404,6 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Déchargement des données de la table `users`
---
-
-INSERT INTO `users` (`id_user`, `email`, `password`, `role`) VALUES
-(1, 'teste', 'teste', 'teste');
-
---
 -- Index pour les tables déchargées
 --
 
@@ -547,85 +550,85 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `annee_scolaire`
 --
 ALTER TABLE `annee_scolaire`
-  MODIFY `id_annee_scolaire` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+  MODIFY `id_annee_scolaire` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=221;
 
 --
 -- AUTO_INCREMENT pour la table `classe`
 --
 ALTER TABLE `classe`
-  MODIFY `id_classe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=448;
+  MODIFY `id_classe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=671;
 
 --
 -- AUTO_INCREMENT pour la table `depense`
 --
 ALTER TABLE `depense`
-  MODIFY `id_depense` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=359;
+  MODIFY `id_depense` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=367;
 
 --
 -- AUTO_INCREMENT pour la table `droit_inscription`
 --
 ALTER TABLE `droit_inscription`
-  MODIFY `id_droit_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=373;
+  MODIFY `id_droit_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=457;
 
 --
 -- AUTO_INCREMENT pour la table `ecolage`
 --
 ALTER TABLE `ecolage`
-  MODIFY `id_ecolage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=635;
+  MODIFY `id_ecolage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=719;
 
 --
 -- AUTO_INCREMENT pour la table `eleve`
 --
 ALTER TABLE `eleve`
-  MODIFY `id_eleve` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=903;
+  MODIFY `id_eleve` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=973;
 
 --
 -- AUTO_INCREMENT pour la table `etablissement`
 --
 ALTER TABLE `etablissement`
-  MODIFY `id_etablissement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id_etablissement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT pour la table `inscription`
 --
 ALTER TABLE `inscription`
-  MODIFY `id_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=430;
+  MODIFY `id_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=465;
 
 --
 -- AUTO_INCREMENT pour la table `matiere`
 --
 ALTER TABLE `matiere`
-  MODIFY `id_matiere` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=897;
+  MODIFY `id_matiere` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=977;
 
 --
 -- AUTO_INCREMENT pour la table `niveau`
 --
 ALTER TABLE `niveau`
-  MODIFY `id_niveau` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=640;
+  MODIFY `id_niveau` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=736;
 
 --
 -- AUTO_INCREMENT pour la table `note`
 --
 ALTER TABLE `note`
-  MODIFY `id_note` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=771;
+  MODIFY `id_note` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=841;
 
 --
 -- AUTO_INCREMENT pour la table `paiement`
 --
 ALTER TABLE `paiement`
-  MODIFY `id_paiement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=354;
+  MODIFY `id_paiement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=374;
 
 --
 -- AUTO_INCREMENT pour la table `parents`
 --
 ALTER TABLE `parents`
-  MODIFY `id_parent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=202;
+  MODIFY `id_parent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=347;
 
 --
 -- AUTO_INCREMENT pour la table `personnel`
 --
 ALTER TABLE `personnel`
-  MODIFY `id_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1109;
+  MODIFY `id_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1257;
 
 --
 -- AUTO_INCREMENT pour la table `type_personnel`
@@ -637,7 +640,7 @@ ALTER TABLE `type_personnel`
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Contraintes pour les tables déchargées
@@ -654,8 +657,7 @@ ALTER TABLE `classe`
 --
 ALTER TABLE `classe_proffesseur_matiere`
   ADD CONSTRAINT `fk_classe_has_professeur_classe1` FOREIGN KEY (`classe_id_classe`) REFERENCES `classe` (`id_classe`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_classe_has_professeur_professeur1` FOREIGN KEY (`professeur_id_professeur`) REFERENCES `personnel` (`id_personnel`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_classe_professeur_matier_matiere1` FOREIGN KEY (`matiere_id_matiere`) REFERENCES `matiere` (`id_matiere`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_classe_has_professeur_professeur1` FOREIGN KEY (`professeur_id_professeur`) REFERENCES `personnel` (`id_personnel`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `depense`

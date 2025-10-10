@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { Check, Clock, Trash2, X, Pencil, BookOpen, ArrowRight } from "lucide-react";
+import { Check, Clock, Trash2, X, Pencil, BookOpen, ArrowRight, Trash } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSubjectState } from "./Subjects/redux/SubjectSlice";
 import { ClasseType, SubjectType } from "../Utils/Types";
@@ -10,6 +10,7 @@ import Table from "./Table";
 import Input from "../Components/ui/Input";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
+import ConfirmDialog from "./ConfirmDialog";
 
 export type AssignationType = {
     id_matiere?: number | string;
@@ -30,13 +31,12 @@ const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) =
     const [editIndex, setEditIndex] = useState<number | null>(null);
     const [editHour, setEditHour] = useState<number>(1);
     const [classes, setClasses] = useState<ClasseType[]>([])
-
+    const [isActiveConfirmation, setIsActiveConfirmation] = useState(false)
     const { datas: subjects } = useSelector(getSubjectState);
 
     const dispatch: AppDispatch = useDispatch();
 
     const [subjectOptions, setsubjectOptions] = useState<subjectOptionsType>([]);
-
     useEffect(() => {
         if (subjects.length === 0) dispatch(getAllSubject());
 
@@ -192,6 +192,15 @@ const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) =
         setEditHour(Number(e.target.value));
     };
 
+    const handleDeleteAll = () => {
+        setIsActiveConfirmation(true);
+    }
+
+    const handleConfirmDeleteAll = () => {
+        setAssignations([]);
+        setIsActiveConfirmation(false);
+    }
+
     const isValidateDisabled =
         !selectedSubject ||
         Object.values(selectedClasses).filter(Boolean).length === 0;
@@ -241,7 +250,6 @@ const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) =
             )
         }
     ];
-
 
 
     return (
@@ -351,7 +359,7 @@ const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) =
                 </div>
 
                 {/* Colonne 2 : Tableau récapitulatif */}
-                <div className="col-span-3 max-lg:border-t lg:border-l">
+                <div className="col-span-3 max-lg:border-t lg:border-l flex flex-col justify-between">
                     <Table
                         columns={columns}
                         data={assignations.map((a, i) => ({ ...a, index: i }))}
@@ -365,6 +373,17 @@ const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) =
                         ]}
                         isLoading={false}
                     />
+                    <div className="flex justify-end py-3">
+                        <button
+                            className="bg-red-600 text-white px-4 py-2 rounded-lg space-x-2 hover:bg-red-700 transition-colors flex items-center disabled:bg-red-300"
+                            onClick={handleDeleteAll}
+                            disabled={assignations.length === 0}
+                            type="button"
+                        >
+                            <Trash className="w-4 h-4" />
+                            <span>Tout effacer</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -378,6 +397,15 @@ const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) =
                     </div>
                 ))}
             </div>
+            <ConfirmDialog
+                isOpen={isActiveConfirmation}
+                onClose={() => setIsActiveConfirmation(false)}
+                onConfirm={handleConfirmDeleteAll}
+
+                title="Confirmer la suppression des attributions"
+                message="Êtes-vous sûr de vouloir supprimer toutes les attributions de classes et de matières pour cet enseignant ?"
+
+            />
         </div>
     );
 };

@@ -13,6 +13,7 @@ import TeacherSubject from '../../Pages/TeacherSubject';
 import { getEmployeState } from '../../Pages/Employees/redux/EmployeSlice';
 import HeadingSmall from '../ui/HeadingSmall';
 import ImageProfile from '../ui/ImageProfile';
+import { createTeacher, updateTeacher } from '../../Pages/Teachers/redux/TeacherAsyncThunk';
 
 // ? VALIDATION DES DONNÉ AVEC YUP
 const EmployeSchema = object({
@@ -94,7 +95,12 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
     // Soumission du formulaire
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         onSubmite((validateData: EmployeeType) => {
-            editingEmployees ? dispatch(updateEmployees({ datas: validateData, id: editingEmployees?.id_personnel as number })) : dispatch(createEmployees(validateData))
+            if (!isTeacher) {
+                editingEmployees ? dispatch(updateEmployees({ datas: validateData, id: editingEmployees?.id_personnel as number })) : dispatch(createEmployees(validateData))
+            }
+            else if (isTeacher) {
+                editingEmployees ? dispatch(updateTeacher({ datas: validateData, id: editingEmployees?.id_personnel as number })) : dispatch(createTeacher(validateData))
+            }
         }, e);
     };
 
