@@ -60,7 +60,6 @@ type EmployeFormPropsType = {
 
 const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleClose = () => { }, type }) => {
     // const { datas: TypesEmployees } = useSelector(getTypeEmployeesState);
-    const [assignations, setAssignations] = useState<any>([]);
     const { datas: TypesEmployees } = useSelector(getTypeEmployeesState);
     const { action } = useSelector(getEmployeState);
     const [isTeacher, setIsTeacher] = useState(type == 'teacher' ? true : false);
@@ -390,7 +389,7 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                 'sr-only': page !== 2
             })} >
                 {/* Composant pour l'assigantion des matieres dans les classes pour le proffesseur */}
-                <TeacherSubject setParentAssignation={setAssignations} />
+                <TeacherSubject />
 
                 {/* Boutons de validation et retour dans l'assignation des matieres et classes pour le prof actuel */}
                 <div className='flex items-center justify-between'>
@@ -413,17 +412,6 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                         }
                         <span>Valider</span>
                     </button>
-                </div>
-
-                {/* Div cacher pour creation d'input qui va contenire les valeur des assigantions  */}
-                <div>
-                    {assignations.map((assignation: any, index: number) => (
-                        <div key={index}>
-                            <input type="hidden" name={`assignations[${index}][id_classe]`} value={assignation.id_classe} onChange={() => { }} />
-                            <input type="hidden" name={`assignations[${index}][id_matiere]`} value={assignation.id_matiere} onChange={() => { }} />
-                            <input type="hidden" name={`assignations[${index}][heures]`} value={assignation.heures} onChange={() => { }} />
-                        </div>
-                    ))}
                 </div>
             </div>
         </form>

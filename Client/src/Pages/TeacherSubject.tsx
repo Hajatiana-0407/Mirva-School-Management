@@ -11,20 +11,19 @@ import Input from "../Components/ui/Input";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 
-type AssignationType = {
+export type AssignationType = {
     id_matiere?: number | string;
     matiere: string;
     id_classe?: number | string;
     classe: string;
     heures: number;
 };
-
 type TeacherSubjectPropsType = {
-    setParentAssignation: React.Dispatch<any>;
+    assignationsInitialValue?: AssignationType[]
 };
 type subjectOptionsType = { label: string, value: number | string }[] | any[];
-const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
-    const [assignations, setAssignations] = useState<AssignationType[]>([]);
+const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) => {
+    const [assignations, setAssignations] = useState<AssignationType[]>(assignationsInitialValue || []);
     const [selectedSubject, setSelectedSubject] = useState<string>("");
     const [selectedClasses, setSelectedClasses] = useState<{ [key: string]: boolean }>({});
     const [hoursByClass, setHoursByClass] = useState<{ [key: string]: number }>({});
@@ -43,17 +42,15 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
 
     }, [dispatch]);
 
-    // Gestion du soumission au parent
-    useEffect(() => {
-        setParentAssignation(assignations);
-    }, [assignations, setParentAssignation]);
-
     useEffect(() => {
         if (classes.length === 0) {
             dispatch(getAllClasse()).then((res: any) => {
                 const allClasses = res.payload as ClasseType[];
                 setClasses(allClasses);
-                setSelectedSubject('tous');
+
+                if (!assignationsInitialValue) {
+                    setSelectedSubject('tous');
+                }
             });
         }
     }, [dispatch])
@@ -118,7 +115,7 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
             [id]: !prev[id]
         }));
     };
-    
+
     // Gestion des heures par classe
     const handleHoursChange = (id: number, value: number) => {
         setHoursByClass(prev => ({
@@ -248,125 +245,138 @@ const TeacherSubject = ({ setParentAssignation }: TeacherSubjectPropsType) => {
 
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-            {/* Colonne 1 */}
-            <div className="col-span-2 rounded p-1">
-                <h2 className='text-sm col-span-2 text-gray-500 italic mb-4'>Attribution matière(s) et classe(s) a cette enseigant </h2>
-                <div className="col-span-2 rounded  bg-white flex flex-col gap-4">
-                    {/* Choix matière */}
-                    <div>
-                        <Input
-                            label="Sélectionnez une matière"
-                            name=""
-                            icon={BookOpen}
-                            type="select"
-                            options={subjectOptions}
-                            onChange={handleSubjectChange as (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void}
-                        />
-                    </div>
+        <div>
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+                {/* Colonne 1 */}
+                <div className="col-span-2 rounded p-1">
+                    <h2 className='text-sm col-span-2 text-gray-500 italic mb-4'>Attribution matière(s) et classe(s) a cette enseigant </h2>
+                    <div className="col-span-2 rounded  bg-white flex flex-col gap-4">
+                        {/* Choix matière */}
+                        <div>
+                            <Input
+                                label="Sélectionnez une matière"
+                                name=""
+                                icon={BookOpen}
+                                type="select"
+                                options={subjectOptions}
+                                onChange={handleSubjectChange as (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void}
+                            />
+                        </div>
 
-                    {/* Sélection classes toujours affichée */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Classes :</label>
-                        <div className="rounded mb-2">
-                            <div className="flex px-4 py-2 border-b text-base font-semibold mb-2 rounded-t-2xl">
-                                <div className="w-10"></div>
-                                <div className="flex-1">Nom</div>
-                                <div className="w-24 text-center">h/semaine</div>
-                            </div>
-                            <div className="space-y-2 max-h-[350px] overflow-y-auto">
-                                {classes.map((classe: ClasseType, idx: number) => {
-                                    const checked = !!selectedClasses[classe.id_classe as number];
-                                    const disabled =
-                                        !selectedSubject ||
-                                        (selectedSubject === "tous" && Object.values(selectedClasses).some(v => v) && !checked)
-                                        || isClassAlreadyAssigned(classe.id_classe as number);
-                                    return (
-                                        <label
-                                            key={classe.id_classe || idx}
-                                            className={`flex items-center px-4 py-2 bg-white rounded border border-gray-200 hover:shadow-sm transition mb-1 cursor-pointer ${disabled ? "opacity-50 pointer-events-none" : ""}`}
-                                            htmlFor={`__classe_input_${classe.id_classe}`}
-                                        >
-                                            {/* Checkbox */}
-                                            <div className="w-10 flex items-center justify-center">
-                                                <input
-                                                    type="checkbox"
-                                                    className="peer appearance-none w-6 h-6 border-2 border-blue-300 rounded-md bg-blue-50 checked:bg-blue-500 checked:border-blue-500 transition cursor-pointer"
-                                                    id={`__classe_input_${classe.id_classe}`}
-                                                    checked={checked}
-                                                    disabled={disabled}
-                                                    onChange={() => handleClassCheck(classe.id_classe as number)}
-                                                />
-                                            </div>
-                                            {/* Nom de la classe */}
-                                            <div className="flex-1 flex items-center font-semibold text-gray-800 pl-2">
-                                                {classe.denomination}
-                                            </div>
-                                            {/* Input heure/semaine avec icône */}
-                                            <div className="w-24 flex items-center relative">
-                                                <input
-                                                    type="number"
-                                                    min={1}
-                                                    className={clsx({
-                                                        'border border-gray-500': checked,
-                                                        'border border-gray-200': !checked,
-                                                    }, "w-full  px-3 py-1 bg-gray-50 focus:ring-2 focus:ring-blue-200 font-medium")}
-                                                    placeholder="1"
-                                                    value={hoursByClass[classe.id_classe as number] || ""}
-                                                    onChange={e => handleHoursChange(classe.id_classe as number, Number(e.target.value))}
-                                                    disabled={!checked}
-                                                />
-                                                <Clock className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-400 w-5 h-5 pointer-events-none bg-white" />
-                                            </div>
-                                        </label>
-                                    );
-                                })}
+                        {/* Sélection classes toujours affichée */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Classes :</label>
+                            <div className="rounded mb-2">
+                                <div className="flex px-4 py-2 border-b text-base font-semibold mb-2 rounded-t-2xl">
+                                    <div className="w-10"></div>
+                                    <div className="flex-1">Nom</div>
+                                    <div className="w-24 text-center">h/semaine</div>
+                                </div>
+                                <div className="space-y-2 max-h-[350px] overflow-y-auto">
+                                    {classes.map((classe: ClasseType, idx: number) => {
+                                        const checked = !!selectedClasses[classe.id_classe as number];
+                                        const disabled =
+                                            !selectedSubject ||
+                                            (selectedSubject === "tous" && Object.values(selectedClasses).some(v => v) && !checked)
+                                            || isClassAlreadyAssigned(classe.id_classe as number);
+                                        return (
+                                            <label
+                                                key={classe.id_classe || idx}
+                                                className={`flex items-center px-4 py-2 bg-white rounded border border-gray-200 hover:shadow-sm transition mb-1 cursor-pointer ${disabled ? "opacity-50 pointer-events-none" : ""}`}
+                                                htmlFor={`__classe_input_${classe.id_classe}`}
+                                            >
+                                                {/* Checkbox */}
+                                                <div className="w-10 flex items-center justify-center">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="peer appearance-none w-6 h-6 border-2 border-blue-300 rounded-md bg-blue-50 checked:bg-blue-500 checked:border-blue-500 transition cursor-pointer"
+                                                        id={`__classe_input_${classe.id_classe}`}
+                                                        checked={checked}
+                                                        disabled={disabled}
+                                                        onChange={() => handleClassCheck(classe.id_classe as number)}
+                                                    />
+                                                </div>
+                                                {/* Nom de la classe */}
+                                                <div className="flex-1 flex items-center font-semibold text-gray-800 pl-2">
+                                                    {classe.denomination}
+                                                </div>
+                                                {/* Input heure/semaine avec icône */}
+                                                <div className="w-24 flex items-center relative">
+                                                    <input
+                                                        type="number"
+                                                        min={1}
+                                                        className={clsx({
+                                                            'border border-gray-500': checked,
+                                                            'border border-gray-200': !checked,
+                                                        }, "w-full  px-3 py-1 bg-gray-50 focus:ring-2 focus:ring-blue-200 font-medium")}
+                                                        placeholder="1"
+                                                        value={hoursByClass[classe.id_classe as number] || ""}
+                                                        onChange={e => handleHoursChange(classe.id_classe as number, Number(e.target.value))}
+                                                        disabled={!checked}
+                                                    />
+                                                    <Clock className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-400 w-5 h-5 pointer-events-none bg-white" />
+                                                </div>
+                                            </label>
+                                        );
+                                    })}
 
-                                {!classes.length && <>
-                                    <div className="text-gray-500 bg-blue-100 text-center p-5 border rounded shadow-inner">
-                                        <h6>Aucune classe trouver pour ce matière</h6>
-                                        <Link to={'/levels/level-subject'} className="text-blue-500 underline">Click ici pour ajouter</Link>
-                                    </div>
-                                </>}
-                            </div>
-                            {/* Boutons */}
-                            <div className="flex gap-2 justify-end mt-3">
-                                <button
-                                    className="bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-gray-300 transition-colors"
-                                    onClick={handleCancel}
-                                    disabled={isValidateDisabled && !selectedSubject && !Object.values(selectedClasses).some(Boolean)}
-                                >
-                                    <X className="w-4 h-4" />
-                                </button>
-                                <button
-                                    className={`bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors ${isValidateDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"}`}
-                                    onClick={handleValidate}
-                                    disabled={isValidateDisabled}
-                                >
-                                    <span>Valider</span>
-                                    <ArrowRight className="w-4 h-4" />
-                                </button>
+                                    {!classes.length && <>
+                                        <div className="text-gray-500 bg-blue-100 text-center p-5 border rounded shadow-inner">
+                                            <h6>Aucune classe trouver pour ce matière</h6>
+                                            <Link to={'/levels/level-subject'} className="text-blue-500 underline">Click ici pour ajouter</Link>
+                                        </div>
+                                    </>}
+                                </div>
+                                {/* Boutons */}
+                                <div className="flex gap-2 justify-end mt-3">
+                                    <button
+                                        className="bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-gray-300 transition-colors"
+                                        onClick={handleCancel}
+                                        disabled={isValidateDisabled && !selectedSubject && !Object.values(selectedClasses).some(Boolean)}
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                        className={`bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors ${isValidateDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"}`}
+                                        onClick={handleValidate}
+                                        disabled={isValidateDisabled}
+                                    >
+                                        <span>Valider</span>
+                                        <ArrowRight className="w-4 h-4" />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {/* Colonne 2 : Tableau récapitulatif */}
+                <div className="col-span-3 max-lg:border-t lg:border-l">
+                    <Table
+                        columns={columns}
+                        data={assignations.map((a, i) => ({ ...a, index: i }))}
+                        actions={[
+                            {
+                                icon: Trash2,
+                                label: "Supprimer",
+                                onClick: (item) => handleDeleteAssignation(item.index),
+                                color: "red"
+                            }
+                        ]}
+                        isLoading={false}
+                    />
+                </div>
             </div>
 
-            {/* Colonne 2 : Tableau récapitulatif */}
-            <div className="col-span-3 max-lg:border-t lg:border-l">
-                <Table
-                    columns={columns}
-                    data={assignations.map((a, i) => ({ ...a, index: i }))}
-                    actions={[
-                        {
-                            icon: Trash2,
-                            label: "Supprimer",
-                            onClick: (item) => handleDeleteAssignation(item.index),
-                            color: "red"
-                        }
-                    ]}
-                    isLoading={false}
-                />
+            {/* Div cacher pour creation d'input qui va contenire les valeur des assigantions  */}
+            <div>
+                {assignations.map((assignation: any, index: number) => (
+                    <div key={index}>
+                        <input type="hidden" name={`assignations[${index}][id_classe]`} value={assignation.id_classe} onChange={() => { }} />
+                        <input type="hidden" name={`assignations[${index}][id_matiere]`} value={assignation.id_matiere} onChange={() => { }} />
+                        <input type="hidden" name={`assignations[${index}][heures]`} value={assignation.heures} onChange={() => { }} />
+                    </div>
+                ))}
             </div>
         </div>
     );
