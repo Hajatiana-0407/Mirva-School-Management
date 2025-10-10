@@ -118,6 +118,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                                   onClick={() => action.onClick(item)}
                                   className={`p-1 rounded hover:bg-gray-100 ${getActionColor(action.color)}`}
                                   title={action.label}
+                                  type='button'
                                 >
                                   <Icon className="w-4 h-4" />
                                 </button>
