@@ -17,7 +17,7 @@ interface Props {
 
 
 
-export function ActionMenu({ actions }: Props) {
+const ActionMenu = ({ actions }: Props) => {
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState<{ top: number; left: number }>({
     top: 0,
@@ -119,3 +119,6 @@ export function ActionMenu({ actions }: Props) {
     </>
   );
 }
+
+
+export default ActionMenu

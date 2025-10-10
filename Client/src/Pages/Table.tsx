@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Loading from '../Components/ui/Loading';
-import { ActionMenu } from '../Components/ActionMenu';
+import ActionMenu from '../Components/ActionMenu';
 
 interface TableProps {
   data: any[];
