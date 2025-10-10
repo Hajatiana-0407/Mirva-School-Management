@@ -30,6 +30,7 @@ import Parents from './Pages/Parents/Parents';
 import Signin from './Pages/Auth/Signin';
 import ProtectedRoute from './Security/ProtectedRoute';
 import { getAuthState, testAuthentication } from './Pages/Auth/redux/AuthSlice';
+import Assignments from './Pages/Teachers/Assignments';
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
@@ -50,6 +51,8 @@ function App() {
         dispatch(getAllSchoolYear());
       }
       // Verification si l'utilisateur est toujours authentifié
+    }
+    if (!isLoggedIn) {
       dispatch(testAuthentication())
     }
   }, [isLoggedIn]);
@@ -73,7 +76,6 @@ function App() {
 
         <Route element={<Layout />}>
           <Route element={<ProtectedRoute />}>
-
             <Route index element={<Dashboard />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="students"  >
@@ -81,7 +83,10 @@ function App() {
               <Route path=':id' element={<StudentSinglePage />} />
             </Route>
             <Route path="registration" element={<Registration />} />
-            <Route path="teachers" element={<Teachers />} />
+            <Route path='teachers'>
+              <Route index element={<Teachers />} />
+              <Route path=':id' element={<Assignments />} />
+            </Route>
             <Route path="employees"  >
               <Route index element={<Employees />} />
               <Route path=':id' element={<EmployeesSinglePage />} />
@@ -102,7 +107,6 @@ function App() {
             <Route path="school-year" element={<SchoolYear />} />
             {/* 404 Not found  */}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
-
           </Route>
         </Route>
       </Routes>

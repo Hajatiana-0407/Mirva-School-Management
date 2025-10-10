@@ -1,12 +1,24 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { getAuthState } from "../Pages/Auth/redux/AuthSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthState, testAuthentication } from "../Pages/Auth/redux/AuthSlice";
+import { useEffect } from "react";
+import { AppDispatch } from "../Redux/store";
 
 export default function ProtectedRoute() {
     const { datas } = useSelector(getAuthState);
+    const dispatch: AppDispatch = useDispatch();
 
-    if (!datas.isLoggedIn) {
+    useEffect(() => {
+        if (datas.isLoggedIn) {
+            dispatch(testAuthentication());
+        }
+        return () => { }
+    }, [datas.isLoggedIn])
+
+    const tokken = localStorage.getItem('token')
+
+    if (!datas.isLoggedIn && !tokken) {
         return <Navigate to="/signin" replace />;
     }
-    return <Outlet/>;
+    return <Outlet />;
 }
