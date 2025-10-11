@@ -1,6 +1,7 @@
 <?php
 class AppFixtures extends CI_Controller
 {
+    protected $faker = null;
     public function __construct()
     {
         parent::__construct();
@@ -14,43 +15,38 @@ class AppFixtures extends CI_Controller
         $this->load->model('PersonnelModel', 'personnelModel');
         $this->load->model('EtudiantModel');
         $this->load->helper('matricule');
+
+        $this->faker = \Faker\Factory::create('fr_FR');
     }
 
-    public function loadFixtures()
+
+    /**
+     * Configurations general
+     *
+     * @return void
+     */
+    private function loadConfigurations($clean = false)
     {
-        $faker = \Faker\Factory::create('fr_FR');
+
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
-            // 'etablissement',
-            'paiement',
-            'note',
-            'inscription',
-            'classe_proffesseur_matiere',
-            'eleve',
-            'personnel',
-            // 'type_personnel',
-            'ecolage',
-            'droit_inscription',
-            'classe',
-            'matiere_niveau',
+            'etablissement',
+            'annee_scolaire',
             'matiere',
             'niveau',
-            'annee_scolaire',
-            'parents',
-            'depense',
-            'users'
+            'matiere_niveau',
+            'classe',
+            'ecolage',
+            'droit_inscription',
         ]);
 
-
-        // ===================== UTILISATEURS ===================== //
-        $this->model->insertFixture('users', [
-            'role' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'password' => password_hash('admin123', PASSWORD_DEFAULT)
-        ]);
+        if ($clean) {
+            // On efface seulement la base de données
+            return;
+        }
 
 
-        // Insertion des données sur l'etablissement
+        // ? ===================== Etablissement ===================== //
         $this->model->insertFixture('etablissement', [
             'nom' => 'Mada School',
             'code' => 'MIRV2024',
@@ -71,21 +67,19 @@ class AppFixtures extends CI_Controller
         ]);
 
 
-
-        // 1. annee_scolaire
+        // ? ===================== Annee scolaire  ===================== //
         for ($i = 0; $i < 2; $i++) {
             $this->model->insertFixture('annee_scolaire', [
                 'nom' => 'Année Scolaire ' . ($i + 1),
-                'date_debut' => $faker->date(),
-                'date_fin' => $faker->date(),
-                'description' => $faker->sentence(6),
+                'date_debut' => $this->faker->date(),
+                'date_fin' => $this->faker->date(),
+                'description' => $this->faker->sentence(6),
                 'created_at' => date('Y-m-d')
             ]);
         }
 
 
-
-        // 2. matiere
+        // ? ===================== Matières  ===================== //
         $matieresListe = [
             [
                 'denomination' => 'Mathématiques',
@@ -138,30 +132,17 @@ class AppFixtures extends CI_Controller
                 'description' => 'Apprentissage de la langue anglaise, écrite et orale.'
             ]
         ];
-
-
-        $type_personnels = [
-            'Enseignant',
-            'Secrétaire',
-            'Gardin',
-            'Surveillant',
-            'Agent d’entretien',
-            'Bibliothécaire',
-            'Comptable',
-            'Chauffeur'
-        ];
-
         foreach ($matieresListe as  $mat) {
             $this->model->insertFixture('matiere', [
                 'denomination' => $mat['denomination'],
                 'abbreviation' => strtoupper($mat['abbreviation']),
                 'description' => $mat['description'],
-                'couleur' => $faker->hexColor,
+                'couleur' => $this->faker->hexColor,
             ]);
         }
 
 
-        // 3. niveaux scolaires 
+        // ? ===================== Niveau ===================== // 
         $niveaux = [
             'Primaire' => [
                 'CP',
@@ -182,7 +163,6 @@ class AppFixtures extends CI_Controller
                 'Terminale'
             ]
         ];
-
         foreach ($niveaux as $cycle => $classes) {
             foreach ($classes as $classe) {
                 $this->model->insertFixture('niveau', [
@@ -194,24 +174,21 @@ class AppFixtures extends CI_Controller
             }
         }
 
-
-        // 4. matiere_niveau
+        // ? ===================== Matieres et Niveau ===================== //
         $niveaux = $this->model->getIds('niveau', 'id_niveau');
         $matieres = $this->model->getIds('matiere', 'id_matiere');
         foreach ($matieres as $matiere) {
-            foreach ($faker->randomElements($niveaux, rand(1, 2)) as $niveau) {
+            foreach ($this->faker->randomElements($niveaux, rand(1, 2)) as $niveau) {
                 $this->model->insertFixture('matiere_niveau', [
                     'matiere_id_matiere' => $matiere,
                     'niveau_id_niveau' => $niveau,
-                    'coefficient' => $faker->numberBetween(1, 5),
+                    'coefficient' => $this->faker->numberBetween(1, 5),
                 ]);
             }
         }
 
-        // 5. classes
+        // ? ===================== Classes ===================== //
         $sections = ['A', 'B', 'C', 'D', 'E', 'F'];
-
-        // On récupère les niveaux avec leur nom
         $this->load->database();
         $niveauxData = $this->db->select('id_niveau, niveau')
             ->from('niveau')
@@ -221,13 +198,10 @@ class AppFixtures extends CI_Controller
         foreach ($niveauxData as $niveau) {
             $niveauId = $niveau['id_niveau'];
             $nomNiveau = $niveau['niveau'];
-
-            // Génère entre 2 et 3 classes par niveau
             $nbClasses = rand(2, 3);
 
             for ($i = 0; $i < $nbClasses; $i++) {
-                // Utilise l’index pour choisir la lettre (A, B, C…)
-                $section = $sections[$i] ?? $faker->randomElement($sections);
+                $section = $sections[$i] ?? $this->faker->randomElement($sections);
 
                 $this->model->insertFixture('classe', [
                     'denomination'     => $nomNiveau . ' ' . $section, // ex: "5ème A"
@@ -238,29 +212,45 @@ class AppFixtures extends CI_Controller
         }
 
 
-
-        $classes = $this->model->getIds('classe', 'id_classe');
-
-        // 6. droit_inscription
+        // ? ===================== Frais de scolarité  ===================== //
         foreach ($niveaux as $niveau) {
             $this->model->insertFixture('droit_inscription', [
-                'montant' => $faker->numberBetween(50000, 100000),
+                'montant' => $this->faker->numberBetween(50000, 100000),
                 'niveau_id_niveau' => $niveau,
                 'created_at' => date('Y-m-d H:i:s')
             ]);
         }
 
-        // 7. ecolage
         foreach ($niveaux as $niveau) {
             $this->model->insertFixture('ecolage', [
-                'montant' => $faker->numberBetween(25000, 80000),
+                'montant' => $this->faker->numberBetween(25000, 80000),
                 'niveau_id_niveau' => $niveau,
                 'created_at' => date('Y-m-d H:i:s')
             ]);
         }
+    }
 
-        // 8. eleve
-        // ? Creation de matricule pour l'etudiant
+
+    /**
+     * Fixtures pour les eleves et parents 
+     *
+     * @return void
+     */
+    private function LoadEleveParent($clean = false)
+    {
+        // Vider les tables (dans l’ordre inverse des dépendances)
+        $this->model->emptyDb([
+            'eleve',
+            'parents',
+            'inscription',
+        ]);
+
+        if ($clean) {
+            // On efface seulement la base de données
+            return;
+        }
+
+        // ? ===================== Eleves  ===================== //
         $lastStudent = $this->EtudiantModel->findLasted();
         $lastStudentMatricule = '';
         if (isset($lastStudent) && isset($lastStudent->matricule_etudiant)) {
@@ -271,23 +261,23 @@ class AppFixtures extends CI_Controller
             $matriculeStudent = generateMatricule(STUDENT_PRIFIX, $lastStudentMatricule);
             $this->model->insertFixture('eleve', [
                 'matricule_etudiant' => $matriculeStudent,
-                'nom' => $faker->lastName,
-                'prenom' => $faker->firstName,
-                'adresse' => $faker->address,
-                'telephone' => $faker->phoneNumber,
-                'date_naissance' => $faker->date(),
-                'lieu_naissance' => $faker->address(),
-                'sexe' => $faker->randomElement(['Homme', 'Femme']),
-                'maladies' => $faker->word,
+                'nom' => $this->faker->lastName,
+                'prenom' => $this->faker->firstName,
+                'adresse' => $this->faker->address,
+                'telephone' => $this->faker->phoneNumber,
+                'date_naissance' => $this->faker->date(),
+                'lieu_naissance' => $this->faker->address(),
+                'sexe' => $this->faker->randomElement(['Homme', 'Femme']),
+                'maladies' => $this->faker->word,
                 'created_at' => date('Y-m-d H:i:s'),
                 'nationalite' => 'Malagasy',
-                'email' => $faker->email()
+                'email' => $this->faker->email()
             ]);
             $lastStudentMatricule = $matriculeStudent;
         }
 
+        //? ===================== Parents ===================== //
         $eleves = $this->model->getIds('eleve', 'id_eleve');
-        // 9. parents
         foreach ($eleves as $eleve) {
             // Génère entre 1 et 3 parents/tuteurs par élève
             $nbParents = rand(1, 3);
@@ -295,40 +285,84 @@ class AppFixtures extends CI_Controller
             for ($i = 0; $i < $nbParents; $i++) {
                 // Créer un parent dans la table parents
                 $parentId = $this->model->insertFixture('parents', [
-                    'prenom' => $faker->firstName,
-                    'nom' => $faker->lastName,
-                    'telephone' => $faker->phoneNumber,
-                    'email' => $faker->safeEmail,
-                    'adresse' => $faker->address,
-                    'profession' => $faker->jobTitle,
-                    'employeur' => $faker->company,
-                    'telephone_travail' => $faker->phoneNumber,
-                    'contact_urgence' => $faker->boolean(30)
+                    'prenom' => $this->faker->firstName,
+                    'nom' => $this->faker->lastName,
+                    'telephone' => $this->faker->phoneNumber,
+                    'email' => $this->faker->safeEmail,
+                    'adresse' => $this->faker->address,
+                    'profession' => $this->faker->jobTitle,
+                    'employeur' => $this->faker->company,
+                    'telephone_travail' => $this->faker->phoneNumber,
+                    'contact_urgence' => $this->faker->boolean(30)
                 ]);
 
                 // Lier ce parent à l'élève dans la table parents_eleves
                 $this->model->insertFixture('parents_eleves', [
                     'eleve_id_eleve' => $eleve,
                     'parent_id_parent' => $parentId,
-                    'type' => $faker->randomElement(['père', 'mère', 'tuteur'])
+                    'type' => $this->faker->randomElement(['père', 'mère', 'tuteur'])
                 ]);
             }
         }
 
 
-        // Types de personnel
-        // foreach ($type_personnels as $type) {
-        //     $this->model->insertFixture('type_personnel', [
-        //         'type' => $type,
-        //         'description' => $faker->sentence(6),
-        //     ]);
-        // }
+        //? ===================== Inscription eleves ===================== //
+        $classes = $this->model->getIds('classe', 'id_classe');
+        $annees = $this->model->getIds('annee_scolaire', 'id_annee_scolaire');
+        for ($i = 0; $i < 5; $i++) {
+            $eleve = $this->faker->randomElement($eleves);
+            $this->model->insertFixture('inscription', [
+                'date_inscription' => $this->faker->date(),
+                'classe_id_classe' => $this->faker->randomElement($classes),
+                'annee_scolaire_id_annee_scolaire' => $this->faker->randomElement($annees),
+                'eleve_id_eleve' => $eleve,
+                'ancienne_ecole' => $this->faker->company(),
+                'is_droit_payed' => $this->faker->randomElement(['oui', 'non']),
+                'created_at' => date('Y-m-d H:i:s')
+            ]);
+        }
+    }
 
+    /**
+     * Fixtures pour les personnels 
+     *
+     * @return void
+     */
+    private function loadPersonnel($clean = false)
+    {
+
+        // Vider les tables (dans l’ordre inverse des dépendances)
+        $this->model->emptyDb([
+            'type_personnel',
+            'classe_proffesseur_matiere',
+            'personnel',
+        ]);
+
+        if ($clean) {
+            // On efface seulement la base de données
+            return;
+        }
+        // ? ===================== Type du personnel ===================== //
+        $type_personnels = [
+            'Enseignant',
+            'Secrétaire',
+            'Gardin',
+            'Surveillant',
+            'Agent d’entretien',
+            'Bibliothécaire',
+            'Comptable',
+            'Chauffeur'
+        ];
+
+        foreach ($type_personnels as $type) {
+            $this->model->insertFixture('type_personnel', [
+                'type' => $type,
+                'description' => $this->faker->sentence(6),
+            ]);
+        }
+
+        //? ===================== Personnel ===================== //
         $types = $this->model->getIds('type_personnel', 'id_type_personnel');
-
-        // 10. Personnel
-        $userIds = 1;
-        // Récupérer le dernier matricule enregistré
         $lasted = $this->personnelModel->findLasted();
         $lasteMatricule = '';
         if ($lasted && !empty($lasted->matricule_personnel)) {
@@ -341,32 +375,31 @@ class AppFixtures extends CI_Controller
 
             $this->model->insertFixture('personnel', [
                 'matricule_personnel' => $matricule,
-                'nom' => $faker->lastName,
-                'prenom' => $faker->firstName,
-                'addresse' => $faker->address,
-                'telephone' => $faker->phoneNumber,
-                'date_naissance' => $faker->date(),
-                'lieu_naissance' => $faker->city(),
-                'sexe' => $faker->randomElement(['Homme', 'Femme']),
+                'nom' => $this->faker->lastName,
+                'prenom' => $this->faker->firstName,
+                'addresse' => $this->faker->address,
+                'telephone' => $this->faker->phoneNumber,
+                'date_naissance' => $this->faker->date(),
+                'lieu_naissance' => $this->faker->city(),
+                'sexe' => $this->faker->randomElement(['Homme', 'Femme']),
                 'engagement' => 'Permanent',
-                'email' => $faker->email,
-                'password' => password_hash('123456', PASSWORD_DEFAULT),
-                'id_type_personnel' => $faker->randomElement($types),
-                'salaire_base' => $faker->numberBetween(200000, 800000),
-                "status" => $faker->randomElement(['Actif', 'Suspendu', "Démissionnaire"]),
-                'numero_cin' => $faker->randomNumber(),
-                'nationalite' => $faker->country(),
-                'type_contrat' => $faker->randomElement(['CDD', 'CDI', 'Stagiaire']),
-                'specialisation' => $faker->jobTitle(),
-                'certification' => $faker->sentence(),
-                'date_embauche' => $faker->date(),
+                'email' => $this->faker->email,
+                'id_type_personnel' => $this->faker->randomElement($types),
+                'salaire_base' => $this->faker->numberBetween(200000, 800000),
+                "status" => $this->faker->randomElement(['Actif', 'Suspendu', "Démissionnaire"]),
+                'numero_cin' => $this->faker->randomNumber(),
+                'nationalite' => $this->faker->country(),
+                'type_contrat' => $this->faker->randomElement(['CDD', 'CDI', 'Stagiaire']),
+                'specialisation' => $this->faker->jobTitle(),
+                'certification' => $this->faker->sentence(),
+                'date_embauche' => $this->faker->date(),
                 'created_at' => date('Y-m-d H:i:s'),
 
                 // Urgence 
-                'urgence_nom' => $faker->firstName() . ' ' . $faker->lastName(),
-                'urgence_lien' => $faker->word(),
-                'urgence_tel' => $faker->phoneNumber(),
-                'urgence_email' => $faker->email()
+                'urgence_nom' => $this->faker->firstName() . ' ' . $this->faker->lastName(),
+                'urgence_lien' => $this->faker->word(),
+                'urgence_tel' => $this->faker->phoneNumber(),
+                'urgence_email' => $this->faker->email()
             ]);
 
             $lasteMatricule = $matricule;
@@ -375,11 +408,12 @@ class AppFixtures extends CI_Controller
 
         $professeurs = $this->model->getIds('personnel', 'id_personnel');
 
-        // 11. classe_proffesseur_matiere
-
+        // ? ===================== Cours ===================== //
+        $matieres = $this->model->getIds('matiere', 'id_matiere');
+        $classes = $this->model->getIds('classe', 'id_classe');
         foreach ($classes as $classe) {
-            foreach ($faker->randomElements($matieres, 2) as $matiere) {
-                $professeur = $faker->randomElement($professeurs);
+            foreach ($this->faker->randomElements($matieres, 2) as $matiere) {
+                $professeur = $this->faker->randomElement($professeurs);
 
                 // Vérifie si la combinaison existe déjà dans la BDD
                 $exists = $this->db->where('classe_id_classe', $classe)
@@ -392,67 +426,80 @@ class AppFixtures extends CI_Controller
                         'classe_id_classe' => $classe,
                         'professeur_id_professeur' => $professeur,
                         'matiere_id_matiere' => $matiere,
-                        'heure_semaine' => $faker->numberBetween(1, 10)
+                        'heure_semaine' => $this->faker->numberBetween(1, 10)
                     ]);
                 }
             }
         }
+    }
 
+    /**
+     * Fixtures pour les compte utilisateurs
+     *
+     * @return void
+     */
+    private function loadUser($clean = false)
+    {
+        // Vider les tables (dans l’ordre inverse des dépendances)
+        $this->model->emptyDb([
+            'users'
+        ]);
 
+        if ($clean) {
+            // On efface seulement la base de données
+            return;
+        }
 
-        // 12. inscription
-        $annees = $this->model->getIds('annee_scolaire', 'id_annee_scolaire');
+        $roles = ['admin', 'secretaire', 'prof', 'parent', 'etudiant'];
         for ($i = 0; $i < 5; $i++) {
-            $eleve = $faker->randomElement($eleves);
-            $this->model->insertFixture('inscription', [
-                'date_inscription' => $faker->date(),
-                'classe_id_classe' => $faker->randomElement($classes),
-                'annee_scolaire_id_annee_scolaire' => $faker->randomElement($annees),
-                'eleve_id_eleve' => $eleve,
-                'ancienne_ecole' => $faker->company(),
-                'is_droit_payed' => $faker->randomElement(['oui', 'non']),
-                'created_at' => date('Y-m-d H:i:s')
+            $this->model->insertFixture('users', [
+                'role' => $this->faker->randomElement($roles),
+                'identifiant' => $this->faker->email(),
+                'password' => password_hash('123456', PASSWORD_DEFAULT),
+                'status' => false,
+                'created_at' => $this->faker->dateTime()->format('Y-m-d H:i:s'),
+                'last_login' => $this->faker->dateTime()->format('Y-m-d H:i:s')
             ]);
         }
+        $this->model->insertFixture('users', [
+            'role' => 'admin',
+            'identifiant' => 'admin@gmail.com',
+            'password' => password_hash('admin123', PASSWORD_DEFAULT),
+            'status' => false,
+            'created_at' => $this->faker->dateTime()->format('Y-m-d H:i:s'),
+            'last_login' => $this->faker->dateTime()->format('Y-m-d H:i:s')
+        ]);
+    }
 
-        $inscriptions = $this->model->getIds('inscription', 'id_inscription');
 
-        // 13. note
-        for ($i = 0; $i < 10; $i++) {
-            $this->model->insertFixture('note', [
-                'valeur' => $faker->numberBetween(0, 20),
-                'eleve_id_eleve' => $faker->randomElement($eleves),
-                'annee_scolaire_id_annee_scolaire' => $faker->randomElement($annees),
-                'matiere_id_matiere' => $faker->randomElement($matieres),
-                'created_at' => date('Y-m-d H:i:s')
-            ]);
-        }
-
-        // 14. depense
-        // for ($i = 0; $i < 5; $i++) {
-        //     $this->model->insertFixture('depense', [
-        //         'raison' => $faker->sentence(3),
-        //         'montant' => $faker->randomFloat(2, 500, 5000),
-        //         'date' => $faker->date(),
-        //         'user_id_user' => $userIds,
-        //         'created_at' => date('Y-m-d H:i:s')
-        //     ]);
-        // }
-
-        // 15. paiement
-        $droitIds = $this->model->getIds('droit_inscription', 'id_droit_inscription');
-        $ecolageIds = $this->model->getIds('ecolage', 'id_ecolage');
-        foreach ($inscriptions as $inscription) {
-            $this->model->insertFixture('paiement', [
-                'date_paiement' => $faker->date(),
-                'droit_inscription_id' => $faker->randomElement($droitIds),
-                'ecolage_id_ecolage' => $faker->randomElement($ecolageIds),
-                'mois' => $faker->monthName,
-                'inscription_id_inscription' => $inscription,
-                'created_at' => date('Y-m-d H:i:s')
-            ]);
-        }
+    /**
+     * Create a fake data  in the data base 
+     *
+     * @return void
+     */
+    public function loadFixtures()
+    {
+        $this->loadUser();
+        $this->loadConfigurations();
+        $this->loadPersonnel();
+        $this->LoadEleveParent();
 
         echo "✅ Fausse base de données générée avec succès !" . PHP_EOL;
+    }
+
+
+    /**
+     * Effacer toutes le donée dans la base de données
+     *
+     * @return void
+     */
+    public function cleanUp()
+    {
+        $this->loadUser(true);
+        $this->loadConfigurations(true);
+        $this->loadPersonnel(true);
+        $this->LoadEleveParent(true);
+
+        echo "✅ Suppression des données avec succès !" . PHP_EOL;
     }
 }

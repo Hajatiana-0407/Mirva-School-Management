@@ -23,4 +23,13 @@ class FixturesModel extends CI_Model
             $this->db->empty_table($table);
         }
     }
+
+    public function getAllTable($table = '')
+    {
+        if (!!!$table) return null;
+        return $this->db->select('*')
+            ->from($table)
+            ->get()
+            ->result_array();
+    }
 }
