@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CodeIgniter
  *
@@ -36,7 +37,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Model Class
@@ -47,31 +48,176 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/libraries/config.html
  */
-class CI_Model {
+class CI_Model
+{
 
-	/**
-	 * Class constructor
-	 *
-	 * @link	https://github.com/bcit-ci/CodeIgniter/issues/5332
-	 * @return	void
-	 */
-	public function __construct() {}
+    /**
+     * Class constructor
+     *
+     * @link	https://github.com/bcit-ci/CodeIgniter/issues/5332
+     * @return	void
+     */
 
-	/**
-	 * __get magic
-	 *
-	 * Allows models to access CI's loaded classes using the same
-	 * syntax as controllers.
-	 *
-	 * @param	string	$key
-	 */
-	public function __get($key)
-	{
-		// Debugging note:
-		//	If you're here because you're getting an error message
-		//	saying 'Undefined Property: system/core/Model.php', it's
-		//	most likely a typo in your model code.
-		return get_instance()->$key;
-	}
 
+    protected $table;
+    protected $primaryKey;
+
+    public function __construct() {}
+
+    /**
+     * __get magic
+     *
+     * Allows models to access CI's loaded classes using the same
+     * syntax as controllers.
+     *
+     * @param	string	$key
+     */
+    public function __get($key)
+    {
+        // Debugging note:
+        //	If you're here because you're getting an error message
+        //	saying 'Undefined Property: system/core/Model.php', it's
+        //	most likely a typo in your model code.
+        return get_instance()->$key;
+    }
+
+    /**
+     * Verification de doublan
+     *
+     * @param array $champs [ column => value  ]
+     * @param [type] $id ( id a exclure )
+     * @return boolean
+     */
+    public function isExist($champs = [], $id = null)
+    {
+        $query = $this->db;
+        $i = 0;
+        $query->where($this->primaryKey . ' <>', $id);
+        foreach ($champs as $key => $value) {
+            if ($i == 0) {
+                $query->where($key, $value);
+            } else {
+                $query->or_where($key, $value);
+            }
+            $i++;
+        }
+        $data = $query->get($this->table)->result();
+        if (count($data)) {
+            return true;
+        }
+        return false;
+    }
+
+
+
+    // * fonctions CRUD * //
+    // ======= READ =======
+    public function findAll()
+    {
+        return $this->db->select('*')
+            ->from($this->table)
+            ->order_by($this->primaryKey, 'DESC')
+            ->get()
+            ->result_array();
+    }
+
+    public function findOneById($id)
+    {
+        if (!!!$id)  return null;
+        return $this->db->select('*')
+            ->from($this->table)
+            ->where($this->primaryKey, $id)
+            ->get()
+            ->row_array();
+    }
+
+    // Récupère le dernier élément inséré
+    public function findLasted()
+    {
+        return $this->db->select('*')
+            ->from($this->table)
+            ->order_by($this->primaryKey, 'DESC')
+            ->limit(1)
+            ->get()
+            ->row_array();
+    }
+
+    // ======= CREATE =======
+    public function insert($data)
+    {
+        $inserted = $this->db->insert($this->table, $data);
+
+        if ($inserted) {
+            $inserted_id = $this->db->insert_id();
+
+            return $this->findOneById($inserted_id);
+        }
+
+        return false;
+    }
+
+    // ======= UPDATE =======
+    public function update($id, $data)
+    {
+        $updated =  $this->db->where($this->primaryKey, $id)
+            ->update($this->table, $data);
+        if ($updated) {
+            return  $this->findOneById($id);
+        }
+        return $updated;
+    }
+
+    // ======= DELETE =======
+    public function delete($id)
+    {
+        $element = $this->db
+            ->get_where($this->table, [$this->primaryKey => $id])
+            ->row();
+        if ($element) {
+            $deleted = $this->db
+                ->where($this->primaryKey, $id)
+                ->delete($this->table);
+
+            if ($deleted) {
+                return $id;
+            }
+        }
+        return false;
+    }
+
+
+
+    public function insertBatch($data = [])
+    {
+        if (empty($data)) {
+            return [];
+        }
+
+        $result = $this->db->insert_batch($this->table, $data);
+
+        if ($result === false) {
+            return [];
+        }
+
+        $insertedData = [];
+        $insertId = $this->db->insert_id();
+        foreach ($data as $index => $row) {
+            $row[$this->primaryKey] = $insertId + $index;
+            $insertedData[] = $row;
+        }
+
+        return $insertedData;
+    }
+
+
+    // ======= COUNT =======
+    // ? Statistique 
+    public function getCount($where = [])
+    {
+        $this->db->from($this->table);
+        foreach ($where as $key => $value) {
+            $this->db->where($key, $value);
+        }
+        return $this->db->count_all_results();
+    }
 }

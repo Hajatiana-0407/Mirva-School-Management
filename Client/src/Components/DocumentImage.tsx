@@ -1,0 +1,28 @@
+import clsx from "clsx"
+import { ChevronDown, ChevronUp } from "lucide-react"
+import { useState } from "react"
+
+const DocumentImage = ({ url = '', label = 'photo' }: { url: string, label?: string }) => {
+    const [isShow, setIsShow] = useState(false)
+    return (
+        <div className={clsx({
+            'h-[5rem]': !isShow
+        }, "w-full p-6 border rounded bg-blue-100  relative overflow-hidden transition-all duration-700")} >
+            <a href={url} target="_blank" className="absolute top-2 left-4 italic px-6 font-bold rounded-full bg-blue-600 text-white hover:underline cursor-pointer"> {label} </a>
+            <button
+                className="absolute top-2 right-4 italic px-4 border border-blue-600 rounded-full bg-blue-600 text-white hover:bg-blue-500 translate-all duration-150 cursor-pointer"
+                onClick={() => setIsShow(v => !v)}
+            >
+                {isShow ? <ChevronUp /> : <ChevronDown />}
+            </button>
+            <div className={clsx({
+                'h-[2rem] overflow-hidden': !isShow,
+                'overflow-auto': isShow,
+            }, "w-full max-h-max border")} >
+                <img src={url} className="w-full mx-auto" alt={label} />
+            </div>
+        </div>
+    )
+}
+
+export default DocumentImage; 

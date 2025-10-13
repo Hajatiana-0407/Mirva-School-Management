@@ -9,6 +9,13 @@ $hook['pre_controller'] = array(
     'params'   => array()
 );
 
+$hook['post_controller_constructor'][] = [
+    'class'    => 'AuthHook',
+    'function' => 'check_secure_routes',
+    'filename' => 'AuthHook.php',
+    'filepath' => 'hooks',
+];
+
 /*
 | -------------------------------------------------------------------------
 | Hooks

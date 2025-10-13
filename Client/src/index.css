@@ -15,3 +15,7 @@
         transform: scaleY(1.5);
     }
 }
+
+* {
+    scrollbar-width: thin ;
+}

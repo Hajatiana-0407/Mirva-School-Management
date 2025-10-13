@@ -1,0 +1,73 @@
+# Todo liste
+## Fait 
+-  Anné scolaire 
+-  Niveau et Classe 
+-  Matiere 
+-  Parametre  
+
+## En Attent 
+- Frais de scolarité   
+- Payement
+- Emploi du temps 
+- Examen et Note  
+
+# TODO 
+## GESTION DES COMPTES UTILISATEURS 
+### Base de donnée 
+- [x] Ajouter les colomnes : 
+    - status 
+    - created_at
+    - last_login
+    dans la table users
+
+- [x] Changer la colomne email en identifiant
+
+- [x] Suppression du champ password dans eleve , personnel
+
+- [x] Ajout du champs id_user dans eleve , personnel , parents 
+et les lier a users 
+
+
+- [x] Changer le fixtures 
+
+- [x] Modifier la connexion pour verifier dans users seulement et mettre le status true si connecté et false si non
+
+- [ ] Mettre une systeme de securité stricte au niveau front 
+
+- [ ] Debug du error 401 token expirer dans le front 
+
+
+### 🎓 Tableau des droits d’accès – Logiciel de gestion d’école
+
+###### 👥 Types d’utilisateurs
+- **Admin**
+- **Secrétaire**
+- **Professeur**
+- **Parent**
+- **Étudiant**
+
+---
+
+###### 🧭 Droits d’accès par module
+
+| Fonctionnalité / Module | **Admin** | **Secrétaire** | **Professeur** | **Parent** | **Étudiant** |
+|--------------------------|:----------:|:---------------:|:---------------:|:-----------:|:-------------:|
+| **Tableau de bord (Dashboard)** | 🔹 Voir toutes les statistiques globales | 🔹 Voir les stats administratives | 🔹 Voir ses classes, absences, notes | 🔹 Voir les infos de ses enfants | 🔹 Voir ses propres infos |
+| **Gestion des utilisateurs** | 🔹 Créer / modifier / supprimer tous les comptes | ❌ | ❌ | ❌ | ❌ |
+| **Gestion des classes** | 🔹 Créer / modifier / supprimer | 🔹 Gérer les inscriptions | 🔹 Voir les classes assignées | 🔹 Voir la classe de son enfant | 🔹 Voir sa classe |
+| **Gestion des matières / cours** | 🔹 Créer / assigner / modifier | 🔹 Gérer les affectations | 🔹 Voir et gérer ses matières | ❌ | ❌ |
+| **Emploi du temps** | 🔹 Gérer tous les emplois du temps | 🔹 Gérer les horaires | 🔹 Voir ses emplois du temps | 🔹 Voir celui de son enfant | 🔹 Voir le sien |
+| **Saisie des notes** | 🔹 Accès complet | ❌ | 🔹 Ajouter / modifier les notes de ses élèves | ❌ | ❌ |
+| **Consultation des notes** | 🔹 Voir toutes les notes | 🔹 Voir toutes les notes | 🔹 Voir ses propres notes saisies | 🔹 Voir les notes de ses enfants | 🔹 Voir ses propres notes |
+| **Absences et retards** | 🔹 Voir / modifier tous | 🔹 Gérer les absences | 🔹 Enregistrer les absences dans ses cours | 🔹 Voir les absences de son enfant | 🔹 Voir ses absences |
+| **Bulletins / relevés** | 🔹 Générer et voir tous | 🔹 Générer et imprimer | 🔹 Voir ceux de ses classes | 🔹 Voir ceux de son enfant | 🔹 Voir le sien |
+| **Paiements / frais de scolarité** | 🔹 Gestion globale | 🔹 Gérer les paiements | ❌ | 🔹 Consulter les paiements effectués | ❌ |
+| **Communication (messages / notifications)** | 🔹 Envoyer à tous | 🔹 Envoyer aux parents / profs | 🔹 Envoyer aux élèves / parents de sa classe | 🔹 Recevoir et répondre | 🔹 Recevoir |
+| **Rapports / statistiques** | 🔹 Tout voir | 🔹 Rapports administratifs | 🔹 Rapports de sa classe | ❌ | ❌ |
+| **Documents / fichiers scolaires** | 🔹 Gérer tous les fichiers | 🔹 Ajouter / supprimer | 🔹 Ajouter des documents de cours | 🔹 Télécharger | 🔹 Télécharger |
+| **Paramètres du système** | 🔹 Accès complet | ❌ | ❌ | ❌ | ❌ |
+| **Profil personnel** | 🔹 Modifier le sien | 🔹 Modifier le sien | 🔹 Modifier le sien | 🔹 Modifier ses infos | 🔹 Modifier ses info
+
+
+
+

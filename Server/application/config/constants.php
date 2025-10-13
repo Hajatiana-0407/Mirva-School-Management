@@ -73,6 +73,8 @@ defined('FOPEN_READ_WRITE_CREATE_STRICT')       OR define('FOPEN_READ_WRITE_CREA
 |       http://tldp.org/LDP/abs/html/exitcodes.html
 |
 */
+
+
 defined('EXIT_SUCCESS')        OR define('EXIT_SUCCESS', 0); // no errors
 defined('EXIT_ERROR')          OR define('EXIT_ERROR', 1); // generic error
 defined('EXIT_CONFIG')         OR define('EXIT_CONFIG', 3); // configuration error
@@ -83,3 +85,21 @@ defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+
+
+/* My constants */
+// ? PREFIX POUR LES MATRICULE EMPLOYE
+defined('EMPLOYEE_PREFIX') OR define('EMPLOYEE_PREFIX' , 'EPM-') ; 
+defined('STUDENT_PRIFIX') OR define('STUDENT_PRIFIX' , 'ST-') ; 
+
+
+// ? DIRECTORY UPLOAD FILE 
+defined('PERSONNEL_UPLOAD_DIR') OR define('PERSONNEL_UPLOAD_DIR', 'public/uploads/personnel/');
+defined('STUDENT_UPLOAD_DIR') OR define('STUDENT_UPLOAD_DIR',  'public/uploads/etudiant/') ; 
+defined('PARENT_UPLOAD_DIR') OR define('PARENT_UPLOAD_DIR',  'public/uploads/parents/') ; 
+defined('MAX_UPLOAD_FILE') OR define('MAX_UPLOAD_FILE',  524288000) ; 
+
+// ************************************************* //
+defined('ETABLISSEMENT_UPLOAD_DIRECTORY') OR define('ETABLISSEMENT_UPLOAD_DIRECTORY', 'public/uploads/etablissement/');
+
