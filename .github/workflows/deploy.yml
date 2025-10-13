@@ -36,7 +36,7 @@ jobs:
           password: ftp$0Nathiyh
           protocol: ftp
           local-dir: ./Server/
-          server-dir: /htdocs/Server/
+          server-dir: /Server/
           exclude: |
             **/node_modules/**
             **/.git**
@@ -52,6 +52,6 @@ jobs:
           password: ftp$0Nathiyh
           protocol: ftp
           local-dir: ./Client/dist/
-          server-dir: /htdocs/
+          server-dir: /
           exclude: |
             **/Server/**
