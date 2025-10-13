@@ -10,7 +10,7 @@ export const hexToRgba = (hex: string, alpha = 1): string => {
 };
 
 export const baseUrl = (uri: string | undefined) => {
-  const serverUrl = import.meta.env.VITE_API_URL ;
+  const serverUrl = import.meta.env.VITE_API_URL;
 
   if (uri !== undefined) {
     return `${serverUrl}${uri}`;
@@ -165,3 +165,14 @@ export const decodeToken = (token: string): DecodePropsType => {
   } = jwtDecode(token);
   return tokenDecode;
 }
+
+
+export const generatePassword = (length = 12) => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?";
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * chars.length);
+    password += chars[randomIndex];
+  }
+  return password;
+};
