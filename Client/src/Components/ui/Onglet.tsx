@@ -36,25 +36,29 @@ const Onglet: React.FC<OngletPropsType> = ({ onlgets, type = 'hidden' }) => {
             </div >
 
             <div className="p-6">
-                {onlgets.map((onglet) => (
-                    <div>
-                        {type === 'hidden' &&
+                {onlgets.map((onglet) => {
+                    const isActive = onglet.key.toLowerCase() === activeTab;
+                    if (type === 'hidden') {
+                        return (
                             <div
                                 key={onglet.key + '_container'}
-                                className={clsx({
-                                    'hidden': onglet.key.toLowerCase() !== activeTab
-                                })}>
+                                className={clsx({ hidden: !isActive })}
+                            >
                                 {onglet.component}
                             </div>
-                        }
-                        {type === 'delete' && onglet.key.toLowerCase() === activeTab && (
+                        );
+                    }
+                    if (type === 'delete' && isActive) {
+                        return (
                             <div key={onglet.key + '_container'}>
                                 {onglet.component}
                             </div>
-                        )}
-                    </div>
-                ))}
+                        );
+                    }
+                    return null;
+                })}
             </div>
+
         </div >
     )
 }
