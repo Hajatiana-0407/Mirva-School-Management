@@ -53,7 +53,7 @@ const Assignments = () => {
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-gray-900">
                     <ArrowLeft className="h-6 w-6 inline-block me-1 cursor-pointer" onClick={() => navigate(-1)} />
-                    Attribution matière(s) et classe(s)
+                    Attribution des classes et des matières
                 </h1>
                 <button
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center disabled:bg-blue-300"
