@@ -47,8 +47,11 @@ const Header = () => {
 
           <div className="flex items-center space-x-3">
             <div className="text-right">
-              <p className="text-sm font-medium text-gray-700"> {user?.email || 'email'} </p>
-              <p className="text-xs text-gray-500">{user?.role || 'Role'}</p>
+              <p className="text-sm font-medium text-gray-700"> {user?.identifiant || 'Identifiant'} </p>
+              <p className="text-xs text-gray-500 flex items-center justify-end">
+                <span className='inline-block w-3 h-3 me-2 bg-green-500 rounded-full'></span>
+                {user?.role || 'Role'}
+                </p>
             </div>
             <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
               <User className="w-4 h-4 text-white" />

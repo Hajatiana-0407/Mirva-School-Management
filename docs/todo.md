@@ -28,11 +28,11 @@
 et les lier a users 
 
 
-- [] Changer le fixtures 
+- [x] Changer le fixtures 
 
-- [ ] Modifier la connexion pour verifier dans users seulement et mettre le status true si connecté et false si non
+- [x] Modifier la connexion pour verifier dans users seulement et mettre le status true si connecté et false si non
 
-- [ ] Mettre une systeme de securité stricte au niveau front | Fonctionnalité / Module   
+- [ ] Mettre une systeme de securité stricte au niveau front 
 
 - [ ] Debug du error 401 token expirer dans le front 
 

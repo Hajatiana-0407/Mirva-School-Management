@@ -231,8 +231,8 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
         <div className="flex items-center justify-center">
           {!collapsed && (
             <div >
-              <h1 className="text-xl font-bold text-gray-800">{shoolInfo.nom || "Nom de l'école"}</h1>
-              <p className="text-sm text-gray-600">{shoolInfo.slogan || 'Votre slogan'}</p>
+              <h1 className="text-xl font-bold text-gray-800">{shoolInfo?.nom || "Nom de l'école"}</h1>
+              <p className="text-sm text-gray-600">{shoolInfo?.slogan || 'Votre slogan'}</p>
               <p className='text-xs font-semibold text-blue-600'> {activeSchoolYear?.nom} </p>
             </div>
           )}

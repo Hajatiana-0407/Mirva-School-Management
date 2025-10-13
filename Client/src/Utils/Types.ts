@@ -18,15 +18,17 @@ export const AppInitialValue: AppStateType = {
     hiddeTheModalActive: false
 }
 
-
+export type  User ={
+    id_user?: number;
+    identifiant: string | null;
+    password?: string | null;
+    role: 'admin' | 'secretaire' | 'prof' | 'parent' | 'etudiant' | string | null;
+    status: boolean;
+    created_at?: string;
+    last_login?: string | null;
+}
 export type AuthStateType = {
-    user?: {
-        id?: number;
-        email?: string;
-        nom?: string;
-        is_active?: boolean;
-        role?: string
-    }
+    user?: User ; 
     isLoggedIn?: boolean;
     token?: string;
 }
@@ -208,8 +210,8 @@ export const employeeInitialValue: EmployeeType = {
     created_at: ''
 };
 
-export type SubjectClasseAssignmentsType =  ClasseType & { matieres?: SubjectType[] }
-export type TeacherType = EmployeeType & { classes?: SubjectClasseAssignmentsType[]};
+export type SubjectClasseAssignmentsType = ClasseType & { matieres?: SubjectType[] }
+export type TeacherType = EmployeeType & { classes?: SubjectClasseAssignmentsType[] };
 
 
 // Type Personnel ( TYPE PERSONNEL )

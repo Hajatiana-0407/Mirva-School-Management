@@ -16,9 +16,8 @@ import { useEffect } from "react"
 import { getSchoolInfo } from "../Settings/School/redux/SchoolAsyncThunk"
 
 export const LoginSchema = object({
-    email: string()
-        .email("Veuillez entrer un email valide")
-        .required("L'email est requis"),
+    identifiant: string()
+        .required("L'identifiant est requis"),
 
     password: string()
         .min(6, "Le mot de passe doit contenir au moins 6 caractères")
@@ -33,7 +32,7 @@ const Signin = () => {
     const navigate = useNavigate();
 
     const { formErrors, onSubmite } = useForm(LoginSchema, {
-        email: '',
+        identifiant: '',
         password: ''
     });
 
@@ -50,7 +49,7 @@ const Signin = () => {
     }, [datas.isLoggedIn]);
 
     useEffect(() => {
-        if (!datas.isLoggedIn && !school.id_etablissement) {
+        if (!datas.isLoggedIn && !school?.id_etablissement) {
             dispatch(getSchoolInfo());
         }
     }, [datas.isLoggedIn])
@@ -59,13 +58,13 @@ const Signin = () => {
         <div className="w-screen h-screen pt-[calc(100vh/5)]">
             <div className="relative shadow  p-5 w-[95%] sm:w-96 bg-surface mx-auto border-ring border rounded">
                 <div className="flex justify-center items-center p-2 mb-4 rounded-lg mx-auto max-h-24">
-                    {school.logo ? <div className="flex justify-center items-center p-2 mb-4 rounded-lg mx-auto max-h-20 border w-full bg-gray-50">
-                        <img src={baseUrl(school.logo)} alt="Logo" className="max-h-24 max-w-full object-cover " />
+                    {school?.logo ? <div className="flex justify-center items-center p-2 mb-4 rounded-lg mx-auto max-h-20 border w-full bg-gray-50">
+                        <img src={baseUrl(school?.logo)} alt="Logo" className="max-h-24 max-w-full object-cover " />
                     </div>
-                        : school.nom
+                        : school?.nom
                             ? <div className="flex items-center gap-2 text-gray-600 border w-full py-2 justify-center bg-gray-50 rounded">
                                 <GraduationCap />
-                                <span className="font-semibold text-xl "> {school.nom} </span>
+                                <span className="font-semibold text-xl "> {school?.nom} </span>
                             </div>
                             : <div className="flex items-center gap-2 text-gray-500 border w-full py-2 justify-center bg-gray-50 rounded">
                                 <ImagePlus />
@@ -75,11 +74,11 @@ const Signin = () => {
                 </div>
                 <form action="" onSubmit={handleSubmit} className="flex flex-col gap-4 my-2">
                     <Input
-                        label="Email"
-                        type="email"
-                        name="email"
-                        placeholder="Votre email"
-                        errorMessage={formErrors?.email}
+                        label="Identifiant"
+                        type="text"
+                        name="identifiant"
+                        placeholder="Votre identifiant"
+                        errorMessage={formErrors?.identifiant}
                         icon={Mail}
                     />
                     <div>
