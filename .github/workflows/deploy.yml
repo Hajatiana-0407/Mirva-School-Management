@@ -36,7 +36,7 @@ jobs:
           password: ftp$0Nathiyh
           protocol: ftp
           local-dir: ./Server/
-          server-dir: /www/Server/
+          server-dir: /htdocs/Server/
           exclude: |
             **/node_modules/**
             **/.git**
@@ -47,11 +47,11 @@ jobs:
       - name: Deploy frontend build to root
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
+          server: ftp.lyceemirva35.com
+          username: lycee2677694
+          password: ftp$0Nathiyh
           protocol: ftp
           local-dir: ./Client/dist/
-          server-dir: /www/
+          server-dir: /htdocs/
           exclude: |
             **/Server/**
