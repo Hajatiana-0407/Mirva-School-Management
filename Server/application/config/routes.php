@@ -57,6 +57,7 @@ $route['translate_uri_dashes'] = FALSE;
 
 // ===================== Authentification  ===================== //
 $route['api/auth/login'] = 'AuthController/login';
+$route['api/auth/update/account'] = 'AuthController/update';
 // ===================== **************** ===================== //
 
 // ******************* ROUTE ETABLISSEMENT ********************** //

@@ -26,7 +26,7 @@ const SchoolSlice = createSlice({
     },
     extraReducers(builder) {
 
-        // // ************************************* Read ************************************* //
+        //  ************************************* Read ************************************* //
         builder
             .addCase(getSchoolInfo.pending, (state) => {
                 state.action.isLoading = true;
@@ -42,7 +42,7 @@ const SchoolSlice = createSlice({
                 toast.error("Erreur de connexion au server");
             });
 
-        // // // ************************************* Update ************************************* //
+        //  ************************************* Update ************************************* //
         builder
             .addCase(updateSchoolInfo.pending, (state) => {
                 state.action.isUpdating = true;
