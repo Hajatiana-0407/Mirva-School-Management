@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive, Eye, HeartPulse, PlusSquare } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Archive, Eye, HeartPulse } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
@@ -60,7 +60,7 @@ const Teachers: React.FC = () => {
   // TABLEAUX 
   const actions = [
     { icon: Eye, label: 'Voir le détail', onClick: (item: TeacherType) => navigate("/employees/" + item.matricule_personnel), color: 'blue' },
-    { icon: PlusSquare, label: 'Classes et Matières', onClick: (item: TeacherType) => navigate("/teachers/" + item.matricule_personnel), color: 'purple' },
+    { icon: Plus, label: 'Classes et Matières', onClick: (item: TeacherType) => navigate("/teachers/" + item.matricule_personnel), color: 'purple' },
     { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
     { icon: Archive, label: 'Supprimer', onClick: handleArchive, color: 'red' },
   ];
