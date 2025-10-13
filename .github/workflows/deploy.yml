@@ -1,0 +1,57 @@
+name: Deploy me
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Récupérer le code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2️⃣ Installer les dépendances backend
+      - name: Install backend dependencies
+        run: |
+          cd Server
+          composer install --no-dev --optimize-autoloader
+
+      # 3️⃣ Build du frontend React
+      - name: Build frontend
+        run: |
+          cd Client
+          npm ci
+          npm run build
+
+      # 4️⃣ Déploiement du backend (CodeIgniter)
+      - name: Deploy backend (Server)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ftp.lyceemirva35.com
+          username: lycee2677694
+          password: ftp$0Nathiyh
+          protocol: ftp
+          local-dir: ./Server/
+          server-dir: /www/Server/
+          exclude: |
+            **/node_modules/**
+            **/.git**
+            **/.github**
+            **/.env.development**
+
+      # 5️⃣ Déploiement du frontend buildé (React)
+      - name: Deploy frontend build to root
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp
+          local-dir: ./Client/dist/
+          server-dir: /www/
+          exclude: |
+            **/Server/**
