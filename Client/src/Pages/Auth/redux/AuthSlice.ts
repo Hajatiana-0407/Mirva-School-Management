@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootStateType } from '../../../Redux/store';
-import { ActionIntialValue, ActionType, ApiReturnType, AuthInitialValue, AuthStateType } from '../../../Utils/Types';
-import { loginUser } from './AuthAsyncThunk';
+import { ActionIntialValue, ActionType, ApiReturnType, AuthInitialValue, AuthStateType, User } from '../../../Utils/Types';
+import { loginUser, updateAccount } from './AuthAsyncThunk';
 import { toast } from 'react-toastify';
 import { decodeToken } from '../../../Utils/Utils';
 
@@ -40,9 +40,12 @@ const authSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
+
+    //  ?===================== LOGIN ===================== //
     builder
       .addCase(loginUser.pending, (state) => {
         state.action.isLoading = true;
+        state.error = '';
       })
       .addCase(loginUser.fulfilled, (state, action: {
         payload: ApiReturnType
@@ -64,6 +67,31 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state) => {
         state.action.isLoading = false
+        state.error = 'Erreur de connexion au server';
+        toast.error("Erreur de connexion au server");
+      })
+
+
+    // ? ===================== MODIFICATION DU COMPTE ===================== //
+    builder
+      .addCase(updateAccount.pending, (state) => {
+        state.action.isUpdating = true;
+        state.error = '';
+      })
+      .addCase(updateAccount.fulfilled, (state, action: {
+        payload: ApiReturnType
+      }) => {
+        state.action.isUpdating = false;
+        const { error, data, message } = action.payload;
+        if (error) {
+          state.error = message as string;
+        } else {
+          state.datas.user = { ...state.datas.user, identifiant: data.user.identifiant } as User
+          localStorage.setItem('token', data.token)
+        }
+      })
+      .addCase(updateAccount.rejected, (state) => {
+        state.action.isUpdating = false
         state.error = 'Erreur de connexion au server';
         toast.error("Erreur de connexion au server");
       })

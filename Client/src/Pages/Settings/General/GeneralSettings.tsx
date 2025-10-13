@@ -1,4 +1,4 @@
-import { CalendarCheck, CalendarHeart, GraduationCap } from "lucide-react"
+import { CalendarCheck, CalendarHeart, GraduationCap, Save } from "lucide-react"
 import { useDispatch, useSelector } from "react-redux"
 import { NavLink } from "react-router-dom"
 import { getSchoolYearState } from "../../School-Year/redux/SchoolYearSlice"
@@ -14,10 +14,10 @@ import clsx from "clsx"
 const SchoolYearSchema = object({
 });
 const GeneralSettings = () => {
-    const { activeSchoolYear, datas: schoolYearData } = useSelector(getSchoolYearState)
+    const { activeSchoolYear, datas: schoolYearData, action: schoolYearAction } = useSelector(getSchoolYearState)
     const { onSubmite } = useForm<{ id_annee_scolaire: null | number }>(SchoolYearSchema, { id_annee_scolaire: null })
     const dispatch: AppDispatch = useDispatch();
-    const [theActiveSchoolYear, setTheActiveSchoolYear] = useState<SchoolYearType>(schoolYearInitialValue)
+    const [theActiveSchoolYear, setTheActiveSchoolYear] = useState<SchoolYearType>(schoolYearInitialValue);
 
     useEffect(() => {
         if (activeSchoolYear) {
@@ -37,8 +37,8 @@ const GeneralSettings = () => {
 
     const handleChangeSchoolYears = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const id_annee_scolaire = parseInt(e.target.value);
-        console.log( id_annee_scolaire );
-        
+        console.log(id_annee_scolaire);
+
         for (let i = 0; i < schoolYearData.length; i++) {
             const element = schoolYearData[i];
             if (element.id_annee_scolaire == id_annee_scolaire) {
@@ -48,12 +48,11 @@ const GeneralSettings = () => {
         }
     }
 
-
     return (
         <div className="space-y-6">
-            <div className="">
+            <form onSubmit={handleSchoolYearChangeSubmit} className="space-y-4">
                 <div className="flex justify-between items-center">
-                    <div className="flex items-center text-lg mb-4 space-x-2 text-gray-900 font-medium">
+                    <div className="flex items-center text-lg space-x-2 text-gray-900 font-medium">
                         <div className="bg-green-500 w-4 h-4 rounded-full"></div>
                         <h3 className="">Année scolaire actif</h3>
                     </div>
@@ -64,7 +63,7 @@ const GeneralSettings = () => {
                     </div>
                 </div>
                 <div className="flex gap-4">
-                    <form onSubmit={handleSchoolYearChangeSubmit} id="__form-to-change-active-schoolYear" className="flex-1">
+                    <div className="flex-1">
                         <div className="relative">
                             <select
                                 name='id_annee_scolaire'
@@ -89,7 +88,8 @@ const GeneralSettings = () => {
                                 {React.createElement(GraduationCap, { size: 18 })}
                             </div>
                         </div>
-                    </form>
+
+                    </div>
                     <div className="flex items-center ">
                         <p>du</p>
                     </div>
@@ -123,7 +123,7 @@ const GeneralSettings = () => {
                         />
                     </div>
                 </div>
-                <div className="mt-4">
+                <div className="">
                     <textarea
                         rows={3}
                         readOnly
@@ -132,7 +132,18 @@ const GeneralSettings = () => {
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
-            </div>
+                <div className="flex justify-end">
+                    <button
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center"
+                    >
+                        {schoolYearAction.isLoading || schoolYearAction.isUpdating
+                            ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+                            <Save className="w-4 h-4" />
+                        }
+                        <span>Enregistrer</span>
+                    </button>
+                </div>
+            </form>
 
 
             {/* <div>

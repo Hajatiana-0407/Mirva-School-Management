@@ -3,8 +3,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class AuthModel extends CI_Model
 {
-    protected $table = '';
-    protected $primaryKey = '';
+    protected $table = 'users';
+    protected $primaryKey = 'id_user';
 
     public function __construct()
     {
@@ -16,7 +16,7 @@ class AuthModel extends CI_Model
     {
         if ( !!!$identifiant) return null ;  
         $user  = $this->db->select('*')
-            ->from('users')
+            ->from($this->table )
             ->where('identifiant', $identifiant)
             ->get()
             ->row();
