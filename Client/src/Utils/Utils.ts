@@ -10,7 +10,7 @@ export const hexToRgba = (hex: string, alpha = 1): string => {
 };
 
 export const baseUrl = (uri: string | undefined) => {
-  const serverUrl = 'http://localhost/Mirva-School-Management/Server/';
+  const serverUrl = import.meta.env.VITE_API_URL ;
 
   if (uri !== undefined) {
     return `${serverUrl}${uri}`;
