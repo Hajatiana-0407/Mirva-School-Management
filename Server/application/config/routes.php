@@ -55,6 +55,14 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 
+
+
+
+// ===================== Fixtures  ===================== //
+$route['fixtures'] = 'AppFixtures/loadFixtures';
+// ===================== **************** ===================== //
+
+
 // ===================== Authentification  ===================== //
 $route['api/auth/login'] = 'AuthController/login';
 $route['api/auth/update/account'] = 'AuthController/update';

@@ -406,7 +406,7 @@ class AppFixtures extends CI_Controller
         }
 
 
-        $professeurs = $this->model->getIds('personnel', 'id_personnel');
+        $professeurs =  $this->model->getAllIdTeacher();
 
         // ? ===================== Cours ===================== //
         $matieres = $this->model->getIds('matiere', 'id_matiere');
@@ -471,6 +471,47 @@ class AppFixtures extends CI_Controller
         ]);
     }
 
+    /**
+     * Fixtures pour les leçon 
+     *
+     * @param boolean $clean
+     * @return void
+     */
+    private function loadLecon($clean = false)
+    {
+        // Vider les tables (dans l’ordre inverse des dépendances)
+        $this->model->emptyDb([
+            'lecon',
+        ]);
+
+        if ($clean) {
+            // On efface seulement la base de données
+            return;
+        }
+
+        $teachersId = $this->model->getAllIdTeacher();
+        foreach ($teachersId as $id) {
+            $assignations = $this->model->getAssignationByTeacher($id);
+            $lecons = [];
+            foreach ($assignations as $assignation) {
+                $lecon = [
+                    'titre' => $this->faker->sentence(6),
+                    'description' => $this->faker->paragraph(3),
+                    'contenu' => $this->faker->paragraphs(5, true),
+                    'fichier_support' => $this->faker->optional()->fileExtension(),
+                    'video_url' => $this->faker->url,
+                    'created_at' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d H:i:s'),
+                    'id_prof' => $assignation['id_prof'],
+                    'id_matiere' => $assignation['id_matiere'],
+                    'id_niveau' => $assignation['id_niveau']
+                ];
+                $lecons[] = $lecon;
+            }
+            // Insertion des loçons pour le prof dans la base de donnée
+            $this->model->insertBatchFixtures($lecons, 'lecon');
+        }
+    }
+
 
     /**
      * Create a fake data  in the data base 
@@ -483,6 +524,7 @@ class AppFixtures extends CI_Controller
         $this->loadConfigurations();
         $this->loadPersonnel();
         $this->LoadEleveParent();
+        $this->loadlecon();
 
         echo "✅ Fausse base de données générée avec succès !" . PHP_EOL;
     }
@@ -499,6 +541,7 @@ class AppFixtures extends CI_Controller
         $this->loadConfigurations(true);
         $this->loadPersonnel(true);
         $this->LoadEleveParent(true);
+        $this->loadlecon(true);
 
         echo "✅ Suppression des données avec succès !" . PHP_EOL;
     }
