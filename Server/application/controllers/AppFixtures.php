@@ -499,7 +499,7 @@ class AppFixtures extends CI_Controller
                     'description' => $this->faker->paragraph(3),
                     'contenu' => $this->faker->paragraphs(5, true),
                     'fichier_support' => $this->faker->optional()->fileExtension(),
-                    'video_url' => $this->faker->url,
+                    'ficher_principale' => $this->faker->url,
                     'created_at' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d H:i:s'),
                     'id_prof' => $assignation['id_prof'],
                     'id_matiere' => $assignation['id_matiere'],
