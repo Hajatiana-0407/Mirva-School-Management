@@ -14,6 +14,7 @@ import { getEmployeState } from '../../Pages/Employees/redux/EmployeSlice';
 import HeadingSmall from '../ui/HeadingSmall';
 import ImageProfile from '../ui/ImageProfile';
 import { createTeacher, updateTeacher } from '../../Pages/Teachers/redux/TeacherAsyncThunk';
+import { getTeacherState } from '../../Pages/Teachers/redux/TeachersSlice';
 
 // ? VALIDATION DES DONNÉ AVEC YUP
 const EmployeSchema = object({
@@ -62,7 +63,8 @@ type EmployeFormPropsType = {
 const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleClose = () => { }, type }) => {
     // const { datas: TypesEmployees } = useSelector(getTypeEmployeesState);
     const { datas: TypesEmployees } = useSelector(getTypeEmployeesState);
-    const { action } = useSelector(getEmployeState);
+    const { action: employeeAction } = useSelector(getEmployeState);
+    const { action: teacherAction } = useSelector(getTeacherState)
     const [isTeacher, setIsTeacher] = useState(type == 'teacher' ? true : false);
     const [page, setPage] = useState(1)
     const { onSubmite, formErrors, resetError, HandleValidateSchema } = useForm<EmployeeType>(EmployeSchema, employeeInitialValue);
@@ -372,9 +374,9 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                         type={(isTeacher && !editingEmployees) ? 'button' : 'submit'}
                         className="px-4 py-2 bg-blue-600 text-white flex items-center rounded-lg hover:bg-blue-700 disabled:bg-blue-300"
                         onClick={handleNext}
-                        disabled={action.isLoading || action.isUpdating}
+                        disabled={employeeAction.isLoading || employeeAction.isUpdating || teacherAction.isLoading || teacherAction.isUpdating}
                     >
-                        {action.isLoading || action.isUpdating ?
+                        {employeeAction.isLoading || employeeAction.isUpdating || teacherAction.isLoading || teacherAction.isUpdating ?
                             <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div>
                             : <>
                                 {/* Icone si le mot est modifier */}
@@ -410,9 +412,9 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                     <button
                         className={`bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-1 transition-colors hover:bg-blue-700 disabled:bg-blue-300`}
                         type='submit'
-                        disabled={action.isLoading || action.isUpdating}
+                        disabled={employeeAction.isLoading || employeeAction.isUpdating || teacherAction.isLoading || teacherAction.isUpdating}
                     >
-                        {action.isLoading || action.isUpdating
+                        {employeeAction.isLoading || employeeAction.isUpdating || teacherAction.isLoading || teacherAction.isUpdating
                             ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div>
                             : <Check className='h-5 w-5 inline-block me-1' />
                         }
