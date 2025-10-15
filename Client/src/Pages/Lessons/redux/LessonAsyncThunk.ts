@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../../Utils/api";
 import { ApiReturnInitial, ApiReturnType, LessonType } from "../../../Utils/Types";
 import { setHiddeModalValue } from "../../../Redux/AppSlice";
+import { toast } from "react-toastify";
 
 // READ
 export const getAllLessons = createAsyncThunk('lesson/getAll', async (): Promise<LessonType[]> => {
@@ -24,6 +25,7 @@ export const createLesson = createAsyncThunk('leçon/ajout', async (lesson: any,
     .then(response => {
       data = response.data;
       if (!data.error) {
+        toast('Ajout effectué.')
         dispatch(setHiddeModalValue(true));
       }
     })
@@ -44,6 +46,7 @@ export const updatelesson = createAsyncThunk('lesson/modification', async ({ les
   }).then(response => {
     data = response.data;
     if (!data.error) {
+      toast('Modification effectuée.')
       dispatch(setHiddeModalValue(true));
     }
   }).catch(error => {
@@ -53,22 +56,42 @@ export const updatelesson = createAsyncThunk('lesson/modification', async ({ les
 });
 
 
-// // DELETE
-// export const deletelesson = createAsyncThunk('lesson/suppression', async (id_annee_scolaire: number, { dispatch }): Promise<ApiReturnType> => {
-//   let data: ApiReturnType = ApiReturnInitial;
-//   if (id_annee_scolaire) {
-//     await api.delete('admin/school-year/delete', {
-//       data: { id_annee_scolaire },
-//       headers: { 'Content-Type': 'application/json' }
-//     }).then(response => {
-//       data = response.data;
-//       if (!data.error) {
-//         dispatch(setHiddeModalValue(true));
-//       }
-//     }).catch(error => {
-//       console.error('Erreur lors de la récupération des données:', error.getMessage());
-//     });
-//   }
-//   return data;
-// });
+// DELETE
+export const deleteLesson = createAsyncThunk('lesson/suppression', async (id_lecon: number): Promise<ApiReturnType> => {
+  let data: ApiReturnType = ApiReturnInitial;
+  if (id_lecon) {
+    await api.delete('admin/lesson/delete', {
+      data: { id_lecon },
+      headers: { 'Content-Type': 'application/json' }
+    }).then(response => {
+      data = response.data;
+      if (!data.error) {
+        toast("Suppression effectuée.");
+      }
+    }).catch(error => {
+      console.error('Erreur lors de la récupération des données:', error.getMessage());
+    });
+  }
+  return data;
+});
+
+
+// PUBLISH 
+export const publish = createAsyncThunk('lesson/publish', async (id_lecon: number): Promise<ApiReturnType> => {
+  let data: ApiReturnType = ApiReturnInitial;
+  if (id_lecon) {
+    await api.post('admin/lesson/publish', {
+      id_lecon,
+      headers: { 'Content-Type': 'application/json' }
+    }).then(response => {
+      data = response.data;
+      if (!data.error) {
+        toast("Leçon publié.");
+      }
+    }).catch(error => {
+      console.error('Erreur lors de la publication du leçon :', error.getMessage());
+    });
+  }
+  return data;
+})
 

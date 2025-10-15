@@ -72,7 +72,8 @@ et les lier a users
 
 
 # LEÇON
-- [ ] Supprimer une leçon 
+- [x] Supprimer une leçon 
+- [x] Publié 
 - [ ] Activé le bouton telechager 
     - Le telechargement seras une dossier dont le nom est le titre et le contenue est le fichier principale , une doc txt pour voir le description du leçcon et le titre et une fichier qui est le fichier de support 
 - [ ] Sur Connexion de prof 
