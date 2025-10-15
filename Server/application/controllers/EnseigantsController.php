@@ -71,7 +71,7 @@ class EnseigantsController extends CI_Controller
             $data['matricule_personnel'] = $matricule;
             $data['id_type_personnel'] = $this->input->post('type_personnel');
             foreach ($_POST as $key => $value) {
-                if ($key !== 'type_personnel' && $key !== 'assignations') {
+                if ($key !== 'type_personnel' && $key !== 'assignations' && $key === 'user') {
                     $data[$key] = $this->input->post($key);
                 }
             }
@@ -210,7 +210,7 @@ class EnseigantsController extends CI_Controller
             $data = [];
             $data['id_type_personnel'] = $this->input->post('type_personnel');
             foreach ($_POST as $key => $value) {
-                if ($key !== 'type_personnel') {
+                if ($key !== 'type_personnel' && $key !== 'user') {
                     $data[$key] = $this->input->post($key);
                 }
             }
