@@ -20,8 +20,8 @@ if (!function_exists('upload_file')) {
                 preg_match('/([^\[]+)\[([^\]]+)\]/', $field_name, $matches);
 
                 if (count($matches) === 3) {
-                    $parent = $matches[1]; 
-                    $child  = $matches[2]; 
+                    $parent = $matches[1];
+                    $child  = $matches[2];
 
                     $file = [
                         'name'     => $_FILES[$parent]['name'][$child]     ?? null,
@@ -45,11 +45,13 @@ if (!function_exists('upload_file')) {
 
             // Vérifier extension
             $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-            if (!in_array($ext, $allowed_types)) {
-                return [
-                    'success' => false,
-                    'error'   => "Type de fichier non autorisé: .$ext"
-                ];
+            if ($allowed_types !== '*') {
+                if (!in_array($ext, $allowed_types)) {
+                    return [
+                        'success' => false,
+                        'error'   => "Type de fichier non autorisé: .$ext"
+                    ];
+                }
             }
 
             // Vérifier taille
@@ -75,7 +77,7 @@ if (!function_exists('upload_file')) {
 
             return [
                 'success'   => true,
-                'file_name' => $upload_path .'/'. $unique_name,
+                'file_name' => $upload_path . '/' . $unique_name,
                 'error'     => null
             ];
         } catch (\Throwable $th) {
