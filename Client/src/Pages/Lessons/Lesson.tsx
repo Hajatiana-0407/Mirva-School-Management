@@ -1,17 +1,18 @@
 import { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Trash, PenBox, Download, Eye, BellPlus } from 'lucide-react';
+import { Plus, Search, Filter, Trash, PenBox, Download, Eye, BellPlus, Share } from 'lucide-react';
 import Modal from '../Modal';
 import { getAppState } from '../../Redux/AppSlice';
 import { LessonType } from '../../Utils/Types';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../Redux/store';
 import { getLessonState } from './redux/LessonSlice';
-import { getAllLessons } from './redux/LessonAsyncThunk';
+import { deleteLesson, getAllLessons, publish } from './redux/LessonAsyncThunk';
 import ActionMenu from '../../Components/ActionMenu';
 import { baseUrl, hexToRgba } from '../../Utils/Utils';
 import Profile from '../../Components/ui/Profile';
 import LessonForm from '../../Components/Forms/LessonForm';
 import { getFileIcon } from '../../Components/ui/VideoOrFileInput';
+import ConfirmDialog from '../ConfirmDialog';
 
 
 
@@ -21,6 +22,8 @@ const Lesson = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingLesson, setEditingLesson] = useState<LessonType | null>(null);
   const { datas } = useSelector(getLessonState);
+  const [lessonToArchive, setlessonToArchive] = useState<LessonType | null>(null)
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const dispatch: AppDispatch = useDispatch();
 
   const handleCloseModal = () => {
@@ -32,6 +35,18 @@ const Lesson = () => {
     setEditingLesson(lesson);
     setShowModal(true);
   }
+  const handleDelete = (lesson: LessonType) => {
+    setlessonToArchive(lesson);
+    setShowConfirmDialog(true);
+  }
+  const handleConfirmArchive = () => {
+    dispatch(deleteLesson(lessonToArchive?.id_lecon as number));
+    setShowConfirmDialog(false);
+  }
+
+  const handlePublish = (lesson: LessonType) => {
+    dispatch(publish(lesson.id_lecon as number))
+  }
 
   useEffect(() => {
     if (showModal && hiddeTheModalActive) {
@@ -40,9 +55,7 @@ const Lesson = () => {
   }, [hiddeTheModalActive]);
 
   useEffect(() => {
-    if (!datas.length) {
-      dispatch(getAllLessons());
-    }
+    dispatch(getAllLessons());
   }, [dispatch])
 
 
@@ -93,6 +106,36 @@ const Lesson = () => {
               // Détection image
               const isImage = fileUrl.match(/\.(jpg|jpeg|png|gif|webp|bmp)$/i);
 
+              // Action 
+              let actions = [
+                {
+                  label: 'Supprimer',
+                  color: 'text-red-500',
+                  onClick: () => handleDelete(lesson),
+                  icon: Trash
+                },
+                {
+                  label: 'Modifier',
+                  color: 'text-green-500',
+                  onClick: () => handlEdit(lesson),
+                  icon: PenBox
+                },
+                {
+                  label: 'Télécharger',
+                  color: 'text-blue-500',
+                  onClick: () => { },
+                  icon: Download
+                },
+              ]
+              // Si la leçon n'est pas encore publlié 
+              if (lesson.published == 0) {
+                actions.push({
+                  label: 'Publié',
+                  color: 'text-orange-600',
+                  onClick: () => handlePublish(lesson),
+                  icon: Share
+                })
+              }
               return (
                 <div key={`${lesson.id_lecon}_${idx}`} className="bg-white rounded-lg shadow p-4 border flex flex-col">
 
@@ -150,30 +193,26 @@ const Lesson = () => {
                         <Eye className=' ms-2' />
                       </button>
                     </div>
-                    <div className='space-x-2'>
-                      <button className="bg-gray-100 border border-gray-300 rounded-lg px-2 py-2 text-gray-700 hover:bg-gray-200 transition" title="Télécharger">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" /></svg>
+                    <div className='space-x-2 flex '>
+                      {lesson.published == 0 &&
+                        <button
+                          className="bg-orange-600 relative rounded-lg p-2 text-white hover:bg-orange-700 transition group"
+                          title="Publié"
+                          onClick={() => { handlePublish(lesson) }}
+                        >
+                          <Share className='w-5 h-5' />
+                          <div className='hidden group-hover:block absolute bottom-full text-sm left-full px-1 py-1 rounded-full rounded-bl-none bg-gray-200 text-black border border-gray-400'>
+                            Publié
+                          </div>
+                        </button>
+                      }
+                      <button className="bg-gray-100 border border-gray-300 rounded-lg p-2 text-gray-700 hover:bg-gray-200 transition relative group" title="Télécharger">
+                        <Download className='w-5 h-5' />
+                        <div className='hidden group-hover:block absolute bottom-full text-sm left-full px-1 py-1 rounded-full rounded-bl-none bg-gray-200 text-black border border-gray-400'>
+                          Télécharger
+                        </div>
                       </button>
-                      <ActionMenu actions={[
-                        {
-                          label: 'Supprimer',
-                          color: 'text-red-500',
-                          onClick: () => { },
-                          icon: Trash
-                        },
-                        {
-                          label: 'Modifier',
-                          color: 'text-green-500',
-                          onClick: () => handlEdit(lesson),
-                          icon: PenBox
-                        },
-                        {
-                          label: 'Télécharger',
-                          color: 'text-blue-500',
-                          onClick: () => { },
-                          icon: Download
-                        },
-                      ]} />
+                      <ActionMenu actions={actions} />
                     </div>
                   </div>
                 </div>
@@ -194,8 +233,18 @@ const Lesson = () => {
         title={editingLesson ? 'Modification' : 'Nouvelle leçon'}
         size='lg'
       >
-        <LessonForm lesson={editingLesson as LessonType} />
+        <LessonForm lesson={editingLesson as LessonType} handleCloseModal={handleCloseModal} />
       </Modal>
+
+
+      {/* Dialog de confirmation */}
+      <ConfirmDialog
+        isOpen={showConfirmDialog}
+        onClose={() => setShowConfirmDialog(false)}
+        onConfirm={handleConfirmArchive}
+        title="Supprimer les parent"
+        message={`Êtes-vous sûr de vouloir supprimer la leçon "${lessonToArchive?.titre}"?`}
+      />
     </div>
   );
 };

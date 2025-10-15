@@ -60,7 +60,7 @@ const SubjectSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
-                    toast.success('Matière ajoutée !');
+                    toast('Matière ajoutée !');
                     state.error = '';
                     state.datas.unshift(data);
                 }
@@ -84,7 +84,7 @@ const SubjectSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
-                    toast.success('Matière modifiée !');
+                    toast('Matière modifiée !');
                     state.error = '';
                     state.datas = state.datas.map(level => {
                         if (level.id_matiere === data?.id_matiere) {
@@ -116,7 +116,7 @@ const SubjectSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
-                    toast.success('Suppression effectuée');
+                    toast('Suppression effectuée');
                     state.error = '';
                     state.datas = state.datas.filter((data: SubjectType) => data.id_matiere !== id_deleted);
                 }

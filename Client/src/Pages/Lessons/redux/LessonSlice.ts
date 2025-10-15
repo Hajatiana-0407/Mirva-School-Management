@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ActionIntialValue, ActionType, ApiReturnType, LessonType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
-import { createLesson, getAllLessons, updatelesson } from "./LessonAsyncThunk";
+import { createLesson, deleteLesson, getAllLessons, publish, updatelesson } from "./LessonAsyncThunk";
 
 // Type SchoolYear à adapter selon votre modèle
 
@@ -96,6 +96,56 @@ const LessonSlice = createSlice({
                 state.action.isUpdating = false
                 state.error = 'Erreur de connexion au server';
             })
+
+        // ! ===================== DELETE ===================== //
+        builder
+            .addCase(deleteLesson.pending, (state) => {
+                state.action.isDeleting = true;
+                state.error = '';
+            })
+            .addCase(deleteLesson.fulfilled, (state, action: { payload: any }) => {
+                state.action.isDeleting = false;
+                const { error, data: id_deleted, message } = action.payload;
+                if (error) {
+                    state.error = message as string;
+                } else {
+                    state.error = '';
+                    state.datas = state.datas.filter((data: LessonType) => data.id_lecon !== id_deleted);
+                }
+            })
+            .addCase(deleteLesson.rejected, (state) => {
+                state.action.isDeleting = false;
+                state.error = 'Erreur de connexion au server';
+            });
+
+        // ? ===================== PUBLIÉ ===================== //
+        builder
+            .addCase(publish.pending, (state) => {
+                state.action.isDeleting = true;
+                state.error = '';
+            })
+            .addCase(publish.fulfilled, (state, action: { payload: any }) => {
+                state.action.isDeleting = false;
+                const { error, data: id_lecon, message } = action.payload;
+                if (error) {
+                    state.error = message as string;
+                } else {
+                    state.error = '';
+                    state.datas = state.datas.map(lesson => {
+                        if (lesson.id_lecon == id_lecon) {
+                            return {
+                                ...lesson,
+                                published: 1
+                            }
+                        }
+                        return lesson
+                    })
+                }
+            })
+            .addCase(publish.rejected, (state) => {
+                state.action.isDeleting = false;
+                state.error = 'Erreur de connexion au server';
+            });
     }
 });
 

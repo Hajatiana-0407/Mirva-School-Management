@@ -31,7 +31,7 @@ export const updateAccount = createAsyncThunk('update/account', async (account: 
     }).then(response => {
         returnData = response.data;
         if (!returnData.error) {
-            toast.success('Modification effectué')
+            toast('Modification effectué')
         }
     }).catch(error => {
         console.error('Erreur lors de la Modification:', error.getMessage());

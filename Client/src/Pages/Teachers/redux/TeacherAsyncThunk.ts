@@ -41,7 +41,7 @@ export const createTeacher = createAsyncThunk('enseignant/ajout', async (datas: 
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
-            toast.success('Ajout de l’enseignant effectué !');
+            toast('Ajout de l’enseignant effectué !');
         }
     }).catch(error => {
         console.error('Erreur lors de la creation de l\'enseignant :', error.getMessage());
@@ -57,7 +57,7 @@ export const updateTeacher = createAsyncThunk('enseignant/modification', async (
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
-            toast.success('Modification effectuée !');
+            toast('Modification effectuée !');
         }
     }).catch(error => {
         console.error('Erreur lors de la Modification :', error.getMessage());

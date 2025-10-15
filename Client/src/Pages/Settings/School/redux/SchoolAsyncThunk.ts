@@ -25,7 +25,7 @@ export const updateSchoolInfo = createAsyncThunk('school/modification', async ({
     await api.post('admin/school/update', schoolInfo ).then(response => {
         data = response.data;
         if (!data.error) {
-            toast.success("Modification avec succès !");
+            toast("Modification avec succès !");
         }
     }).catch(error => {
         console.error('( Etablissement modification ) Erreur lors de la récupération des données:', error.getMessage());

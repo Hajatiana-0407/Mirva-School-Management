@@ -63,7 +63,7 @@ const SchoolYearSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
-                    toast.success('Année scolaire ajoutée !');
+                    toast('Année scolaire ajoutée !');
                     state.error = '';
                     state.datas.unshift(data);
                     // l'année scolaire nouvellement créée devient l'année scolaire active
@@ -92,7 +92,7 @@ const SchoolYearSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
-                    toast.success('Année scolaire modifiée !');
+                    toast('Année scolaire modifiée !');
                     state.error = '';
                     state.datas = state.datas.map(year =>
                         year.id_annee_scolaire === data?.id_annee_scolaire ? { ...data, id_annee_scolaire: year.id_annee_scolaire } : year
@@ -116,7 +116,7 @@ const SchoolYearSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
-                    toast.success('Suppression effectuée');
+                    toast('Suppression effectuée');
                     state.error = '';
                     state.datas = state.datas.filter((data: SchoolYearType) => data.id_annee_scolaire !== id_deleted);
 

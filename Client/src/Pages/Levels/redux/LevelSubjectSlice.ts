@@ -45,7 +45,7 @@ const LevelSubjectSlice = createSlice({
         })
             .addCase(registerSubjectLevelCoef.fulfilled, (state) => {
                 state.action.isUpdating = false;
-                toast.success('Opération effectuée avec succès.');
+                toast('Opération effectuée avec succès.');
             })
             .addCase(registerSubjectLevelCoef.rejected, (state) => {
                 state.action.isUpdating = false;

@@ -29,9 +29,10 @@ export const lessonSchema = Yup.object({
 
 type LessonFormPropsType = {
     lesson?: LessonType,
+    handleCloseModal: () => void
 };
 
-const LessonForm: React.FC<LessonFormPropsType> = ({ lesson }) => {
+const LessonForm: React.FC<LessonFormPropsType> = ({ lesson , handleCloseModal }) => {
     const { formErrors, onSubmite } = useForm(lessonSchema, LessonInitialValue)
     const { } = useSelector(getAuthState);
     const { datas: levels } = useSelector(getLevelState);
@@ -100,7 +101,7 @@ const LessonForm: React.FC<LessonFormPropsType> = ({ lesson }) => {
             {/* levels  */}
             <input type="hidden" name="id_prof" value='' onChange={() => { }} />
             {lesson &&
-                <input type="text" name="id_lecon" value={lesson?.id_lecon} onChange={() => { }} />
+                <input type="hidden" name="id_lecon" value={lesson?.id_lecon} onChange={() => { }} />
             }
             <InputError message={error} />
             <Input
@@ -182,7 +183,7 @@ const LessonForm: React.FC<LessonFormPropsType> = ({ lesson }) => {
                 <div className="flex justify-end space-x-3 pt-4">
                     <button
                         type="button"
-                        // onClick={handleCloseModal}
+                        onClick={handleCloseModal}
                         className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
                     >
                         <X className='inline-block w-5 h-5 me-1' />

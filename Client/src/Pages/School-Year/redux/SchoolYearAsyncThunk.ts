@@ -80,7 +80,7 @@ export const changeActiveSchoolYear = createAsyncThunk('schoolYear/change-active
   ).then(response => {
     data = response.data;
     if (!data.error) {
-      toast.success('Modification éffectuée')
+      toast('Modification éffectuée')
     }
   }).catch(error => {
     console.error('Erreur lors de la récupération des données:', error.getMessage());

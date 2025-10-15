@@ -143,6 +143,7 @@ $route['api/admin/lesson'] = 'LeconController';
 $route['api/admin/lesson/update'] = 'LeconController/update';
 $route['api/admin/lesson/create'] = 'LeconController/create';
 $route['api/admin/lesson/delete'] = 'LeconController/delete';
+$route['api/admin/lesson/publish'] = 'LeconController/publish';
 
 
 

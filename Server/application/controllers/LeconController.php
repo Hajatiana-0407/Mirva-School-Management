@@ -2,6 +2,7 @@
 
 class LeconController extends CI_Controller
 {
+    protected $pk = 'id_lecon';
     public function __construct()
     {
         parent::__construct();
@@ -168,6 +169,69 @@ class LeconController extends CI_Controller
             echo json_encode([
                 'error' => true,
                 'message' => "Erreur lors de la modification",
+                'details' => 'La méthode est non autorisé'
+            ]);
+            return;
+        }
+    }
+
+    public function delete()
+    {
+
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+
+            $input = json_decode(file_get_contents('php://input'), true);
+
+            if (!empty($input[$this->pk])) {
+                $id = $input[$this->pk];
+
+                $data = $this->LeconModel->delete($id);
+
+                if ($data) {
+                    echo json_encode(['error' => false, 'data' => $data]);
+                } else {
+                    echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                }
+            } else {
+                echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+            }
+        } else {
+            echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+        }
+    }
+
+
+    public function publish()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user'])) {
+            $post = $this->input->post(null, true);
+            $id_lecon = $post[$this->pk] ?? null;
+            if ($id_lecon) {
+                $updated = $this->LeconModel->update($id_lecon, ['published' => true]);
+                if ($updated) {
+                    echo json_encode([
+                        'error' => false,
+                        'data' => $id_lecon
+                    ]);
+                } else {
+                    echo json_encode([
+                        'error' => true,
+                        'message' => 'Impossible de trouvé la leçon à publié.',
+                        'details' => "Identification null",
+                    ]);
+                }
+            } else {
+                echo json_encode([
+                    'error' => true,
+                    'message' => 'Impossible de trouvé la leçon a publié.',
+                    'details' => "Identification null",
+                ]);
+            }
+            return;
+        } else {
+            echo json_encode([
+                'error' => true,
+                'message' => "Erreur lors de l'enregistrement",
                 'details' => 'La méthode est non autorisé'
             ]);
             return;

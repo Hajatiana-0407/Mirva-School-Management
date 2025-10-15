@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { FileText, X, Video, Image as ImageIcon, FileSpreadsheet, FileArchive, FileAudio, FileCode, File, FileImage, FileVideo } from "lucide-react";
+import { FileText, X, Image as FileArchive, FileAudio, FileCode, File, FileImage, FileVideo } from "lucide-react";
 import InputError from "./InputError";
 import word from '../../assets/word.png';
 import exel from '../../assets/excel.png';
@@ -40,7 +40,7 @@ export const getFileIcon = (fileName: string, size = 12) => {
 
     if (pdfExt.includes(ext))
         return <div>
-            <img src={pdf} alt="word" className={`w-${size} h-${size}`} />
+            <img src={pdf} alt="PDF" className={`w-${size} h-${size}`} />
         </div>;
 
     if (wordExt.includes(ext))
@@ -50,7 +50,7 @@ export const getFileIcon = (fileName: string, size = 12) => {
 
     if (excelExt.includes(ext))
         return <div>
-            <img src={exel} alt="word" className={`w-${size} h-${size}`} />
+            <img src={exel} alt="exel" className={`w-${size} h-${size}`} />
         </div>;
 
     if (pptExt.includes(ext))
@@ -84,14 +84,14 @@ const VideoOrFileInput: React.FC<VideoOrFileInputProps> = ({
     defaultValue
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [file, setFile] = useState<string | null>(defaultValue ||  null  );
+    const [file, setFile] = useState<string | null>(defaultValue || null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(defaultValue || null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
         setFile(selectedFile?.name || null);
         if (selectedFile) {
-            if (isImage(selectedFile?.name ) || isVideo(selectedFile?.name )) {
+            if (isImage(selectedFile?.name) || isVideo(selectedFile?.name)) {
                 setPreviewUrl(URL.createObjectURL(selectedFile));
             } else {
                 setPreviewUrl(null);
@@ -117,13 +117,16 @@ const VideoOrFileInput: React.FC<VideoOrFileInputProps> = ({
                 <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
             )}
             <div
-                className="flex items-center justify-center border-2 border-dashed rounded-lg h-52 bg-gray-50 cursor-pointer relative"
+                className="flex items-center justify-center border-2 border-dashed rounded-lg h-52 bg-gray-50 border-gray-400 cursor-pointer relative"
                 onClick={() => inputRef.current?.click()}
             >
                 {!file ? (
-                    <div className="flex flex-col items-center text-gray-400">
+                    <div className="flex flex-col items-center text-gray-600">
                         <FileText className="w-28 h-28 mb-2" />
-                        <span className="text-xs">Cliquez pour ajouter un fichier</span>
+                        <span className="text-md">
+                            Cliquez pour ajouter un fichier, une image ou une vidéo
+                        </span>
+
                     </div>
                 ) : (
                     <div className="flex items-center justify-center w-full h-full relative">
@@ -154,8 +157,8 @@ const VideoOrFileInput: React.FC<VideoOrFileInputProps> = ({
                     onChange={handleFileChange}
                 />
             </div>
-            {file && (
-                <div className="text-xs text-gray-600 mt-2 text-center truncate">{file.split('/').pop()}</div>
+            {file && !defaultValue && (
+                <div className="text-md text-gray-700 underline mt-2 text-center truncate">{file.split('/').pop()}</div>
             )}
             {errorMessage && (
                 <InputError message={errorMessage} />
