@@ -11,11 +11,13 @@ class MatiereNiveauModel extends CI_Model
     }
 
     // ======= READ =======
-    public function getLelvelSubjectByIdNiveau($id)
+    public function getLelvelSubjectByIdNiveau($id_niveau)
     {
         return $this->db->select('*')
-            ->from($this->table)
-            ->where('niveau_id_niveau', $id)
+            ->from($this->table . ' mn')
+            ->join('matiere m' , 'm.id_matiere = mn.matiere_id_matiere' , 'left')
+            ->join('niveau n' , 'n.id_niveau = mn.niveau_id_niveau' , 'left')
+            ->where('n.id_niveau' , $id_niveau)
             ->get()
             ->result_array();
     }
@@ -35,4 +37,5 @@ class MatiereNiveauModel extends CI_Model
         $this->db->where('matiere_id_matiere  ', $idSubject); 
         return $this->db->update( $this->table , $data ); 
     }
+    
 }

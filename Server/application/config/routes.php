@@ -138,6 +138,14 @@ $route['api/admin/parent/update'] = 'ParentController/update';
 $route['api/admin/parent/upsert'] = 'ParentController/upsert';
 $route['api/admin/parent/delete'] = 'ParentController/delete';
 
+// ******************* ROUTE LECONS ********************** //
+$route['api/admin/lesson'] = 'LeconController';
+$route['api/admin/lesson/update'] = 'LeconController/update';
+$route['api/admin/lesson/create'] = 'LeconController/create';
+$route['api/admin/lesson/delete'] = 'LeconController/delete';
+
+
+
 
 
 // ===================== Sécurisation des routes ===================== //

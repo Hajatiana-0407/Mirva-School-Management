@@ -18,7 +18,7 @@ export const AppInitialValue: AppStateType = {
     hiddeTheModalActive: false
 }
 
-export type  User ={
+export type User = {
     id_user?: number;
     identifiant: string | null;
     password?: string | null;
@@ -28,7 +28,7 @@ export type  User ={
     last_login?: string | null;
 }
 export type AuthStateType = {
-    user?: User ; 
+    user?: User;
     isLoggedIn?: boolean;
     token?: string;
 }
@@ -145,7 +145,7 @@ export type LevelSubjectType = {
     matiere_id_matiere: number;
     niveau_id_niveau: number;
     coefficient: number
-}
+} & levelType & SubjectType
 
 
 
@@ -515,5 +515,31 @@ export const StudentFormDataInitialValue: StudentFormDataType = {
     urgence_lien: { label: "", value: "" },
     urgence_tel: { label: "", value: "" },
 };
+
+
+
+// ===================== Lessons ===================== //
+export type LessonType = {
+    id_lecon?: number;
+    titre: string;
+    lecon_description: string;
+    contenu?: string;
+    ficher_principale?: string;
+    fichier_support?: string;
+    id_matiere?: number;
+    id_prof?: number;
+    id_niveau?: number;
+    created_at?: any;
+    published?: number
+} & EmployeeType & SubjectType & levelType;
+
+export const LessonInitialValue: LessonType = {
+    titre: '',
+    lecon_description: '',
+    ...employeeInitialValue,
+    ...subjectInitialValue,
+    ...levelInitial
+
+}
 
 

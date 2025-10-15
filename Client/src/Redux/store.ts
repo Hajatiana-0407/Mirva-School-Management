@@ -13,6 +13,7 @@ import RegisterSlice from '../Pages/Registrations/redux/registerSlice';
 import StudentReducer from '../Pages/Students/redux/StudentSlice'
 import ParentReducer from '../Pages/Parents/redux/ParentSlice'
 import AuthReduce from '../Pages/Auth/redux/AuthSlice'
+import LessonReducer from '../Pages/Lessons/redux/LessonSlice'
 
 export const store = configureStore({
     reducer: {
@@ -29,7 +30,8 @@ export const store = configureStore({
         registration: RegisterSlice,
         student: StudentReducer,
         parent: ParentReducer,
-        auth: AuthReduce
+        auth: AuthReduce,
+        lesson: LessonReducer
     }
 });
 
