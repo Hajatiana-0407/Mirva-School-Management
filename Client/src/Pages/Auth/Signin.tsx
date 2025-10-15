@@ -58,7 +58,7 @@ const Signin = () => {
         <div className="w-screen h-screen pt-[calc(100vh/5)]">
             <div className="relative shadow  p-5 w-[95%] sm:w-96 bg-surface mx-auto border-ring border rounded">
                 <div className="flex justify-center items-center p-2 mb-4 rounded-lg mx-auto max-h-24">
-                    {school?.logo ? <div className="flex justify-center items-center p-2 mb-4 rounded-lg mx-auto max-h-20 border w-full bg-gray-50">
+                    {school?.logo ? <div className="flex justify-center items-center p-2 mb-4 rounded-lg mx-auto max-h-20 border w-full bg-gray-50 overflow-hidden">
                         <img src={baseUrl(school?.logo)} alt="Logo" className="max-h-24 max-w-full object-cover " />
                     </div>
                         : school?.nom

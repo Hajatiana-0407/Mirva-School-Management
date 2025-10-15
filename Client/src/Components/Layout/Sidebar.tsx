@@ -16,7 +16,10 @@ import {
   Menu,
   ChevronLeft,
   Backpack,
-  UserPlus
+  UserPlus,
+  Notebook,
+  BookOpenText,
+  ListChecks
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
@@ -46,13 +49,23 @@ const menuItems: MenuItemType[] = [
   { id: 'attendance', label: 'Présences', icon: UserCog, path: '/attendance' },
   { id: 'exams', label: 'Examens et Notes', icon: FileText, path: '/exams' },
 
+  // Section Lessons et exercice 
+  {
+    id: 'course',
+    label: 'Leçons et exerices',
+    icon: Notebook,
+    children: [
+      { id: 'lesson', label: 'Leçons', icon: UserCheck, path: '/lessons' },
+      { id: 'exercice', label: 'Exercices', icon: ListChecks, path: '/exercices' },
+    ],
+  },
   // Section Administration
   {
     id: 'management',
     label: 'Administration',
     icon: UserCheck,
     children: [
-      { id: 'employees', label: 'Employés', icon: UserCheck, path: '/employees' },
+      { id: 'employees', label: 'Employés', icon: BookOpenText, path: '/employees' },
       { id: 'teachers', label: 'Enseignants', icon: UserCheck, path: '/teachers' },
       { id: 'parents', label: 'Parents', icon: Users, path: '/parents' },
       { id: 'payments', label: 'Paiements', icon: CreditCard, path: '/payments' },

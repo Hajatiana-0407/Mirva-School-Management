@@ -94,7 +94,6 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                             id={name}
                             name={name}
                             required={required}
-                            value={localValue}
                             onChange={handleChange}
                             defaultValue={defaultValue}
                             className={clsx(

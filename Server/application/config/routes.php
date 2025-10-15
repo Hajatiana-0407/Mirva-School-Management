@@ -55,6 +55,14 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 
+
+
+
+// ===================== Fixtures  ===================== //
+$route['fixtures'] = 'AppFixtures/loadFixtures';
+// ===================== **************** ===================== //
+
+
 // ===================== Authentification  ===================== //
 $route['api/auth/login'] = 'AuthController/login';
 $route['api/auth/update/account'] = 'AuthController/update';
@@ -129,6 +137,14 @@ $route['api/admin/parent'] = 'ParentController';
 $route['api/admin/parent/update'] = 'ParentController/update';
 $route['api/admin/parent/upsert'] = 'ParentController/upsert';
 $route['api/admin/parent/delete'] = 'ParentController/delete';
+
+// ******************* ROUTE LECONS ********************** //
+$route['api/admin/lesson'] = 'LeconController';
+$route['api/admin/lesson/update'] = 'LeconController/update';
+$route['api/admin/lesson/create'] = 'LeconController/create';
+$route['api/admin/lesson/delete'] = 'LeconController/delete';
+
+
 
 
 
