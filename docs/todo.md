@@ -71,3 +71,16 @@ et les lier a users
 
 
 
+# LEÇON
+- [ ] Supprimer une leçon 
+- [ ] Activé le bouton telechager 
+    - Le telechargement seras une dossier dont le nom est le titre et le contenue est le fichier principale , une doc txt pour voir le description du leçcon et le titre et une fichier qui est le fichier de support 
+- [ ] Sur Connexion de prof 
+    Ce sont les leçon du prof qui s'affiche 
+    Possibilité de publié une leçon non publié , supprimer et modifié 
+- [ ] sur connxion d'etudiant
+    Ce sont les leçon dans liéé a sont niveau d'inscription actuel qui s'affiche 
+    Pas d'action possible 
+- [ ] Creer une composant pour le voire plus 
+    -les prof connecté ne peut voir que ces leçons
+    -les etudant ne peut pas faire d'action apart le telechargement 
