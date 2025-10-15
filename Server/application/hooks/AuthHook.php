@@ -3,12 +3,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class AuthHook
 {
+    public function __construct() {}
     public function check_secure_routes()
     {
         $CI = &get_instance();
-
-        // ✅ Charger le helper JWT
         $CI->load->helper('auth_helper');
+
+        // 🔹 Nouvelle fonctionnalité : injecter le payload si un token existe
+        $this->inject_jwt_if_present();
 
         // ✅ Récupérer les routes sécurisées définies dans routes.php
         $secure_routes = isset($GLOBALS['secure']) ? $GLOBALS['secure'] : [];
@@ -44,5 +46,47 @@ class AuthHook
         }
 
         return false;
+    }
+
+    /**
+     * Nouvelle fonction : injecte les données du JWT dans $_POST si un token existe
+     */
+    private function inject_jwt_if_present()
+    {
+        $CI = &get_instance();
+
+        // 🔹 Charger le helper JWT si ce n’est pas déjà fait
+        $CI->load->helper('jwt');
+
+        // Récupère le header Authorization
+        $authHeader = $CI->input->get_request_header('Authorization', TRUE);
+
+        if (!$authHeader || !preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
+            return; // pas de token → ne fait rien
+        }
+
+        $token = $matches[1];
+        $payload = validate_jwt($token); // maintenant la fonction sera disponible
+
+        if (!$payload) {
+            return; // token invalide → on n’injecte rien
+        }
+
+        // Injection dans $_POST et $_REQUEST
+        if (is_object($payload)) {
+            $payload = (array) $payload;
+        }
+        $user = [];
+        foreach ($payload as $key => $value) {
+            if ($key === 'data') {
+                $user = (array)$value;
+                break;
+            }
+        }
+        $_POST['user'] = $user;
+        $_REQUEST['user'] = $user;
+
+        // Stocke aussi proprement dans CI
+        $CI->auth_user = $payload;
     }
 }
