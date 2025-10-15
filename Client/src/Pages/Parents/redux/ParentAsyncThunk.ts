@@ -27,7 +27,7 @@ export const upsertParent = createAsyncThunk('parent/upsert', async (parentData:
     }).then(response => {
         data = response.data;
         if (!data.error) {
-            toast.success('Opération effectuée !');
+            toast('Opération effectuée !');
             dispatch(setHiddeModalValue(true));
         }
     }).catch(error => {
@@ -48,7 +48,7 @@ export const updateParent = createAsyncThunk('parent/modification', async ({ par
     }).then(response => {
         data = response.data;
         if (!data.error) {
-            toast.success('Modification effectuée !');
+            toast('Modification effectuée !');
             dispatch(setHiddeModalValue(true));
         }
     }).catch(error => {
@@ -83,7 +83,7 @@ export const deleteParent = createAsyncThunk('parent/suppression', async (id_par
         }).then(response => {
             data = response.data;
             if (!data.error) {
-                toast.success('Suppression effectuée !');
+                toast('Suppression effectuée !');
                 dispatch(setHiddeModalValue(true));
             }
         }).catch(error => {

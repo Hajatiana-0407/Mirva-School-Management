@@ -60,7 +60,7 @@ const LevelSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
-                    toast.success('Niveau ajouté !');
+                    toast('Niveau ajouté !');
                     state.error = '';
                     state.datas.unshift(data);
                 }
@@ -84,7 +84,7 @@ const LevelSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
-                    toast.success('Niveau modifié !');
+                    toast('Niveau modifié !');
                     state.error = '';
                     state.datas = state.datas.map(level => {
                         if (level.id_niveau === data?.id_niveau) {
@@ -116,7 +116,7 @@ const LevelSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
-                    toast.success('Suppression effectuée');
+                    toast('Suppression effectuée');
                     state.error = '';
                     state.datas = state.datas.filter((data: levelType) => data.id_niveau !== id_deleted);
                 }

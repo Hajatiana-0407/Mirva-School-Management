@@ -172,7 +172,7 @@ const TeacherSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
-                    toast.success("Assignations mise à jour avec succès")
+                    toast("Assignations mise à jour avec succès")
                 }
             })
             .addCase(assignationTeacher.rejected, (state) => {

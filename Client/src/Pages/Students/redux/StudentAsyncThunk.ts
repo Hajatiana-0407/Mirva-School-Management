@@ -53,7 +53,7 @@ export const updateStudent = createAsyncThunk('etudiant/modification', async ({ 
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
-            toast.success('Modification effectuée');
+            toast('Modification effectuée');
         }
     }).catch(error => {
         console.error('Erreur lors de la Modification:', error.getMessage());
@@ -70,7 +70,7 @@ export const createStudent = createAsyncThunk('etudiant/ajout', async (student: 
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
-            toast.success('effectuée');
+            toast('effectuée');
         }
     }).catch(error => {
         console.error('Erreur lors de l\'ajout :', error.getMessage());
@@ -88,7 +88,7 @@ export const deleteStudent = createAsyncThunk('etudiant/suppression', async (id_
         }).then(response => {
             data = response.data;
             if (!data.error) {
-                toast.success('Suppression effectuée');
+                toast('Suppression effectuée');
                 dispatch(setHiddeModalValue(true));
             }
         }).catch(error => {

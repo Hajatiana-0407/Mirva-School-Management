@@ -27,7 +27,7 @@ export const updateEmployees = createAsyncThunk('personnel/modification', async 
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
-            toast.success('Modification effectuée !');
+            toast('Modification effectuée !');
         }
     }).catch(error => {
         console.error('Erreur lors de la récupération des données:', error.getMessage());
@@ -42,7 +42,7 @@ export const createEmployees = createAsyncThunk('personnel/ajout', async (datas:
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
-            toast.success('Employé ajoutée !');
+            toast('Employé ajoutée !');
         }
     }).catch(error => {
         console.error('Erreur lors de la récupération des données:', error.getMessage());
@@ -61,7 +61,7 @@ export const deleteEmployees = createAsyncThunk('personnel/suppression', async (
             data = response.data;
             if (!data.error) {
                 dispatch(setHiddeModalValue(true));
-                toast.success('Suppression effectuée');
+                toast('Suppression effectuée');
             }
         }).catch(error => {
             console.error('Erreur lors de la récupération des données:', error.getMessage());

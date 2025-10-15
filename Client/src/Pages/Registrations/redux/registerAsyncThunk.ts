@@ -13,7 +13,7 @@ export const createRegistration = createAsyncThunk<ApiReturnType, RegistrationTy
       data = response.data;
       if (!data.error) {
         dispatch(setHiddeModalValue(true));
-        toast.success('Enregistrement effectuées !');
+        toast('Enregistrement effectuées !');
       }
     }).catch(error => {
       console.error('Erreur lors de l\'inscription :', error.getMessage());
@@ -53,7 +53,7 @@ export const deleteRegistration = createAsyncThunk<ApiReturnType, number>(
         data = response.data;
         if (!data.error) {
           dispatch(setHiddeModalValue(true));
-          toast.success('Suppression effectuée');
+          toast('Suppression effectuée');
         }
       }).catch(error => {
         console.error('Erreur lors de la suppréssion de l\'inscription :', error.getMessage());
