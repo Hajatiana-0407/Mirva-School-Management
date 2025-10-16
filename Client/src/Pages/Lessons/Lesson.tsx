@@ -14,6 +14,7 @@ import LessonForm from '../../Components/Forms/LessonForm';
 import { getFileIcon } from '../../Components/ui/VideoOrFileInput';
 import ConfirmDialog from '../ConfirmDialog';
 import Loading from '../../Components/ui/Loading';
+import DownloadProgression from '../../Components/DownloadProgression';
 
 
 
@@ -25,8 +26,10 @@ const Lesson = () => {
   const { datas, action } = useSelector(getLessonState);
   const [lessonToArchive, setlessonToArchive] = useState<LessonType | null>(null)
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [showProgress, setShowProgress] = useState(false)
   const dispatch: AppDispatch = useDispatch();
-
+  
   const handleCloseModal = () => {
     setShowModal(false);
     setEditingLesson(null);
@@ -49,13 +52,17 @@ const Lesson = () => {
     dispatch(publish(lesson.id_lecon as number))
   }
 
-  const handleDownload = (lesson: LessonType) => {
-    download({
+  const handleDownload = async (lesson: LessonType) => {
+    setShowProgress(true);
+    await download({
       title: lesson.titre,
       description: lesson.lecon_description,
       principalFileUrl: lesson.ficher_principale || "",
       supportFileUrl: lesson.fichier_support,
-    })
+    }, (percent: number ) => setProgress(percent))
+  }
+  const handleCloaseProgress = () => {
+    setShowProgress(false);
   }
 
   useEffect(() => {
@@ -251,7 +258,6 @@ const Lesson = () => {
         <LessonForm lesson={editingLesson as LessonType} handleCloseModal={handleCloseModal} />
       </Modal>
 
-
       {/* Dialog de confirmation */}
       <ConfirmDialog
         isOpen={showConfirmDialog}
@@ -259,6 +265,13 @@ const Lesson = () => {
         onConfirm={handleConfirmArchive}
         title="Supprimer les parent"
         message={`Êtes-vous sûr de vouloir supprimer la leçon "${lessonToArchive?.titre}"?`}
+      />
+      <DownloadProgression
+        showProgress={showProgress}
+        percent={progress}
+        handleClose={handleCloaseProgress}
+        Icon={Download}
+        color='green'
       />
     </div>
   );

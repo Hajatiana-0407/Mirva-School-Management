@@ -207,7 +207,10 @@ type DowloadPropsType = {
 }
 
 const downloadUrl = 'admin/download';
-export const download = async (fileInfo: DowloadPropsType) => {
+export const download = async (
+  fileInfo: DowloadPropsType,
+  onProgress?: (percent: number, step: string) => void
+) => {
   const zip = new JSZip();
   const folderName = formatFolderName(fileInfo.title);
   const folder = zip.folder(folderName);
@@ -215,45 +218,70 @@ export const download = async (fileInfo: DowloadPropsType) => {
 
   let error = false;
 
+  //  Progression initiale
+  onProgress?.(0, "Préparation du dossier...");
+
   //  Ajouter le fichier info.txt
   const infoContent = `Titre : ${fileInfo.title}\nDescription : ${fileInfo.description}`;
   folder.file("info.txt", infoContent);
+
+  //  Télécharger le fichier principal
   try {
+    onProgress?.(10, "Téléchargement du fichier principal...");
     const response = await api.get(downloadUrl, {
       params: { filePath: fileInfo.principalFileUrl },
       responseType: "blob",
+      onDownloadProgress: (e) => {
+        if (e.total) {
+          const percent = Math.round((e.loaded / e.total) * 60);
+          onProgress?.(percent, "Téléchargement du fichier principal...");
+        }
+      },
     });
+
     const mainBlob = response.data;
-    const ext = fileInfo.principalFileUrl.split('.').pop() || "txt";
+    const ext = fileInfo.principalFileUrl.split(".").pop() || "txt";
     folder.file(`${folderName}.${ext}`, mainBlob);
   } catch (err) {
-    console.error('Erreur lors du téléchargement :', err);
+    console.error("Erreur lors du téléchargement :", err);
     error = true;
   }
 
   //  Télécharger le fichier de support si présent
   if (fileInfo.supportFileUrl) {
+    onProgress?.(70, "Téléchargement du fichier de support...");
     const optionalUrl = baseUrl(fileInfo.supportFileUrl);
     try {
       const response = await api.get(downloadUrl, {
         params: { filePath: fileInfo.supportFileUrl },
         responseType: "blob",
       });
-      const mainBlob = response.data;
-      const ext = fileInfo.supportFileUrl.split('.').pop() || "txt";
-      folder.file(`support.${ext}`, mainBlob);
+      const optionalBlob = response.data;
+      const ext = fileInfo.supportFileUrl.split(".").pop() || "txt";
+      folder.file(`support.${ext}`, optionalBlob);
     } catch (err) {
       error = true;
-      console.warn(`⚠️ Fichier optionnel non trouvé ou impossible à télécharger : ${optionalUrl}`);
+      console.warn(
+        `Fichier optionnel non trouvé ou impossible à télécharger : ${optionalUrl}`
+      );
     }
   }
-  //  Générer le ZIP et le télécharger
+
+  //  Génération du ZIP avec suivi de progression
   if (!error) {
-    const zipBlob = await zip.generateAsync({ type: "blob" });
+    onProgress?.(80, "Compression du fichier ZIP...");
+    const zipBlob = await zip.generateAsync(
+      { type: "blob" },
+      (metadata) => {
+        const percent = 80 + Math.round((metadata.percent * 20) / 100);
+        onProgress?.(percent, "Compression du fichier ZIP...");
+      }
+    );
+
+    onProgress?.(100, "Téléchargement terminé ✅");
     saveAs(zipBlob, `${folderName}.zip`);
-    toast('Téléchargement effectué')
-  }
-  else {
-    toast.error('Erreur lors du téléchargement.')
+    toast("Téléchargement effectué");
+  } else {
+    toast.error("Erreur lors du téléchargement.");
   }
 };
