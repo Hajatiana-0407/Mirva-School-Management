@@ -81,14 +81,14 @@ const LessonSlice = createSlice({
                     state.error = message as string;
                 } else {
                     state.error = '';
-                    state.datas = state.datas.map(level => {
-                        if (level.id_niveau === data?.id_niveau) {
+                    state.datas = state.datas.map(lesson => {
+                        if (lesson.id_lecon === data?.id_lecon) {
                             return {
                                 ...data,
-                                id_niveau: level.id_niveau
+                                id_lecon: lesson.id_lecon
                             }
                         }
-                        return level
+                        return lesson
                     })
                 }
             })
