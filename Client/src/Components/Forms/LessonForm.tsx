@@ -87,12 +87,21 @@ const LessonForm: React.FC<LessonFormPropsType> = ({ lesson , handleCloseModal }
             getSubjectByIdLevel(lesson?.id_niveau || levels?.[0]?.id_niveau as number);
         }
         return () => { }
-    }, [dispatch])
+    }, [dispatch, levels.length ])
 
     // ===================== levels options ===================== //
-    let levelsOptions = levels.map((level) => ({
+    let levelsOptions = levels.filter(level => !lesson ? true : lesson.id_niveau !== level.id_niveau ).map((level) => ({
         value: level.id_niveau as number, label: level.niveau
     }))
+    // ? mettre le Niveau dans edit en premier
+    levels.map( level => {
+        if ( !!lesson && lesson.id_niveau === level.id_niveau ){
+            levelsOptions.unshift({
+                value: level.id_niveau as number  , 
+                label: level.niveau 
+            })
+        }
+    })
     // =====================  ===================== //
 
     const published = lesson ? (lesson.published == 0 ? false : true) : true;

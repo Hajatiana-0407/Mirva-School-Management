@@ -13,6 +13,7 @@ import Profile from '../../Components/ui/Profile';
 import LessonForm from '../../Components/Forms/LessonForm';
 import { getFileIcon } from '../../Components/ui/VideoOrFileInput';
 import ConfirmDialog from '../ConfirmDialog';
+import Loading from '../../Components/ui/Loading';
 
 
 
@@ -21,7 +22,7 @@ const Lesson = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingLesson, setEditingLesson] = useState<LessonType | null>(null);
-  const { datas } = useSelector(getLessonState);
+  const { datas, action } = useSelector(getLessonState);
   const [lessonToArchive, setlessonToArchive] = useState<LessonType | null>(null)
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const dispatch: AppDispatch = useDispatch();
@@ -93,8 +94,13 @@ const Lesson = () => {
         </div>
 
         <div>
+          {datas.length === 0 && action.isLoading &&
+            <div className='w-full border'>
+              <Loading />
+            </div>
+          }
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {datas.map((lesson: LessonType, idx: number) => {
+            {datas.length > 0 && datas.map((lesson: LessonType, idx: number) => {
               const createdAt = lesson.created_at ? new Date(lesson.created_at) : null;
               const isNew = createdAt && (Date.now() - createdAt.getTime()) < 2 * 24 * 60 * 60 * 1000;
 
@@ -218,10 +224,6 @@ const Lesson = () => {
                 </div>
               );
             })}
-          </div>
-          {/* Pagination */}
-          <div className="mt-8 flex justify-center">
-            <div className="bg-white border rounded-lg px-6 py-2 text-center text-gray-700 font-mono">pagination</div>
           </div>
         </div>
       </div>
