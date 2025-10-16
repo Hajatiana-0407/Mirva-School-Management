@@ -1,5 +1,11 @@
 import { jwtDecode } from "jwt-decode";
 import { AuthStateType, StudentFormDataType } from "./Types";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
+import api from "./api";
+import { toast } from "react-toastify";
+
+
 
 export const cycles = ['Primaire', 'Collège', 'Lycée'];
 export const hexToRgba = (hex: string, alpha = 1): string => {
@@ -175,4 +181,79 @@ export const generatePassword = (length = 12) => {
     password += chars[randomIndex];
   }
   return password;
+};
+
+/**
+ * 
+ * @param titre Le text a transformer en nom de dossier
+ * @returns Nom de dossier valide 
+ */
+export function formatFolderName(titre: string): string {
+  return titre
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9-_ ]/g, "")
+    .trim()
+    .replace(/\s+/g, "_")
+    .toLowerCase();
+}
+
+
+type DowloadPropsType = {
+  title: string;
+  principalFileUrl: string;
+  supportFileUrl?: string;
+  description?: string;
+}
+
+const downloadUrl = 'admin/download';
+export const download = async (fileInfo: DowloadPropsType) => {
+  const zip = new JSZip();
+  const folderName = formatFolderName(fileInfo.title);
+  const folder = zip.folder(folderName);
+  if (!folder) throw new Error("Impossible de créer le dossier dans le zip");
+
+  let error = false;
+
+  //  Ajouter le fichier info.txt
+  const infoContent = `Titre : ${fileInfo.title}\nDescription : ${fileInfo.description}`;
+  folder.file("info.txt", infoContent);
+  try {
+    const response = await api.get(downloadUrl, {
+      params: { filePath: fileInfo.principalFileUrl },
+      responseType: "blob",
+    });
+    const mainBlob = response.data;
+    const ext = fileInfo.principalFileUrl.split('.').pop() || "txt";
+    folder.file(`${folderName}.${ext}`, mainBlob);
+  } catch (err) {
+    console.error('Erreur lors du téléchargement :', err);
+    error = true;
+  }
+
+  //  Télécharger le fichier de support si présent
+  if (fileInfo.supportFileUrl) {
+    const optionalUrl = baseUrl(fileInfo.supportFileUrl);
+    try {
+      const response = await api.get(downloadUrl, {
+        params: { filePath: fileInfo.supportFileUrl },
+        responseType: "blob",
+      });
+      const mainBlob = response.data;
+      const ext = fileInfo.supportFileUrl.split('.').pop() || "txt";
+      folder.file(`support.${ext}`, mainBlob);
+    } catch (err) {
+      error = true;
+      console.warn(`⚠️ Fichier optionnel non trouvé ou impossible à télécharger : ${optionalUrl}`);
+    }
+  }
+  //  Générer le ZIP et le télécharger
+  if (!error) {
+    const zipBlob = await zip.generateAsync({ type: "blob" });
+    saveAs(zipBlob, `${folderName}.zip`);
+    toast('Téléchargement effectué')
+  }
+  else {
+    toast.error('Erreur lors du téléchargement.')
+  }
 };

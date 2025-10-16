@@ -8,11 +8,12 @@ import { AppDispatch } from '../../Redux/store';
 import { getLessonState } from './redux/LessonSlice';
 import { deleteLesson, getAllLessons, publish } from './redux/LessonAsyncThunk';
 import ActionMenu from '../../Components/ActionMenu';
-import { baseUrl, hexToRgba } from '../../Utils/Utils';
+import { baseUrl, download, hexToRgba } from '../../Utils/Utils';
 import Profile from '../../Components/ui/Profile';
 import LessonForm from '../../Components/Forms/LessonForm';
 import { getFileIcon } from '../../Components/ui/VideoOrFileInput';
 import ConfirmDialog from '../ConfirmDialog';
+import Loading from '../../Components/ui/Loading';
 
 
 
@@ -21,7 +22,7 @@ const Lesson = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingLesson, setEditingLesson] = useState<LessonType | null>(null);
-  const { datas } = useSelector(getLessonState);
+  const { datas, action } = useSelector(getLessonState);
   const [lessonToArchive, setlessonToArchive] = useState<LessonType | null>(null)
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const dispatch: AppDispatch = useDispatch();
@@ -46,6 +47,15 @@ const Lesson = () => {
 
   const handlePublish = (lesson: LessonType) => {
     dispatch(publish(lesson.id_lecon as number))
+  }
+
+  const handleDownload = (lesson: LessonType) => {
+    download({
+      title: lesson.titre,
+      description: lesson.lecon_description,
+      principalFileUrl: lesson.ficher_principale || "",
+      supportFileUrl: lesson.fichier_support,
+    })
   }
 
   useEffect(() => {
@@ -93,8 +103,13 @@ const Lesson = () => {
         </div>
 
         <div>
+          {datas.length === 0 && action.isLoading &&
+            <div className='w-full border'>
+              <Loading />
+            </div>
+          }
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {datas.map((lesson: LessonType, idx: number) => {
+            {datas.length > 0 && datas.map((lesson: LessonType, idx: number) => {
               const createdAt = lesson.created_at ? new Date(lesson.created_at) : null;
               const isNew = createdAt && (Date.now() - createdAt.getTime()) < 2 * 24 * 60 * 60 * 1000;
 
@@ -123,7 +138,7 @@ const Lesson = () => {
                 {
                   label: 'Télécharger',
                   color: 'text-blue-500',
-                  onClick: () => { },
+                  onClick: () => handleDownload(lesson),
                   icon: Download
                 },
               ]
@@ -206,7 +221,11 @@ const Lesson = () => {
                           </div>
                         </button>
                       }
-                      <button className="bg-gray-100 border border-gray-300 rounded-lg p-2 text-gray-700 hover:bg-gray-200 transition relative group" title="Télécharger">
+                      <button
+                        className="bg-gray-100 border border-gray-300 rounded-lg p-2 text-gray-700 hover:bg-gray-200 transition relative group" title="Télécharger"
+                        type='button'
+                        onClick={() => handleDownload(lesson)}
+                      >
                         <Download className='w-5 h-5' />
                         <div className='hidden group-hover:block absolute bottom-full text-sm left-full px-1 py-1 rounded-full rounded-bl-none bg-gray-200 text-black border border-gray-400'>
                           Télécharger
@@ -218,10 +237,6 @@ const Lesson = () => {
                 </div>
               );
             })}
-          </div>
-          {/* Pagination */}
-          <div className="mt-8 flex justify-center">
-            <div className="bg-white border rounded-lg px-6 py-2 text-center text-gray-700 font-mono">pagination</div>
           </div>
         </div>
       </div>
