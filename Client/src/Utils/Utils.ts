@@ -278,10 +278,11 @@ export const download = async (
       }
     );
 
-    onProgress?.(100, "Téléchargement terminé ✅");
+    onProgress?.(100, "Téléchargement terminé");
     saveAs(zipBlob, `${folderName}.zip`);
     toast("Téléchargement effectué");
   } else {
+    onProgress?.(100, "Erreur lors du téléchargement");
     toast.error("Erreur lors du téléchargement.");
   }
 };
