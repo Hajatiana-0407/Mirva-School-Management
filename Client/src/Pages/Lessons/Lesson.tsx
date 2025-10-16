@@ -8,7 +8,7 @@ import { AppDispatch } from '../../Redux/store';
 import { getLessonState } from './redux/LessonSlice';
 import { deleteLesson, getAllLessons, publish } from './redux/LessonAsyncThunk';
 import ActionMenu from '../../Components/ActionMenu';
-import { baseUrl, hexToRgba } from '../../Utils/Utils';
+import { baseUrl, download, hexToRgba } from '../../Utils/Utils';
 import Profile from '../../Components/ui/Profile';
 import LessonForm from '../../Components/Forms/LessonForm';
 import { getFileIcon } from '../../Components/ui/VideoOrFileInput';
@@ -47,6 +47,15 @@ const Lesson = () => {
 
   const handlePublish = (lesson: LessonType) => {
     dispatch(publish(lesson.id_lecon as number))
+  }
+
+  const handleDownload = (lesson: LessonType) => {
+    download({
+      title: lesson.titre,
+      description: lesson.lecon_description,
+      principalFileUrl: lesson.ficher_principale || "",
+      supportFileUrl: lesson.fichier_support,
+    })
   }
 
   useEffect(() => {
@@ -129,7 +138,7 @@ const Lesson = () => {
                 {
                   label: 'Télécharger',
                   color: 'text-blue-500',
-                  onClick: () => { },
+                  onClick: () => handleDownload(lesson),
                   icon: Download
                 },
               ]
@@ -212,7 +221,11 @@ const Lesson = () => {
                           </div>
                         </button>
                       }
-                      <button className="bg-gray-100 border border-gray-300 rounded-lg p-2 text-gray-700 hover:bg-gray-200 transition relative group" title="Télécharger">
+                      <button
+                        className="bg-gray-100 border border-gray-300 rounded-lg p-2 text-gray-700 hover:bg-gray-200 transition relative group" title="Télécharger"
+                        type='button'
+                        onClick={() => handleDownload(lesson)}
+                      >
                         <Download className='w-5 h-5' />
                         <div className='hidden group-hover:block absolute bottom-full text-sm left-full px-1 py-1 rounded-full rounded-bl-none bg-gray-200 text-black border border-gray-400'>
                           Télécharger

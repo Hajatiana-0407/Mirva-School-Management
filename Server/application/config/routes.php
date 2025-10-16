@@ -61,6 +61,11 @@ $route['translate_uri_dashes'] = FALSE;
 // ===================== Fixtures  ===================== //
 $route['fixtures'] = 'AppFixtures/loadFixtures';
 // ===================== **************** ===================== //
+// ===================== Download  ===================== //
+$route['api/admin/download'] = 'DownloadContrller/download';
+// ===================== **************** ===================== //
+
+
 
 
 // ===================== Authentification  ===================== //
