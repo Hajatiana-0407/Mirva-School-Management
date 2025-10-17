@@ -32,7 +32,7 @@ type LessonFormPropsType = {
     handleCloseModal: () => void
 };
 
-const LessonForm: React.FC<LessonFormPropsType> = ({ lesson , handleCloseModal }) => {
+const LessonForm: React.FC<LessonFormPropsType> = ({ lesson, handleCloseModal }) => {
     const { formErrors, onSubmite } = useForm(lessonSchema, LessonInitialValue)
     const { } = useSelector(getAuthState);
     const { datas: levels } = useSelector(getLevelState);
@@ -87,18 +87,18 @@ const LessonForm: React.FC<LessonFormPropsType> = ({ lesson , handleCloseModal }
             getSubjectByIdLevel(lesson?.id_niveau || levels?.[0]?.id_niveau as number);
         }
         return () => { }
-    }, [dispatch, levels.length ])
+    }, [dispatch, levels.length])
 
     // ===================== levels options ===================== //
-    let levelsOptions = levels.filter(level => !lesson ? true : lesson.id_niveau !== level.id_niveau ).map((level) => ({
+    let levelsOptions = levels.filter(level => !lesson ? true : lesson.id_niveau !== level.id_niveau).map((level) => ({
         value: level.id_niveau as number, label: level.niveau
     }))
     // ? mettre le Niveau dans edit en premier
-    levels.map( level => {
-        if ( !!lesson && lesson.id_niveau === level.id_niveau ){
+    levels.map(level => {
+        if (!!lesson && lesson.id_niveau === level.id_niveau) {
             levelsOptions.unshift({
-                value: level.id_niveau as number  , 
-                label: level.niveau 
+                value: level.id_niveau as number,
+                label: level.niveau
             })
         }
     })
@@ -190,14 +190,16 @@ const LessonForm: React.FC<LessonFormPropsType> = ({ lesson , handleCloseModal }
                     />
                 </div>
                 <div className="flex justify-end space-x-3 pt-4">
-                    <button
-                        type="button"
-                        onClick={handleCloseModal}
-                        className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-                    >
-                        <X className='inline-block w-5 h-5 me-1' />
-                        Annuler
-                    </button>
+                    {handleCloseModal !== undefined &&
+                        <button
+                            type="button"
+                            onClick={handleCloseModal}
+                            className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                        >
+                            <X className='inline-block w-5 h-5 me-1' />
+                            Annuler
+                        </button>
+                    }
                     <button
                         type="submit"
                         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"

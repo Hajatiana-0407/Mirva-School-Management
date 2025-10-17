@@ -48,7 +48,7 @@ const DownloadProgression: React.FC<DownloadProgressionType> = ({ percent = 0, s
                             </div>
                             <div className="w-full bg-gray-200 rounded-full">
                                 <div
-                                    className={`bg-${color}-500 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full w-1/2`}
+                                    className={`bg-${color}-500 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full transition-all`}
                                     style={{
                                         width: `${percent}%`
                                     }}

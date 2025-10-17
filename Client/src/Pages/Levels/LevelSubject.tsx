@@ -151,7 +151,6 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
             {/* LISTE DES MATIERE A AJOUTER  */}
             <div className="lg:col-span-1">
                 <div className="bg-white rounded-lg shadow-sm border">

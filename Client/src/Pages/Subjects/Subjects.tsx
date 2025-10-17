@@ -1,28 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Plus, Search, Filter, Edit, Archive, Eye } from 'lucide-react';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import Table from '../Table';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSubjectState } from './redux/SubjectSlice';
-import useForm from '../../Hooks/useForm';
-import { subjectInitialValue, SubjectType } from '../../Utils/Types';
-import { object, string } from 'yup';
+import { SubjectType } from '../../Utils/Types';
 import { AppDispatch } from '../../Redux/store';
-import { createSubject, deleteSubject, getAllSubject, updateSubject } from './redux/SubjectAsyncThunk';
+import { deleteSubject, getAllSubject } from './redux/SubjectAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
-import InputError from '../../Components/ui/InputError';
+import SubjectForm from '../../Components/Forms/SubjectForm';
 
-// Validation de donnée avec yup 
-const SubjectSchema = object({
-  denomination: string().required('La denomination est obligatoire.'),
-  abbreviation: string().required('L\' abbreviation est obligatoire.'),
-  couleur: string().required('La couleur est obligatoire.'),
-});
+
 
 const Subjects = () => {
-  const { datas: subjects, action , error  } = useSelector(getSubjectState);
-  const { onSubmite, formErrors } = useForm<SubjectType>(SubjectSchema, subjectInitialValue);
+  const { datas: subjects, action } = useSelector(getSubjectState);
   const { hiddeTheModalActive } = useSelector(getAppState);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -58,8 +50,8 @@ const Subjects = () => {
   };
 
   const handleConfirmArchive = () => {
-    if( subjectToArchive ){
-      dispatch(deleteSubject( subjectToArchive?.id_matiere as number))
+    if (subjectToArchive) {
+      dispatch(deleteSubject(subjectToArchive?.id_matiere as number))
     }
     setShowConfirmDialog(false);
     setSubjectToArchive(null);
@@ -69,12 +61,6 @@ const Subjects = () => {
     setShowModal(false);
     setEditingSubject(null);
   };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    onSubmite((validateData ) => {
-      editingSubject ? dispatch(updateSubject({ subject: validateData, id: editingSubject?.id_matiere as number })) : dispatch(createSubject(validateData))
-    }, e)
-  }
 
   // Modal
   useEffect(() => {
@@ -144,67 +130,7 @@ const Subjects = () => {
         onClose={handleCloseModal}
         title={editingSubject ? 'Modifier la matière' : 'Nouvelle matière'}
       >
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <InputError message={error}/>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" >Nom de la matière</label>
-              <input
-                name='denomination'
-                type="text"
-                defaultValue={editingSubject?.denomination || ''}
-                placeholder='Ex:Mathématique'
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <InputError message={ formErrors?.denomination } />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Abbreviation</label>
-              <input
-                name='abbreviation'
-                type="text"
-                defaultValue={editingSubject?.abbreviation || ''}
-                placeholder='Ex:MATH'
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <InputError message={ formErrors?.abbreviation } />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Déscription</label>
-            <textarea
-              name='description'
-              defaultValue={editingSubject?.description}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <InputError message={ formErrors?.description } />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Couleur</label>
-            <input
-              type="color"
-              name='couleur'
-              defaultValue={editingSubject?.couleur || '#80aed1'}
-              className="w-full h-10 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <InputError message={ formErrors?.couleur } />
-          </div>
-          <div className="flex justify-end space-x-3 pt-4">
-            <button
-              type="button"
-              onClick={handleCloseModal}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              Annuler
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              {editingSubject ? 'Modifier' : 'Ajouter'}
-            </button>
-          </div>
-        </form>
+        <SubjectForm handleClose={handleCloseModal} subject={editingSubject} />
       </Modal>
 
       {/* Dialog de confirmation */}

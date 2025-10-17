@@ -56,7 +56,7 @@ const School = () => {
     return (
         <form onSubmit={handleSubmit} id="__etablissement-form" className="space-y-6">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Informations de l'établissement</h3>
-            <div className="flex gap-5">
+            <div className="flex gap-5 max-lg:flex-wrap items-center justify-center">
                 <div className="relative flex flex-col items-center justify-center">
                     <label htmlFor="icone-upload" className="cursor-pointer flex flex-col items-center justify-center w-60 h-60 rounded-md bg-gray-100 border-2 border-dashed border-gray-500 hover:bg-gray-200 transition-all">
                         {photoPreview ? (
@@ -86,7 +86,7 @@ const School = () => {
                         />
                     </label>
                 </div>
-                <div className="flex-1 space-y-5">
+                <div className="flex-1 space-y-5 min-w-80">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Nom de l'établissement</label>
                         <input

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Trash, PenBox, Download, Eye, BellPlus, Share } from 'lucide-react';
+import { Plus, Search, Filter, Trash, PenBox, Download, Eye, BellPlus, Share, Share2 } from 'lucide-react';
 import Modal from '../Modal';
 import { getAppState } from '../../Redux/AppSlice';
 import { LessonType } from '../../Utils/Types';
@@ -29,7 +29,7 @@ const Lesson = () => {
   const [progress, setProgress] = useState(0)
   const [showProgress, setShowProgress] = useState(false)
   const dispatch: AppDispatch = useDispatch();
-  
+
   const handleCloseModal = () => {
     setShowModal(false);
     setEditingLesson(null);
@@ -59,7 +59,7 @@ const Lesson = () => {
       description: lesson.lecon_description,
       principalFileUrl: lesson.ficher_principale || "",
       supportFileUrl: lesson.fichier_support,
-    }, (percent: number ) => setProgress(percent))
+    }, (percent: number) => setProgress(percent))
   }
   const handleCloaseProgress = () => {
     setShowProgress(false);
@@ -222,19 +222,19 @@ const Lesson = () => {
                           title="Publié"
                           onClick={() => { handlePublish(lesson) }}
                         >
-                          <Share className='w-5 h-5' />
-                          <div className='hidden group-hover:block absolute bottom-full text-sm left-full px-1 py-1 rounded-full rounded-bl-none bg-gray-200 text-black border border-gray-400'>
+                          <Share2 className='w-5 h-5' />
+                          <div className="hidden group-hover:block absolute z-20 left-full bottom-full mt-1 px-2 py-1 bg-orange-500 text-white rounded-full rounded-bl-none text-sm shadow">
                             Publié
                           </div>
                         </button>
                       }
                       <button
-                        className="bg-gray-100 border border-gray-300 rounded-lg p-2 text-gray-700 hover:bg-gray-200 transition relative group" title="Télécharger"
-                        type='button'
-                        onClick={() => handleDownload(lesson)}
+                        className="bg-green-600 relative rounded-lg p-2 text-white hover:bg-green-700 transition group"
+                        title="Télécharger"
+                        onClick={() => { handlePublish(lesson) }}
                       >
                         <Download className='w-5 h-5' />
-                        <div className='hidden group-hover:block absolute bottom-full text-sm left-full px-1 py-1 rounded-full rounded-bl-none bg-gray-200 text-black border border-gray-400'>
+                        <div className="hidden group-hover:block absolute z-20 left-full bottom-full mt-1 px-2 py-1 bg-green-500 text-white rounded-full rounded-bl-none text-sm shadow">
                           Télécharger
                         </div>
                       </button>

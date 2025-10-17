@@ -1,30 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { Plus, Search, Filter, Edit, Archive, Eye } from 'lucide-react';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import Table from '../Table';
 import { useDispatch, useSelector } from 'react-redux';
-// Remplacez par vos propres slices pour SchoolYear
 import { getSchoolYearState } from './redux/SchoolYearSlice';
-import useForm from '../../Hooks/useForm';
-import { object, string } from 'yup';
 import { AppDispatch } from '../../Redux/store';
-import { createSchoolYear, deleteSchoolYear, getAllSchoolYear, updateSchoolYear } from './redux/SchoolYearAsyncThunk';
+import {  deleteSchoolYear, getAllSchoolYear } from './redux/SchoolYearAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
-import InputError from '../../Components/ui/InputError';
-import { schoolYearInitialValue, SchoolYearType } from '../../Utils/Types';
+import {  SchoolYearType } from '../../Utils/Types';
+import SchoolYearForm from '../../Components/Forms/SchoolYearForm';
 
 
-// Validation
-const SchoolYearSchema = object({
-  nom: string().required('Le nom de l\'année scolaire est obligatoire.'),
-  date_debut: string().required('La date de début est obligatoire.'),
-  date_fin: string().required('La date de fin est obligatoire.'),
-});
+
 
 const SchoolYear = () => {
-  const { datas: schoolYears, action, error } = useSelector(getSchoolYearState);
-  const { onSubmite, formErrors } = useForm<SchoolYearType>(SchoolYearSchema, schoolYearInitialValue);
+  const { datas: schoolYears, action} = useSelector(getSchoolYearState);
   const { hiddeTheModalActive } = useSelector(getAppState);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -38,7 +29,7 @@ const SchoolYear = () => {
     {
       key: 'isActif', label: 'Status', render: (value: string) => (
         value === '1' ? <div className='w-4 h-4 rounded-full bg-green-400'></div>
-        : <div className='w-4 h-4 rounded-full bg-gray-400'></div>
+          : <div className='w-4 h-4 rounded-full bg-gray-400'></div>
       )
     },
     { key: 'date_debut', label: 'Date de début' },
@@ -70,13 +61,6 @@ const SchoolYear = () => {
     setEditingSchoolYear(null);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    onSubmite((validateData) => {
-      editingSchoolYear
-        ? dispatch(updateSchoolYear({ schoolYear: validateData, id: editingSchoolYear?.id_annee_scolaire as number }))
-        : dispatch(createSchoolYear(validateData));
-    }, e);
-  };
 
   useEffect(() => {
     if (showModal && hiddeTheModalActive) {
@@ -144,68 +128,7 @@ const SchoolYear = () => {
         onClose={handleCloseModal}
         title={editingSchoolYear ? 'Modifier l\'année scolaire' : 'Nouvelle année scolaire'}
       >
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <InputError message={error} />
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nom de l'année scolaire</label>
-            <input
-              name='nom'
-              type="text"
-              defaultValue={editingSchoolYear?.nom || ''}
-              placeholder='2023-2024'
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <InputError message={formErrors?.nom} />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-            <textarea
-              rows={3}
-              name="description"
-              defaultValue={editingSchoolYear?.description || ""}
-              placeholder='Décrivez brièvement cette année scolaire'
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <InputError message={formErrors?.description} />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date de début</label>
-              <input
-                name='date_debut'
-                type="date"
-                defaultValue={editingSchoolYear?.date_debut || ''}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <InputError message={formErrors?.date_debut} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date de fin</label>
-              <input
-                name='date_fin'
-                type="date"
-                defaultValue={editingSchoolYear?.date_fin || ''}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <InputError message={formErrors?.date_fin} />
-            </div>
-          </div>
-          <div className="flex justify-end space-x-3 pt-4">
-            <button
-              type="button"
-              onClick={handleCloseModal}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              Annuler
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              {editingSchoolYear ? 'Modifier' : 'Ajouter'}
-            </button>
-          </div>
-        </form>
+        <SchoolYearForm schoolYear={editingSchoolYear } handleClose={handleCloseModal} />
       </Modal>
 
       {/* Dialog de confirmation */}

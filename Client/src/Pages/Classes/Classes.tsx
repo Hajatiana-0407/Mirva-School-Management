@@ -3,30 +3,19 @@ import { Plus, Search, Filter, Edit, Archive, Eye } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
-import { number, object, string } from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../Redux/store';
-import useForm from '../../Hooks/useForm';
-import { classeInitialState, ClasseType, levelType } from '../../Utils/Types';
-import { createClasse, deleteClasse, getAllClasse, updateClasse } from './redux/ClasseAsyncThunk';
+import { ClasseType } from '../../Utils/Types';
+import { deleteClasse, getAllClasse } from './redux/ClasseAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
 import { getClasseState } from './redux/ClasseSlice';
-import { getLevelState } from '../Levels/redux/LevelSlice';
-import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
-import InputError from '../../Components/ui/InputError';
+import ClasseForm from '../../Components/Forms/ClasseForm';
 
-// Validation de donnée avec yup 
-const LevelSchema = object({
-  denomination: string().required('La denomination est obligatoire.'),
-  niveau_id_niveau: number().min(1, "'Selectionner un niveau.'").required('Selectionner un niveau.'),
-})
 
 const Classes: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { datas: classes, action, error } = useSelector(getClasseState);
-  const { onSubmite, formErrors } = useForm<ClasseType>(LevelSchema, classeInitialState);
+  const { datas: classes, action } = useSelector(getClasseState);
   const { hiddeTheModalActive } = useSelector(getAppState);
-  const { datas: niveaux } = useSelector(getLevelState);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingClass, setEditingClass] = useState<ClasseType | null>(null);
@@ -69,16 +58,6 @@ const Classes: React.FC = () => {
   useEffect(() => {
     dispatch(getAllClasse());
   }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getAllLevel());
-  }, [dispatch]);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    onSubmite((validateData: ClasseType) => {
-      editingClass ? dispatch(updateClasse({ Classe: validateData, id: editingClass?.id_classe as number })) : dispatch(createClasse(validateData))
-    }, e)
-  }
 
   const columns = [
     { key: 'denomination', label: 'Nom de la classe' },
@@ -141,52 +120,7 @@ const Classes: React.FC = () => {
         onClose={handleCloseModal}
         title={editingClass ? 'Modifier la classe' : 'Nouvelle classe'}
       >
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <InputError message={error} />
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nom de la classe</label>
-            <input
-              type="text"
-              name='denomination'
-              defaultValue={editingClass?.denomination || ''}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <InputError message={formErrors?.denomination} />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Niveau</label>
-            <select name='niveau_id_niveau' className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-              {!editingClass && <option value="0">Sélectionner un niveau</option>}
-
-              {niveaux.map((niveau: levelType, key: number) => {
-                return editingClass && editingClass.niveau_id_niveau === niveau.id_niveau
-                  ? <option key={key} value={niveau.id_niveau}>{niveau.niveau}</option>
-                  : editingClass ? "" : <option key={key} value={niveau.id_niveau}>{niveau.niveau}</option>
-              })}
-              {niveaux.map((niveau: levelType, key: number) => {
-                return editingClass && editingClass.niveau_id_niveau !== niveau.id_niveau
-                  ? <option key={key} value={niveau.id_niveau}>{niveau.niveau}</option>
-                  : ""
-              })}
-            </select>
-            <InputError message={formErrors?.niveau_id_niveau} />
-          </div>
-          <div className="flex justify-end space-x-3 pt-4">
-            <button
-              type="button"
-              onClick={handleCloseModal}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              Annuler
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              {editingClass ? 'Modifier' : 'Ajouter'}
-            </button>
-          </div>
-        </form>
+        <ClasseForm handleClose={handleCloseModal} classe={editingClass} />
       </Modal>
 
       {/* Dialog de confirmation */}

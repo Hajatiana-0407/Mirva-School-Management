@@ -94,6 +94,7 @@ const ParentModifForm: React.FC<ParentModifFormPropsType> = ({ parent, handleClo
                 </div>
 
                 <div className="flex justify-end space-x-3 pt-4">
+                    { handleCloseModal !== undefined && 
                     <button
                         type="button"
                         onClick={handleCloseModal}
@@ -102,6 +103,7 @@ const ParentModifForm: React.FC<ParentModifFormPropsType> = ({ parent, handleClo
                         <X className='h-5 w-5 me-1 inline-block' />
                         Annuler
                     </button>
+                    }
                     <button
                         type="submit"
                         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center "

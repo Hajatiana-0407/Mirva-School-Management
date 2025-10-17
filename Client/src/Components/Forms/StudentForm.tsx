@@ -1,5 +1,5 @@
 import React from 'react'
-import { User, UserCheck, CalendarDays, MapPin, Home, Phone, Mail, Globe,  FolderOpen, X, PenBox, Check } from 'lucide-react';
+import { User, UserCheck, CalendarDays, MapPin, Home, Phone, Mail, Globe, FolderOpen, X, PenBox, Check } from 'lucide-react';
 import InputError from '../../Components/ui/InputError';
 import Input from '../../Components/ui/Input';
 import ImageProfile from '../ui/ImageProfile';
@@ -161,14 +161,16 @@ const StudentForm: React.FC<StudentFormPropsType> = ({ editingStudent, handleClo
             </div>
 
             <div className="flex justify-end space-x-3 pt-4">
-                <button
-                    type="button"
-                    onClick={handleCloseModal}
-                    className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-                >
-                    <X className='inline-block w-5 h-5 me-1' />
-                    Annuler
-                </button>
+                {handleCloseModal !== undefined &&
+                    <button
+                        type="button"
+                        onClick={handleCloseModal}
+                        className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    >
+                        <X className='inline-block w-5 h-5 me-1' />
+                        Annuler
+                    </button>
+                }
                 <button
                     type="submit"
                     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"

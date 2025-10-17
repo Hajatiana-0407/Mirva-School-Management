@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useRef } from "react";
+import React, { forwardRef, useState, useRef, useEffect } from "react";
 import clsx from "clsx";
 import { Eye, EyeOff, AlertCircle, X, RefreshCcw, LucideProps } from "lucide-react";
 import { generatePassword } from "../../Utils/Utils";
@@ -65,6 +65,15 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                 target: { name, value: password },
             } as any);
         };
+
+
+        useEffect(() => {
+            if (value) {
+                setLocalValue(value)
+            }
+            return () => { }
+        }, [value])
+
 
         return (
             <div className="relative w-full">
