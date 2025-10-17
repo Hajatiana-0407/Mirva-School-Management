@@ -1,15 +1,16 @@
-import { CalendarCheck, CalendarHeart, GraduationCap, Save } from "lucide-react"
+import { CalendarCheck, CalendarHeart, GraduationCap, Plus, Save } from "lucide-react"
 import { useDispatch, useSelector } from "react-redux"
-import { NavLink } from "react-router-dom"
 import { getSchoolYearState } from "../../School-Year/redux/SchoolYearSlice"
 import Input from "../../../Components/ui/Input"
-import { schoolYearInitialValue, SchoolYearType } from "../../../Utils/Types"
+import { SchoolYearType } from "../../../Utils/Types"
 import { object } from "yup"
 import useForm from "../../../Hooks/useForm"
 import { AppDispatch } from "../../../Redux/store"
 import { changeActiveSchoolYear } from "../../School-Year/redux/SchoolYearAsyncThunk"
 import React, { useEffect, useState } from "react"
-import clsx from "clsx"
+import Modal from "../../Modal"
+import SchoolYearForm from "../../../Components/Forms/SchoolYearForm"
+import { getAppState } from "../../../Redux/AppSlice"
 
 const SchoolYearSchema = object({
 });
@@ -17,7 +18,10 @@ const GeneralSettings = () => {
     const { activeSchoolYear, datas: schoolYearData, action: schoolYearAction } = useSelector(getSchoolYearState)
     const { onSubmite } = useForm<{ id_annee_scolaire: null | number }>(SchoolYearSchema, { id_annee_scolaire: null })
     const dispatch: AppDispatch = useDispatch();
-    const [theActiveSchoolYear, setTheActiveSchoolYear] = useState<SchoolYearType>(schoolYearInitialValue);
+    const [theActiveSchoolYear, setTheActiveSchoolYear] = useState<SchoolYearType | null>(null);
+    const [showModalSchoolYear, setShowModalSchoolYear] = useState(false)
+    const { hiddeTheModalActive } = useSelector(getAppState);
+    const [schoolYearOptions, setSchoolYearOptions] = useState<any[]>([]);
 
     useEffect(() => {
         if (activeSchoolYear) {
@@ -35,10 +39,12 @@ const GeneralSettings = () => {
         }, e)
     }
 
-    const handleChangeSchoolYears = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const id_annee_scolaire = parseInt(e.target.value);
-        console.log(id_annee_scolaire);
+    const handleCloseModalSchoolYear = () => {
+        setShowModalSchoolYear(false);
+    }
 
+    const handleChangeSchoolYears = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+        const id_annee_scolaire = parseInt(e.target.value);
         for (let i = 0; i < schoolYearData.length; i++) {
             const element = schoolYearData[i];
             if (element.id_annee_scolaire == id_annee_scolaire) {
@@ -47,7 +53,21 @@ const GeneralSettings = () => {
             }
         }
     }
+    useEffect(() => {
+        if (showModalSchoolYear && hiddeTheModalActive) {
+            handleCloseModalSchoolYear();
+        }
+    }, [hiddeTheModalActive]);
 
+    useEffect(() => {
+        if (schoolYearData.length > 0) {
+            setSchoolYearOptions(schoolYearData.map(schoolYear => ({
+                value: schoolYear.id_annee_scolaire,
+                label: schoolYear.nom
+            })))
+        }
+        return () => { }
+    }, [schoolYearData.length])
     return (
         <div className="space-y-6">
             <form onSubmit={handleSchoolYearChangeSubmit} className="space-y-4">
@@ -57,47 +77,35 @@ const GeneralSettings = () => {
                         <h3 className="">Année scolaire actif</h3>
                     </div>
                     <div>
-                        <NavLink to={'/school-year'} className={'text-sm text-blue-600 underline'}>
-                            Ajouter une nouvelle année scolaire
-                        </NavLink>
+                        <button
+                            type="button"
+                            onClick={() => setShowModalSchoolYear(true)}
+                            className="flex items-center gap-1 text-blue-600 underline"
+                        >
+                            <Plus className="w-4 h-4" />
+                            <span>Nouvelle année scolaire</span>
+                        </button>
                     </div>
                 </div>
-                <div className="flex gap-4">
+                <div className="grid lg:grid-cols-3 gap-4">
                     <div className="flex-1">
-                        <div className="relative">
-                            <select
-                                name='id_annee_scolaire'
-                                required
-                                className={clsx(
-                                    "bg-background border border-gray-300 text-primary text-sm rounded focus:ring-gray-300/50 focus:border-gray-300/50 focus:outline-1 block w-full p-2 py-2.5 ps-12"
-                                )}
-                                onChange={handleChangeSchoolYears}
-                            >
-                                {schoolYearData.map((opt, idx) => (
-                                    opt.isActif == "1" && <option key={idx} value={opt.id_annee_scolaire}>
-                                        {opt.nom}
-                                    </option>
-                                ))}
-                                {schoolYearData.map((opt, idx) => (
-                                    opt.isActif != "1" && <option key={idx} value={opt.id_annee_scolaire}>
-                                        {opt.nom}
-                                    </option>
-                                ))}
-                            </select>
-                            <div className={`absolute flex justify-center items-center w-10 top-0 left-0 text-xl  border-r border-gray-300 h-full `}>
-                                {React.createElement(GraduationCap, { size: 18 })}
-                            </div>
+                        <Input
+                            type="select"
+                            name='id_annee_scolaire'
+                            label="Année scrolaire"
+                            icon={GraduationCap}
+                            options={schoolYearOptions}
+                            onChange={handleChangeSchoolYears}
+                        />
+                    </div>
+                    <div className="flex-1 flex items-center gap-4">
+                        <div className="flex items-center ">
+                            <p>du</p>
                         </div>
-
-                    </div>
-                    <div className="flex items-center ">
-                        <p>du</p>
-                    </div>
-                    <div className="flex-1">
                         <Input
                             label=""
                             name=""
-                            value={theActiveSchoolYear?.date_debut ? new Date(theActiveSchoolYear?.date_debut).toLocaleDateString('fr-FR', {
+                            value={theActiveSchoolYear ? new Date(theActiveSchoolYear.date_debut).toLocaleDateString('fr-FR', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric'
@@ -106,14 +114,14 @@ const GeneralSettings = () => {
                             readonly
                         />
                     </div>
-                    <div className="flex items-center ">
-                        <p>au</p>
-                    </div>
-                    <div className="flex-1">
+                    <div className="flex-1 flex items-center gap-4">
+                        <div className="flex items-center ">
+                            <p>au</p>
+                        </div>
                         <Input
                             label=""
                             name=""
-                            value={theActiveSchoolYear?.date_fin ? new Date(theActiveSchoolYear?.date_fin).toLocaleDateString('fr-FR', {
+                            value={theActiveSchoolYear ? new Date(theActiveSchoolYear.date_fin).toLocaleDateString('fr-FR', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric'
@@ -144,6 +152,13 @@ const GeneralSettings = () => {
                     </button>
                 </div>
             </form>
+            <Modal
+                isOpen={showModalSchoolYear}
+                onClose={handleCloseModalSchoolYear}
+                title={'Nouvelle année scolaire'}
+            >
+                <SchoolYearForm handleClose={handleCloseModalSchoolYear} />
+            </Modal>
 
 
             {/* <div>

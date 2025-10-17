@@ -11,7 +11,7 @@ import { deleteLevel } from "./redux/LevelAsyncThunk";
 
 type LevelListePropsType = {
     handleEdit: (level: levelType) => void
-    setActiveTab: React.Dispatch<React.SetStateAction<"levelSbject" | "listeLevel">>;
+    setActiveTab: React.Dispatch<React.SetStateAction<number>>;
     setIdLevelToAddSubject: React.Dispatch<React.SetStateAction<number>>
 }
 
@@ -44,7 +44,7 @@ const LevelListe = ({ handleEdit, setActiveTab, setIdLevelToAddSubject }: LevelL
         return <div
             className="p-2 rounded text-xs text-gray-400 hover:bg-gray-50 cursor-pointer"
             onClick={() => {
-                setActiveTab('levelSbject');
+                setActiveTab(2);
                 setIdLevelToAddSubject(subjects.id_niveau);
             }}
         >

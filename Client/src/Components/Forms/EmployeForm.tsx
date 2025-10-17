@@ -362,14 +362,17 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
 
                 {/* Boutons de validation , d'annulation et pour passer au  suivant  */}
                 <div className="flex justify-end space-x-3 pt-4">
-                    <button
-                        type="button"
-                        onClick={handleCloseModal}
-                        className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-                    >
-                        <X className='w-5 h-5 inline-block me-1' />
-                        Annuler
-                    </button>
+                    {handleCloseModal !== undefined &&
+                        <button
+                            type="button"
+                            onClick={handleCloseModal}
+                            className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                        >
+                            <X className='w-5 h-5 inline-block me-1' />
+                            Annuler
+                        </button>
+
+                    }
                     <button
                         type={(isTeacher && !editingEmployees) ? 'button' : 'submit'}
                         className="px-4 py-2 bg-blue-600 text-white flex items-center rounded-lg hover:bg-blue-700 disabled:bg-blue-300"

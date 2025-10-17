@@ -102,7 +102,9 @@ const flattenMenuItems = (items: MenuItemType[]): MenuItemType[] => {
 };
 
 const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
-  const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
+  const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({
+    'course': true,
+  });
   const { datas: shoolInfo } = useSelector(getSchoolState)
   const { activeSchoolYear } = useSelector(getSchoolYearState)
 

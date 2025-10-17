@@ -2,42 +2,54 @@ import clsx from 'clsx';
 import React, { type ComponentType, type SVGProps, useEffect, useState } from 'react'
 
 type OngletPropsType = {
-    onlgets: { key: string, component: JSX.Element, Icon?: ComponentType<SVGProps<SVGSVGElement>> }[];
+    onlgets: { key: string, component: JSX.Element, Icon?: ComponentType<SVGProps<SVGSVGElement>>, color?: string }[];
     type?: 'hidden' | 'delete'
+    active?: number;
+    setActive?: React.Dispatch<React.SetStateAction<number>>;
 }
-const Onglet: React.FC<OngletPropsType> = ({ onlgets, type = 'hidden' }) => {
-    const [activeTab, setActiveTab] = useState('');
+const Onglet: React.FC<OngletPropsType> = ({ onlgets, type = 'hidden', active, setActive }) => {
+    const [activeTab, setActiveTab] = useState(active || 1);
     useEffect(() => {
-        if (onlgets[0]) {
-            setActiveTab(onlgets[0].key.toLowerCase());
+        if (active !== 0 && active) {
+            onlgets.map((onglet, idx) => {
+                if ((idx + 1) === active && onglet) {
+                    setActiveTab(idx + 1)
+                    setActive?.(idx + 1)
+                }
+            })
         }
-    }, [])
+    }, [active])
     return (
-        <div className="bg-white rounded-lg shadow-sm border">
-            <div className="border-b">
-                <nav className="flex space-x-8 px-6">
-                    {onlgets.map((tab) => {
+        <div className="shadow-sm space-y-6">
+            <div className="bg-white rounded-md shadow-sm border py-3 px-6">
+                <nav className="flex space-x-2 overflow-x-auto">
+                    {onlgets.map((tab, idx) => {
                         const Icon = tab.Icon;
+                        const color = tab?.color ? tab.color as string : 'blue';
                         return (
                             <button
+                                type='button'
                                 key={tab.key + '_btn'}
-                                onClick={() => setActiveTab(tab.key.toLowerCase())}
-                                className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${activeTab === tab.key.toLowerCase()
-                                    ? 'border-blue-500 text-blue-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                onClick={() => {
+                                    setActiveTab(idx + 1);
+                                    setActive?.(idx + 1)
+                                }}
+                                className={`flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 whitespace-nowrap ${activeTab === (idx + 1)
+                                    ? `bg-${color}-50 text-${color}-700 shadow-sm`
+                                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                                     }`}
                             >
-                                {Icon && < Icon className="w-4 h-4" />}
+                                {Icon && < Icon className="w-5 h-5" />}
                                 <span>{tab.key}</span>
                             </button>
                         );
                     })}
                 </nav>
-            </div >
+            </div>
 
-            <div className="p-6">
-                {onlgets.map((onglet) => {
-                    const isActive = onglet.key.toLowerCase() === activeTab;
+            <div className="">
+                {onlgets.map((onglet, idx) => {
+                    const isActive = activeTab === (idx + 1);
                     if (type === 'hidden') {
                         return (
                             <div

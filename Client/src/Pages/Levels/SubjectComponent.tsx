@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { LevelSubjectType, SubjectType } from '../../Utils/Types';
 import { hexToRgba } from '../../Utils/Utils';
 import { Archive, Pencil, Plus } from 'lucide-react';
+import ConfirmDialog from '../ConfirmDialog';
 
 type Props = {
     subject: SubjectType;
@@ -17,12 +18,27 @@ type Props = {
  * @returns 
  */
 const SubjectComponent = ({ subject, levelSubject, nameKey, onDelete, type = "update" }: Props) => {
-    const coefficient = levelSubject?.coefficient ?? 1;
-    const [value, setValue] = useState<number >(1);
+    const coefficient = levelSubject?.coefficient ?? 2;
+    const [value, setValue] = useState<number>(2);
+    const [isShowConfirm, setIsShowConfirm] = useState(false)
+
 
     useEffect(() => {
         setValue(coefficient);
     }, [coefficient]);
+
+    const handleDelete = () => {
+        setIsShowConfirm(true);
+    }
+    const handleConfirmeDelete = () => {
+        if (subject) {
+            onDelete(subject.id_matiere as number)
+        }
+        setIsShowConfirm(false);
+    }
+    const handleClose = () => {
+        setIsShowConfirm(false);
+    }
 
     return (
         <div key={`${nameKey}`} className="w-100 min-h-10 gap-1 grid grid-cols-12 my-2">
@@ -43,17 +59,24 @@ const SubjectComponent = ({ subject, levelSubject, nameKey, onDelete, type = "up
                 min={1}
                 className="px-3 py-2 border col-span-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Coefficient..."
-                value={value }
+                value={value}
                 onChange={(e) => setValue(parseInt(e.target.value))}
                 name={`${nameKey}`}
                 required
             />
             <div
                 className='col-span-1 cursor-pointer border rounded  bg-gray-100 hover:bg-gray-200 transition-all duration-200 text-red-600 hover:text-red-800 flex justify-center items-center'
-                onClick={() => { onDelete(subject.id_matiere as number) }}
+                onClick={() => { handleDelete() }}
             >
                 <Archive />
             </div>
+            <ConfirmDialog
+                title='Suppression du matière'
+                message={`Êtes-vous sûr de vouloir la supprimer la matiere "${subject.denomination}" ?`}
+                isOpen={isShowConfirm}
+                onClose={handleClose}
+                onConfirm={handleConfirmeDelete}
+            />
         </div>
     );
 };
