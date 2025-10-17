@@ -115,7 +115,7 @@ const Lesson = () => {
               <Loading />
             </div>
           }
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {datas.length > 0 && datas.map((lesson: LessonType, idx: number) => {
               const createdAt = lesson.created_at ? new Date(lesson.created_at) : null;
               const isNew = createdAt && (Date.now() - createdAt.getTime()) < 2 * 24 * 60 * 60 * 1000;
@@ -168,20 +168,21 @@ const Lesson = () => {
                     >
                       {lesson.denomination || 'Matière'}
                     </span>
-                    <span className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-500">{lesson.niveau || ''}</span>
+                    <div className='flex items-center'>
+                      <span className="bg-gray-100  px-2 py-1 rounded-full text-xs text-gray-500">{lesson.niveau || ''}</span>
+                      {isNew && (
+                        <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold text-green-500">
+                          <BellPlus className='animate-bell-infinite' />
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="flex items-center my-2">
                     <Profile fullName={lesson.nom ? `${lesson.nom} ${lesson.prenom}` : 'Administrateur'} photo={lesson.photo as string} copy={false} />
                   </div>
-
                   {/* Indication des nouveau cours */}
                   <div className="flex items-center mb-1">
                     <h2 className="font-bold text-lg">{lesson.titre}</h2>
-                    {isNew && (
-                      <span className="ml-auto bg-green-500 px-2 py-0.5 rounded-full text-xs font-semibold text-white">
-                        <BellPlus />
-                      </span>
-                    )}
                   </div>
 
                   {/* Date d'ajout */}
