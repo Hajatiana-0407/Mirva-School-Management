@@ -251,7 +251,7 @@ class AppFixtures extends CI_Controller
         }
 
         // ? ===================== Eleves  ===================== //
-        $lastStudent = $this->EtudiantModel->findLasted();
+        $lastStudent = $this->EtudiantModel->findLatest();
         $lastStudentMatricule = '';
         if (isset($lastStudent) && isset($lastStudent->matricule_etudiant)) {
             $lastStudentMatricule = $lastStudent->matricule_etudiant;
@@ -363,7 +363,7 @@ class AppFixtures extends CI_Controller
 
         //? ===================== Personnel ===================== //
         $types = $this->model->getIds('type_personnel', 'id_type_personnel');
-        $lasted = $this->personnelModel->findLasted();
+        $lasted = $this->personnelModel->findLatest();
         $lasteMatricule = '';
         if ($lasted && !empty($lasted->matricule_personnel)) {
             $lasteMatricule = $lasted->matricule_personnel;
@@ -490,12 +490,17 @@ class AppFixtures extends CI_Controller
         }
 
         $teachersId = $this->model->getAllIdTeacher();
+        $id = 1;
         foreach ($teachersId as $id) {
             $assignations = $this->model->getAssignationByTeacher($id);
             $lecons = [];
             foreach ($assignations as $assignation) {
+                $titre = $this->faker->sentence(6);
+                $this->load->helper(['url', 'text']);
+                $slug = url_title(convert_accented_characters($titre . ' ' . $id), 'dash', TRUE);
                 $lecon = [
-                    'titre' => $this->faker->sentence(6),
+                    'titre' => $titre,
+                    'slug' => $slug,
                     'description' => $this->faker->paragraph(3),
                     'contenu' => $this->faker->paragraphs(5, true),
                     'fichier_support' => $this->faker->optional()->fileExtension(),
@@ -506,6 +511,7 @@ class AppFixtures extends CI_Controller
                     'id_niveau' => $assignation['id_niveau']
                 ];
                 $lecons[] = $lecon;
+                $id++;
             }
             // Insertion des loçons pour le prof dans la base de donnée
             $this->model->insertBatchFixtures($lecons, 'lecon');

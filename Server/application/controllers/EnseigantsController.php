@@ -58,7 +58,7 @@ class EnseigantsController extends CI_Controller
             $this->load->helper('matricule');
             //? Creation d'un matricule unique si non fourni
             $this->load->model('PersonnelModel');
-            $lasted = $this->PersonnelModel->findLasted();
+            $lasted = $this->PersonnelModel->findLatest();
             $matricule = '';
             if ($lasted) {
                 $matricule = generateMatricule(EMPLOYEE_PREFIX, $lasted["matricule_personnel"]);

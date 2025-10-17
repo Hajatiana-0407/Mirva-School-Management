@@ -7,6 +7,7 @@ class LeconController extends CI_Controller
     {
         parent::__construct();
         $this->load->model('LeconModel');
+        $this->load->helper(['url', 'text']);
     }
 
     // Get Etablissement Info
@@ -26,6 +27,8 @@ class LeconController extends CI_Controller
             switch ($user['role']) {
                 case 'admin':
                 case 'prof':
+                    $latest = $this->LeconModel->findLatest();
+                    $slug = $latest ? url_title(convert_accented_characters($post['titre'] . ' ' . $latest['id_lecon']), 'dash', TRUE) : url_title(convert_accented_characters($post['titre'] . ' ' . 1), 'dash', TRUE);
                     $data = [
                         'id_prof' => $post['id_prof'] !== ''  ? $post['id_prof'] : null,
                         'id_niveau' => $post['id_niveau'] !== ''  ? $post['id_niveau'] : null,
@@ -34,6 +37,7 @@ class LeconController extends CI_Controller
                         'description' => $post['description'] ?? '',
                         'contenu' => $post['contenu'] ?? '',
                         'published' => $post['published'] ?? false,
+                        'slug' => $slug
                     ];
 
                     // ? =====================  ===================== //
@@ -118,6 +122,7 @@ class LeconController extends CI_Controller
                         'description' => $post['description'] ?? '',
                         'contenu' => $post['contenu'] ?? '',
                         'published' => $post['published'] ?? false,
+                        'slug' => url_title(convert_accented_characters($post['titre'] . ' ' . $id_lecon), 'dash', TRUE)
                     ];
 
                     // ? =====================  ===================== //

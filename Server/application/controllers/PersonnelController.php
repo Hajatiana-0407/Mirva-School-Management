@@ -55,7 +55,7 @@ class PersonnelController extends CI_Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->load->helper('matricule');
             //? Creation d'un matricule unique si non fourni
-            $lasted = $this->PersonnelModel->findLasted();
+            $lasted = $this->PersonnelModel->findLatest();
             $matricule = '';
             if ($lasted) {
                 $matricule = generateMatricule(EMPLOYEE_PREFIX, $lasted["matricule_personnel"]);
