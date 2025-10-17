@@ -15,6 +15,7 @@ import { getFileIcon } from '../../Components/ui/VideoOrFileInput';
 import ConfirmDialog from '../ConfirmDialog';
 import Loading from '../../Components/ui/Loading';
 import DownloadProgression from '../../Components/DownloadProgression';
+import { Link } from 'react-router-dom';
 
 
 
@@ -211,10 +212,12 @@ const Lesson = () => {
                   </div>
                   <div className="mt-auto flex items-center justify-between space-x-2">
                     <div>
-                      <button className="bg-blue-600 border border-blue-700 rounded-lg px-4 py-1 text-white hover:bg-blue-700 transition flex items-center">
+                      <Link 
+                      to={`/lessons/${ lesson.slug }`}
+                       className="bg-blue-600 border border-blue-700 rounded-lg px-4 py-1 text-white hover:bg-blue-700 transition flex items-center">
                         Voir plus
                         <Eye className=' ms-2' />
-                      </button>
+                      </Link>
                     </div>
                     <div className='space-x-2 flex '>
                       {lesson.published == 0 &&
@@ -232,7 +235,7 @@ const Lesson = () => {
                       <button
                         className="bg-green-600 relative rounded-lg p-2 text-white hover:bg-green-700 transition group"
                         title="Télécharger"
-                        onClick={() => { handlePublish(lesson) }}
+                        onClick={() => { handleDownload(lesson) }}
                       >
                         <Download className='w-5 h-5' />
                         <div className="hidden group-hover:block absolute z-20 left-full bottom-full mt-1 px-2 py-1 bg-green-500 text-white rounded-full rounded-bl-none text-sm shadow">
