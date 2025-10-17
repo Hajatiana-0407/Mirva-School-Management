@@ -33,6 +33,7 @@ import { getAuthState, testAuthentication } from './Pages/Auth/redux/AuthSlice';
 import Assignments from './Pages/Teachers/Assignments';
 import Lesson from './Pages/Lessons/Lesson';
 import Exercice from './Pages/Exercice/Exercice';
+import LessonSingle from './Pages/Lessons/LessonSingle';
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
@@ -109,7 +110,10 @@ function App() {
             <Route path="school-year" element={<SchoolYear />} />
 
             {/* leçcons et exercices  */}
-            <Route path="lessons" element={<Lesson />} />
+            <Route path='lessons'>
+              <Route index element={<Lesson />} />
+              <Route path=':slug' element={<LessonSingle />} />
+            </Route>
             <Route path="exercices" element={<Exercice />} />
             {/* 404 Not found  */}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />

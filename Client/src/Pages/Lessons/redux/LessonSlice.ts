@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionIntialValue, ActionType, ApiReturnType, LessonType } from "../../../Utils/Types";
+import { ActionIntialValue, ActionType, ApiReturnType, LessonInitialValue, LessonType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { createLesson, deleteLesson, getAllLessons, publish, updatelesson } from "./LessonAsyncThunk";
 
@@ -9,7 +9,11 @@ type initialStateType = {
     action: ActionType,
     datas: LessonType[],
     page: number,
-    error: string
+    error: string,
+    single: {
+        data?: LessonType;
+        action: ActionType
+    }
 }
 
 const initialState: initialStateType = {
@@ -17,12 +21,28 @@ const initialState: initialStateType = {
     datas: [],
     page: 1,
     error: '',
+    single: {
+        data: LessonInitialValue,
+        action: ActionIntialValue
+    }
 }
 
 const LessonSlice = createSlice({
     name: 'Lesson',
     initialState,
-    reducers: {},
+    reducers: {
+        getLessonBySlug: (state, action: { payload: string }) => {
+            state.single.action.isLoading = true;
+            if (action.payload) {
+                state.datas.map((lesson) => {
+                    if (lesson.slug === action.payload) {
+                        state.single.data = lesson;
+                    }
+                })
+            }
+            state.single.action.isLoading = false;
+        }
+    },
     extraReducers(builder) {
         // ? ===================== Read  ===================== //
         builder
@@ -82,6 +102,11 @@ const LessonSlice = createSlice({
                 } else {
                     state.error = '';
                     state.datas = state.datas.map(lesson => {
+                        // Si la leçoon modifier est celle dans le single 
+                        if (state.single.data?.id_lecon === data?.id_lecon) {
+                            state.single.data = data;
+                        }
+                        
                         if (lesson.id_lecon === data?.id_lecon) {
                             return {
                                 ...data,
@@ -132,6 +157,10 @@ const LessonSlice = createSlice({
                 } else {
                     state.error = '';
                     state.datas = state.datas.map(lesson => {
+                        // Si la leçoon modifier est celle dans le single 
+                        if (state.single.data?.id_lecon === id_lecon) {
+                            state.single.data = { ...state.single.data, published: 1 } as LessonType;
+                        }
                         if (lesson.id_lecon == id_lecon) {
                             return {
                                 ...lesson,
@@ -146,8 +175,32 @@ const LessonSlice = createSlice({
                 state.action.isDeleting = false;
                 state.error = 'Erreur de connexion au server';
             });
+
+
+        // ? ************************************* Single ************************************* //
+        // builder
+        //     .addCase(getLessonBySlug.pending, (state) => {
+        //         state.single.action.isLoading = true;
+        //         state.error = '';
+        //     })
+        //     .addCase(getLessonBySlug.fulfilled, (state, action: { payload: ApiReturnType }) => {
+        //         state.single.action.isLoading = false;
+        //         const { error, data: employe, message } = action.payload;
+
+        //         if (error) {
+        //             state.error = message as string;
+        //         } else {
+        //             state.single.data = employe;
+        //         }
+        //     })
+        //     .addCase(getLessonBySlug.rejected, (state) => {
+        //         state.single.action.isLoading = false;
+        //         state.error = 'Erreur de connexion au server';
+        //     })
     }
 });
 
 export const getLessonState = (state: RootStateType) => state.lesson;
+export const getLessonSingleState = (state: RootStateType) => state.lesson.single;
+export const { getLessonBySlug } = LessonSlice.actions;
 export default LessonSlice.reducer;

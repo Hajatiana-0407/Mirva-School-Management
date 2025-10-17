@@ -16,6 +16,7 @@ class LeconModel extends CI_Model
     {
         return $this->db->select('
                 l.id_lecon,
+                l.slug , 
                 l.titre  , 
                 l.published  , 
                 l.description as lecon_description , 
@@ -49,6 +50,7 @@ class LeconModel extends CI_Model
         if (!!!$id)  return null;
         return $this->db->select('
                 l.id_lecon,
+                l.slug , 
                 l.titre  , 
                 l.published , 
                 l.description as lecon_description , 

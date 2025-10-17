@@ -95,3 +95,17 @@ export const publish = createAsyncThunk('lesson/publish', async (id_lecon: numbe
   return data;
 })
 
+
+// Get By Slug 
+// export const getLessonBySlug = createAsyncThunk('lesson/getOneBySlug', async (slug: string): Promise<ApiReturnType> => {
+//   let data: ApiReturnType = ApiReturnInitial;
+//   await api.get(`admin/lesson/${slug}`)
+//     .then(response => {
+//       data.data = response.data
+//     })
+//     .catch(error => {
+//       console.error('Erreur lors de la récupération des données:', error);
+//     });
+//   return data;
+// })
+

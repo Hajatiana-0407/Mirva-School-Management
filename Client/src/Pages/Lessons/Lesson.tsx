@@ -15,6 +15,7 @@ import { getFileIcon } from '../../Components/ui/VideoOrFileInput';
 import ConfirmDialog from '../ConfirmDialog';
 import Loading from '../../Components/ui/Loading';
 import DownloadProgression from '../../Components/DownloadProgression';
+import { Link } from 'react-router-dom';
 
 
 
@@ -115,7 +116,7 @@ const Lesson = () => {
               <Loading />
             </div>
           }
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {datas.length > 0 && datas.map((lesson: LessonType, idx: number) => {
               const createdAt = lesson.created_at ? new Date(lesson.created_at) : null;
               const isNew = createdAt && (Date.now() - createdAt.getTime()) < 2 * 24 * 60 * 60 * 1000;
@@ -168,20 +169,21 @@ const Lesson = () => {
                     >
                       {lesson.denomination || 'Matière'}
                     </span>
-                    <span className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-500">{lesson.niveau || ''}</span>
+                    <div className='flex items-center'>
+                      <span className="bg-gray-100  px-2 py-1 rounded-full text-xs text-gray-500">{lesson.niveau || ''}</span>
+                      {isNew && (
+                        <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold text-green-500">
+                          <BellPlus className='animate-bell-infinite' />
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="flex items-center my-2">
                     <Profile fullName={lesson.nom ? `${lesson.nom} ${lesson.prenom}` : 'Administrateur'} photo={lesson.photo as string} copy={false} />
                   </div>
-
                   {/* Indication des nouveau cours */}
                   <div className="flex items-center mb-1">
                     <h2 className="font-bold text-lg">{lesson.titre}</h2>
-                    {isNew && (
-                      <span className="ml-auto bg-green-500 px-2 py-0.5 rounded-full text-xs font-semibold text-white">
-                        <BellPlus />
-                      </span>
-                    )}
                   </div>
 
                   {/* Date d'ajout */}
@@ -210,10 +212,12 @@ const Lesson = () => {
                   </div>
                   <div className="mt-auto flex items-center justify-between space-x-2">
                     <div>
-                      <button className="bg-blue-600 border border-blue-700 rounded-lg px-4 py-1 text-white hover:bg-blue-700 transition flex items-center">
+                      <Link 
+                      to={`/lessons/${ lesson.slug }`}
+                       className="bg-blue-600 border border-blue-700 rounded-lg px-4 py-1 text-white hover:bg-blue-700 transition flex items-center">
                         Voir plus
                         <Eye className=' ms-2' />
-                      </button>
+                      </Link>
                     </div>
                     <div className='space-x-2 flex '>
                       {lesson.published == 0 &&
@@ -231,7 +235,7 @@ const Lesson = () => {
                       <button
                         className="bg-green-600 relative rounded-lg p-2 text-white hover:bg-green-700 transition group"
                         title="Télécharger"
-                        onClick={() => { handlePublish(lesson) }}
+                        onClick={() => { handleDownload(lesson) }}
                       >
                         <Download className='w-5 h-5' />
                         <div className="hidden group-hover:block absolute z-20 left-full bottom-full mt-1 px-2 py-1 bg-green-500 text-white rounded-full rounded-bl-none text-sm shadow">

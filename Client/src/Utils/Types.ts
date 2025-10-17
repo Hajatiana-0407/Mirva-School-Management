@@ -521,6 +521,7 @@ export const StudentFormDataInitialValue: StudentFormDataType = {
 // ===================== Lessons ===================== //
 export type LessonType = {
     id_lecon?: number;
+    slug: string;
     titre: string;
     lecon_description: string;
     contenu?: string;
@@ -535,6 +536,7 @@ export type LessonType = {
 
 export const LessonInitialValue: LessonType = {
     titre: '',
+    slug: '',
     lecon_description: '',
     ...employeeInitialValue,
     ...subjectInitialValue,

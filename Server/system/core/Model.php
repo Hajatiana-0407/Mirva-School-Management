@@ -132,7 +132,7 @@ class CI_Model
     }
 
     // Récupère le dernier élément inséré
-    public function findLasted()
+    public function findLatest()
     {
         return $this->db->select('*')
             ->from($this->table)

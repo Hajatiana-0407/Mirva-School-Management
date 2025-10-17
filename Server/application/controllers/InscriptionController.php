@@ -22,7 +22,7 @@ class InscriptionController extends CI_Controller
     {
         $this->load->helper('matricule');
         //? Creation d'un matricule unique 
-        $lasted = $this->EtudiantModel->findLasted();
+        $lasted = $this->EtudiantModel->findLatest();
         $matricule = '';
         if ($lasted) {
             $matricule = generateMatricule(STUDENT_PRIFIX, $lasted["matricule_etudiant"]);
