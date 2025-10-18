@@ -38,3 +38,20 @@ export const updateAccount = createAsyncThunk('update/account', async (account: 
     });
     return returnData
 })
+
+// Deconnexion 
+export const logoutUser = createAsyncThunk('logout', async (id_user: number): Promise<ApiReturnType> => {
+    let returnData: ApiReturnType = ApiReturnInitial;
+    await api.post('auth/logout', {
+        id_user ,
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(response => {
+        returnData = response.data;
+        if (returnData.error) {
+            toast.error('Une erreur c\'est produite!')
+        }
+    }).catch(error => {
+        console.error('Erreur lors de la Modification:', error.getMessage());
+    });
+    return returnData
+})

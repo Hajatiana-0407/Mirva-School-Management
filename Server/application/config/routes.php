@@ -70,6 +70,7 @@ $route['api/admin/download'] = 'DownloadContrller/download';
 
 // ===================== Authentification  ===================== //
 $route['api/auth/login'] = 'AuthController/login';
+$route['api/auth/logout'] = 'AuthController/logout';
 $route['api/auth/update/account'] = 'AuthController/update';
 // ===================== **************** ===================== //
 

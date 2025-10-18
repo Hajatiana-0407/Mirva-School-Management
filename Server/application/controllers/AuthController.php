@@ -21,12 +21,15 @@ class AuthController extends CI_Controller
                 return;
             }
 
-            $user = $this->AuthModel->get_by_identifiant($identifiant);
-
+            $response = $this->AuthModel->login($identifiant);
+            $user  = $response['user'];
             if ($user && password_verify($password, $user->password)) {
                 $this->load->helper('jwt');
-                unset($user->password); // Remove password before generating token 
-                $token = generate_jwt($user);
+                unset($user->password);
+                $token = generate_jwt($response);
+
+                // Modification de last_login 
+                $this->AuthModel->update($user->id_user, ['last_login' => (new DateTime())->format('Y-m-d H:i:s'), 'status' => true]);
 
                 echo json_encode(['error' => false, 'data' => $token]);
                 return;
@@ -42,18 +45,42 @@ class AuthController extends CI_Controller
         }
     }
 
+    public function logout()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $identifiant = $this->input->post('id_user', true);
+
+            if (!$identifiant) {
+                echo json_encode(['error' => true, 'message'  => 'L\identifiant est null']);
+                http_response_code(400);
+                return;
+            }
+            $response = $this->AuthModel->update($identifiant,  ['last_login' => (new DateTime())->format('Y-m-d H:i:s'), 'status' => true]);
+            if ($response) {
+                echo json_encode(['error' => false, 'data' => true]);
+            } else {
+                echo json_encode(['error' => true, 'message' => 'Identifiant incorrect']);
+            }
+        } else {
+            echo json_encode(['error' => true, 'message' => 'Méthode non autorisée']);
+            http_response_code(405);
+        }
+    }
+
     public function update()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $post = $this->input->post(null, true);
+
             $id_user =  $post['id_user'] ?? null;
             $password =  $post['password'] ?? null;
             if ($id_user) {
                 $identifiant = trim(strip_tags($post['identifiant']));
                 $user = $this->AuthModel->findOneById($id_user);
+                $user = $user['user'];
 
                 // ===================== Verification de l'ancien mot de passe ===================== //
-                if ($user && password_verify($password, $user['password'])) {
+                if ($user && password_verify($password, $user->password)) {
                     $data = [
                         'identifiant' => $identifiant,
                     ];
@@ -72,7 +99,7 @@ class AuthController extends CI_Controller
                         $response = [
                             'error' => false,
                             'data' => [
-                                'user' => $updated , 
+                                'user' => $updated,
                                 'token' => $token
                             ]
                         ];

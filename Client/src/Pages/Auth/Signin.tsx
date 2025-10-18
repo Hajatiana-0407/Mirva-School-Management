@@ -43,10 +43,14 @@ const Signin = () => {
     }
 
     useEffect(() => {
-        if (datas.isLoggedIn) {
+        const token = localStorage.getItem('token');
+        if (datas.isLoggedIn && !!token) {
             navigate('/dashboard');
         }
-    }, [datas.isLoggedIn]);
+
+        console.log(datas.isLoggedIn && !!token);
+
+    }, [datas.isLoggedIn , action.isLoading ]);
 
     useEffect(() => {
         if (!datas.isLoggedIn && !school?.id_etablissement) {

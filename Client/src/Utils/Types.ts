@@ -18,25 +18,43 @@ export const AppInitialValue: AppStateType = {
     hiddeTheModalActive: false
 }
 
+type Permission = 'create' | 'read' | 'update' | 'delete';
+type PermissionsMap = {
+    [moduleName: string]: Permission[];
+};
+type InfoType = {
+    nom: string,
+    prenom: string,
+    matricule?: string
+    id_personne?: number,
+    id_eleve?: number,
+    id_parent?: number,
+}
+
+export type TokenDecodeType = {
+    user?: User;
+    permissions: PermissionsMap[];
+    info?: InfoType
+}
 export type User = {
     id_user?: number;
     identifiant: string | null;
     password?: string | null;
-    role: 'admin' | 'secretaire' | 'prof' | 'parent' | 'etudiant' | string | null;
+    role: 'admin' | 'secretaire' | 'proffesseur' | 'parent' | 'etudiant' | string | null;
     status: boolean;
     created_at?: string;
     last_login?: string | null;
 }
 export type AuthStateType = {
-    user?: User;
     isLoggedIn?: boolean;
     token?: string;
-}
+} & TokenDecodeType
 
 export const AuthInitialValue: AuthStateType = {
     user: undefined,
     isLoggedIn: false,
-    token: ''
+    token: '',
+    permissions: []
 }
 
 // BACK'S OBJECT RETURN 

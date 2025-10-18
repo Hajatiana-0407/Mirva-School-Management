@@ -74,7 +74,6 @@ class FixturesModel extends CI_Model
         if (empty($data) && !!!$table) {
             return [];
         }
-
         $result = $this->db->insert_batch($table, $data);
 
         if ($result === false) {

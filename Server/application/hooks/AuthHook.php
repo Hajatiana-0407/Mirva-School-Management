@@ -76,16 +76,19 @@ class AuthHook
         if (is_object($payload)) {
             $payload = (array) $payload;
         }
-        $user = [];
         foreach ($payload as $key => $value) {
             if ($key === 'data') {
-                $user = (array)$value;
+                $_POST['user'] = (array)$value->user ?? null;
+                $_POST['info'] = (array)$value->info ?? null;
+                $_POST['permissions'] = (array)$value->permissions ?? null;
+
+
+                $_REQUEST['user'] = (array)$value->user ?? null;
+                $_REQUEST['info'] = (array)$value->info ?? null;
+                $_REQUEST['permissions'] = (array)$value->permissions ?? null;
                 break;
             }
         }
-        $_POST['user'] = $user;
-        $_REQUEST['user'] = $user;
-
         // Stocke aussi proprement dans CI
         $CI->auth_user = $payload;
     }

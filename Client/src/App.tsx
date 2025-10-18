@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Layout from './Components/Layout/Layout';
 import Dashboard from './Pages/Dashboard';
 import Classes from './Pages/Classes/Classes';
@@ -34,13 +34,14 @@ import Assignments from './Pages/Teachers/Assignments';
 import Lesson from './Pages/Lessons/Lesson';
 import Exercice from './Pages/Exercice/Exercice';
 import LessonSingle from './Pages/Lessons/LessonSingle';
+import { setNavigator } from './Utils/navigate';
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
   const { datas: schoolInfo } = useSelector(getSchoolState)
   const { activeSchoolYear } = useSelector(getSchoolYearState)
   const { datas: { isLoggedIn } } = useSelector(getAuthState);
-
+  const navigate = useNavigate();
   // Utils
   useEffect(() => {
     if (isLoggedIn) {
@@ -55,10 +56,22 @@ function App() {
       }
       // Verification si l'utilisateur est toujours authentifié
     }
+    
     if (!isLoggedIn) {
-      dispatch(testAuthentication())
+      const token = localStorage.getItem('token');
+      if (!!token) {
+        dispatch(testAuthentication())
+      } else {
+        navigate('/signin');
+      }
     }
   }, [isLoggedIn]);
+
+
+  useEffect(() => {
+    setNavigator(navigate);
+  }, [navigate])
+
 
   return (
     < >
