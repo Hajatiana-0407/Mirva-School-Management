@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { AuthStateType, StudentFormDataType } from "./Types";
+import {  StudentFormDataType, TokenDecodeType } from "./Types";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import api from "./api";
@@ -161,13 +161,13 @@ export const nestData = (flatData: Record<string, any>): Record<string, any> => 
 type DecodePropsType = {
   exp: number;
   iat: number;
-  data: AuthStateType['user'];
+  data: TokenDecodeType ;
 }
 export const decodeToken = (token: string): DecodePropsType => {
   const tokenDecode: {
     exp: number;
     iat: number;
-    data: AuthStateType['user'];
+    data: TokenDecodeType ;
   } = jwtDecode(token);
   return tokenDecode;
 }

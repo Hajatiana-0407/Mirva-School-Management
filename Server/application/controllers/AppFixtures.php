@@ -433,6 +433,121 @@ class AppFixtures extends CI_Controller
         }
     }
 
+
+    /**
+     * Fixtures pour les roles permission
+     *
+     * @param boolean $clean
+     * @return void
+     */
+    private function loadRoles($clean = false)
+    {
+        $this->model->emptyDb([
+            'modules',
+            'permissions',
+            'roles',
+            'role_permissions'
+        ]);
+
+        if ($clean) {
+            // On efface seulement la base de données
+            return;
+        }
+        //?  ===================== ROLES ===================== //
+        $roles = [
+            [
+                'nom' => 'admin',
+                'description' => 'Administrateur du système avec tous les droits',
+                'is_restrict' => true
+            ],
+            [
+                'nom' => 'proffesseur',
+                'description' => 'Professeur pouvant gérer ses classes, notes et présences',
+                'is_restrict' => true
+            ],
+            [
+                'nom' => 'étudiant',
+                'description' => 'Élève pouvant consulter ses notes, devoirs et emplois du temps',
+                'is_restrict' => true
+            ],
+            [
+                'nom' => 'parent',
+                'description' => 'Parent d’élève pouvant consulter les résultats et paiements',
+                'is_restrict' => false
+            ],
+        ];
+        $this->model->insertBatchFixtures($roles, "roles");
+
+
+        //?  ===================== PERMISSIONS ===================== //
+        $permissions = [
+            ['nom' => 'create', 'description' => 'Autorise la création de nouvelles données'],
+            ['nom' => 'read', 'description' => 'Autorise la lecture ou la consultation des données'],
+            ['nom' => 'update', 'description' => 'Autorise la modification des données existantes'],
+            ['nom' => 'delete', 'description' => 'Autorise la suppression des données'],
+            // Permissions complémentaires
+            // ['nom' => 'import', 'description' => 'Autorise l’importation de données depuis un fichier'],
+            // ['nom' => 'export', 'description' => 'Autorise l’exportation de données'],
+            // ['nom' => 'validate', 'description' => 'Autorise la validation d’éléments (ex : notes, paiements, etc.)'],
+            // ['nom' => 'print', 'description' => 'Autorise l’impression ou la génération de documents PDF'],
+            // ['nom' => 'manage', 'description' => 'Autorise la gestion complète du module (tous droits inclus)'],
+        ];
+        $this->model->insertBatchFixtures($permissions, "permissions");
+
+        //?  ===================== MODULE ===================== //
+        $modules = [
+            ['nom' => 'dashboard', 'description' => 'Tableau de bord général de la plateforme'],
+            ['nom' => 'registration', 'description' => 'Gestion des inscriptions des nouveaux élèves'],
+            ['nom' => 'students', 'description' => 'Gestion des informations et dossiers des élèves'],
+            ['nom' => 'schedule', 'description' => 'Organisation et consultation des emplois du temps'],
+            ['nom' => 'attendance', 'description' => 'Suivi des présences et absences des élèves'],
+            ['nom' => 'exams', 'description' => 'Gestion des examens, notes et bulletins'],
+
+            // Section Leçons et Exercices
+            ['nom' => 'course', 'description' => 'Module principal pour la gestion des leçons et exercices'],
+            ['nom' => 'lesson', 'description' => 'Création et consultation des leçons'],
+            ['nom' => 'exercice', 'description' => 'Création et gestion des exercices pour les élèves'],
+
+            // Section Administration
+            ['nom' => 'management', 'description' => 'Espace d’administration et gestion du personnel'],
+            ['nom' => 'employees', 'description' => 'Gestion des employés de l’établissement'],
+            ['nom' => 'teachers', 'description' => 'Gestion des enseignants et de leurs matières'],
+            ['nom' => 'parents', 'description' => 'Gestion des comptes et informations des parents'],
+            ['nom' => 'payments', 'description' => 'Suivi et gestion des paiements et frais de scolarité'],
+            ['nom' => 'messages', 'description' => 'Messagerie interne entre professeurs, élèves et parents'],
+
+            // Section Paramétrage
+            ['nom' => 'settingsSection', 'description' => 'Section regroupant les paramètres et configurations globales'],
+            ['nom' => 'school-year', 'description' => 'Gestion des années scolaires'],
+            ['nom' => 'levels', 'description' => 'Gestion des niveaux d’enseignement'],
+            ['nom' => 'classes', 'description' => 'Gestion des classes et des groupes d’élèves'],
+            ['nom' => 'subjects', 'description' => 'Gestion des matières enseignées'],
+            ['nom' => 'settings', 'description' => 'Paramètres et configuration du système'],
+        ];
+        $this->model->insertBatchFixtures($modules, 'modules');
+
+        $permissions_id = $this->model->getIds('permissions', 'id_permission');
+        $modules_id = $this->model->getIds('modules', 'id_module');
+        $roles_id = $this->model->getIds('roles', 'id_role');
+
+        $roles_permmissions = [];
+        foreach ($roles_id as $role) {
+            foreach ($modules_id as  $module) {
+                $count  =  rand(1, 4); // les permissions
+                for ($i = 0; $i < $count; $i++) {
+                    $temps = [
+                        'id_role' => $role,
+                        'id_module' => $module,
+                        'id_permission' => $permissions_id[$i]
+                    ];
+                    $roles_permmissions[] = $temps;
+                    $temps = [];
+                }
+            }
+        }
+        $this->model->insertBatchFixtures($roles_permmissions, 'role_permissions');
+    }
+
     /**
      * Fixtures pour les compte utilisateurs
      *
@@ -450,19 +565,52 @@ class AppFixtures extends CI_Controller
             return;
         }
 
-        $roles = ['admin', 'secretaire', 'prof', 'parent', 'etudiant'];
+        $personnels_id = $this->model->getIds('personnel', 'id_personnel');
+        $eleves_id = $this->model->getIds('eleve', 'id_eleve');
+        $parent_id = $this->model->getIds('parents', 'id_parent');
+
+        $user_relations  = [$personnels_id, $eleves_id, $parent_id];
+
+        $roles_id = $this->model->getIds('roles', 'id_role');
         for ($i = 0; $i < 5; $i++) {
-            $this->model->insertFixture('users', [
-                'role' => $this->faker->randomElement($roles),
+            $user = [
+                'id_role' => $this->faker->randomElement($roles_id),
                 'identifiant' => $this->faker->email(),
                 'password' => password_hash('123456', PASSWORD_DEFAULT),
-                'status' => false,
+                'status' => 0,
                 'created_at' => $this->faker->dateTime()->format('Y-m-d H:i:s'),
                 'last_login' => $this->faker->dateTime()->format('Y-m-d H:i:s')
-            ]);
+            ];
+
+            $typeIdx = rand(0, 2);
+            $tentation = 0;
+            while (!isset($user_relations[$typeIdx]) || count($user_relations[$typeIdx]) === 0) {
+                if ($tentation === 6) {
+                    exit;
+                }
+                $typeIdx = rand(0, 2);
+                # code...
+                $tentation++;
+            }
+
+            switch ($typeIdx) {
+                case 0:
+                    $user['id_personnel'] = $this->faker->randomElement($user_relations[$typeIdx]);
+                    break;
+                case 1:
+                    $user['id_eleve'] = $this->faker->randomElement($user_relations[$typeIdx]);
+                    break;
+                case 2:
+                    $user['id_parent'] = $this->faker->randomElement($user_relations[$typeIdx]);
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+            $this->model->insertFixture('users', $user);
         }
         $this->model->insertFixture('users', [
-            'role' => 'admin',
+            'id_role' => $roles_id[0] ?? null,
             'identifiant' => 'admin@gmail.com',
             'password' => password_hash('admin123', PASSWORD_DEFAULT),
             'status' => false,
@@ -526,11 +674,12 @@ class AppFixtures extends CI_Controller
      */
     public function loadFixtures()
     {
-        $this->loadUser();
+        $this->loadRoles();
         $this->loadConfigurations();
         $this->loadPersonnel();
         $this->LoadEleveParent();
         $this->loadlecon();
+        $this->loadUser();
 
         echo "✅ Fausse base de données générée avec succès !" . PHP_EOL;
     }
@@ -548,6 +697,7 @@ class AppFixtures extends CI_Controller
         $this->loadPersonnel(true);
         $this->LoadEleveParent(true);
         $this->loadlecon(true);
+        $this->loadRoles(true);
 
         echo "✅ Suppression des données avec succès !" . PHP_EOL;
     }

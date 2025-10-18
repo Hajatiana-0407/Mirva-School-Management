@@ -69,6 +69,22 @@ et les lier a users
 | **Profil personnel** | 🔹 Modifier le sien | 🔹 Modifier le sien | 🔹 Modifier le sien | 🔹 Modifier ses infos | 🔹 Modifier ses info
 
 
+# CONNEXION 
+- [x] Creation de la table roles , permission et module ( role_permission)
+- [x] Liaisons de la tables user et roles 
+- [x] Creation d'une fonction dans fixtures pour le roles 
+- [x] Modifcation de lafixtures Users pour les roles
+- ### Modification de la connexion 
+    - [x] Ajouter les informations sur l'utilisateur dans le authState apres connexion
+    - [x] Ajouter les roles dans le authState
+    - [x] Modifier la date du dernier connextion a chaque connexion 
+    - [x] Modifier le status a chaque connexion et deconnexion 
+- [ ] Creation du compte automatique au moment d'ajout personnel , etudiant , parent ( identifiant: Matricule | password : Matricule )
+- [ ] 
+- [ ] Prendre les information sur l'utilisateur au mement de la connexion ( pas seulement uers mais dans les table qui est liéé a user)
+- [ ] 
+
+
 
 
 # LEÇON
@@ -76,6 +92,7 @@ et les lier a users
 - [x] Publié 
 - [x] Activé le bouton telechager 
     - Le telechargement seras une dossier dont le nom est le titre et le contenue est le fichier principale , une doc txt pour voir le description du leçcon et le titre et une fichier qui est le fichier de support 
+
 - [ ] Sur Connexion de prof 
     Ce sont les leçon du prof qui s'affiche 
     Possibilité de publié une leçon non publié , supprimer et modifié 
