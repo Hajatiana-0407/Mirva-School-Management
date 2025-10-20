@@ -48,8 +48,6 @@ const Signin = () => {
             navigate('/dashboard');
         }
 
-        console.log(datas.isLoggedIn && !!token);
-
     }, [datas.isLoggedIn , action.isLoading ]);
 
     useEffect(() => {

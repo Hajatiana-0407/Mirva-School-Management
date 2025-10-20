@@ -15,6 +15,7 @@ import { getAppState } from "../../Redux/AppSlice";
 import EmployeForm from "../../Components/Forms/EmployeForm";
 import HeadingSmall from "../../Components/ui/HeadingSmall";
 import ImageProfile from "../../Components/ui/ImageProfile";
+import { useHashPermission } from "../../Hooks/useHashPermission";
 
 const EmployeesSinglePage = () => {
     const { id } = useParams();
@@ -23,6 +24,7 @@ const EmployeesSinglePage = () => {
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const { hiddeTheModalActive } = useSelector(getAppState);
+    const permission = useHashPermission();
 
     useEffect(() => {
         if (id) {
@@ -52,15 +54,17 @@ const EmployeesSinglePage = () => {
                     <ArrowLeft className="h-6 w-6 inline-block me-1 cursor-pointer" onClick={() => navigate(-1)} />
                     {employee?.nom.toUpperCase()} {employee?.prenom} ( {employee?.matricule_personnel} )
                 </h1>
-                <button
-                    onClick={() => {
-                        setShowModal(true);
-                    }}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
-                >
-                    <PenBox className="w-4 h-4" />
-                    <span>Modifié</span>
-                </button>
+                {permission.update &&
+                    <button
+                        onClick={() => {
+                            setShowModal(true);
+                        }}
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+                    >
+                        <PenBox className="w-4 h-4" />
+                        <span>Modifié</span>
+                    </button>
+                }
             </div>
             <div className="space-y-4">
 

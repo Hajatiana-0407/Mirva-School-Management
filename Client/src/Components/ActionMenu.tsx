@@ -1,13 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { MoreVertical } from "lucide-react";
+import { useHashPermission } from "../Hooks/useHashPermission";
 
 interface Action {
   label: string;
   onClick: () => void;
   danger?: boolean;
   icon: React.ComponentType<{ className?: string }>;
-  color: string
+  color: string;
+  type?: string
 }
 
 interface Props {
@@ -23,18 +25,13 @@ const ActionMenu = ({ actions }: Props) => {
     top: 0,
     left: 0,
   });
-
-
-
-
+  const permission = useHashPermission();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-
   // Toggle menu et calcule la position du bouton
   const toggleMenu = () => {
     setOpen(!open);
   };
-
   // Fermer si clic extérieur
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -94,21 +91,28 @@ const ActionMenu = ({ actions }: Props) => {
             ref={menuRef}
           >
             <ul className=" p-1 space-y-1">
-              {actions.map((action, i) => (
-                <li key={i}>
-                  <button
-                    onClick={() => {
-                      action.onClick();
-                      setOpen(false);
-                    }}
-                    type="button"
-                    className={`w-full border border-gray-100 rounded text-left px-4 py-2 text-md hover:bg-gray-100 flex items-center gap-2 text-ellipsis overflow-hidden whitespace-nowrap  text-gray-600`}
-                  >
-                    {action.icon && <action.icon className={`w-5 h-5 ${action.color}`} />}
-                    {action.label}
-                  </button>
-                </li>
-              ))}
+              {actions.map((action, i) => {
+
+                // ? Pas de permission de modification
+                if (action.type === 'update' && !permission.update) return;
+                // ! Pas de permission de suppression 
+                if (action.type === 'delete' && !permission.delete) return;
+                return (
+                  <li key={i}>
+                    <button
+                      onClick={() => {
+                        action.onClick();
+                        setOpen(false);
+                      }}
+                      type="button"
+                      className={`w-full border border-gray-100 rounded text-left px-4 py-2 text-md hover:bg-gray-100 flex items-center gap-2 text-ellipsis overflow-hidden whitespace-nowrap  text-gray-600`}
+                    >
+                      {action.icon && <action.icon className={`w-5 h-5 ${action.color}`} />}
+                      {action.label}
+                    </button>
+                  </li>
+                )
+              })}
             </ul>
 
 

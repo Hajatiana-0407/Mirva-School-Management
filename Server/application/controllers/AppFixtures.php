@@ -456,24 +456,28 @@ class AppFixtures extends CI_Controller
         //?  ===================== ROLES ===================== //
         $roles = [
             [
-                'nom' => 'admin',
-                'description' => 'Administrateur du système avec tous les droits',
-                'is_restrict' => true
+                'nom' => 'administrateur',
+                'description' => 'Administrateur du système',
+                'is_restrict' => true,
+                'couleur' => $this->faker->hexColor,
             ],
             [
-                'nom' => 'proffesseur',
+                'nom' => 'enseignant',
                 'description' => 'Professeur pouvant gérer ses classes, notes et présences',
-                'is_restrict' => true
+                'is_restrict' => true,
+                'couleur' => $this->faker->hexColor,
             ],
             [
                 'nom' => 'étudiant',
                 'description' => 'Élève pouvant consulter ses notes, devoirs et emplois du temps',
-                'is_restrict' => true
+                'is_restrict' => true,
+                'couleur' => $this->faker->hexColor,
             ],
             [
                 'nom' => 'parent',
                 'description' => 'Parent d’élève pouvant consulter les résultats et paiements',
-                'is_restrict' => false
+                'is_restrict' => false,
+                'couleur' => $this->faker->hexColor,
             ],
         ];
         $this->model->insertBatchFixtures($roles, "roles");
@@ -496,34 +500,40 @@ class AppFixtures extends CI_Controller
 
         //?  ===================== MODULE ===================== //
         $modules = [
-            ['nom' => 'dashboard', 'description' => 'Tableau de bord général de la plateforme'],
-            ['nom' => 'registration', 'description' => 'Gestion des inscriptions des nouveaux élèves'],
-            ['nom' => 'students', 'description' => 'Gestion des informations et dossiers des élèves'],
-            ['nom' => 'schedule', 'description' => 'Organisation et consultation des emplois du temps'],
-            ['nom' => 'attendance', 'description' => 'Suivi des présences et absences des élèves'],
-            ['nom' => 'exams', 'description' => 'Gestion des examens, notes et bulletins'],
+            ['nom' => 'dashboard', 'label' => 'Tableau de bord', 'description' => 'Tableau de bord général de la plateforme'],
+            ['nom' => 'registration', 'label' => 'Inscriptions', 'description' => 'Gestion des inscriptions des nouveaux élèves'],
+            ['nom' => 'students', 'label' => 'Élèves', 'description' => 'Gestion des informations et dossiers des élèves'],
+            ['nom' => 'schedule', 'label' => 'Emploi du temps', 'description' => 'Organisation et consultation des emplois du temps'],
+            ['nom' => 'attendance', 'label' => 'Présences', 'description' => 'Suivi des présences et absences des élèves'],
+            ['nom' => 'exams', 'label' => 'Examens', 'description' => 'Gestion des examens, notes et bulletins'],
 
             // Section Leçons et Exercices
-            ['nom' => 'course', 'description' => 'Module principal pour la gestion des leçons et exercices'],
-            ['nom' => 'lesson', 'description' => 'Création et consultation des leçons'],
-            ['nom' => 'exercice', 'description' => 'Création et gestion des exercices pour les élèves'],
+            ['nom' => 'course', 'label' => 'Cours', 'description' => 'Module principal pour la gestion des leçons et exercices'],
+            ['nom' => 'lessons', 'label' => 'Leçons', 'description' => 'Création et consultation des leçons'],
+            ['nom' => 'exercices', 'label' => 'Exercices', 'description' => 'Création et gestion des exercices pour les élèves'],
 
             // Section Administration
-            ['nom' => 'management', 'description' => 'Espace d’administration et gestion du personnel'],
-            ['nom' => 'employees', 'description' => 'Gestion des employés de l’établissement'],
-            ['nom' => 'teachers', 'description' => 'Gestion des enseignants et de leurs matières'],
-            ['nom' => 'parents', 'description' => 'Gestion des comptes et informations des parents'],
-            ['nom' => 'payments', 'description' => 'Suivi et gestion des paiements et frais de scolarité'],
-            ['nom' => 'messages', 'description' => 'Messagerie interne entre professeurs, élèves et parents'],
+            ['nom' => 'management', 'label' => 'Administration', 'description' => 'Espace d’administration et gestion du personnel'],
+            ['nom' => 'employees', 'label' => 'Employés', 'description' => 'Gestion des employés de l’établissement'],
+            ['nom' => 'teachers', 'label' => 'Enseignants', 'description' => 'Gestion des enseignants et de leurs matières'],
+            ['nom' => 'parents', 'label' => 'Parents', 'description' => 'Gestion des comptes et informations des parents'],
+            ['nom' => 'payments', 'label' => 'Paiements', 'description' => 'Suivi et gestion des paiements et frais de scolarité'],
+            ['nom' => 'messages', 'label' => 'Messages', 'description' => 'Messagerie interne entre professeurs, élèves et parents'],
 
             // Section Paramétrage
-            ['nom' => 'settingsSection', 'description' => 'Section regroupant les paramètres et configurations globales'],
-            ['nom' => 'school-year', 'description' => 'Gestion des années scolaires'],
-            ['nom' => 'levels', 'description' => 'Gestion des niveaux d’enseignement'],
-            ['nom' => 'classes', 'description' => 'Gestion des classes et des groupes d’élèves'],
-            ['nom' => 'subjects', 'description' => 'Gestion des matières enseignées'],
-            ['nom' => 'settings', 'description' => 'Paramètres et configuration du système'],
+            ['nom' => 'settingsSection', 'label' => 'Paramètres (Section)', 'description' => 'Section regroupant les paramètres et configurations globales'],
+            ['nom' => 'school-year', 'label' => 'Années scolaires', 'description' => 'Gestion des années scolaires'],
+            ['nom' => 'levels', 'label' => 'Niveaux', 'description' => 'Gestion des niveaux d’enseignement'],
+            ['nom' => 'classes', 'label' => 'Classes', 'description' => 'Gestion des classes et des groupes d’élèves'],
+            ['nom' => 'subjects', 'label' => 'Matières', 'description' => 'Gestion des matières enseignées'],
+            ['nom' => 'settings', 'label' => 'Paramètres', 'description' => 'Paramètres et configuration du système'],
+
+            // Paramettre 
+            ['nom' => 'general-settings', 'label' => 'Paramètres généraux', 'description' => 'Configuration générale du système et des préférences globales'],
+            ['nom' => 'school-settings', 'label' => 'Paramètres de l’établissement', 'description' => 'Informations et configuration propres à l’établissement scolaire'],
+            ['nom' => 'roles-settings', 'label' => 'Paramètres des rôles et utilisateurs', 'description' => 'Gestion des rôles, permissions et utilisateurs du système'],
         ];
+
         $this->model->insertBatchFixtures($modules, 'modules');
 
         $permissions_id = $this->model->getIds('permissions', 'id_permission');

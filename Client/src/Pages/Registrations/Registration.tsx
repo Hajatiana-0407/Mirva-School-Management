@@ -13,6 +13,7 @@ import { getAppState } from '../../Redux/AppSlice';
 import Profile from '../../Components/ui/Profile';
 import { getShortDate } from '../../Utils/Utils';
 import RegisterForm from '../../Components/Forms/RegisterForm';
+import { useHashPermission } from '../../Hooks/useHashPermission';
 
 
 const Registration: React.FC = () => {
@@ -24,7 +25,8 @@ const Registration: React.FC = () => {
   const [dataToDelete, setDataToDelete] = useState<RegistrationType | null>(null);
   const { datas: registrations, action } = useSelector(getRegistrationState);
   const dispatch: AppDispatch = useDispatch();
-  const { hiddeTheModalActive } = useSelector(getAppState)
+  const { hiddeTheModalActive } = useSelector(getAppState);
+  const permission = useHashPermission();
 
 
   // ? ===================== HANDLERS ===================== //
@@ -63,7 +65,7 @@ const Registration: React.FC = () => {
 
   // ? ===================== TABLEAUX =====================
   const actions = [
-    { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
+    { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
 
   const columns = [
@@ -117,13 +119,15 @@ const Registration: React.FC = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Inscription des élèves</h1>
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Nouvelle inscription  </span>
-        </button>
+        {permission.create &&
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Nouvelle inscription  </span>
+          </button>
+        }
       </div>
       <div className="bg-white p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6">

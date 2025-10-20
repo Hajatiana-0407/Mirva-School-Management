@@ -151,6 +151,11 @@ $route['api/admin/lesson/create'] = 'LeconController/create';
 $route['api/admin/lesson/delete'] = 'LeconController/delete';
 $route['api/admin/lesson/publish'] = 'LeconController/publish';
 
+// ******************* ROUTE ROLES ********************** //
+$route['api/admin/role'] = 'RoleController';
+$route['api/admin/role/update'] = 'RoleController/update';
+$route['api/admin/role/create'] = 'RoleController/create';
+$route['api/admin/role/delete'] = 'RoleController/delete';
 
 
 

@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import Profile from '../../Components/ui/Profile';
 import RegisterForm from '../../Components/Forms/RegisterForm';
 import StudentForm from '../../Components/Forms/StudentForm';
+import { useHashPermission } from '../../Hooks/useHashPermission';
 
 
 const Student = () => {
@@ -30,6 +31,7 @@ const Student = () => {
   const [statistique, setStatistique] = useState<any>(null)
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
+  const permission = useHashPermission();
 
   const handleEdit = (student: StudentType) => {
     setEditingStudent(student);
@@ -91,8 +93,8 @@ const Student = () => {
   // ===================== TABLEAUX =====================
   const actions = [
     { icon: Eye, label: 'Voir', onClick: (item: RegistrationType) => navigate('/students/' + item.matricule_etudiant), color: 'blue' },
-    { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
-    { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
+    { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
+    { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
 
   const columns = [
@@ -141,13 +143,15 @@ const Student = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Liste des étudiants</h1>
-        <button
-          onClick={() => setShowModalRegister(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Nouvelle inscription  </span>
-        </button>
+        {permission.create &&
+          <button
+            onClick={() => setShowModalRegister(true)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Nouvelle inscription  </span>
+          </button>
+        }
       </div>
 
       {/* Girl statistique */}
@@ -250,7 +254,7 @@ const Student = () => {
       <Modal
         isOpen={showModal}
         onClose={handleCloseModal}
-        title={editingStudent ? `${ editingStudent.nom } ${ editingStudent.prenom } ( ${ editingStudent.matricule_etudiant } )` : 'Nouvelle étudiant'}
+        title={editingStudent ? `${editingStudent.nom} ${editingStudent.prenom} ( ${editingStudent.matricule_etudiant} )` : 'Nouvelle étudiant'}
         size='lg'
       >
         <StudentForm

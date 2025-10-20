@@ -11,6 +11,7 @@ import { SchoolInfoInitialValue } from "../../../Utils/Types";
 import { AppDispatch } from "../../../Redux/store";
 import { updateSchoolInfo } from "./redux/SchoolAsyncThunk";
 import { baseUrl } from "../../../Utils/Utils";
+import { useHashPermission } from "../../../Hooks/useHashPermission";
 
 // Validation de donnée avec yup 
 const schoolInfoSchema = object({
@@ -32,6 +33,7 @@ const School = () => {
     const { action, datas: schoolInfo } = useSelector(getSchoolState);
     const { onSubmite, formErrors } = useForm(schoolInfoSchema, SchoolInfoInitialValue);
     const [idEteblissement, setIdEteblissement] = useState<number | null>(null);
+    const permission = useHashPermission();
 
     // Effets
     useEffect(() => {
@@ -218,15 +220,17 @@ const School = () => {
             </div>
 
             <div className="flex justify-end">
-                <button
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center"
-                >
-                    {action.isUpdating
-                        ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
-                        <Save className="w-4 h-4" />
-                    }
-                    <span>Enregistrer</span>
-                </button>
+                {permission.update &&
+                    <button
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center"
+                    >
+                        {action.isUpdating
+                            ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+                            <Save className="w-4 h-4" />
+                        }
+                        <span>Enregistrer</span>
+                    </button>
+                }
             </div>
         </form>
     )

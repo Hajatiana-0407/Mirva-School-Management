@@ -11,6 +11,7 @@ import InputError from '../../Components/ui/InputError';
 import { object, string } from 'yup';
 import useForm from '../../Hooks/useForm';
 import Profile from '../../Components/ui/Profile';
+import { useHashPermission } from '../../Hooks/useHashPermission';
 
 
 // Validation de donnée avec yup 
@@ -23,6 +24,7 @@ const Assignments = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const dispatch: AppDispatch = useDispatch();
+    const permission = useHashPermission('teachers');
 
 
     const { onSubmite, formErrors } = useForm(assignationSchema, { id_personnel: teacher?.id_personnel || '' });
@@ -55,17 +57,19 @@ const Assignments = () => {
                     <ArrowLeft className="h-6 w-6 inline-block me-1 cursor-pointer" onClick={() => navigate(-1)} />
                     Attribution des classes et des matières
                 </h1>
-                <button
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center disabled:bg-blue-300"
-                    type='submit'
-                    disabled={action.isLoadingAssignation}
-                >
-                    {action.isLoadingAssignation
-                        ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
-                        <Save className="w-4 h-4" />
-                    }
-                    <span>Enregistrer</span>
-                </button>
+                {permission.update && permission.create &&
+                    <button
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center disabled:bg-blue-300"
+                        type='submit'
+                        disabled={action.isLoadingAssignation}
+                    >
+                        {action.isLoadingAssignation
+                            ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+                            <Save className="w-4 h-4" />
+                        }
+                        <span>Enregistrer</span>
+                    </button>
+                }
             </div>
 
             {teacher &&

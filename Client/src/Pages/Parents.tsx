@@ -50,8 +50,8 @@ const Parents: React.FC = () => {
 
   const actions = [
     { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
-    { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
-    { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
+    { icon: Edit, type:'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
+    { icon: Archive,type:'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
 
   return (

@@ -27,6 +27,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getSchoolState } from '../../Pages/Settings/School/redux/SchoolSlice';
 import { getSchoolYearState } from '../../Pages/School-Year/redux/SchoolYearSlice';
+import { getAuthState } from '../../Pages/Auth/redux/AuthSlice';
 
 interface MenuItemType {
   id: string;
@@ -35,11 +36,14 @@ interface MenuItemType {
   path?: string;
   children?: MenuItemType[];
 }
-
 interface SidebarPropsType {
   collapsed: boolean;
   onToggleCollapse: () => void;
 }
+
+
+
+
 const menuItems: MenuItemType[] = [
   { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard, path: '/dashboard' },
 
@@ -55,8 +59,8 @@ const menuItems: MenuItemType[] = [
     label: 'Leçons et exerices',
     icon: Notebook,
     children: [
-      { id: 'lesson', label: 'Leçons', icon: UserCheck, path: '/lessons' },
-      { id: 'exercice', label: 'Exercices', icon: ListChecks, path: '/exercices' },
+      { id: 'lessons', label: 'Leçons', icon: UserCheck, path: '/lessons' },
+      { id: 'exercices', label: 'Exercices', icon: ListChecks, path: '/exercices' },
     ],
   },
   // Section Administration
@@ -107,6 +111,8 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
   });
   const { datas: shoolInfo } = useSelector(getSchoolState)
   const { activeSchoolYear } = useSelector(getSchoolYearState)
+  const { datas: { permissions } } = useSelector(getAuthState);
+
 
   const handleToggleMenu = (id: string) => {
     setOpenMenus((prev) => ({
@@ -118,10 +124,15 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
   // Rendu des menus pour collapsed
   const renderCollapsedMenuItems = () => {
     const flatMenus = flattenMenuItems(menuItems);
+
     return (
       <ul>
         {flatMenus.map((menu, idx) => {
           const Icon = menu.icon;
+
+          // ===================== L'utilisateur na pas le permission de lecture  ===================== //
+          if (!permissions[menu.id] || !permissions?.[menu.id]?.includes('read')) return '';
+
           return (
             <li key={menu.id} className="relative">
               {menu.path ? (
@@ -153,7 +164,6 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
       </ul>
     );
   };
-
   // Rendu récursif des menus et sous-menus (pour non-collapsed)
   const renderMenuItems = (items: MenuItemType[], level = 0) => (
     <ul className='space-y-0.5'>
@@ -161,7 +171,8 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
         const Icon = menu.icon;
         const hasChildren = !!menu.children?.length;
         const isOpen = openMenus[menu.id];
-
+        // ===================== L'utilisateur na pas le permission de lecture  ===================== //
+        if (!permissions[menu.id] || !permissions?.[menu.id]?.includes('read')) return '';
         return (
           <li key={menu.id}>
             {menu.path ? (

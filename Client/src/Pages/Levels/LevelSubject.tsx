@@ -14,6 +14,7 @@ import SubjectComponent from "./SubjectComponent";
 import useForm from "../../Hooks/useForm";
 import { object } from "yup";
 import AlertDialog from "../../Components/ui/AlertDialog";
+import { useHashPermission } from "../../Hooks/useHashPermission";
 
 const LevelSubjectSchema = object({})
 const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) => {
@@ -31,6 +32,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
     const [subjectCoefToDelete, setSubjectCoefToDelete] = useState<number[]>([]);
     const { onSubmite } = useForm<any>(LevelSubjectSchema, {});
     const [isAlertOpen, setIsAlertOpen] = useState(false)
+    const permission = useHashPermission();
 
     useEffect(() => {
         const allLevelActiveSubject = [];
@@ -213,14 +215,16 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                                         <GraduationCap />
                                         <span>{levelActive?.niveau}</span>
                                     </h1>
-                                    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors text-sm">
-                                        {levelSubjectAction.isUpdating ?
-                                            <div className="w-4 h-4 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-                                            :
-                                            <Save className="w-4 h-4" />
-                                        }
-                                        <span>Enregistrer</span>
-                                    </button>
+                                    {permission.create &&
+                                        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors text-sm">
+                                            {levelSubjectAction.isUpdating ?
+                                                <div className="w-4 h-4 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                :
+                                                <Save className="w-4 h-4" />
+                                            }
+                                            <span>Enregistrer</span>
+                                        </button>
+                                    }
                                 </div>
                                 <div className="space-y-2 ">
                                     <div className="w-100 h-10 text-black border-b grid grid-cols-3">

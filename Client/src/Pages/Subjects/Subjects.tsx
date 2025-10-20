@@ -10,6 +10,7 @@ import { AppDispatch } from '../../Redux/store';
 import { deleteSubject, getAllSubject } from './redux/SubjectAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
 import SubjectForm from '../../Components/Forms/SubjectForm';
+import { useHashPermission } from '../../Hooks/useHashPermission';
 
 
 
@@ -22,6 +23,7 @@ const Subjects = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [subjectToArchive, setSubjectToArchive] = useState<SubjectType | null>(null);
   const dispatch: AppDispatch = useDispatch();
+  const permission = useHashPermission();
 
 
   const columns = [
@@ -78,21 +80,23 @@ const Subjects = () => {
 
   const actions = [
     { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
-    { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
-    { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
+    { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
+    { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Gestion des matières</h1>
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Nouvelle matière</span>
-        </button>
+        {permission.create &&
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Nouvelle matière</span>
+          </button>
+        }
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-sm border">

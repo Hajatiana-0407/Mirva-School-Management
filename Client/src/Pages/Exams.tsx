@@ -39,13 +39,13 @@ const Exams: React.FC = () => {
 
   const examActions = [
     { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
-    { icon: Edit, label: 'Modifier', onClick: (item: any) => console.log('Modifier', item), color: 'green' },
-    { icon: Archive, label: 'Archiver', onClick: (item: any) => console.log('Archiver', item), color: 'red' },
+    { icon: Edit, type:'update', label: 'Modifier', onClick: (item: any) => console.log('Modifier', item), color: 'green' },
+    { icon: Archive,type:'delete', label: 'Archiver', onClick: (item: any) => console.log('Archiver', item), color: 'red' },
   ];
 
   const noteActions = [
-    { icon: Edit, label: 'Modifier', onClick: (item: any) => console.log('Modifier', item), color: 'green' },
-    { icon: Archive, label: 'Supprimer', onClick: (item: any) => console.log('Supprimer', item), color: 'red' },
+    { icon: Edit, type:'update', label: 'Modifier', onClick: (item: any) => console.log('Modifier', item), color: 'green' },
+    { icon: Archive,type:'delete', label: 'Supprimer', onClick: (item: any) => console.log('Supprimer', item), color: 'red' },
   ];
 
   return (

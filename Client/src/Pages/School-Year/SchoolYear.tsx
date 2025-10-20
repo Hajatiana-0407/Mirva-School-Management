@@ -1,4 +1,4 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Plus, Search, Filter, Edit, Archive, Eye } from 'lucide-react';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
@@ -6,16 +6,17 @@ import Table from '../Table';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSchoolYearState } from './redux/SchoolYearSlice';
 import { AppDispatch } from '../../Redux/store';
-import {  deleteSchoolYear, getAllSchoolYear } from './redux/SchoolYearAsyncThunk';
+import { deleteSchoolYear, getAllSchoolYear } from './redux/SchoolYearAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
-import {  SchoolYearType } from '../../Utils/Types';
+import { SchoolYearType } from '../../Utils/Types';
 import SchoolYearForm from '../../Components/Forms/SchoolYearForm';
+import { useHashPermission } from '../../Hooks/useHashPermission';
 
 
 
 
 const SchoolYear = () => {
-  const { datas: schoolYears, action} = useSelector(getSchoolYearState);
+  const { datas: schoolYears, action } = useSelector(getSchoolYearState);
   const { hiddeTheModalActive } = useSelector(getAppState);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -23,6 +24,7 @@ const SchoolYear = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [schoolYearToArchive, setSchoolYearToArchive] = useState<SchoolYearType | null>(null);
   const dispatch: AppDispatch = useDispatch();
+  const permission = useHashPermission();
 
   const columns = [
     { key: 'nom', label: 'Année scolaire' },
@@ -76,21 +78,23 @@ const SchoolYear = () => {
 
   const actions = [
     { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
-    { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
-    { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
+    { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
+    { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Gestion des années scolaires</h1>
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Nouvelle année scolaire</span>
-        </button>
+        {permission.create &&
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Nouvelle année scolaire</span>
+          </button>
+        }
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-sm border">
@@ -128,7 +132,7 @@ const SchoolYear = () => {
         onClose={handleCloseModal}
         title={editingSchoolYear ? 'Modifier l\'année scolaire' : 'Nouvelle année scolaire'}
       >
-        <SchoolYearForm schoolYear={editingSchoolYear } handleClose={handleCloseModal} />
+        <SchoolYearForm schoolYear={editingSchoolYear} handleClose={handleCloseModal} />
       </Modal>
 
       {/* Dialog de confirmation */}

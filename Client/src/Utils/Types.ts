@@ -18,10 +18,8 @@ export const AppInitialValue: AppStateType = {
     hiddeTheModalActive: false
 }
 
-type Permission = 'create' | 'read' | 'update' | 'delete';
-type PermissionsMap = {
-    [moduleName: string]: Permission[];
-};
+export type Permission = 'create' | 'read' | 'update' | 'delete';
+type PermissionsMap = Record<string, Permission[]>;
 type InfoType = {
     nom: string,
     prenom: string,
@@ -33,7 +31,7 @@ type InfoType = {
 
 export type TokenDecodeType = {
     user?: User;
-    permissions: PermissionsMap[];
+    permissions: PermissionsMap;
     info?: InfoType
 }
 export type User = {
@@ -54,7 +52,7 @@ export const AuthInitialValue: AuthStateType = {
     user: undefined,
     isLoggedIn: false,
     token: '',
-    permissions: []
+    permissions: {}
 }
 
 // BACK'S OBJECT RETURN 
@@ -561,5 +559,27 @@ export const LessonInitialValue: LessonType = {
     ...levelInitial
 
 }
+
+
+// ===================== Roles ===================== //
+export interface PermissionItem {
+    label: string;
+    create: boolean;
+    delete: boolean;
+    update: boolean;
+    read: boolean;
+}
+
+export interface Role {
+    id_role?: number; 
+    nom: string;
+    description: string;
+    is_restrict: string;
+    couleur: string;
+    total_utilisateur: string; 
+    permissions: Record<number, PermissionItem>; 
+}
+
+
 
 
