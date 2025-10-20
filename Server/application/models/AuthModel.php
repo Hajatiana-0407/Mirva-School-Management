@@ -64,32 +64,28 @@ class AuthModel extends CI_Model
                 unset($user->id_personnel);
 
             // Cherche les role et les permission d'acces pour l'utilisateur 
-            $permissions = null;
+            $permissions = [];
             $modules = $this->db->select('*')
                 ->from('modules')
                 ->get()
                 ->result_array();
-            foreach ($modules as $key => $module) {
-                $role_permission  = $this->db->select('p.*')
-                    ->from('role_permissions rp')
-                    ->join('permissions p', 'p.id_permission = rp.id_permission', 'inner')
-                    ->where('rp.id_role', $user->id_role)
-                    ->where('rp.id_module', $module['id_module'])
+            foreach ($modules as  $module) {
+                $role_permission  = $this->db->select('can_read as read , can_create as create , can_update as update , can_delete as delete')
+                    ->from('role_permissions ')
+                    ->where('id_role', $user->id_role)
+                    ->where('id_module', $module['id_module'])
                     ->get()
-                    ->result_array();
-                if (count($role_permission) > 0) {
-                    $temps = [];
-                    foreach ($role_permission as $value) {
-                        $temps[] = $value['nom'];
-                    }
-                    $permissions[$module['nom']] = $temps;
-                    $temps = [];
-                }
+                    ->row();
+
+                $permissions[$module['nom']]['create'] = $role_permission->create === '1';
+                $permissions[$module['nom']]['read'] = $role_permission->read  === '1';
+                $permissions[$module['nom']]['update'] = $role_permission->update  === '1';
+                $permissions[$module['nom']]['delete'] = $role_permission->delete  === '1';
             }
+
             $response['info'] =  $info;
             $response['permissions'] = $permissions;
         }
-
         return $response;
     }
 
@@ -146,32 +142,27 @@ class AuthModel extends CI_Model
                 unset($user->id_personnel);
 
             // Cherche les role et les permission d'acces pour l'utilisateur 
-            $permissions = null;
+            $permissions = [];
             $modules = $this->db->select('*')
                 ->from('modules')
                 ->get()
                 ->result_array();
-            foreach ($modules as $key => $module) {
-                $role_permission  = $this->db->select('p.*')
-                    ->from('role_permissions rp')
-                    ->join('permissions p', 'p.id_permission = rp.id_permission', 'inner')
-                    ->where('rp.id_role', $user->id_role)
-                    ->where('rp.id_module', $module['id_module'])
+            foreach ($modules as  $module) {
+                $role_permission  = $this->db->select('can_read as read , can_create as create , can_update as update , can_delete as delete')
+                    ->from('role_permissions ')
+                    ->where('id_role', $user->id_role)
+                    ->where('id_module', $module['id_module'])
                     ->get()
-                    ->result_array();
-                if (count($role_permission) > 0) {
-                    $temps = [];
-                    foreach ($role_permission as $value) {
-                        $temps[] = $value['nom'];
-                    }
-                    $permissions[$module['nom']] = $temps;
-                    $temps = [];
-                }
+                    ->row();
+
+                $permissions[$module['nom']]['create'] = $role_permission->create === '1';
+                $permissions[$module['nom']]['read'] = $role_permission->read  === '1';
+                $permissions[$module['nom']]['update'] = $role_permission->update  === '1';
+                $permissions[$module['nom']]['delete'] = $role_permission->delete  === '1';
             }
             $response['info'] =  $info;
             $response['permissions'] = $permissions;
         }
-
         return $response;
     }
 }

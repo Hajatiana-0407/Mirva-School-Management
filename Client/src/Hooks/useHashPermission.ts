@@ -20,25 +20,28 @@ export const useHashPermission = (id?: string): {
         identification = id;
     }
 
+    console.log( permissions[identification]);
+    
+
 
     // ? GERER LA PERMISSION DE LECTURE GLOBALEMENT 
-    if (!permissions[identification] || !permissions?.[identification]?.includes('read')) {
+    if ( !permissions?.[identification]?.read) {
         // localStorage.removeItem('token');
         // navigate('/signin')
         return {
-            create: permissions?.[identification]?.includes('create'),
-            read: permissions?.[identification]?.includes('read'),
-            delete: permissions?.[identification]?.includes('delete'),
-            update: permissions?.[identification]?.includes('update'),
+            create: !!permissions?.[identification]?.create,
+            read: !!permissions?.[identification]?.read,
+            delete: !!permissions?.[identification]?.delete,
+            update: !!permissions?.[identification]?.update,
 
             identification: identification,
         };
     }
     return {
-        create: permissions[identification].includes('create'),
-        read: permissions[identification].includes('read'),
-        delete: permissions[identification].includes('delete'),
-        update: permissions[identification].includes('update'),
+        create: !!permissions[identification]?.create,
+        read: !!permissions[identification]?.read,
+        delete: !!permissions[identification]?.delete,
+        update: !!permissions[identification]?.update,
 
         identification: identification
     }

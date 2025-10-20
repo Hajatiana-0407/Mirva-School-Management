@@ -18,8 +18,13 @@ export const AppInitialValue: AppStateType = {
     hiddeTheModalActive: false
 }
 
-export type Permission = 'create' | 'read' | 'update' | 'delete';
-type PermissionsMap = Record<string, Permission[]>;
+export type Permission = {
+    create: boolean;
+    update: boolean;
+    read: boolean;
+    delete : boolean;
+};
+type PermissionsMap = Record<string, Permission>;
 type InfoType = {
     nom: string,
     prenom: string,
@@ -571,13 +576,13 @@ export interface PermissionItem {
 }
 
 export interface Role {
-    id_role?: number; 
+    id_role?: number;
     nom: string;
     description: string;
     is_restrict: string;
     couleur: string;
-    total_utilisateur: string; 
-    permissions: Record<number, PermissionItem>; 
+    total_utilisateur: string;
+    permissions: Record<number, PermissionItem>;
 }
 
 

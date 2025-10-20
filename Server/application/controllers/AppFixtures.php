@@ -444,7 +444,6 @@ class AppFixtures extends CI_Controller
     {
         $this->model->emptyDb([
             'modules',
-            'permissions',
             'roles',
             'role_permissions'
         ]);
@@ -483,21 +482,6 @@ class AppFixtures extends CI_Controller
         $this->model->insertBatchFixtures($roles, "roles");
 
 
-        //?  ===================== PERMISSIONS ===================== //
-        $permissions = [
-            ['nom' => 'create', 'description' => 'Autorise la création de nouvelles données'],
-            ['nom' => 'read', 'description' => 'Autorise la lecture ou la consultation des données'],
-            ['nom' => 'update', 'description' => 'Autorise la modification des données existantes'],
-            ['nom' => 'delete', 'description' => 'Autorise la suppression des données'],
-            // Permissions complémentaires
-            // ['nom' => 'import', 'description' => 'Autorise l’importation de données depuis un fichier'],
-            // ['nom' => 'export', 'description' => 'Autorise l’exportation de données'],
-            // ['nom' => 'validate', 'description' => 'Autorise la validation d’éléments (ex : notes, paiements, etc.)'],
-            // ['nom' => 'print', 'description' => 'Autorise l’impression ou la génération de documents PDF'],
-            // ['nom' => 'manage', 'description' => 'Autorise la gestion complète du module (tous droits inclus)'],
-        ];
-        $this->model->insertBatchFixtures($permissions, "permissions");
-
         //?  ===================== MODULE ===================== //
         $modules = [
             ['nom' => 'dashboard', 'label' => 'Tableau de bord', 'description' => 'Tableau de bord général de la plateforme'],
@@ -533,26 +517,31 @@ class AppFixtures extends CI_Controller
             ['nom' => 'school-settings', 'label' => 'Paramètres de l’établissement', 'description' => 'Informations et configuration propres à l’établissement scolaire'],
             ['nom' => 'roles-settings', 'label' => 'Paramètres des rôles et utilisateurs', 'description' => 'Gestion des rôles, permissions et utilisateurs du système'],
         ];
-
         $this->model->insertBatchFixtures($modules, 'modules');
 
-        $permissions_id = $this->model->getIds('permissions', 'id_permission');
         $modules_id = $this->model->getIds('modules', 'id_module');
-        $roles_id = $this->model->getIds('roles', 'id_role');
-
+        $roles = $this->model->getAllTable('roles');
         $roles_permmissions = [];
-        foreach ($roles_id as $role) {
+        foreach ($roles as $role) {
             foreach ($modules_id as  $module) {
-                $count  =  rand(1, 4); // les permissions
-                for ($i = 0; $i < $count; $i++) {
-                    $temps = [
-                        'id_role' => $role,
-                        'id_module' => $module,
-                        'id_permission' => $permissions_id[$i]
-                    ];
-                    $roles_permmissions[] = $temps;
-                    $temps = [];
+                $temps = [
+                    'id_role' => $role['id_role'],
+                    'id_module' => $module,
+                    'can_read' => (bool) random_int(0, 1),
+                    'can_create' => (bool) random_int(0, 1),
+                    'can_update' => (bool) random_int(0, 1),
+                    'can_delete' => (bool) random_int(0, 1),
+                ];
+
+                if ($role['nom'] === 'administrateur') {
+                    $temps['can_create'] = true;
+                    $temps['can_update'] = true;
+                    $temps['can_delete'] = true;
+                    $temps['can_read'] = true;
                 }
+
+                $roles_permmissions[] = $temps;
+                $temps = [];
             }
         }
         $this->model->insertBatchFixtures($roles_permmissions, 'role_permissions');

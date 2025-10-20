@@ -43,7 +43,7 @@ export const updateAccount = createAsyncThunk('update/account', async (account: 
 export const logoutUser = createAsyncThunk('logout', async (id_user: number): Promise<ApiReturnType> => {
     let returnData: ApiReturnType = ApiReturnInitial;
     await api.post('auth/logout', {
-        id_user ,
+        id_user,
         headers: { 'Content-Type': 'multipart/form-data' }
     }).then(response => {
         returnData = response.data;

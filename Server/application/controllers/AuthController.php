@@ -70,8 +70,7 @@ class AuthController extends CI_Controller
     public function update()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $post = $this->input->post(null, true);
-
+            $post =  (array)$this->input->post(null, true);
             $id_user =  $post['id_user'] ?? null;
             $password =  $post['password'] ?? null;
             if ($id_user) {

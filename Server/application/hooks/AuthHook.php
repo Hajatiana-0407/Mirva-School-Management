@@ -80,12 +80,14 @@ class AuthHook
             if ($key === 'data') {
                 $_POST['user'] = (array)$value->user ?? null;
                 $_POST['info'] = (array)$value->info ?? null;
-                $_POST['permissions'] = (array)$value->permissions ?? null;
 
-
+                // transformier le permission stdClass to array
+                foreach ($value->permissions as $key => $permission) {
+                    $_POST['permissions'][$key]  = (array)$permission;
+                    $_REQUEST['permissions'][$key]  = (array)$permission;
+                }
                 $_REQUEST['user'] = (array)$value->user ?? null;
                 $_REQUEST['info'] = (array)$value->info ?? null;
-                $_REQUEST['permissions'] = (array)$value->permissions ?? null;
                 break;
             }
         }

@@ -131,7 +131,7 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
           const Icon = menu.icon;
 
           // ===================== L'utilisateur na pas le permission de lecture  ===================== //
-          if (!permissions[menu.id] || !permissions?.[menu.id]?.includes('read')) return '';
+          if (!permissions?.[menu.id]?.read) return '';
 
           return (
             <li key={menu.id} className="relative">
@@ -172,7 +172,7 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
         const hasChildren = !!menu.children?.length;
         const isOpen = openMenus[menu.id];
         // ===================== L'utilisateur na pas le permission de lecture  ===================== //
-        if (!permissions[menu.id] || !permissions?.[menu.id]?.includes('read')) return '';
+        if (!permissions?.[menu.id]?.read) return '';
         return (
           <li key={menu.id}>
             {menu.path ? (
