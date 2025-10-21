@@ -22,7 +22,7 @@ export type Permission = {
     create: boolean;
     update: boolean;
     read: boolean;
-    delete : boolean;
+    delete: boolean;
 };
 type PermissionsMap = Record<string, Permission>;
 type InfoType = {
@@ -72,6 +72,21 @@ export const ApiReturnInitial: ApiReturnType = {
     'data': {}
 }
 
+// MODULES ( COMPOSANTS ) //
+export type ModuleType = {
+    id_module?: number;
+    nom: string;
+    description: string;
+    label: string
+    is_for_all?: boolean,
+    is_section?: boolean,
+}
+
+export const ModuleInitialValue: ModuleType = {
+    description: '',
+    label: '',
+    nom: ''
+}
 // SCHOOL MANAGEMENT SYSTEM TYPES //
 export type ShoolInfoType = {
     id_etablissement?: number;
@@ -567,24 +582,23 @@ export const LessonInitialValue: LessonType = {
 
 
 // ===================== Roles ===================== //
-export interface PermissionItem {
-    label: string;
-    create: boolean;
-    delete: boolean;
-    update: boolean;
-    read: boolean;
-}
-
-export interface Role {
+export type RoleType = {
     id_role?: number;
     nom: string;
     description: string;
     is_restrict: string;
     couleur: string;
-    total_utilisateur: string;
-    permissions: Record<number, PermissionItem>;
+    total_utilisateur: number;
+    permissions: Record<number, Permission & { label: string, is_for_all?: boolean, is_section?: boolean, }>;
+};
+export const RoleInitialValue: RoleType = {
+    nom: '',
+    description: '',
+    is_restrict: '',
+    couleur: '',
+    total_utilisateur: 0,
+    permissions: {}
 }
-
 
 
 

@@ -157,6 +157,8 @@ $route['api/admin/role/update'] = 'RoleController/update';
 $route['api/admin/role/create'] = 'RoleController/create';
 $route['api/admin/role/delete'] = 'RoleController/delete';
 
+// ******************* ROUTE ROLES ********************** //
+$route['api/admin/module'] = 'ModuleController';
 
 
 

@@ -113,7 +113,6 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
   const { activeSchoolYear } = useSelector(getSchoolYearState)
   const { datas: { permissions } } = useSelector(getAuthState);
 
-
   const handleToggleMenu = (id: string) => {
     setOpenMenus((prev) => ({
       ...prev,

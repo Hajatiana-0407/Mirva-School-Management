@@ -35,12 +35,15 @@ import Lesson from './Pages/Lessons/Lesson';
 import Exercice from './Pages/Exercice/Exercice';
 import LessonSingle from './Pages/Lessons/LessonSingle';
 import { setNavigator } from './Utils/navigate';
+import { getModuleState } from './Redux/Other/slices/ModuleSlice';
+import { getAllModule } from './Redux/Other/asyncThunk/ModuleAsyncThunk';
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
   const { datas: schoolInfo } = useSelector(getSchoolState)
   const { activeSchoolYear } = useSelector(getSchoolYearState)
   const { datas: { isLoggedIn } } = useSelector(getAuthState);
+  const { datas: modules } = useSelector(getModuleState)
   const navigate = useNavigate();
   // Utils
   useEffect(() => {
@@ -54,9 +57,12 @@ function App() {
       if (!activeSchoolYear) {
         dispatch(getAllSchoolYear());
       }
+      if (modules.length === 0) {
+        dispatch(getAllModule());
+      }
       // Verification si l'utilisateur est toujours authentifié
     }
-    
+
     if (!isLoggedIn) {
       const token = localStorage.getItem('token');
       if (!!token) {

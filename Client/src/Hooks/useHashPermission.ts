@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom"
 import { getAuthState } from "../Pages/Auth/redux/AuthSlice";
 import { navigate } from "../Utils/navigate";
 
-export const useHashPermission = (id?: string): {
+export const useHashPermission = (id?: string, redirect = true): {
     create: boolean;
     read: boolean;
     delete: boolean;
@@ -20,14 +20,13 @@ export const useHashPermission = (id?: string): {
         identification = id;
     }
 
-    console.log( permissions[identification]);
-    
-
-
     // ? GERER LA PERMISSION DE LECTURE GLOBALEMENT 
-    if ( !permissions?.[identification]?.read) {
-        // localStorage.removeItem('token');
-        // navigate('/signin')
+    if (!permissions?.[identification]?.read) {
+        if (redirect) {
+            localStorage.removeItem('token');
+            navigate('/signin')
+        }
+
         return {
             create: !!permissions?.[identification]?.create,
             read: !!permissions?.[identification]?.read,
