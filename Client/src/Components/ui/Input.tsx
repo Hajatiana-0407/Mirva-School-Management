@@ -1,6 +1,6 @@
 import React, { forwardRef, useState, useRef, useEffect } from "react";
 import clsx from "clsx";
-import { Eye, EyeOff, AlertCircle, X, RefreshCcw, LucideProps } from "lucide-react";
+import { Eye, EyeOff, AlertCircle, X, RefreshCcw, LucideProps, ChevronDownIcon } from "lucide-react";
 import { generatePassword } from "../../Utils/Utils";
 
 interface InputProps {
@@ -34,7 +34,7 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
             onChange = () => { },
             errorMessage = "",
             defaultValue = undefined,
-            iconColor = "text-gray-800",
+            iconColor = "text-gray-400",
             options = [],
             isShowGeneratePassword = false,
         },
@@ -76,142 +76,154 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
 
 
         return (
-            <div className="relative w-full">
-                {/* Label */}
-                {!icon && (
-                    <label htmlFor={name} className="block mb-2 text-base text-body text-secondary">
-                        {label} :
-                    </label>
-                )}
-
-                <div className="relative">
-                    {/* Label flottant */}
-                    <span
-                        className={clsx(
-                            {
-                                hidden: !isEmpty && type !== "select",
-                            },
-                            "transition-all duration-700 absolute left-3 top-0 -translate-y-1/2 text-sm text-blue-400 pointer-events-none bg-white z-20"
-                        )}
-                    >
-                        {label}
-                    </span>
-
-                    {/* Select */}
-                    {type === "select" ? (
-                        <select
-                            id={name}
-                            name={name}
-                            required={required}
-                            onChange={handleChange}
-                            defaultValue={defaultValue}
-                            className={clsx(
-                                {
-                                    "ps-12": icon,
-                                    "text-gray-400/60": options.length === 0,
-                                },
-                                "bg-white border border-gray-300 text-primary text-sm rounded focus:ring-gray-300/50 focus:border-gray-300/50 focus:outline-1 block w-full p-2 py-2.5"
-                            )}
-                        >
-                            {options.length
-                                ? options.map((opt, idx) => (
-                                    <option key={idx} value={opt.value}>
-                                        {opt.label}
-                                    </option>
-                                ))
-                                : (
-                                    <option value="">Aucun élément trouvé ...</option>
-                                )}
-                        </select>
-                    ) : type === "file" ? (
-                        // Input file
-                        <div className="flex w-full flex-col items-start gap-2 relative">
-                            <label
-                                className={clsx(
-                                    "flex w-full items-center gap-2 px-4 py-2 border border-gray-400/60 rounded-lg cursor-pointer transition-colors"
-                                )}
-                            >
-                                <div className="w-5 h-5" />
-                                <span
-                                    className={clsx(
-                                        { "text-gray-400": !fileInputName, "text-gray-800": fileInputName },
-                                        "text-sm"
-                                    )}
-                                >
-                                    {fileInputName || label}
-                                </span>
-                                <input
-                                    ref={inputFileRef}
-                                    name={name}
-                                    type="file"
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        setFileInputName(file ? file.name : "");
-                                        handleChange(e);
-                                    }}
-                                />
-                            </label>
-                            {fileInputName && (
-                                <span
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-red-400 bg-gray-50 rounded cursor-pointer border"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setFileInputName("");
-                                        if (inputFileRef.current) inputFileRef.current.value = "";
-                                    }}
-                                >
-                                    <X />
-                                </span>
-                            )}
-                        </div>
-                    ) : (
-                        // Input classique (text, password, email...)
-                        <input
-                            ref={ref as React.Ref<HTMLInputElement>}
-                            autoComplete="off"
-                            type={inputType}
-                            id={name}
-                            name={name}
-                            placeholder={placeholder || label}
-                            required={required}
-                            value={localValue}
-                            onChange={handleChange}
-                            readOnly={readonly}
-                            className={clsx(
-                                { "ps-12": icon },
-                                "bg-background border overflow-hidden border-gray-300 text-primary text-sm rounded focus:ring-gray-300/50 focus:border-gray-300/50 focus:outline-1 block w-full p-2 py-2.5"
-                            )}
-                        />
+            <div className="">
+                <div className="relative w-full">
+                    {/* Label */}
+                    {!icon && (
+                        <label htmlFor={name} className="block mb-2 text-base text-body text-secondary">
+                            {label} :
+                        </label>
                     )}
-
                     {/* Icône */}
                     {icon && (
-                        <div className="absolute flex justify-center items-center w-10 top-0 left-0 text-xl border-r border-gray-300 h-full">
-                            {React.createElement(icon, { size: 18, className: iconColor })}
+                        <div className="absolute flex justify-center items-center w-12 top-0 left-0 z-10 h-full">
+                            {React.createElement(icon, { size: 18, className: clsx('w-5 h-5', iconColor) })}
                         </div>
                     )}
 
-                    {/* Password actions */}
-                    {type === "password" && (
-                        <div className="absolute z-20 flex justify-center items-center gap-2 top-0 right-0 text-xl text-secondary h-full rounded overflow-hidden">
-                            <span className="cursor-pointer px-2" onClick={() => setShowPassword((v) => !v)}>
-                                {!showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-                            </span>
-                            {isShowGeneratePassword && (
-                                <button
-                                    type="button"
-                                    className="h-full px-2 flex items-center bg-blue-500 text-white"
-                                    onClick={handleGeneratePassword}
-                                >
-                                    <RefreshCcw />
-                                </button>
+
+                    <div className="relative">
+                        {/* Label flottant */}
+                        <span
+                            className={clsx(
+                                {
+                                    hidden: !isEmpty && type !== "select",
+                                },
+                                "transition-all duration-700 absolute left-3 top-0 -translate-y-1/2 text-sm text-blue-400 pointer-events-none bg-white z-20"
                             )}
-                        </div>
-                    )}
-                </div>
+                        >
+                            {label}
+                        </span>
 
+                        {/* Select */}
+                        {type === "select" ? (
+                            <div className="relative w-full">
+                                {/* Le select */}
+                                <select
+                                    id={name}
+                                    name={name}
+                                    required={required}
+                                    onChange={handleChange}
+                                    defaultValue={defaultValue}
+                                    className={clsx(
+                                        {
+                                            "ps-12": icon,
+                                            "text-gray-400/60": options.length === 0,
+                                        },
+                                        "bg-white pl-10 pr-10 py-2 border w-full border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
+                                    )}
+                                >
+                                    {options.length ? (
+                                        options.map((opt, idx) => (
+                                            <option key={idx} value={opt.value}>
+                                                {opt.label}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option value="">Aucun élément trouvé ...</option>
+                                    )}
+                                </select>
+
+                                {/* Icône Lucide à droite */}
+                                <ChevronDownIcon
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-800 pointer-events-none"
+                                    size={18}
+                                />
+                            </div>
+                        ) : type === "file" ? (
+                            // Input file
+                            <div className="flex w-full flex-col items-start gap-2 relative">
+                                <label
+                                    className={clsx(
+                                        "flex w-full items-center gap-2 px-4 py-2 border border-gray-400/60 rounded-lg cursor-pointer transition-colors"
+                                    )}
+                                >
+                                    <div className="w-5 h-5" />
+                                    <span
+                                        className={clsx(
+                                            { "text-gray-400": !fileInputName, "text-gray-800": fileInputName },
+                                            "text-sm"
+                                        )}
+                                    >
+                                        {fileInputName || label}
+                                    </span>
+                                    <input
+                                        ref={inputFileRef}
+                                        name={name}
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            setFileInputName(file ? file.name : "");
+                                            handleChange(e);
+                                        }}
+                                    />
+                                </label>
+                                {fileInputName && (
+                                    <span
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-red-400 bg-gray-50 rounded cursor-pointer border"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setFileInputName("");
+                                            if (inputFileRef.current) inputFileRef.current.value = "";
+                                        }}
+                                    >
+                                        <X />
+                                    </span>
+                                )}
+                            </div>
+                        ) : (
+                            // Input classique (text, password, email...)
+                            <input
+                                ref={ref as React.Ref<HTMLInputElement>}
+                                autoComplete="off"
+                                type={inputType}
+                                id={name}
+                                name={name}
+                                placeholder={placeholder || label}
+                                required={required}
+                                value={localValue}
+                                onChange={handleChange}
+                                readOnly={readonly}
+                                className={clsx(
+                                    { "ps-12": icon },
+                                    "pl-10 pr-4 py-2 border w-full border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                )}
+                            />
+                        )}
+
+
+                        {/* Password actions */}
+                        {type === "password" && (
+                            <div className="absolute z-20 flex justify-center items-center gap-2 top-0 right-0 text-xl text-secondary h-full rounded overflow-hidden">
+                                <span className="cursor-pointer px-2" onClick={() => setShowPassword((v) => !v)}>
+                                    {!showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                                </span>
+                                {isShowGeneratePassword && (
+                                    <button
+                                        type="button"
+                                        className="h-full px-2 flex items-center bg-blue-500 text-white"
+                                        onClick={handleGeneratePassword}
+                                    >
+                                        <RefreshCcw />
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                    </div>
+
+                </div>
                 {/* Erreur */}
                 {errorMessage && (
                     <div className="text-red-500 px-1 p-[2px] mt-1 rounded text-sm bg-red-500/10 flex items-center">
