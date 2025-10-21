@@ -85,8 +85,6 @@ et les lier a users
 - [ ] 
 
 
-
-
 # LEÇON
 - [x] Supprimer une leçon 
 - [x] Publié 
@@ -102,3 +100,24 @@ et les lier a users
 - [ ] Creer une composant pour le voire plus 
     -les prof connecté ne peut voir que ces leçons
     -les etudant ne peut pas faire d'action apart le telechargement 
+
+
+# Rôle 
+
+- [] Créer un composant pour "Voir toutes les permissions pour ce rôle".
+
+- []  Rendre chaque élément de la liste des rôles cliquable afin d’afficher cette page (modifier uniquement le contenu de la page actuelle, sans redirection vers une autre page).
+
+- []  Ajouter un bouton “Retour” et un titre à cette page.
+
+# Utilisateur 
+
+- [] Créer une page utilisateur permettant la création et l’affichage des informations de la personne liée à cet utilisateur (étudiant, professeur, parent).
+
+- [] Créer un composant pour afficher tous les utilisateurs associés à un rôle.
+
+- [] Rendre toutes les nouvelles pages responsives.
+
+
+# MODIFICATION  
+- [ ] Mettre une message qui affiche auccune matiere disponible dans le matiere et niveau 
