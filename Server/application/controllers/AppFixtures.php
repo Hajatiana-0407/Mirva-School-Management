@@ -54,11 +54,11 @@ class AppFixtures extends CI_Controller
             'telephone' => '034 12 576 92',
             'email' => 'mirvaalarobia@gmail.com',
             'slogan' => 'Apprendre, Grandir, Réussir',
-            'logo' => 'public/uploads/etablissement//1760889625_file_68f50b198f1114.70535074.jpeg',
+            'logo' => '',
             'created_at' => date('Y-m-d H:i:s'),
             'site_web' => 'www.lyceemirva35.com',
             'description' => 'Lycée MIRVA Alarobia Amboniloha
-Présco Primaires Secondaires',
+        Présco Primaires Secondaires',
             "prefix" => '',
             'facebook' => 'https://www.facebook.com/profile.php?id=61575911525721',
             'twitter' => '',
@@ -553,7 +553,7 @@ Présco Primaires Secondaires',
      *
      * @return void
      */
-    private function loadUser($clean = false)
+    public function loadUser($clean = false)
     {
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
@@ -617,6 +617,8 @@ Présco Primaires Secondaires',
             'created_at' => $this->faker->dateTime()->format('Y-m-d H:i:s'),
             'last_login' => $this->faker->dateTime()->format('Y-m-d H:i:s')
         ]);
+
+        echo "✅ Utilisateur générée avec succès !" . PHP_EOL;
     }
 
     /**
