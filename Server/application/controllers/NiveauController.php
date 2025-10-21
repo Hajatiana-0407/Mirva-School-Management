@@ -3,6 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class NiveauController extends CI_Controller
 {
+    protected $pk = 'id_niveau';
     public function __construct()
     {
         parent::__construct();
@@ -76,7 +77,11 @@ class NiveauController extends CI_Controller
             'description' => $this->input->post('description'),
         ];
 
-        if ($this->NiveauModel->isExist(["niveau" => $data['niveau']] , $id_niveau )) {
+        if ($this->NiveauModel->isExist(
+            ["niveau" => $data['niveau']],
+            'and',
+            [$this->pk => $id_niveau]
+        )) {
             echo json_encode(['error' => true, 'message' => 'Le niveau existe déjà.']);
         } else {
             $data =  $this->NiveauModel->update($id_niveau, $data);
@@ -149,8 +154,8 @@ class NiveauController extends CI_Controller
             $toAddIdMatiere = $_POST['add'];
         }
         foreach ($toAddIdMatiere as $key => $value) {
-            $data = ["coefficient" => $value , "matiere_id_matiere" => $key , "niveau_id_niveau" => $id_niveau ];
-            $this->MatiereNiveauModel->insert( $data );
+            $data = ["coefficient" => $value, "matiere_id_matiere" => $key, "niveau_id_niveau" => $id_niveau];
+            $this->MatiereNiveauModel->insert($data);
         }
     }
 }

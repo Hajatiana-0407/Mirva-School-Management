@@ -88,19 +88,49 @@ class CI_Model
      * @param [type] $id ( id a exclure )
      * @return boolean
      */
-    public function isExist($champs = [], $id = null)
+    public function isExist($champs = [], $champSeparator = 'and',  $excludes  = [], $excludeSeparator = 'and')
     {
         $query = $this->db;
-        $i = 0;
-        $query->where($this->primaryKey . ' <>', $id);
-        foreach ($champs as $key => $value) {
-            if ($i == 0) {
-                $query->where($key, $value);
-            } else {
-                $query->or_where($key, $value);
+
+        // ? Exclusions
+        if (!empty($excludes)) {
+            $query->group_start(); // Ouvre un groupe de conditions
+            $j = 0;
+            foreach ($excludes as $champ => $exclude) {
+                if ($j == 0) {
+                    $query->where($champ . ' <>', $exclude);
+                } else {
+                    if ($excludeSeparator == 'and') {
+                        $query->where($champ . ' <>', $exclude);
+                    } else {
+                        $query->or_where($champ . ' <>', $exclude);
+                    }
+                }
+                $j++;
             }
-            $i++;
+            $query->group_end(); // Ferme le groupe
         }
+
+        // ? Vérifications
+        if (!empty($champs)) {
+            $query->group_start();
+            $i = 0;
+            foreach ($champs as $key => $value) {
+                if ($i == 0) {
+                    $query->where($key, $value);
+                } else {
+                    if ($champSeparator == 'and') {
+                        $query->where($key, $value);
+                    } else {
+                        $query->or_where($key, $value);
+                    }
+                }
+                $i++;
+            }
+            $query->group_end();
+        }
+
+        // ? Exécution
         $data = $query->get($this->table)->result();
         if (count($data)) {
             return true;

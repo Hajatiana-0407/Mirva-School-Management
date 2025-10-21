@@ -54,10 +54,11 @@ class AnneeScolaireController extends CI_Controller
         ];
 
 
-        if ($this->AnneeScolaireModel->isExist([
-            'nom' => $data['nom'],
-            // 'abbreviation' => $data['abbreviation'],
-        ], $id)) {
+        if ($this->AnneeScolaireModel->isExist(
+            ['nom' => $data['nom']]
+            ,'and' ,
+            [$this->pk => $id ]
+        )) {
             echo json_encode(['error' => true, 'message' => 'L\'année scolaire existe déjà.']);
         } else {
             $data =  $this->AnneeScolaireModel->update($id, $data);
@@ -99,16 +100,16 @@ class AnneeScolaireController extends CI_Controller
     public function changeActiveSchoolYear()
     {
         $id = $this->input->post($this->pk);
-        
+
         if ($id) {
             $isChnaged = $this->AnneeScolaireModel->changeActiveSchoolYear($id);
             if ($isChnaged) {
                 echo json_encode(['error' => false, 'data' => $id]);
             } else {
-                echo json_encode(['error' => true , 'data' => null, 'message' => 'Échec de la modification']);
+                echo json_encode(['error' => true, 'data' => null, 'message' => 'Échec de la modification']);
             }
         } else {
-            echo json_encode(['error' => true , 'data' => null, 'message' => 'Échec dffsdfsde la modification']);
+            echo json_encode(['error' => true, 'data' => null, 'message' => 'Échec dffsdfsde la modification']);
         }
     }
 }
