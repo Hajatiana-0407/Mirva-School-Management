@@ -232,7 +232,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                                             Matière
                                         </div>
                                         <div className="col-span-2">
-                                            Doefficient
+                                            Coefficient
                                         </div>
                                     </div>
                                     <div className="space-y-2 max-h-80 overflow-y-auto">

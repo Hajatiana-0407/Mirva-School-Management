@@ -71,10 +71,15 @@ class EnseigantsController extends CI_Controller
             $data['matricule_personnel'] = $matricule;
             $data['id_type_personnel'] = $this->input->post('type_personnel');
             foreach ($_POST as $key => $value) {
-                if ($key !== 'type_personnel' && $key !== 'assignations' && $key === 'user') {
+                if (
+                    $key !== 'type_personnel'
+                    &&  $key !== 'assignations'
+                    && $key !== 'user'
+                ) {
                     $data[$key] = $this->input->post($key);
                 }
             }
+
 
             // Gestion de l'upload de la photo de profil
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {

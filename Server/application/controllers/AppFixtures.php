@@ -334,7 +334,7 @@ class AppFixtures extends CI_Controller
 
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
-            'type_personnel',
+            // 'type_personnel',
             'classe_proffesseur_matiere',
             'personnel',
         ]);
@@ -569,9 +569,11 @@ class AppFixtures extends CI_Controller
         $eleves_id = $this->model->getIds('eleve', 'id_eleve');
         $parent_id = $this->model->getIds('parents', 'id_parent');
 
+
         $user_relations  = [$personnels_id, $eleves_id, $parent_id];
 
         $roles_id = $this->model->getIds('roles', 'id_role');
+
         for ($i = 0; $i < 10; $i++) {
             $user = [
                 'id_role' => $this->faker->randomElement($roles_id),
@@ -584,15 +586,11 @@ class AppFixtures extends CI_Controller
 
             $typeIdx = rand(0, 2);
             $tentation = 0;
-            while (!isset($user_relations[$typeIdx]) || count($user_relations[$typeIdx]) === 0) {
-                if ($tentation === 6) {
-                    exit;
-                }
+            while ((!isset($user_relations[$typeIdx]) || count($user_relations[$typeIdx]) === 0) && $tentation < 6 ) {
                 $typeIdx = rand(0, 2);
                 # code...
                 $tentation++;
             }
-
             switch ($typeIdx) {
                 case 0:
                     $user['id_personnel'] = $this->faker->randomElement($user_relations[$typeIdx]);
@@ -606,6 +604,7 @@ class AppFixtures extends CI_Controller
                 default:
                     # code...
                     break;
+
             }
             $this->model->insertFixture('users', $user);
         }

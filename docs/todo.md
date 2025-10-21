@@ -85,8 +85,6 @@ et les lier a users
 - [ ] 
 
 
-
-
 # LEÇON
 - [x] Supprimer une leçon 
 - [x] Publié 
@@ -119,3 +117,7 @@ et les lier a users
 - [] Créer un composant pour afficher tous les utilisateurs associés à un rôle.
 
 - [] Rendre toutes les nouvelles pages responsives.
+
+
+# MODIFICATION  
+- [ ] Mettre une message qui affiche auccune matiere disponible dans le matiere et niveau 

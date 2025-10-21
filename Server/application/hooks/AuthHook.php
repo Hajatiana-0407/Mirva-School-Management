@@ -78,16 +78,17 @@ class AuthHook
         }
         foreach ($payload as $key => $value) {
             if ($key === 'data') {
-                $_POST['user'] = (array)$value->user ?? null;
-                $_POST['info'] = (array)$value->info ?? null;
+                $_POST['user']['user_data'] = (array)$value->user ?? null;
+                $_POST['user']['user_info'] = (array)$value->info ?? null;
+
+                $_REQUEST['user']['user_data'] = (array)$value->user ?? null;
+                $_REQUEST['user']['user_info'] = (array)$value->info ?? null;
 
                 // transformier le permission stdClass to array
                 foreach ($value->permissions as $key => $permission) {
-                    $_POST['permissions'][$key]  = (array)$permission;
-                    $_REQUEST['permissions'][$key]  = (array)$permission;
+                    $_POST['user']['permissions'][$key]  = (array)$permission;
+                    $_REQUEST['user']['permissions'][$key]  = (array)$permission;
                 }
-                $_REQUEST['user'] = (array)$value->user ?? null;
-                $_REQUEST['info'] = (array)$value->info ?? null;
                 break;
             }
         }

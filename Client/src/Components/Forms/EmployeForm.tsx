@@ -78,7 +78,7 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
     switch (type) {
         case 'teacher':
             const typeTeacher: TypePersonnelType = TypesEmployees.find(type => type.type.toLowerCase() === 'enseignant') as TypePersonnelType;
-            typePersonnelOptions = [{ label: typeTeacher.type, value: typeTeacher.id_type_personnel as number }];
+            typePersonnelOptions = [{ label: typeTeacher?.type, value: typeTeacher?.id_type_personnel as number }];
             break;
         default:
             typePersonnelOptions = TypesEmployees.map((type) => ({ value: type.id_type_personnel as number, label: type.type }));
