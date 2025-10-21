@@ -48,22 +48,23 @@ class AppFixtures extends CI_Controller
 
         // ? ===================== Etablissement ===================== //
         $this->model->insertFixture('etablissement', [
-            'nom' => 'Mada School',
-            'code' => 'MIRV2024',
-            'adresse' => '123 Rue de l\'Éducation, Ville, Pays',
-            'telephone' => '+1234567890',
-            'email' => 'mada.shool@gmail.com',
+            'nom' => 'MIRVA',
+            'code' => 'MIRV2025',
+            'adresse' => 'Alarobia Amboniloha',
+            'telephone' => '034 12 576 92',
+            'email' => 'mirvaalarobia@gmail.com',
             'slogan' => 'Apprendre, Grandir, Réussir',
-            'logo' => '',
+            'logo' => 'public/uploads/etablissement//1760889625_file_68f50b198f1114.70535074.jpeg',
             'created_at' => date('Y-m-d H:i:s'),
-            'site_web' => 'www.madaschool.com',
-            'description' => 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.',
+            'site_web' => 'www.lyceemirva35.com',
+            'description' => 'Lycée MIRVA Alarobia Amboniloha
+Présco Primaires Secondaires',
             "prefix" => '',
-            'facebook' => 'https://www.facebook.com/madaschool',
-            'twitter' => 'https://www.twitter.com/madaschool',
-            'instagram' => 'https://www.instagram.com/madaschool',
-            'linkedin' => 'https://www.linkedin.com/company/madaschool',
-            'youtube' => 'https://www.youtube.com/madaschool'
+            'facebook' => 'https://www.facebook.com/profile.php?id=61575911525721',
+            'twitter' => '',
+            'instagram' => '',
+            'linkedin' => '',
+            'youtube' => ''
         ]);
 
 
@@ -492,12 +493,12 @@ class AppFixtures extends CI_Controller
             ['nom' => 'exams', 'label' => 'Examens', 'description' => 'Gestion des examens, notes et bulletins', 'is_for_all' => false, 'is_section' => false],
 
             // Section Leçons et Exercices
-            ['nom' => 'course', 'label' => 'Cours', 'description' => 'Module principal pour la gestion des leçons et exercices', 'is_for_all' => false, 'is_section' => true ],
+            ['nom' => 'course', 'label' => 'Cours', 'description' => 'Module principal pour la gestion des leçons et exercices', 'is_for_all' => false, 'is_section' => true],
             ['nom' => 'lessons', 'label' => 'Leçons', 'description' => 'Création et consultation des leçons', 'is_for_all' => false, 'is_section' => false],
             ['nom' => 'exercices', 'label' => 'Exercices', 'description' => 'Création et gestion des exercices pour les élèves', 'is_for_all' => false, 'is_section' => false],
 
             // Section Administration
-            ['nom' => 'management', 'label' => 'Administration', 'description' => 'Espace d’administration et gestion du personnel', 'is_for_all' => false, 'is_section' => true ],
+            ['nom' => 'management', 'label' => 'Administration', 'description' => 'Espace d’administration et gestion du personnel', 'is_for_all' => false, 'is_section' => true],
             ['nom' => 'employees', 'label' => 'Employés', 'description' => 'Gestion des employés de l’établissement', 'is_for_all' => false, 'is_section' => false],
             ['nom' => 'teachers', 'label' => 'Enseignants', 'description' => 'Gestion des enseignants et de leurs matières', 'is_for_all' => false, 'is_section' => false],
             ['nom' => 'parents', 'label' => 'Parents', 'description' => 'Gestion des comptes et informations des parents', 'is_for_all' => false, 'is_section' => false],

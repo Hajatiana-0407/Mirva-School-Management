@@ -37,6 +37,7 @@ import LessonSingle from './Pages/Lessons/LessonSingle';
 import { setNavigator } from './Utils/navigate';
 import { getModuleState } from './Redux/Other/slices/ModuleSlice';
 import { getAllModule } from './Redux/Other/asyncThunk/ModuleAsyncThunk';
+import AnimatedBackground from './Components/ui/AnimatedBackground';
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
@@ -81,6 +82,7 @@ function App() {
 
   return (
     < >
+      <AnimatedBackground />
       <ToastContainer
         position="top-right"
         autoClose={3000}
