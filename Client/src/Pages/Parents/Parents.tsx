@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive,  User, X, PenBox, Check, Users } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Archive, User, X, PenBox, Check, Users } from 'lucide-react';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import Table from '../Table';
@@ -22,6 +22,7 @@ import TuteurForm from '../../Components/Forms/TuteurForm';
 import Loading from '../../Components/ui/Loading';
 import ParentModifForm from '../../Components/Forms/ParentModifForm';
 import { baseUrl } from '../../Utils/Utils';
+import { useHashPermission } from '../../Hooks/useHashPermission';
 
 const SearchFormSchema = object({
   matricule_etudiant: string().required('le matricule ne peut pas être vide .'),
@@ -46,23 +47,19 @@ type ParentStudentType = ParentType & StudentType;
 
 const Parents = () => {
   const { datas: parents, action, error } = useSelector(getParentState);
-
   const { hiddeTheModalActive } = useSelector(getAppState);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
-
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [parentToArchive, setParentToArchive] = useState<ParentStudentType | null>(null);
   const [studentToAddParent, setStudentToAddParent] = useState<StudentDetailsType | null>(null);
   const { onSubmite: onSearchMatSubmit, formErrors: searMatchFormErrors } = useForm(SearchFormSchema, { matricule_etudiant: '' });
   const dispatch: AppDispatch = useDispatch();
   const [parentToUpdate, setParentToUpdate] = useState<ParentType | undefined>(undefined);
-
   const [showModalModif, setShowModalModif] = useState(false)
-
   const [isLoading, setIsLoading] = useState(false);
-
   const { formErrors, onSubmite } = useForm(ParentSchema, {})
+  const permission = useHashPermission();
 
   const handleEdit = (parent: ParentType) => {
     setParentToUpdate(parent);
@@ -139,8 +136,8 @@ const Parents = () => {
 
   // ? ================== TABLEAU ===================== //
   const actions = [
-    { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
-    { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
+    { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
+    { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
   const columns = [
     {
@@ -185,16 +182,18 @@ const Parents = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Parents et Tuteurs</h1>
-        <button
-          onClick={() => {
-            setStudentToAddParent(null);
-            setShowModal(true);
-          }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Ajouter</span>
-        </button>
+        {permission.create &&
+          <button
+            onClick={() => {
+              setStudentToAddParent(null);
+              setShowModal(true);
+            }}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Ajouter</span>
+          </button>
+        }
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-sm border">
@@ -293,15 +292,15 @@ const Parents = () => {
                 component: <ParentForm
                   formErrors={formErrors}
                   student={studentToAddParent as StudentDetailsType}
-                /> , 
-                Icon: Users 
+                />,
+                Icon: Users
               },
               {
                 key: 'Tuteur', component: <TuteurForm
                   formErrors={formErrors}
                   student={studentToAddParent as StudentDetailsType}
-                /> , 
-                Icon: User 
+                />,
+                Icon: User
               },
             ]} />
 

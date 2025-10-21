@@ -50,8 +50,8 @@ const Payments: React.FC = () => {
 
   const actions = [
     { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
-    { icon: Edit, label: 'Modifier', onClick: (item: any) => console.log('Modifier', item), color: 'green' },
-    { icon: Archive, label: 'Archiver', onClick: (item: any) => console.log('Archiver', item), color: 'red' },
+    { icon: Edit, type:'update', label: 'Modifier', onClick: (item: any) => console.log('Modifier', item), color: 'green' },
+    { icon: Archive,type:'delete', label: 'Archiver', onClick: (item: any) => console.log('Archiver', item), color: 'red' },
   ];
 
   return (

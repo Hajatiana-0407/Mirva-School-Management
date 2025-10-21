@@ -18,10 +18,13 @@ export const AppInitialValue: AppStateType = {
     hiddeTheModalActive: false
 }
 
-type Permission = 'create' | 'read' | 'update' | 'delete';
-type PermissionsMap = {
-    [moduleName: string]: Permission[];
+export type Permission = {
+    create: boolean;
+    update: boolean;
+    read: boolean;
+    delete: boolean;
 };
+type PermissionsMap = Record<string, Permission>;
 type InfoType = {
     nom: string,
     prenom: string,
@@ -33,7 +36,7 @@ type InfoType = {
 
 export type TokenDecodeType = {
     user?: User;
-    permissions: PermissionsMap[];
+    permissions: PermissionsMap;
     info?: InfoType
 }
 export type User = {
@@ -54,7 +57,7 @@ export const AuthInitialValue: AuthStateType = {
     user: undefined,
     isLoggedIn: false,
     token: '',
-    permissions: []
+    permissions: {}
 }
 
 // BACK'S OBJECT RETURN 
@@ -69,6 +72,21 @@ export const ApiReturnInitial: ApiReturnType = {
     'data': {}
 }
 
+// MODULES ( COMPOSANTS ) //
+export type ModuleType = {
+    id_module?: number;
+    nom: string;
+    description: string;
+    label: string
+    is_for_all?: boolean,
+    is_section?: boolean,
+}
+
+export const ModuleInitialValue: ModuleType = {
+    description: '',
+    label: '',
+    nom: ''
+}
 // SCHOOL MANAGEMENT SYSTEM TYPES //
 export type ShoolInfoType = {
     id_etablissement?: number;
@@ -561,5 +579,26 @@ export const LessonInitialValue: LessonType = {
     ...levelInitial
 
 }
+
+
+// ===================== Roles ===================== //
+export type RoleType = {
+    id_role?: number;
+    nom: string;
+    description: string;
+    is_restrict: string;
+    couleur: string;
+    total_utilisateur: number;
+    permissions: Record<number, Permission & { label: string, is_for_all?: boolean, is_section?: boolean, }>;
+};
+export const RoleInitialValue: RoleType = {
+    nom: '',
+    description: '',
+    is_restrict: '',
+    couleur: '',
+    total_utilisateur: 0,
+    permissions: {}
+}
+
 
 

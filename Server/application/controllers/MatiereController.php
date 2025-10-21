@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class MatiereController extends CI_Controller
 {
-    protected $pk = 'id_matiere' ; 
+    protected $pk = 'id_matiere';
     public function __construct()
     {
         parent::__construct();
@@ -26,11 +26,11 @@ class MatiereController extends CI_Controller
         ];
 
 
-        if ($this->MatiereModel->isExist([
-            'denomination' => $data['denomination'],
-            'abbreviation' => $data['abbreviation'],
-        ])) {
-            echo json_encode(['error' => true, 'message' => 'La matière existe déjà.']);
+        if ($this->MatiereModel->isExist(
+            ['denomination' => $data['denomination'], 'abbreviation' => $data['abbreviation']],
+            'or',
+        )) {
+            echo json_encode(['error' => true, 'message' => "La dénomination ou l’abréviation est déjà utilisée."]);
         } else {
             $data =  $this->MatiereModel->insert($data);
             if ($data) {
@@ -53,11 +53,12 @@ class MatiereController extends CI_Controller
         ];
 
 
-        if ($this->MatiereModel->isExist([
-            'denomination' => $data['denomination'],
-            // 'abbreviation' => $data['abbreviation'],
-        ], $id)) {
-            echo json_encode(['error' => true, 'message' => 'La matière existe déjà.']);
+        if ($this->MatiereModel->isExist(
+            ['denomination' => $data['denomination'], 'abbreviation' => $data['abbreviation']],
+            'or',
+            [$this->pk => $id]
+        )) {
+            echo json_encode(['error' => true, 'message' => "La dénomination ou l’abréviation est déjà utilisée."]);
         } else {
             $data =  $this->MatiereModel->update($id, $data);
             if ($data) {

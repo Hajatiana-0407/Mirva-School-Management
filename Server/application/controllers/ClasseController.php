@@ -25,7 +25,7 @@ class ClasseController extends CI_Controller
         if ($this->ClasseModel->isExist([
             'denomination' => $data['denomination'],
         ])) {
-            echo json_encode(['error' => true, 'message' => 'La matière existe déjà.']);
+            echo json_encode(['error' => true, 'message' => "La classe \''{$data['denomination']}'\' existe déjà."]);
         } else {
             $data =  $this->ClasseModel->insert($data);
             if ($data) {
@@ -46,10 +46,12 @@ class ClasseController extends CI_Controller
         ];
 
 
-        if ($this->ClasseModel->isExist([
-            'denomination' => $data['denomination'],
-        ], $id)) {
-            echo json_encode(['error' => true, 'message' => 'La matière existe déjà.']);
+        if ($this->ClasseModel->isExist(
+            ['denomination' => $data['denomination']],
+            'and',
+            [$this->pk => $id]
+        )) {
+            echo json_encode(['error' => true, 'message' => "La classe \''{$data['denomination']}'\' existe déjà."]);
         } else {
             $data =  $this->ClasseModel->update($id, $data);
             if ($data) {

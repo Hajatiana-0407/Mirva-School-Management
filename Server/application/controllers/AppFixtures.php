@@ -48,22 +48,23 @@ class AppFixtures extends CI_Controller
 
         // ? ===================== Etablissement ===================== //
         $this->model->insertFixture('etablissement', [
-            'nom' => 'Mada School',
-            'code' => 'MIRV2024',
-            'adresse' => '123 Rue de l\'Éducation, Ville, Pays',
-            'telephone' => '+1234567890',
-            'email' => 'mada.shool@gmail.com',
+            'nom' => 'MIRVA',
+            'code' => 'MIRV2025',
+            'adresse' => 'Alarobia Amboniloha',
+            'telephone' => '034 12 576 92',
+            'email' => 'mirvaalarobia@gmail.com',
             'slogan' => 'Apprendre, Grandir, Réussir',
-            'logo' => '',
+            'logo' => 'public/uploads/etablissement//1760889625_file_68f50b198f1114.70535074.jpeg',
             'created_at' => date('Y-m-d H:i:s'),
-            'site_web' => 'www.madaschool.com',
-            'description' => 'Mada School est un établissement d\'enseignement dédié à l\'excellence académique et au développement global des élèves.',
+            'site_web' => 'www.lyceemirva35.com',
+            'description' => 'Lycée MIRVA Alarobia Amboniloha
+Présco Primaires Secondaires',
             "prefix" => '',
-            'facebook' => 'https://www.facebook.com/madaschool',
-            'twitter' => 'https://www.twitter.com/madaschool',
-            'instagram' => 'https://www.instagram.com/madaschool',
-            'linkedin' => 'https://www.linkedin.com/company/madaschool',
-            'youtube' => 'https://www.youtube.com/madaschool'
+            'facebook' => 'https://www.facebook.com/profile.php?id=61575911525721',
+            'twitter' => '',
+            'instagram' => '',
+            'linkedin' => '',
+            'youtube' => ''
         ]);
 
 
@@ -444,7 +445,6 @@ class AppFixtures extends CI_Controller
     {
         $this->model->emptyDb([
             'modules',
-            'permissions',
             'roles',
             'role_permissions'
         ]);
@@ -456,93 +456,93 @@ class AppFixtures extends CI_Controller
         //?  ===================== ROLES ===================== //
         $roles = [
             [
-                'nom' => 'admin',
-                'description' => 'Administrateur du système avec tous les droits',
-                'is_restrict' => true
+                'nom' => 'Administrateur',
+                'description' => 'Administrateur du système',
+                'is_restrict' => true,
+                'couleur' => $this->faker->hexColor,
             ],
             [
-                'nom' => 'proffesseur',
+                'nom' => 'Enseignant',
                 'description' => 'Professeur pouvant gérer ses classes, notes et présences',
-                'is_restrict' => true
+                'is_restrict' => true,
+                'couleur' => $this->faker->hexColor,
             ],
             [
-                'nom' => 'étudiant',
+                'nom' => 'Étudiant',
                 'description' => 'Élève pouvant consulter ses notes, devoirs et emplois du temps',
-                'is_restrict' => true
+                'is_restrict' => true,
+                'couleur' => $this->faker->hexColor,
             ],
             [
-                'nom' => 'parent',
+                'nom' => 'Parent',
                 'description' => 'Parent d’élève pouvant consulter les résultats et paiements',
-                'is_restrict' => false
+                'is_restrict' => false,
+                'couleur' => $this->faker->hexColor,
             ],
         ];
         $this->model->insertBatchFixtures($roles, "roles");
 
 
-        //?  ===================== PERMISSIONS ===================== //
-        $permissions = [
-            ['nom' => 'create', 'description' => 'Autorise la création de nouvelles données'],
-            ['nom' => 'read', 'description' => 'Autorise la lecture ou la consultation des données'],
-            ['nom' => 'update', 'description' => 'Autorise la modification des données existantes'],
-            ['nom' => 'delete', 'description' => 'Autorise la suppression des données'],
-            // Permissions complémentaires
-            // ['nom' => 'import', 'description' => 'Autorise l’importation de données depuis un fichier'],
-            // ['nom' => 'export', 'description' => 'Autorise l’exportation de données'],
-            // ['nom' => 'validate', 'description' => 'Autorise la validation d’éléments (ex : notes, paiements, etc.)'],
-            // ['nom' => 'print', 'description' => 'Autorise l’impression ou la génération de documents PDF'],
-            // ['nom' => 'manage', 'description' => 'Autorise la gestion complète du module (tous droits inclus)'],
-        ];
-        $this->model->insertBatchFixtures($permissions, "permissions");
-
         //?  ===================== MODULE ===================== //
         $modules = [
-            ['nom' => 'dashboard', 'description' => 'Tableau de bord général de la plateforme'],
-            ['nom' => 'registration', 'description' => 'Gestion des inscriptions des nouveaux élèves'],
-            ['nom' => 'students', 'description' => 'Gestion des informations et dossiers des élèves'],
-            ['nom' => 'schedule', 'description' => 'Organisation et consultation des emplois du temps'],
-            ['nom' => 'attendance', 'description' => 'Suivi des présences et absences des élèves'],
-            ['nom' => 'exams', 'description' => 'Gestion des examens, notes et bulletins'],
+            ['nom' => 'dashboard', 'label' => 'Tableau de bord', 'description' => 'Tableau de bord général de la plateforme', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'registration', 'label' => 'Inscriptions', 'description' => 'Gestion des inscriptions des nouveaux élèves', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'students', 'label' => 'Élèves', 'description' => 'Gestion des informations et dossiers des élèves', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'schedule', 'label' => 'Emploi du temps', 'description' => 'Organisation et consultation des emplois du temps', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'attendance', 'label' => 'Présences', 'description' => 'Suivi des présences et absences des élèves', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'exams', 'label' => 'Examens', 'description' => 'Gestion des examens, notes et bulletins', 'is_for_all' => false, 'is_section' => false],
 
             // Section Leçons et Exercices
-            ['nom' => 'course', 'description' => 'Module principal pour la gestion des leçons et exercices'],
-            ['nom' => 'lesson', 'description' => 'Création et consultation des leçons'],
-            ['nom' => 'exercice', 'description' => 'Création et gestion des exercices pour les élèves'],
+            ['nom' => 'course', 'label' => 'Cours', 'description' => 'Module principal pour la gestion des leçons et exercices', 'is_for_all' => false, 'is_section' => true],
+            ['nom' => 'lessons', 'label' => 'Leçons', 'description' => 'Création et consultation des leçons', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'exercices', 'label' => 'Exercices', 'description' => 'Création et gestion des exercices pour les élèves', 'is_for_all' => false, 'is_section' => false],
 
             // Section Administration
-            ['nom' => 'management', 'description' => 'Espace d’administration et gestion du personnel'],
-            ['nom' => 'employees', 'description' => 'Gestion des employés de l’établissement'],
-            ['nom' => 'teachers', 'description' => 'Gestion des enseignants et de leurs matières'],
-            ['nom' => 'parents', 'description' => 'Gestion des comptes et informations des parents'],
-            ['nom' => 'payments', 'description' => 'Suivi et gestion des paiements et frais de scolarité'],
-            ['nom' => 'messages', 'description' => 'Messagerie interne entre professeurs, élèves et parents'],
+            ['nom' => 'management', 'label' => 'Administration', 'description' => 'Espace d’administration et gestion du personnel', 'is_for_all' => false, 'is_section' => true],
+            ['nom' => 'employees', 'label' => 'Employés', 'description' => 'Gestion des employés de l’établissement', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'teachers', 'label' => 'Enseignants', 'description' => 'Gestion des enseignants et de leurs matières', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'parents', 'label' => 'Parents', 'description' => 'Gestion des comptes et informations des parents', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'payments', 'label' => 'Paiements', 'description' => 'Suivi et gestion des paiements et frais de scolarité', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'messages', 'label' => 'Messages', 'description' => 'Messagerie interne entre professeurs, élèves et parents', 'is_for_all' => false, 'is_section' => false],
 
             // Section Paramétrage
-            ['nom' => 'settingsSection', 'description' => 'Section regroupant les paramètres et configurations globales'],
-            ['nom' => 'school-year', 'description' => 'Gestion des années scolaires'],
-            ['nom' => 'levels', 'description' => 'Gestion des niveaux d’enseignement'],
-            ['nom' => 'classes', 'description' => 'Gestion des classes et des groupes d’élèves'],
-            ['nom' => 'subjects', 'description' => 'Gestion des matières enseignées'],
-            ['nom' => 'settings', 'description' => 'Paramètres et configuration du système'],
+            ['nom' => 'settingsSection', 'label' => 'Configuration', 'description' => 'Section regroupant les paramètres et configurations globales', 'is_for_all' => false, 'is_section' => true],
+            ['nom' => 'school-year', 'label' => 'Années scolaires', 'description' => 'Gestion des années scolaires', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'levels', 'label' => 'Niveaux', 'description' => 'Gestion des niveaux d’enseignement', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'classes', 'label' => 'Classes', 'description' => 'Gestion des classes et des groupes d’élèves', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'subjects', 'label' => 'Matières', 'description' => 'Gestion des matières enseignées', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'settings', 'label' => 'Paramètres', 'description' => 'Paramètres et configuration du système', 'is_for_all' => true, 'is_section' => false],
+
+            // Paramettre 
+            ['nom' => 'general-settings', 'label' => 'Paramètres généraux', 'description' => 'Configuration générale du système et des préférences globales', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'school-settings', 'label' => 'Paramètres de l’établissement', 'description' => 'Informations et configuration propres à l’établissement scolaire', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'roles-settings', 'label' => 'Paramètres des rôles et utilisateurs', 'description' => 'Gestion des rôles, permissions et utilisateurs du système', 'is_for_all' => false, 'is_section' => false],
         ];
         $this->model->insertBatchFixtures($modules, 'modules');
 
-        $permissions_id = $this->model->getIds('permissions', 'id_permission');
         $modules_id = $this->model->getIds('modules', 'id_module');
-        $roles_id = $this->model->getIds('roles', 'id_role');
-
+        $roles = $this->model->getAllTable('roles');
         $roles_permmissions = [];
-        foreach ($roles_id as $role) {
+        foreach ($roles as $role) {
             foreach ($modules_id as  $module) {
-                $count  =  rand(1, 4); // les permissions
-                for ($i = 0; $i < $count; $i++) {
-                    $temps = [
-                        'id_role' => $role,
-                        'id_module' => $module,
-                        'id_permission' => $permissions_id[$i]
-                    ];
-                    $roles_permmissions[] = $temps;
-                    $temps = [];
+                $temps = [
+                    'id_role' => $role['id_role'],
+                    'id_module' => $module,
+                    'can_read' => (bool) random_int(0, 1),
+                    'can_create' => (bool) random_int(0, 1),
+                    'can_update' => (bool) random_int(0, 1),
+                    'can_delete' => (bool) random_int(0, 1),
+                ];
+
+                if ($role['nom'] === 'Administrateur') {
+                    $temps['can_create'] = true;
+                    $temps['can_update'] = true;
+                    $temps['can_delete'] = true;
+                    $temps['can_read'] = true;
                 }
+
+                $roles_permmissions[] = $temps;
+                $temps = [];
             }
         }
         $this->model->insertBatchFixtures($roles_permmissions, 'role_permissions');
@@ -572,7 +572,7 @@ class AppFixtures extends CI_Controller
         $user_relations  = [$personnels_id, $eleves_id, $parent_id];
 
         $roles_id = $this->model->getIds('roles', 'id_role');
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $user = [
                 'id_role' => $this->faker->randomElement($roles_id),
                 'identifiant' => $this->faker->email(),

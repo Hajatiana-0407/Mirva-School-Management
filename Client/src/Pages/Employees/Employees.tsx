@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import Profile from '../../Components/ui/Profile';
 import EmployeForm from '../../Components/Forms/EmployeForm';
 import { getShortDate } from '../../Utils/Utils';
+import { useHashPermission } from '../../Hooks/useHashPermission';
 
 // Mapping des types à des couleurs de fond
 export const typeBgColors: Record<string, string> = {
@@ -49,6 +50,7 @@ const Employees: React.FC = () => {
   const { datas: employees, action } = useSelector(getEmployeState);
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
+  const permission = useHashPermission();
 
 
   //Handlers
@@ -81,8 +83,8 @@ const Employees: React.FC = () => {
   // TABLEAUX 
   const actions = [
     { icon: Eye, label: 'Voir', onClick: (item: EmployeeType) => navigate("/employees/" + item.matricule_personnel), color: 'blue' },
-    { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
-    { icon: Archive, label: 'Archiver', onClick: handleArchive, color: 'red' },
+    { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
+    { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
 
   const columns = [
@@ -184,13 +186,15 @@ const Employees: React.FC = () => {
       {/* Entete */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Gestion des employés</h1>
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Nouveau employés</span>
-        </button>
+        {permission.create &&
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Nouveau employés</span>
+          </button>
+        }
       </div>
 
       {/* Filtrage  */}

@@ -11,20 +11,19 @@ import { useParams } from 'react-router-dom';
 import Onglet from '../../Components/ui/Onglet';
 import LevelForm from '../../Components/Forms/LevelForm';
 import { getAllLevel } from './redux/LevelAsyncThunk';
+import { useHashPermission } from '../../Hooks/useHashPermission';
 
 
 
 const Levels = () => {
   const { active } = useParams();
-
   const dispatch: AppDispatch = useDispatch();
-
+  const permission = useHashPermission();
   const { hiddeTheModalActive } = useSelector(getAppState);
   const [activeTab, setActiveTab] = useState<number>(active !== undefined ? 2 : 1);
   const [showModal, setShowModal] = useState(false);
   const [editingLevel, setEditingLevel] = useState<levelType | null>(null);
   const [idLevelToAddSubject, setIdLevelToAddSubject] = useState<number>(0);
-
 
   // HANDLERS
   const handleEdit = (level: levelType) => {
@@ -62,13 +61,15 @@ const Levels = () => {
       {/* EN TETE  */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Gestion des niveaux</h1>
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Nouveau niveau</span>
-        </button>
+        {permission.create &&
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Nouveau niveau</span>
+          </button>
+        }
       </div>
 
       {/* ONGLETS */}

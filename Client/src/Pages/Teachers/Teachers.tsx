@@ -14,6 +14,7 @@ import { deleteEmployees } from '../Employees/redux/EmployeAsyncThunk';
 import Profile from '../../Components/ui/Profile';
 import EmployeForm from '../../Components/Forms/EmployeForm';
 import SubjectLevelContent from '../../Components/SubjectLevelContent';
+import { useHashPermission } from '../../Hooks/useHashPermission';
 
 const Teachers: React.FC = () => {
   // Nom du fichier pièce d'identité (verso)
@@ -22,6 +23,7 @@ const Teachers: React.FC = () => {
   const [editingEmployees, setEditingEmployees] = useState<TeacherType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [teacherToArchive, setTeacherToArchive] = useState<TeacherType | null>(null);
+  const permission = useHashPermission();
 
   const { hiddeTheModalActive } = useSelector(getAppState);
   // *** //
@@ -61,8 +63,8 @@ const Teachers: React.FC = () => {
   const actions = [
     { icon: Eye, label: 'Voir le détail', onClick: (item: TeacherType) => navigate("/employees/" + item.matricule_personnel), color: 'blue' },
     { icon: Plus, label: 'Classes et Matières', onClick: (item: TeacherType) => navigate("/teachers/" + item.matricule_personnel), color: 'purple' },
-    { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
-    { icon: Archive, label: 'Supprimer', onClick: handleArchive, color: 'red' },
+    { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
+    { icon: Archive, type: 'delete', label: 'Supprimer', onClick: handleArchive, color: 'red' },
   ];
 
   const columns = [
@@ -149,13 +151,15 @@ const Teachers: React.FC = () => {
       {/* Entete */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Gestion des enseignants</h1>
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Nouveau enseignant</span>
-        </button>
+        {permission.create &&
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Nouveau enseignant</span>
+          </button>
+        }
       </div>
 
       {/* Filtrage  */}

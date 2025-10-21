@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : ven. 17 oct. 2025 à 18:47
+-- Généré le : mar. 21 oct. 2025 à 07:43
 -- Version du serveur : 10.4.22-MariaDB
 -- Version de PHP : 8.0.14
 
@@ -128,8 +128,7 @@ CREATE TABLE `eleve` (
   `nationalite` varchar(50) NOT NULL,
   `pc_pi` text NOT NULL,
   `pc_act_naissance` text NOT NULL,
-  `bulletin` text NOT NULL,
-  `id_user` int(11) DEFAULT NULL
+  `bulletin` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -228,6 +227,21 @@ CREATE TABLE `matiere_niveau` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `modules`
+--
+
+CREATE TABLE `modules` (
+  `id_module` int(11) NOT NULL,
+  `nom` varchar(100) NOT NULL,
+  `label` text NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `is_section` tinyint(1) NOT NULL,
+  `is_for_all` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `niveau`
 --
 
@@ -289,8 +303,7 @@ CREATE TABLE `parents` (
   `contact_urgence` tinyint(1) DEFAULT 0,
   `pc_cin` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `id_user` int(11) DEFAULT NULL
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -338,8 +351,38 @@ CREATE TABLE `personnel` (
   `urgence_lien` varchar(100) NOT NULL,
   `urgence_tel` varchar(20) NOT NULL,
   `urgence_email` varchar(150) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `id_user` int(11) DEFAULT NULL
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `roles`
+--
+
+CREATE TABLE `roles` (
+  `id_role` int(11) NOT NULL,
+  `nom` varchar(50) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `is_restrict` tinyint(1) NOT NULL,
+  `couleur` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `role_permissions`
+--
+
+CREATE TABLE `role_permissions` (
+  `id_role_permission` int(11) NOT NULL,
+  `id_role` int(11) NOT NULL,
+  `id_module` int(11) NOT NULL,
+  `id_permission` int(11) NOT NULL,
+  `can_read` tinyint(1) NOT NULL,
+  `can_create` tinyint(1) NOT NULL,
+  `can_update` tinyint(1) NOT NULL,
+  `can_delete` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -362,12 +405,15 @@ CREATE TABLE `type_personnel` (
 
 CREATE TABLE `users` (
   `id_user` int(11) NOT NULL,
+  `id_role` int(11) DEFAULT NULL,
   `identifiant` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `role` varchar(45) DEFAULT NULL,
   `status` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `last_login` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+  `last_login` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `id_parent` int(11) DEFAULT NULL,
+  `id_eleve` int(11) DEFAULT NULL,
+  `id_personnel` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -421,8 +467,7 @@ ALTER TABLE `ecolage`
 -- Index pour la table `eleve`
 --
 ALTER TABLE `eleve`
-  ADD PRIMARY KEY (`id_eleve`),
-  ADD KEY `fk_user_eleve` (`id_user`);
+  ADD PRIMARY KEY (`id_eleve`);
 
 --
 -- Index pour la table `etablissement`
@@ -464,6 +509,13 @@ ALTER TABLE `matiere_niveau`
   ADD KEY `fk_matiere_has_classe_groupe_matiere1_idx` (`matiere_id_matiere`);
 
 --
+-- Index pour la table `modules`
+--
+ALTER TABLE `modules`
+  ADD PRIMARY KEY (`id_module`),
+  ADD UNIQUE KEY `name` (`nom`);
+
+--
 -- Index pour la table `niveau`
 --
 ALTER TABLE `niveau`
@@ -491,8 +543,7 @@ ALTER TABLE `paiement`
 -- Index pour la table `parents`
 --
 ALTER TABLE `parents`
-  ADD PRIMARY KEY (`id_parent`),
-  ADD KEY `fk_user_parent` (`id_user`);
+  ADD PRIMARY KEY (`id_parent`);
 
 --
 -- Index pour la table `parents_eleves`
@@ -506,8 +557,23 @@ ALTER TABLE `parents_eleves`
 --
 ALTER TABLE `personnel`
   ADD PRIMARY KEY (`id_personnel`),
-  ADD KEY `fx_personne_type` (`id_type_personnel`),
-  ADD KEY `fk_user_personnel` (`id_user`);
+  ADD KEY `fx_personne_type` (`id_type_personnel`);
+
+--
+-- Index pour la table `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id_role`),
+  ADD UNIQUE KEY `name` (`nom`);
+
+--
+-- Index pour la table `role_permissions`
+--
+ALTER TABLE `role_permissions`
+  ADD PRIMARY KEY (`id_role_permission`),
+  ADD UNIQUE KEY `id_role` (`id_role`,`id_module`,`id_permission`),
+  ADD KEY `id_module` (`id_module`),
+  ADD KEY `id_permission` (`id_permission`);
 
 --
 -- Index pour la table `type_personnel`
@@ -519,7 +585,11 @@ ALTER TABLE `type_personnel`
 -- Index pour la table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id_user`);
+  ADD PRIMARY KEY (`id_user`),
+  ADD KEY `fk_user_eleve` (`id_eleve`),
+  ADD KEY `fk_user_parent` (`id_parent`),
+  ADD KEY `fk_user_role` (`id_role`),
+  ADD KEY `fk_user_personnel` (`id_personnel`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
@@ -529,13 +599,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `annee_scolaire`
 --
 ALTER TABLE `annee_scolaire`
-  MODIFY `id_annee_scolaire` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=277;
+  MODIFY `id_annee_scolaire` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=363;
 
 --
 -- AUTO_INCREMENT pour la table `classe`
 --
 ALTER TABLE `classe`
-  MODIFY `id_classe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1495;
+  MODIFY `id_classe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2772;
 
 --
 -- AUTO_INCREMENT pour la table `depense`
@@ -547,49 +617,55 @@ ALTER TABLE `depense`
 -- AUTO_INCREMENT pour la table `droit_inscription`
 --
 ALTER TABLE `droit_inscription`
-  MODIFY `id_droit_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=748;
+  MODIFY `id_droit_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1255;
 
 --
 -- AUTO_INCREMENT pour la table `ecolage`
 --
 ALTER TABLE `ecolage`
-  MODIFY `id_ecolage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=995;
+  MODIFY `id_ecolage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1499;
 
 --
 -- AUTO_INCREMENT pour la table `eleve`
 --
 ALTER TABLE `eleve`
-  MODIFY `id_eleve` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1173;
+  MODIFY `id_eleve` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1543;
 
 --
 -- AUTO_INCREMENT pour la table `etablissement`
 --
 ALTER TABLE `etablissement`
-  MODIFY `id_etablissement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `id_etablissement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
 
 --
 -- AUTO_INCREMENT pour la table `inscription`
 --
 ALTER TABLE `inscription`
-  MODIFY `id_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=565;
+  MODIFY `id_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=750;
 
 --
 -- AUTO_INCREMENT pour la table `lecon`
 --
 ALTER TABLE `lecon`
-  MODIFY `id_lecon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=357;
+  MODIFY `id_lecon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2015;
 
 --
 -- AUTO_INCREMENT pour la table `matiere`
 --
 ALTER TABLE `matiere`
-  MODIFY `id_matiere` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1248;
+  MODIFY `id_matiere` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1678;
+
+--
+-- AUTO_INCREMENT pour la table `modules`
+--
+ALTER TABLE `modules`
+  MODIFY `id_module` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1270;
 
 --
 -- AUTO_INCREMENT pour la table `niveau`
 --
 ALTER TABLE `niveau`
-  MODIFY `id_niveau` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1064;
+  MODIFY `id_niveau` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1581;
 
 --
 -- AUTO_INCREMENT pour la table `note`
@@ -607,25 +683,37 @@ ALTER TABLE `paiement`
 -- AUTO_INCREMENT pour la table `parents`
 --
 ALTER TABLE `parents`
-  MODIFY `id_parent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=768;
+  MODIFY `id_parent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1514;
 
 --
 -- AUTO_INCREMENT pour la table `personnel`
 --
 ALTER TABLE `personnel`
-  MODIFY `id_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1698;
+  MODIFY `id_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2538;
+
+--
+-- AUTO_INCREMENT pour la table `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id_role` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=235;
+
+--
+-- AUTO_INCREMENT pour la table `role_permissions`
+--
+ALTER TABLE `role_permissions`
+  MODIFY `id_role_permission` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8580;
 
 --
 -- AUTO_INCREMENT pour la table `type_personnel`
 --
 ALTER TABLE `type_personnel`
-  MODIFY `id_type_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=385;
+  MODIFY `id_type_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=721;
 
 --
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=154;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=327;
 
 --
 -- Contraintes pour les tables déchargées
@@ -661,12 +749,6 @@ ALTER TABLE `droit_inscription`
 --
 ALTER TABLE `ecolage`
   ADD CONSTRAINT `fk_ecolage_classe_groupe1` FOREIGN KEY (`niveau_id_niveau`) REFERENCES `niveau` (`id_niveau`) ON DELETE CASCADE;
-
---
--- Contraintes pour la table `eleve`
---
-ALTER TABLE `eleve`
-  ADD CONSTRAINT `fk_user_eleve` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Contraintes pour la table `inscription`
@@ -709,12 +791,6 @@ ALTER TABLE `paiement`
   ADD CONSTRAINT `fk_paiement_inscription1` FOREIGN KEY (`inscription_id_inscription`) REFERENCES `inscription` (`id_inscription`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `parents`
---
-ALTER TABLE `parents`
-  ADD CONSTRAINT `fk_user_parent` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`) ON DELETE SET NULL ON UPDATE SET NULL;
-
---
 -- Contraintes pour la table `parents_eleves`
 --
 ALTER TABLE `parents_eleves`
@@ -725,8 +801,23 @@ ALTER TABLE `parents_eleves`
 -- Contraintes pour la table `personnel`
 --
 ALTER TABLE `personnel`
-  ADD CONSTRAINT `fk_user_personnel` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `fx_personne_type` FOREIGN KEY (`id_type_personnel`) REFERENCES `type_personnel` (`id_type_personnel`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `role_permissions`
+--
+ALTER TABLE `role_permissions`
+  ADD CONSTRAINT `role_permissions_ibfk_1` FOREIGN KEY (`id_role`) REFERENCES `roles` (`id_role`) ON DELETE CASCADE,
+  ADD CONSTRAINT `role_permissions_ibfk_2` FOREIGN KEY (`id_module`) REFERENCES `modules` (`id_module`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `fk_user_eleve` FOREIGN KEY (`id_eleve`) REFERENCES `eleve` (`id_eleve`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_user_parent` FOREIGN KEY (`id_parent`) REFERENCES `parents` (`id_parent`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_user_personnel` FOREIGN KEY (`id_personnel`) REFERENCES `personnel` (`id_personnel`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_user_role` FOREIGN KEY (`id_role`) REFERENCES `roles` (`id_role`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

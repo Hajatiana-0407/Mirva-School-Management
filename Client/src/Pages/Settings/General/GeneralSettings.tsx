@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react"
 import Modal from "../../Modal"
 import SchoolYearForm from "../../../Components/Forms/SchoolYearForm"
 import { getAppState } from "../../../Redux/AppSlice"
+import { useHashPermission } from "../../../Hooks/useHashPermission"
 
 const SchoolYearSchema = object({
 });
@@ -22,6 +23,7 @@ const GeneralSettings = () => {
     const [showModalSchoolYear, setShowModalSchoolYear] = useState(false)
     const { hiddeTheModalActive } = useSelector(getAppState);
     const [schoolYearOptions, setSchoolYearOptions] = useState<any[]>([]);
+    const schoolYearPermission = useHashPermission('school-year');
 
     useEffect(() => {
         if (activeSchoolYear) {
@@ -77,14 +79,16 @@ const GeneralSettings = () => {
                         <h3 className="">Année scolaire actif</h3>
                     </div>
                     <div>
-                        <button
-                            type="button"
-                            onClick={() => setShowModalSchoolYear(true)}
-                            className="flex items-center gap-1 text-blue-600 underline"
-                        >
-                            <Plus className="w-4 h-4" />
-                            <span>Nouvelle année scolaire</span>
-                        </button>
+                        {schoolYearPermission.create &&
+                            <button
+                                type="button"
+                                onClick={() => setShowModalSchoolYear(true)}
+                                className="flex items-center gap-1 text-blue-600 underline"
+                            >
+                                <Plus className="w-4 h-4" />
+                                <span>Nouvelle année scolaire</span>
+                            </button>
+                        }
                     </div>
                 </div>
                 <div className="grid lg:grid-cols-3 gap-4">
@@ -141,15 +145,17 @@ const GeneralSettings = () => {
                     />
                 </div>
                 <div className="flex justify-end">
-                    <button
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center"
-                    >
-                        {schoolYearAction.isLoading || schoolYearAction.isUpdating
-                            ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
-                            <Save className="w-4 h-4" />
-                        }
-                        <span>Enregistrer</span>
-                    </button>
+                    {schoolYearPermission.create &&
+                        <button
+                            className="bg-blue-600 text-white px-4 py-2 rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center"
+                        >
+                            {schoolYearAction.isLoading || schoolYearAction.isUpdating
+                                ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+                                <Save className="w-4 h-4" />
+                            }
+                            <span>Enregistrer</span>
+                        </button>
+                    }
                 </div>
             </form>
             <Modal

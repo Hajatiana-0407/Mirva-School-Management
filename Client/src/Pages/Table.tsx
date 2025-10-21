@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Loading from '../Components/ui/Loading';
 import ActionMenu from '../Components/ActionMenu';
+import { useHashPermission } from '../Hooks/useHashPermission';
 
 interface TableProps {
   data: any[];
@@ -15,6 +16,7 @@ interface TableProps {
     label: string;
     onClick: (item: any) => void;
     color: string;
+    type?: string
   }>;
   searchTerm?: string;
   isLoading?: boolean;
@@ -24,6 +26,7 @@ interface TableProps {
 const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, actionType = 'button' }: TableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const permission = useHashPermission();
 
   // RECHERCHE
   const filteredData = data.filter((item) =>
@@ -43,21 +46,21 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
     setCurrentPage(page);
   };
 
- const getActionColor = (color: string) => {
-  const colors = {
-    blue: 'text-blue-600 hover:text-blue-800',
-    green: 'text-green-600 hover:text-green-800',
-    red: 'text-red-600 hover:text-red-800',
-    yellow: 'text-yellow-600 hover:text-yellow-800',
-    purple: 'text-purple-600 hover:text-purple-800',
-    pink: 'text-pink-600 hover:text-pink-800',
-    indigo: 'text-indigo-600 hover:text-indigo-800',
-    teal: 'text-teal-600 hover:text-teal-800',
-    orange: 'text-orange-600 hover:text-orange-800',
-    gray: 'text-gray-600 hover:text-gray-800',
+  const getActionColor = (color: string) => {
+    const colors = {
+      blue: 'text-blue-600 hover:text-blue-800',
+      green: 'text-green-600 hover:text-green-800',
+      red: 'text-red-600 hover:text-red-800',
+      yellow: 'text-yellow-600 hover:text-yellow-800',
+      purple: 'text-purple-600 hover:text-purple-800',
+      pink: 'text-pink-600 hover:text-pink-800',
+      indigo: 'text-indigo-600 hover:text-indigo-800',
+      teal: 'text-teal-600 hover:text-teal-800',
+      orange: 'text-orange-600 hover:text-orange-800',
+      gray: 'text-gray-600 hover:text-gray-800',
+    };
+    return colors[color as keyof typeof colors] || 'text-gray-600 hover:text-gray-800';
   };
-  return colors[color as keyof typeof colors] || 'text-gray-600 hover:text-gray-800';
-};
 
 
 
@@ -112,6 +115,12 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                           {actionType === 'button' &&
                             actions.map((action, actionIndex) => {
                               const Icon = action.icon;
+
+                              // ? Pas de permission de modification
+                              if (action.type === 'update' && !permission.update) return;
+                              // ! Pas de permission de suppression 
+                              if (action.type === 'delete' && !permission.delete) return;
+
                               return (
                                 <button
                                   key={actionIndex}

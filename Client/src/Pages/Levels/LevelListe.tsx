@@ -75,8 +75,8 @@ const LevelListe = ({ handleEdit, setActiveTab, setIdLevelToAddSubject }: LevelL
 
     const actions = [
         { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
-        { icon: Edit, label: 'Modifier', onClick: handleEdit, color: 'green' },
-        { icon: Archive, label: 'Archiver', onClick: handleDelete, color: 'red' },
+        { icon: Edit, type:'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
+        { icon: Archive,type:'delete', label: 'Archiver', onClick: handleDelete, color: 'red' },
     ];
 
     return (

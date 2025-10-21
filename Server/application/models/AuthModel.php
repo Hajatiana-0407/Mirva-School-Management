@@ -32,69 +32,60 @@ class AuthModel extends CI_Model
         ];;
         if ($user) {
             // Personnel 
-            if ($user->id_personnel !== null) {
+            if (!!$user->id_personnel) {
                 $info =  $this->db->select('p.id_personnel,  p.nom , p.prenom , p.photo , p.matricule_personnel as matricule')
                     ->from('personnel p')
                     ->where('id_personnel',  $user->id_personnel)
                     ->get()
                     ->row();
-                unset($user->id_eleve);
-                unset($user->id_parent);
             }
             // Etudiant 
-            if ($user->id_eleve !== null) {
+            if (!!$user->id_eleve) {
                 $info =  $this->db->select('e.id_eleve , e.nom , e.prenom , e.photo , e.matricule_etudiant as matricule')
                     ->from('eleve e')
                     ->where('id_eleve',  $user->id_eleve)
                     ->get()
                     ->row();
-                unset($user->id_personnel);
-                unset($user->id_parent);
             }
             // Parent
-            if ($user->id_parent !== null) {
+            if (!!$user->id_parent !== null) {
                 $info =  $this->db->select('p.id_parent ,  p.nom , p.prenom')
                     ->from('parents p')
                     ->where('id_parent',  $user->id_parent)
                     ->get()
                     ->row();
-                unset($user->id_personnel);
-                unset($user->id_eleve);
             }
 
-            if ($user->id_personnel === null && $user->id_eleve === null && $user->id_parent === null) {
-                unset($user->id_personnel);
+            if ($user->id_eleve === null)
                 unset($user->id_eleve);
+            if ($user->id_parent === null)
                 unset($user->id_parent);
-            }
+            if ($user->id_personnel === null)
+                unset($user->id_personnel);
 
             // Cherche les role et les permission d'acces pour l'utilisateur 
-            $permissions = null;
+            $permissions = [];
             $modules = $this->db->select('*')
                 ->from('modules')
                 ->get()
                 ->result_array();
-            foreach ($modules as $key => $module) {
-                $role_permission  = $this->db->select('p.*')
-                    ->from('role_permissions rp')
-                    ->join('permissions p', 'p.id_permission = rp.id_permission', 'inner')
-                    ->where('rp.id_role', $user->id_role)
-                    ->where('rp.id_module', $module['id_module'])
+            foreach ($modules as  $module) {
+                $role_permission  = $this->db->select('can_read as read , can_create as create , can_update as update , can_delete as delete')
+                    ->from('role_permissions ')
+                    ->where('id_role', $user->id_role)
+                    ->where('id_module', $module['id_module'])
                     ->get()
-                    ->result_array();
-                if (count($role_permission) > 0) {
-                    $temps = [];
-                    foreach ($role_permission as $value) {
-                        $temps[] = $value['nom'];
-                    }
-                    $permissions[$module['nom']] = $temps;
-                    $temps = [];
-                }
+                    ->row();
+
+                $permissions[$module['nom']]['create'] = $role_permission->create === '1';
+                $permissions[$module['nom']]['read'] = $role_permission->read  === '1';
+                $permissions[$module['nom']]['update'] = $role_permission->update  === '1';
+                $permissions[$module['nom']]['delete'] = $role_permission->delete  === '1';
             }
+
             $response['info'] =  $info;
             $response['permissions'] = $permissions;
         }
-
         return $response;
     }
 
@@ -119,68 +110,59 @@ class AuthModel extends CI_Model
         ];;
         if ($user) {
             // Personnel 
-            if ($user->id_personnel !== null) {
+            if (!!$user->id_personnel) {
                 $info =  $this->db->select('p.id_personnel,  p.nom , p.prenom , p.photo , p.matricule_personnel as matricule')
                     ->from('personnel p')
                     ->where('id_personnel',  $user->id_personnel)
                     ->get()
                     ->row();
-                unset($user->id_eleve);
-                unset($user->id_parent);
             }
             // Etudiant 
-            if ($user->id_eleve !== null) {
+            if (!!$user->id_eleve) {
                 $info =  $this->db->select('e.id_eleve , e.nom , e.prenom , e.photo , e.matricule_etudiant as matricule')
                     ->from('eleve e')
                     ->where('id_eleve',  $user->id_eleve)
                     ->get()
                     ->row();
-                unset($user->id_personnel);
-                unset($user->id_parent);
             }
             // Parent
-            if ($user->id_parent !== null) {
+            if (!!$user->id_parent !== null) {
                 $info =  $this->db->select('p.id_parent ,  p.nom , p.prenom')
                     ->from('parents p')
                     ->where('id_parent',  $user->id_parent)
                     ->get()
                     ->row();
-                unset($user->id_personnel);
-                unset($user->id_eleve);
-            }
-            if ($user->id_personnel === null && $user->id_eleve === null && $user->id_parent === null) {
-                unset($user->id_personnel);
-                unset($user->id_eleve);
-                unset($user->id_parent);
             }
 
+            if ($user->id_eleve === null)
+                unset($user->id_eleve);
+            if ($user->id_parent === null)
+                unset($user->id_parent);
+            if ($user->id_personnel === null)
+                unset($user->id_personnel);
+
             // Cherche les role et les permission d'acces pour l'utilisateur 
-            $permissions = null;
+            $permissions = [];
             $modules = $this->db->select('*')
                 ->from('modules')
                 ->get()
                 ->result_array();
-            foreach ($modules as $key => $module) {
-                $role_permission  = $this->db->select('p.*')
-                    ->from('role_permissions rp')
-                    ->join('permissions p', 'p.id_permission = rp.id_permission', 'inner')
-                    ->where('rp.id_role', $user->id_role)
-                    ->where('rp.id_module', $module['id_module'])
+            foreach ($modules as  $module) {
+                $role_permission  = $this->db->select('can_read as read , can_create as create , can_update as update , can_delete as delete')
+                    ->from('role_permissions ')
+                    ->where('id_role', $user->id_role)
+                    ->where('id_module', $module['id_module'])
                     ->get()
-                    ->result_array();
-                if (count($role_permission) > 0) {
-                    $temps = [];
-                    foreach ($role_permission as $value) {
-                        $temps[] = $value['nom'];
-                    }
-                    $permissions[$module['nom']] = $temps;
-                    $temps = [];
-                }
+                    ->row();
+
+                $permissions[$module['nom']]['create'] = $role_permission->create === '1';
+                $permissions[$module['nom']]['read'] = $role_permission->read  === '1';
+                $permissions[$module['nom']]['update'] = $role_permission->update  === '1';
+                $permissions[$module['nom']]['delete'] = $role_permission->delete  === '1';
             }
             $response['info'] =  $info;
             $response['permissions'] = $permissions;
         }
-
         return $response;
     }
 }

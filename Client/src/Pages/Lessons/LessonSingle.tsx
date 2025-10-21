@@ -14,6 +14,7 @@ import { RenderFilePreview } from '../../Components/RenderFilePreviews';
 import DownloadProgression from '../../Components/DownloadProgression';
 import { getLessonBySlug, getLessonSingleState } from './redux/LessonSlice';
 import { getAppState } from '../../Redux/AppSlice';
+import { useHashPermission } from '../../Hooks/useHashPermission';
 
 const LessonSingle = () => {
     const { slug } = useParams();
@@ -21,9 +22,10 @@ const LessonSingle = () => {
     const navigate = useNavigate();
     const { data: lesson, action } = useSelector(getLessonSingleState);
     const { hiddeTheModalActive } = useSelector(getAppState);
-
     const [showModal, setShowModal] = useState(false);
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+    const permission = useHashPermission();
+
 
     // Progession pour le telechargement 
     const [showProgress, setShowProgress] = useState(false);
@@ -97,25 +99,29 @@ const LessonSingle = () => {
                             Télécharger
                         </span>
                     </button>
-                    <button
-                        className="bg-blue-600 text-white px-4 py-2 gap-2 transition-colors rounded-lg hover:bg-blue-700 flex items-center"
-                        onClick={handleEdit}
-                    >
-                        <PenBox className="w-4 h-4 " />
-                        <span className='hidden lg:inline-block'>
-                            Modifier
-                        </span>
-                    </button>
-                    <button
-                        className="bg-red-600 text-white px-4 py-2 gap-2 transition-colors rounded-lg hover:bg-red-700 flex items-center"
-                        onClick={handleDelete}
-                    >
-                        <Trash className="w-4 h-4 " />
-                        <span className='hidden lg:inline-block'>
-                            Supprimer
-                        </span>
-                    </button>
-                    {lesson.published == 0 &&
+                    {permission.update &&
+                        <button
+                            className="bg-blue-600 text-white px-4 py-2 gap-2 transition-colors rounded-lg hover:bg-blue-700 flex items-center"
+                            onClick={handleEdit}
+                        >
+                            <PenBox className="w-4 h-4 " />
+                            <span className='hidden lg:inline-block'>
+                                Modifier
+                            </span>
+                        </button>
+                    }
+                    {permission.delete &&
+                        <button
+                            className="bg-red-600 text-white px-4 py-2 gap-2 transition-colors rounded-lg hover:bg-red-700 flex items-center"
+                            onClick={handleDelete}
+                        >
+                            <Trash className="w-4 h-4 " />
+                            <span className='hidden lg:inline-block'>
+                                Supprimer
+                            </span>
+                        </button>
+                    }
+                    { lesson.published == 0 &&
                         <button
                             className="bg-orange-600 text-white px-4 py-2 gap-2 transition-colors rounded-lg hover:bg-orange-700 flex items-center"
                             onClick={handlePublish}
