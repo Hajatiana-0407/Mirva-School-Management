@@ -18,56 +18,55 @@ const TuteurForm: React.FC<TuteurFormPropsType> = ({ student, formErrors }) => {
     return (
         <div className="space-y-4">
             <HeadingSmall title="Information sur le Tuteur : " />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-4">
                 <input type="hidden" name="tuteur[type]" value="tuteur" />
                 <input type="hidden" name="tuteur[id_parent]" value={student?.tuteur?.id_parent} />
-                <Input
-                    label="Nom du Tuteur"
-                    name="tuteur[nom]"
-                    defaultValue={student?.tuteur?.nom || ""}
-                    icon={User}
-                    errorMessage={formErrors?.["tuteur.nom"]}
-                />
-                <Input
-                    label="Prénom du Tuteur"
-                    name="tuteur[prenom]"
-                    defaultValue={student?.tuteur?.prenom || ""}
-                    icon={User}
-                    errorMessage={formErrors?.["tuteur.prenom"]}
-                />
-                <div className="col-span-2 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Input
-                        label="Profession du Tuteur"
-                        name="tuteur[profession]"
-                        defaultValue={student?.tuteur?.profession || ""}
-                        icon={Briefcase}
-                        errorMessage={formErrors?.["tuteur.profession"]}
+                        label="Nom du Tuteur"
+                        name="tuteur[nom]"
+                        defaultValue={student?.tuteur?.nom || ""}
+                        icon={User}
+                        errorMessage={formErrors?.["tuteur.nom"]}
                     />
                     <Input
-                        label="Adresse"
-                        name="tuteur[adresse]"
-                        defaultValue={student?.tuteur?.adresse || ""}
-                        icon={MapPin}
-                        errorMessage={formErrors?.["tuteur.adresse"]}
+                        label="Prénom du Tuteur"
+                        name="tuteur[prenom]"
+                        defaultValue={student?.tuteur?.prenom || ""}
+                        icon={User}
+                        errorMessage={formErrors?.["tuteur.prenom"]}
                     />
                 </div>
-
                 <Input
-                    label="Téléphone du Tuteur"
-                    name="tuteur[telephone]"
-                    defaultValue={student?.tuteur?.telephone || ""}
-                    icon={Phone}
-                    errorMessage={formErrors?.["tuteur.telephone"]}
+                    label="Profession du Tuteur"
+                    name="tuteur[profession]"
+                    defaultValue={student?.tuteur?.profession || ""}
+                    icon={Briefcase}
+                    errorMessage={formErrors?.["tuteur.profession"]}
                 />
                 <Input
-                    label="Email du Tuteur"
-                    name="tuteur[email]"
-                    defaultValue={student?.tuteur?.email || ""}
-                    icon={Mail}
-                    errorMessage={formErrors?.["tuteur.email"]}
+                    label="Adresse"
+                    name="tuteur[adresse]"
+                    defaultValue={student?.tuteur?.adresse || ""}
+                    icon={MapPin}
+                    errorMessage={formErrors?.["tuteur.adresse"]}
                 />
-            </div>
-            <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Input
+                        label="Téléphone du Tuteur"
+                        name="tuteur[telephone]"
+                        defaultValue={student?.tuteur?.telephone || ""}
+                        icon={Phone}
+                        errorMessage={formErrors?.["tuteur.telephone"]}
+                    />
+                    <Input
+                        label="Email du Tuteur"
+                        name="tuteur[email]"
+                        defaultValue={student?.tuteur?.email || ""}
+                        icon={Mail}
+                        errorMessage={formErrors?.["tuteur.email"]}
+                    />
+                </div>
                 <Input
                     label="Photocopie CIN du Tuteur"
                     name="tuteur[pc_cin]"

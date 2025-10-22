@@ -153,18 +153,17 @@ class EtudiantController extends CI_Controller
         $statistique = [
             'boy' => [
                 'nbr' => $boys,
-                'percent' => $boys * 100 / $all,
+                'percent' =>  $all !== 0 ?  $boys * 100 / $all : 0 ,
             ],
             'girl' => [
                 'nbr' => $girls,
-                'percent' => $girls * 100 / $all,
+                'percent' => $all !== 0 ?  $girls * 100 / $all : 0 ,
             ],
             'all' => [
                 'nbr' => $all,
                 'percent' => 100,
             ]
         ];
-
         echo json_encode($statistique);
     }
 }

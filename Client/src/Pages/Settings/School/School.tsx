@@ -38,8 +38,6 @@ const School = () => {
             setIdEteblissement(schoolInfo?.id_etablissement);
         }
     }, [schoolInfo]);
-
-
     // Handlers
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         onSubmite(
@@ -52,14 +50,14 @@ const School = () => {
     return (
         <form onSubmit={handleSubmit} id="__etablissement-form" className="space-y-6">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Informations de l'établissement</h3>
-            <div className="flex gap-5 max-lg:flex-wrap items-center justify-center">
+            <div className="flex gap-5 flex-col lg:flex-row items-center justify-center">
                 <div className="w-[15rem] h-[15rem]">
                     <ImageProfile
                         name="logo"
                         url={schoolInfo?.logo || ''}
                     />
                 </div>
-                <div className="flex-1 space-y-5 min-w-80">
+                <div className="flex-1 space-y-5 w-full">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Nom de l'établissement</label>
                         <input

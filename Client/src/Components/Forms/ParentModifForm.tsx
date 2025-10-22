@@ -29,8 +29,8 @@ const ParentModifForm: React.FC<ParentModifFormPropsType> = ({ parent, handleClo
     return (
         <form onSubmit={handleSumbit} >
             <div className='space-y-4'>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="hidden" name="id_parent" value={parent.id_parent} />
+                <input type="hidden" name="id_parent" value={parent.id_parent} />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Input
                         label="Nom"
                         name="nom"
@@ -45,22 +45,22 @@ const ParentModifForm: React.FC<ParentModifFormPropsType> = ({ parent, handleClo
                         icon={User}
                         errorMessage={formErrors?.prenom}
                     />
-                    <div className="col-span-2 space-y-4">
-                        <Input
-                            label="Profession"
-                            name="profession"
-                            defaultValue={parent.profession || ""}
-                            icon={Briefcase}
-                            errorMessage={formErrors?.profession}
-                        />
-                        <Input
-                            label="Adresse"
-                            name="adresse"
-                            defaultValue={parent.adresse || ""}
-                            icon={MapPin}
-                            errorMessage={formErrors?.adresse}
-                        />
-                    </div>
+                </div>
+                <Input
+                    label="Profession"
+                    name="profession"
+                    defaultValue={parent.profession || ""}
+                    icon={Briefcase}
+                    errorMessage={formErrors?.profession}
+                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Input
+                        label="Adresse"
+                        name="adresse"
+                        defaultValue={parent.adresse || ""}
+                        icon={MapPin}
+                        errorMessage={formErrors?.adresse}
+                    />
                     <Input
                         label="Téléphone"
                         name="telephone"
@@ -68,41 +68,39 @@ const ParentModifForm: React.FC<ParentModifFormPropsType> = ({ parent, handleClo
                         icon={Phone}
                         errorMessage={formErrors?.telephone}
                     />
-                    <Input
-                        label="Email"
-                        name="email"
-                        defaultValue={parent.email || ""}
-                        icon={Mail}
-                        errorMessage={formErrors?.email}
-                    />
                 </div>
-                <div className='space-y-4'>
-                    <Input
-                        label="Photocopie CIN"
-                        name="pc_cin"
-                        icon={FileText}
-                        iconColor="text-amber-500"
-                        type="file"
-                        errorMessage={formErrors?.pc_cin}
-                    />
-                    <CheckInput
-                        label="Contact d’urgence"
-                        description="Cocher cette case si ce parent doit être contacté en priorité en cas d’urgence."
-                        name="contact_urgence"
-                        defaultValue={parent.contact_urgence == '1' ? true : false}
-                    />
-                </div>
+                <Input
+                    label="Email"
+                    name="email"
+                    defaultValue={parent.email || ""}
+                    icon={Mail}
+                    errorMessage={formErrors?.email}
+                />
+                <Input
+                    label="Photocopie CIN"
+                    name="pc_cin"
+                    icon={FileText}
+                    iconColor="text-amber-500"
+                    type="file"
+                    errorMessage={formErrors?.pc_cin}
+                />
+                <CheckInput
+                    label="Contact d’urgence"
+                    description="Cocher cette case si ce parent doit être contacté en priorité en cas d’urgence."
+                    name="contact_urgence"
+                    defaultValue={parent.contact_urgence == '1' ? true : false}
+                />
 
                 <div className="flex justify-end space-x-3 pt-4">
-                    { handleCloseModal !== undefined && 
-                    <button
-                        type="button"
-                        onClick={handleCloseModal}
-                        className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-                    >
-                        <X className='h-5 w-5 me-1 inline-block' />
-                        Annuler
-                    </button>
+                    {handleCloseModal !== undefined &&
+                        <button
+                            type="button"
+                            onClick={handleCloseModal}
+                            className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                        >
+                            <X className='h-5 w-5 me-1 inline-block' />
+                            Annuler
+                        </button>
                     }
                     <button
                         type="submit"

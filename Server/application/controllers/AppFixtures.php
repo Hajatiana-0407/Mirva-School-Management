@@ -334,7 +334,7 @@ class AppFixtures extends CI_Controller
 
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
-            // 'type_personnel',
+            'type_personnel',
             'classe_proffesseur_matiere',
             'personnel',
         ]);

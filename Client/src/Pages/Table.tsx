@@ -72,84 +72,98 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
         <div className="w-full overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="border-b w-max">
+              <tr className="border-b w-max rounded shadow shadow-blue-50">
                 {columns.map((column) => (
                   <th
                     key={column.key}
-                    className="text-left py-3 px-4 font-semibold text-gray-700 whitespace-nowrap"
+                    className="text-left py-3 px-4 font-semibold text-gray-700 uppercase whitespace-nowrap"
                   >
                     {column.label}
                   </th>
                 ))}
                 {actions && actions.length > 0 && (
-                  <th className="text-center py-3 px-4 font-semibold text-gray-700">
+                  <th className="text-center py-3 px-4 font-semibold text-gray-700 uppercase">
                     Actions
                   </th>
                 )}
               </tr>
             </thead>
             <tbody>
+
+              {/* LOADING */}
               {(isLoading && !currentItems.length) ? (
                 <tr>
                   <td colSpan={columns.length + 1}>
                     <Loading />
                   </td>
                 </tr>
-              ) : (
-                currentItems.map((item, index) => (
-                  <tr key={index} className="border-b hover:bg-gray-50 w-max">
-                    {columns.map((column) => (
-                      <td
-                        key={column.key}
-                        className="py-3 px-4 text-gray-900 truncate max-w-80"
-                      >
-                        {column.render
-                          ? column.render(item[column.key], item)
-                          : item[column.key]}
-                      </td>
-                    ))}
-                    {actions && actions.length > 0 && (
-                      <td className="py-3 px-4">
-                        <div className="flex justify-center space-x-2">
-                          {/* Boutons d'action */}
-                          {actionType === 'button' &&
-                            actions.map((action, actionIndex) => {
-                              const Icon = action.icon;
-
-                              // ? Pas de permission de modification
-                              if (action.type === 'update' && !permission.update) return;
-                              // ! Pas de permission de suppression 
-                              if (action.type === 'delete' && !permission.delete) return;
-
-                              return (
-                                <button
-                                  key={actionIndex}
-                                  onClick={() => action.onClick(item)}
-                                  className={`p-1 rounded hover:bg-gray-100 ${getActionColor(action.color)}`}
-                                  title={action.label}
-                                  type='button'
-                                >
-                                  <Icon className="w-4 h-4" />
-                                </button>
-                              );
-                            })}
-
-                          {/* Action pop-up */}
-                          {actionType === 'pop-up' && (
-                            <ActionMenu
-                              actions={actions.map((action) => ({
-                                ...action,
-                                onClick: () => action.onClick(item),
-                                color: getActionColor(action.color),
-                              }))}
-                            />
-                          )}
-                        </div>
-                      </td>
-                    )}
+              )
+                // ?  AUCUN RESULTAT
+                : (!isLoading && !currentItems.length) ? (
+                  <tr>
+                    <td colSpan={columns.length + 1} className=''>
+                      <div className='text-gray-400 text-md text-center pt-6'>
+                      Nous n’avons trouvé aucun élément.
+                      </div>
+                    </td>
                   </tr>
-                ))
-              )}
+                )
+                  // ? AFFICHAGE 
+                  : (
+                    currentItems.map((item, index) => (
+                      <tr key={index} className="border-b hover:bg-gray-50 w-max">
+                        {columns.map((column) => (
+                          <td
+                            key={column.key}
+                            className="py-3 px-4 text-gray-900 truncate max-w-80"
+                          >
+                            {column.render
+                              ? column.render(item[column.key], item)
+                              : item[column.key]}
+                          </td>
+                        ))}
+                        {actions && actions.length > 0 && (
+                          <td className="py-3 px-4">
+                            <div className="flex justify-center space-x-2">
+                              {/* Boutons d'action */}
+                              {actionType === 'button' &&
+                                actions.map((action, actionIndex) => {
+                                  const Icon = action.icon;
+
+                                  // ? Pas de permission de modification
+                                  if (action.type === 'update' && !permission.update) return;
+                                  // ! Pas de permission de suppression 
+                                  if (action.type === 'delete' && !permission.delete) return;
+
+                                  return (
+                                    <button
+                                      key={actionIndex}
+                                      onClick={() => action.onClick(item)}
+                                      className={`p-1 rounded hover:bg-gray-100 ${getActionColor(action.color)}`}
+                                      title={action.label}
+                                      type='button'
+                                    >
+                                      <Icon className="w-4 h-4" />
+                                    </button>
+                                  );
+                                })}
+
+                              {/* Action pop-up */}
+                              {actionType === 'pop-up' && (
+                                <ActionMenu
+                                  actions={actions.map((action) => ({
+                                    ...action,
+                                    onClick: () => action.onClick(item),
+                                    color: getActionColor(action.color),
+                                  }))}
+                                />
+                              )}
+                            </div>
+                          </td>
+                        )}
+                      </tr>
+                    ))
+                  )}
             </tbody>
           </table>
         </div>

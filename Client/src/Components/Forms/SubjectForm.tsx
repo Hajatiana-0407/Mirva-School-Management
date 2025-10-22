@@ -34,7 +34,7 @@ const SubjectForm: React.FC<SubjectFormPropsType> = ({ handleClose, subject }) =
     return (
         <form className="space-y-4" onSubmit={handleSubmit}>
             <InputError message={error} />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-2 gap-4">
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1" >Nom de la matière</label>
                     <input

@@ -24,7 +24,7 @@ const getPermissionIcon = (hasPermission: boolean) => {
 const UserRole: React.FC = () => {
     const { action, datas, error } = useSelector(getRoleState);
     const dispatch: AppDispatch = useDispatch();
-    const [editingRole, setEditingRole] = useState<RoleType | null>(RoleInitialValue);
+    const [editingRole, setEditingRole] = useState<RoleType | null>(null);
     const [copyRole, setCopyRole] = useState<RoleType | null>(RoleInitialValue);
     const [showRoleModal, setShowRoleModal] = useState(false)
     const { hiddeTheModalActive } = useSelector(getAppState);
@@ -156,7 +156,7 @@ const UserRole: React.FC = () => {
                                             onClick={() => handleEdit(role)}
                                             className="p-2 text-green-600  hover:bg-blue-50 rounded-lg transition-colors"
                                             title="Modifier"
-                                            disabled={ !permissions.update }
+                                            disabled={!permissions.update}
                                         >
                                             <Edit className="w-5" />
                                         </button>
@@ -166,7 +166,7 @@ const UserRole: React.FC = () => {
                                             onClick={() => handleCopy(role)}
                                             className="p-2 text-blue-600 hover:bg-green-50 rounded-lg transition-colors"
                                             title="Dupliquer"
-                                             disabled={ !permissions.create }
+                                            disabled={!permissions.create}
                                         >
                                             <Copy className="w-5" />
                                         </button>
@@ -233,7 +233,7 @@ const UserRole: React.FC = () => {
             <Modal
                 isOpen={showRoleModal}
                 onClose={handleCloseModal}
-                title={editingRole ? `Modifier le rôle : "${ editingRole.nom }"` : 'Nouveau rôle'}
+                title={editingRole ? `Modifier le rôle : "${editingRole.nom}"` : 'Nouveau rôle'}
                 size='lg'
             >
                 <RoleForm handleClose={handleCloseModal} role={editingRole as RoleType} copy={copyRole as RoleType} />

@@ -84,6 +84,7 @@ const Signin = () => {
                         placeholder="Votre identifiant"
                         errorMessage={formErrors?.identifiant}
                         icon={Mail}
+                        iconColor="text-gray-700"
                     />
                     <div>
                         <Input
@@ -93,6 +94,7 @@ const Signin = () => {
                             placeholder="votre mot de passe"
                             errorMessage={formErrors?.password}
                             icon={KeyRound}
+                            iconColor="text-gray-700"
                         />
                         <InputError message={error} />
                     </div>

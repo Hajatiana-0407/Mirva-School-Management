@@ -160,24 +160,13 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
 
                     {/* Information personnel */}
                     <div className='space-y-4'>
-                        <div className="flex flex-col sm:flex-row gap-5 space-y-2">
-
+                        <div className="flex flex-col justify-center items-center sm:flex-row gap-5 space-y-2">
                             {/* photo d'indentité  */}
                             <div className='w-[14rem] h-[14rem]'>
                                 <ImageProfile uri={formValues.photo} setUrl={handleProfileChanage} />
                             </div>
-
-
-                            <div className='flex-1 space-y-4'>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <Input
-                                        label='Nom'
-                                        name='nom'
-                                        defaultValue={editingStudent?.nom ? editingStudent?.nom : formValues.nom.value ? formValues.nom.value : ''}
-                                        icon={User}
-                                        errorMessage={formErrors?.nom}
-                                        onChange={handleInputValueChange('Nom')}
-                                    />
+                            <div className='flex-1 space-y-4 w-full'>
+                                <div className='grid sm:grid-cols-2 gap-4'>
                                     <Input
                                         label='Prénom'
                                         name='prenom'
@@ -186,36 +175,40 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                                         errorMessage={formErrors?.prenom}
                                         onChange={handleInputValueChange('Prénom')}
                                     />
-
-                                    <div className='col-span-2 space-y-4'>
-                                        <Input
-                                            label='Date de naissance'
-                                            name='date_naissance'
-                                            defaultValue={editingStudent?.date_naissance ? editingStudent?.date_naissance : formValues.date_naissance.value ? formValues.date_naissance.value : ''}
-                                            icon={CalendarDays}
-                                            errorMessage={formErrors?.date_naissance} type='date'
-                                            onChange={handleInputValueChange('Date de naissance')}
-                                        />
-                                        <Input
-                                            label='Lieu de naissance'
-                                            name='lieu_naissance'
-                                            defaultValue={editingStudent?.lieu_naissance ? editingStudent?.lieu_naissance : formValues.lieu_naissance.value ? formValues.lieu_naissance.value : ''}
-                                            icon={MapPin}
-                                            errorMessage={formErrors?.lieu_naissance}
-                                            onChange={handleInputValueChange('Lieu de naissance')}
-                                        />
-                                        <Input
-                                            label='Genre'
-                                            name='sexe'
-                                            defaultValue={editingStudent?.sexe || ''}
-                                            icon={UserCheck}
-                                            errorMessage={formErrors?.sexe}
-                                            type='select'
-                                            options={sexe}
-                                        />
-                                    </div>
-
+                                    <Input
+                                        label='Nom'
+                                        name='nom'
+                                        defaultValue={editingStudent?.nom ? editingStudent?.nom : formValues.nom.value ? formValues.nom.value : ''}
+                                        icon={User}
+                                        errorMessage={formErrors?.nom}
+                                        onChange={handleInputValueChange('Nom')}
+                                    />
                                 </div>
+                                <Input
+                                    label='Date de naissance'
+                                    name='date_naissance'
+                                    defaultValue={editingStudent?.date_naissance ? editingStudent?.date_naissance : formValues.date_naissance.value ? formValues.date_naissance.value : ''}
+                                    icon={CalendarDays}
+                                    errorMessage={formErrors?.date_naissance} type='date'
+                                    onChange={handleInputValueChange('Date de naissance')}
+                                />
+                                <Input
+                                    label='Lieu de naissance'
+                                    name='lieu_naissance'
+                                    defaultValue={editingStudent?.lieu_naissance ? editingStudent?.lieu_naissance : formValues.lieu_naissance.value ? formValues.lieu_naissance.value : ''}
+                                    icon={MapPin}
+                                    errorMessage={formErrors?.lieu_naissance}
+                                    onChange={handleInputValueChange('Lieu de naissance')}
+                                />
+                                <Input
+                                    label='Genre'
+                                    name='sexe'
+                                    defaultValue={editingStudent?.sexe || ''}
+                                    icon={UserCheck}
+                                    errorMessage={formErrors?.sexe}
+                                    type='select'
+                                    options={sexe}
+                                />
                             </div>
                         </div>
                         <div>
@@ -239,7 +232,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                             errorMessage={formErrors?.adresse}
                             onChange={handleInputValueChange('Adresse complète')}
                         />
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <Input
                                 label='Téléphone'
                                 name='telephone'
@@ -265,43 +258,41 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                         <div>
                             <HeadingSmall title='Infos médicales & contact d’urgence :' />
                         </div>
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                            <div className="col-span-2">
+                        <div className='space-y-4'>
+                            <Input
+                                label='Alergies ou Maladies chroniques '
+                                name='maladies'
+                                defaultValue={editingStudent?.maladies ? editingStudent?.maladies : formValues.maladies.value ? formValues.maladies.value : ''}
+                                icon={Activity}
+                                errorMessage={formErrors?.maladies}
+                                onChange={handleInputValueChange('Alergies ou Maladies chroniques')}
+                            />
+                            <div className='grid sm:grid-cols-2 gap-4'>
                                 <Input
-                                    label='Alergies ou Maladies chroniques '
-                                    name='maladies'
-                                    defaultValue={editingStudent?.maladies ? editingStudent?.maladies : formValues.maladies.value ? formValues.maladies.value : ''}
-                                    icon={Activity}
-                                    errorMessage={formErrors?.maladies}
-                                    onChange={handleInputValueChange('Alergies ou Maladies chroniques')}
+                                    label='Personne à contacter en cas d’urgence'
+                                    name='urgence_nom'
+                                    defaultValue={editingStudent?.urgence_nom ? editingStudent?.urgence_nom : formValues.urgence_nom.value ? formValues.urgence_nom.value : ''}
+                                    icon={User}
+                                    errorMessage={formErrors?.urgence_nom}
+                                    onChange={handleInputValueChange('Personne à contacter en cas d’urgence')}
+                                />
+                                <Input
+                                    label='Lien avec l’élève (urgence)'
+                                    name='urgence_lien'
+                                    defaultValue={editingStudent?.urgence_lien ? editingStudent?.urgence_lien : formValues.urgence_lien.value ? formValues.urgence_lien.value : ''}
+                                    icon={UserCheck}
+                                    errorMessage={formErrors?.urgence_lien}
+                                    onChange={handleInputValueChange('Lien avec l’élève (urgence)')}
                                 />
                             </div>
                             <Input
-                                label='Personne à contacter en cas d’urgence'
-                                name='urgence_nom'
-                                defaultValue={editingStudent?.urgence_nom ? editingStudent?.urgence_nom : formValues.urgence_nom.value ? formValues.urgence_nom.value : ''}
-                                icon={User}
-                                errorMessage={formErrors?.urgence_nom}
-                                onChange={handleInputValueChange('Personne à contacter en cas d’urgence')}
+                                label='Téléphone urgence'
+                                name='urgence_tel'
+                                defaultValue={editingStudent?.urgence_tel ? editingStudent?.urgence_tel : formValues.urgence_tel.value ? formValues.urgence_tel.value : ''}
+                                icon={Phone}
+                                errorMessage={formErrors?.urgence_tel}
+                                onChange={handleInputValueChange('Téléphone urgence')}
                             />
-                            <Input
-                                label='Lien avec l’élève (urgence)'
-                                name='urgence_lien'
-                                defaultValue={editingStudent?.urgence_lien ? editingStudent?.urgence_lien : formValues.urgence_lien.value ? formValues.urgence_lien.value : ''}
-                                icon={UserCheck}
-                                errorMessage={formErrors?.urgence_lien}
-                                onChange={handleInputValueChange('Lien avec l’élève (urgence)')}
-                            />
-                            <div className="col-span-2">
-                                <Input
-                                    label='Téléphone urgence'
-                                    name='urgence_tel'
-                                    defaultValue={editingStudent?.urgence_tel ? editingStudent?.urgence_tel : formValues.urgence_tel.value ? formValues.urgence_tel.value : ''}
-                                    icon={Phone}
-                                    errorMessage={formErrors?.urgence_tel}
-                                    onChange={handleInputValueChange('Téléphone urgence')}
-                                />
-                            </div>
                         </div>
                     </div>
 
@@ -405,8 +396,8 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                         },
                         {
                             key: 'Tuteur', component: <TuteurForm
-                            formErrors={formErrors}
-                            /> , 
+                                formErrors={formErrors}
+                            />,
                             Icon: User
                         },
                     ]} />
