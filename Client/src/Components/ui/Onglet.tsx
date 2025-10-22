@@ -1,24 +1,26 @@
 import clsx from 'clsx';
 import React, { type ComponentType, type SVGProps, useEffect, useState } from 'react'
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 
 type OngletPropsType = {
-    onlgets: { key: string, component: JSX.Element, Icon?: ComponentType<SVGProps<SVGSVGElement>>, color?: string }[];
+    onlgets: { key: string, label: string, component: JSX.Element, Icon?: ComponentType<SVGProps<SVGSVGElement>>, color?: string }[];
     type?: 'hidden' | 'delete'
     active?: number;
     setActive?: React.Dispatch<React.SetStateAction<number>>;
 }
-const Onglet: React.FC<OngletPropsType> = ({ onlgets, type = 'hidden', active, setActive }) => {
-    const [activeTab, setActiveTab] = useState(active || 1);
+const Onglet: React.FC<OngletPropsType> = ({ onlgets, type = 'hidden' }) => {
+    const [activeTab, setActiveTab] = useState(1);
+    const [searchParams] = useSearchParams();
+    const location = useLocation();
     useEffect(() => {
-        if (active !== 0 && active) {
-            onlgets.map((onglet, idx) => {
-                if ((idx + 1) === active && onglet) {
-                    setActiveTab(idx + 1)
-                    setActive?.(idx + 1)
-                }
-            })
+        const ongletKey = searchParams.get('o');
+        if (ongletKey) {
+            const foundIndex = onlgets.findIndex(tab => tab.key.toLowerCase() === ongletKey.toLowerCase());
+            if (foundIndex !== -1) {
+                setActiveTab(foundIndex + 1);
+            }
         }
-    }, [active])
+    }, [searchParams])
     return (
         <div className="shadow-sm space-y-6">
             <div className="bg-white rounded-md shadow-sm border py-3 px-6">
@@ -27,12 +29,12 @@ const Onglet: React.FC<OngletPropsType> = ({ onlgets, type = 'hidden', active, s
                         const Icon = tab.Icon;
                         const color = tab?.color ? tab.color as string : 'blue';
                         return (
-                            <button
+                            <Link
+                                to={`${location.pathname}?o=${tab.key}`}
                                 type='button'
                                 key={tab.key + '_btn'}
                                 onClick={() => {
                                     setActiveTab(idx + 1);
-                                    setActive?.(idx + 1)
                                 }}
                                 className={`flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 whitespace-nowrap ${activeTab === (idx + 1)
                                     ? `bg-${color}-50 text-${color}-700 shadow-sm`
@@ -40,8 +42,8 @@ const Onglet: React.FC<OngletPropsType> = ({ onlgets, type = 'hidden', active, s
                                     }`}
                             >
                                 {Icon && < Icon className="w-5 h-5" />}
-                                <span>{tab.key}</span>
-                            </button>
+                                <span>{tab.label}</span>
+                            </Link>
                         );
                     })}
                 </nav>

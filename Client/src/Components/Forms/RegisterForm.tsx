@@ -388,14 +388,17 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                 )}>
                     <Onglet onlgets={[
                         {
-                            key: 'Parent',
+                            key: 'parent',
+                            label: 'Parent',
                             component: <ParentForm
                                 formErrors={formErrors}
                             />,
                             Icon: Users
                         },
                         {
-                            key: 'Tuteur', component: <TuteurForm
+                            key: 'tuteur',
+                            label: 'Tuteur',
+                            component: <TuteurForm
                                 formErrors={formErrors}
                             />,
                             Icon: User

@@ -76,7 +76,7 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
 
 
         return (
-            <div className="flex flex-col">
+            <div className="flex flex-col w-full">
                 <div className="relative">
                     {/* Label */}
                     {!icon && (

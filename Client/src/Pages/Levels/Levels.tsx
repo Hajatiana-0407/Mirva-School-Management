@@ -7,7 +7,6 @@ import { levelType } from '../../Utils/Types';
 import { getAppState } from '../../Redux/AppSlice';
 import LevelSubject from './LevelSubject';
 import LevelListe from './LevelListe';
-import { useParams } from 'react-router-dom';
 import Onglet from '../../Components/ui/Onglet';
 import LevelForm from '../../Components/Forms/LevelForm';
 import { getAllLevel } from './redux/LevelAsyncThunk';
@@ -16,11 +15,9 @@ import { useHashPermission } from '../../Hooks/useHashPermission';
 
 
 const Levels = () => {
-  const { active } = useParams();
   const dispatch: AppDispatch = useDispatch();
   const permission = useHashPermission();
   const { hiddeTheModalActive } = useSelector(getAppState);
-  const [activeTab, setActiveTab] = useState<number>(active !== undefined ? 2 : 1);
   const [showModal, setShowModal] = useState(false);
   const [editingLevel, setEditingLevel] = useState<levelType | null>(null);
   const [idLevelToAddSubject, setIdLevelToAddSubject] = useState<number>(0);
@@ -46,15 +43,7 @@ const Levels = () => {
 
   useEffect(() => {
     dispatch(getAllLevel());
-  }, [dispatch, activeTab]);
-
-  useEffect(() => {
-    if (activeTab == 2) {
-      setIdLevelToAddSubject(0);
-    }
-  }, [activeTab])
-
-
+  }, [dispatch]);
   return (
 
     <div className="space-y-6">
@@ -76,18 +65,18 @@ const Levels = () => {
       <Onglet
         onlgets={[
           {
-            key: 'Listes des niveaux',
-            component: <LevelListe handleEdit={handleEdit} setActiveTab={setActiveTab} setIdLevelToAddSubject={setIdLevelToAddSubject} />,
+            key:'list-level' , 
+            label: 'Listes des niveaux',
+            component: <LevelListe handleEdit={handleEdit} setIdLevelToAddSubject={setIdLevelToAddSubject} />,
             Icon: ListChecks
           },
           {
-            key: 'Niveau & Matiere',
+            key:'subject-level-coef' , 
+            label: 'Niveau & Matiere',
             component: <LevelSubject idLevelToAddSubject={idLevelToAddSubject} />,
             Icon: BookOpenCheck
           },
         ]}
-        active={activeTab || undefined}
-        setActive={setActiveTab}
       />
 
       {/* MOADALE POUR FORMULAIRE AJOUT / MODIF */}

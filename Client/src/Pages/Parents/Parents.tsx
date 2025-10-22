@@ -288,7 +288,8 @@ const Parents = () => {
             <input type="hidden" name='id_eleve' value={studentToAddParent.id_eleve} />
             <Onglet onlgets={[
               {
-                key: 'Parent',
+                key: 'parent',
+                label: 'Parent',
                 component: <ParentForm
                   formErrors={formErrors}
                   student={studentToAddParent as StudentDetailsType}
@@ -296,7 +297,9 @@ const Parents = () => {
                 Icon: Users
               },
               {
-                key: 'Tuteur', component: <TuteurForm
+                key: 'tuteur',
+                label: 'Tuteur',
+                component: <TuteurForm
                   formErrors={formErrors}
                   student={studentToAddParent as StudentDetailsType}
                 />,
