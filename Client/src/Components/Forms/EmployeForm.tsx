@@ -132,7 +132,7 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
             <div className={clsx({
                 'sr-only': (page !== 1)
             }, 'space-y-6')} >
-                <div className="flex flex-col sm:flex-row gap-5  space-y-2">
+                <div className="flex flex-col sm:flex-row gap-5 items-center justify-center  space-y-2">
 
                     {/* Photo de profil de l'employé */}
                     <div className='w-[14rem] h-[14rem]'>
@@ -140,8 +140,8 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                     </div>
 
                     {/* Information personnel sur l'employer  */}
-                    <div className='flex-1 space-y-4' >
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                    <div className='flex-1 space-y-4 w-full' >
+                        <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                             <Input
                                 label='Nom'
                                 name='nom'
@@ -156,7 +156,6 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                                 icon={UserCheck}
                                 errorMessage={formErrors?.prenom}
                             />
-
                         </div>
                         <Input
                             label='Date de naissance'
@@ -216,31 +215,30 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                 {/* Information sur les coordonner de l'employer */}
                 <div className="space-y-4">
                     <HeadingSmall title='Information sur les coordonner :' />
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Input
-                            label='Email'
-                            name='email'
-                            defaultValue={editingEmployees?.email || ''}
-                            icon={Mail}
-                            errorMessage={formErrors?.email}
-                        />
-
-                        <Input
-                            label='Téléphone'
-                            name='telephone'
-                            defaultValue={editingEmployees?.telephone || ''}
-                            icon={Phone}
-                            errorMessage={formErrors?.telephone}
-                        />
-                        <div className='col-span-2'>
+                    <div className="space-y-4">
+                        <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                             <Input
-                                label='Adresse'
-                                name='addresse'
-                                defaultValue={editingEmployees?.addresse || ''}
-                                icon={MapPinned}
-                                errorMessage={formErrors?.addresse}
+                                label='Email'
+                                name='email'
+                                defaultValue={editingEmployees?.email || ''}
+                                icon={Mail}
+                                errorMessage={formErrors?.email}
+                            />
+                            <Input
+                                label='Téléphone'
+                                name='telephone'
+                                defaultValue={editingEmployees?.telephone || ''}
+                                icon={Phone}
+                                errorMessage={formErrors?.telephone}
                             />
                         </div>
+                        <Input
+                            label='Adresse'
+                            name='addresse'
+                            defaultValue={editingEmployees?.addresse || ''}
+                            icon={MapPinned}
+                            errorMessage={formErrors?.addresse}
+                        />
                     </div>
                 </div>
 
@@ -263,57 +261,54 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                             icon={Calculator}
                             type='number'
                         />
-
-                        {/* Fonctions du personnel  */}
-                        <Input
-                            label='Poste'
-                            name='type_personnel'
-                            defaultValue={editingEmployees?.id_type_personnel || typePersonnelOptions[0]?.value}
-                            icon={Briefcase}
-                            errorMessage={formErrors?.type_personnel} type='select'
-                            options={typePersonnelOptions}
-                            onChange={(e) => { handleTypeEmployeesChange(e as ChangeEvent<HTMLSelectElement>) }}
-                        />
-                        <Input
-                            label='Type de contrat'
-                            name='type_contrat'
-                            defaultValue={editingEmployees?.type_contrat || 'cdd'}
-                            icon={Check}
-                            errorMessage={formErrors?.type_contrat} type='select'
-                            options={contrats}
-                        />
-                        <div className='col-span-2 space-y-4'>
+                    </div>
+                    <div className='space-y-4'>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* Fonctions du personnel  */}
                             <Input
-                                label='Spécialisation'
-                                name='specialisation'
-                                defaultValue={editingEmployees?.specialisation || ''}
-                                icon={Layers}
-                                errorMessage={formErrors?.specialisation}
+                                label='Poste'
+                                name='type_personnel'
+                                defaultValue={editingEmployees?.id_type_personnel || typePersonnelOptions[0]?.value}
+                                icon={Briefcase}
+                                errorMessage={formErrors?.type_personnel} type='select'
+                                options={typePersonnelOptions}
+                                onChange={(e) => { handleTypeEmployeesChange(e as ChangeEvent<HTMLSelectElement>) }}
                             />
                             <Input
-                                label='Certifications'
-                                name='certification'
-                                defaultValue={editingEmployees?.certification || ''}
-                                icon={Award}
-                                errorMessage={formErrors?.certification}
-                            />
-                        </div>
-
-                        <div className='col-span-2'>
-                            <Input
-                                label='Status'
-                                name='status'
-                                defaultValue={editingEmployees?.status || 'Actif'}
+                                label='Type de contrat'
+                                name='type_contrat'
+                                defaultValue={editingEmployees?.type_contrat || 'cdd'}
                                 icon={Check}
-                                errorMessage={formErrors?.status} type='select'
-                                options={[
-                                    { label: 'Actif', value: 'Actif' },
-                                    { label: 'Suspendu', value: 'Suspendu' },
-                                    { label: 'Démissionnaire', value: 'Démissionnaire' },
-                                ]}
+                                errorMessage={formErrors?.type_contrat} type='select'
+                                options={contrats}
                             />
                         </div>
-
+                        <Input
+                            label='Spécialisation'
+                            name='specialisation'
+                            defaultValue={editingEmployees?.specialisation || ''}
+                            icon={Layers}
+                            errorMessage={formErrors?.specialisation}
+                        />
+                        <Input
+                            label='Certifications'
+                            name='certification'
+                            defaultValue={editingEmployees?.certification || ''}
+                            icon={Award}
+                            errorMessage={formErrors?.certification}
+                        />
+                        <Input
+                            label='Status'
+                            name='status'
+                            defaultValue={editingEmployees?.status || 'Actif'}
+                            icon={Check}
+                            errorMessage={formErrors?.status} type='select'
+                            options={[
+                                { label: 'Actif', value: 'Actif' },
+                                { label: 'Suspendu', value: 'Suspendu' },
+                                { label: 'Démissionnaire', value: 'Démissionnaire' },
+                            ]}
+                        />
                     </div>
                 </div>
 

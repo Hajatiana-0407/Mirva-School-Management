@@ -120,6 +120,11 @@ const Lesson = () => {
               <Loading />
             </div>
           }
+          {!action.isLoading && !datas.length && (
+            <div className='text-gray-400 text-md text-center pt-6'>
+              Nous n’avons trouvé aucun élément.
+            </div>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {datas.length > 0 && datas.map((lesson: LessonType, idx: number) => {
               const createdAt = lesson.created_at ? new Date(lesson.created_at) : null;

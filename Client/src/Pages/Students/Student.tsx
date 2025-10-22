@@ -87,7 +87,7 @@ const Student = () => {
         console.error("Erreur lors de la recupération de statistique des étudiant ", action.payload);
       }
     })
-  }, [students.length])
+  }, [students])
 
 
   // ===================== TABLEAUX =====================

@@ -76,8 +76,8 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
 
 
         return (
-            <div className="">
-                <div className="relative w-full">
+            <div className="flex flex-col">
+                <div className="relative">
                     {/* Label */}
                     {!icon && (
                         <label htmlFor={name} className="block mb-2 text-base text-body text-secondary">

@@ -30,7 +30,7 @@ class AppFixtures extends CI_Controller
 
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
-            // 'etablissement',
+            'etablissement',
             'annee_scolaire',
             'matiere',
             'niveau',
@@ -334,7 +334,7 @@ class AppFixtures extends CI_Controller
 
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
-            // 'type_personnel',
+            'type_personnel',
             'classe_proffesseur_matiere',
             'personnel',
         ]);
@@ -444,9 +444,9 @@ class AppFixtures extends CI_Controller
     private function loadRoles($clean = false)
     {
         $this->model->emptyDb([
-            // 'modules',
-            // 'roles',
-            // 'role_permissions'
+            'modules',
+            'roles',
+            'role_permissions'
         ]);
 
         if ($clean) {
@@ -557,7 +557,7 @@ class AppFixtures extends CI_Controller
     {
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
-            // 'users'
+            'users'
         ]);
 
         if ($clean) {

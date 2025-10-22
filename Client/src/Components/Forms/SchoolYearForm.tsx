@@ -63,7 +63,7 @@ const SchoolYearForm: React.FC<SchoolYearFormPropsType> = ({ schoolYear, handleC
         <InputError message={formErrors?.description} />
       </div>
       <div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Date de début</label>
             <input
@@ -83,8 +83,7 @@ const SchoolYearForm: React.FC<SchoolYearFormPropsType> = ({ schoolYear, handleC
             />
           </div>
         </div>
-        <InputError message={formErrors?.date_debut || formErrors?.date_fin ? "La date de début est obligatoire." : ''} />
-
+        <InputError message={formErrors?.date_debut || formErrors?.date_fin ? "Les dates de debut et fin sont obligatoire." : ''} />
       </div>
       <div className="flex justify-end space-x-3 pt-4">
         <button

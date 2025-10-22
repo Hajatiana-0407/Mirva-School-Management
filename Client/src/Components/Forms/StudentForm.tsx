@@ -48,13 +48,12 @@ const StudentForm: React.FC<StudentFormPropsType> = ({ editingStudent, handleClo
         <form className="space-y-4" onSubmit={handleSubmit}>
             <InputError message={error} />
             {/* Information personnel */}
-            <div className="flex flex-col sm:flex-row gap-5 space-y-2">
-
+            <div className="flex flex-col md:flex-row items-center gap-5 space-y-2">
                 {/* PHOTO D IDENTITE */}
                 <div className="w-[15rem] h-[15rem]">
                     <ImageProfile url={editingStudent?.photo} />
                 </div>
-                <div className='flex-1 space-y-4'>
+                <div className='flex-1 space-y-4 w-full'>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Input
                             label='Nom'
