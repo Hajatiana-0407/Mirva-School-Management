@@ -9,9 +9,6 @@ const Layout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  console.log('windth : ' , windowWidth );
-  
-
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -37,8 +34,9 @@ const Layout = () => {
         />
       </div>
       <div className={clsx(
-        { "pl-[16rem]": !sidebarCollapsed && windowWidth > 1000 }
-        , "flex-1 flex flex-col overflow-hidden pl-[4rem] transition-all duration-300 max-h-screen"
+        { "pl-[16rem]": !sidebarCollapsed && windowWidth > 1000 },
+        { "pl-[4rem]": !(!sidebarCollapsed && windowWidth > 1000) }
+        , "flex-1 flex flex-col overflow-hidden  transition-all duration-300 max-h-screen"
       )} >
         <Header />
         <main className="flex-1 overflow-y-auto p-3 md:p-6 relative">
