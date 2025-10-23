@@ -23,6 +23,7 @@ import Loading from '../../Components/ui/Loading';
 import ParentModifForm from '../../Components/Forms/ParentModifForm';
 import { baseUrl } from '../../Utils/Utils';
 import { useHashPermission } from '../../Hooks/useHashPermission';
+import Title from '../../Components/ui/Title';
 
 const SearchFormSchema = object({
   matricule_etudiant: string().required('le matricule ne peut pas être vide .'),
@@ -180,8 +181,11 @@ const Parents = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Parents et Tuteurs</h1>
+
+      <Title
+        title='Parents et Tuteurs'
+        description='Gérez les informations et le suivi des parents et tuteurs des élèves.'
+      >
         {permission.create &&
           <button
             onClick={() => {
@@ -191,11 +195,10 @@ const Parents = () => {
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
-            <span>Ajouter</span>
+            <span className='max-md:hidden-susp' >Ajouter</span>
           </button>
         }
-      </div>
-
+      </Title>
       <div className="bg-white p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">

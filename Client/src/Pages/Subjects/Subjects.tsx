@@ -11,6 +11,7 @@ import { deleteSubject, getAllSubject } from './redux/SubjectAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
 import SubjectForm from '../../Components/Forms/SubjectForm';
 import { useHashPermission } from '../../Hooks/useHashPermission';
+import Title from '../../Components/ui/Title';
 
 
 
@@ -86,18 +87,20 @@ const Subjects = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Gestion des matières</h1>
+      <Title
+        title='Gestion des matières'
+        description='Créez et organisez les matières enseignées.'
+      >
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
-            <span>Nouvelle matière</span>
+            <span className='max-md:hidden-susp'>Nouvelle matière</span>
           </button>
         }
-      </div>
+      </Title>
 
       <div className="bg-white p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6">

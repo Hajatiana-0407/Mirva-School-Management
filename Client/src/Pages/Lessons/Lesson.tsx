@@ -17,6 +17,7 @@ import Loading from '../../Components/ui/Loading';
 import DownloadProgression from '../../Components/DownloadProgression';
 import { Link } from 'react-router-dom';
 import { useHashPermission } from '../../Hooks/useHashPermission';
+import Title from '../../Components/ui/Title';
 
 
 
@@ -81,18 +82,21 @@ const Lesson = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Cours et leçons disponibles</h1>
+
+      <Title
+        title='Cours et leçons'
+        description='Gérez les cours, les leçons et le contenu pédagogique.'
+      >
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
-            <span>Nouvelle leçon</span>
+            <span className='max-md:hidden-susp'>Nouvelle leçon</span>
           </button>
         }
-      </div>
+      </Title>
 
       <div className="bg-white p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6">
@@ -125,7 +129,7 @@ const Lesson = () => {
               Nous n’avons trouvé aucun élément.
             </div>
           )}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {datas.length > 0 && datas.map((lesson: LessonType, idx: number) => {
               const createdAt = lesson.created_at ? new Date(lesson.created_at) : null;
               const isNew = createdAt && (Date.now() - createdAt.getTime()) < 2 * 24 * 60 * 60 * 1000;
@@ -170,7 +174,6 @@ const Lesson = () => {
               }
               return (
                 <div key={`${lesson.id_lecon}_${idx}`} className="bg-white rounded-lg shadow p-4 border flex flex-col">
-
                   <div className="flex items-center justify-between mb-2">
                     <span
                       className="px-3 py-1 rounded-full text-xs font-semibold border"
@@ -224,7 +227,7 @@ const Lesson = () => {
                       <Link
                         to={`/lessons/${lesson.slug}`}
                         className="bg-blue-600 border border-blue-700 rounded-lg px-4 py-1 text-white hover:bg-blue-700 transition flex items-center">
-                        Voir plus
+                        <span className='max-md:hidden-susp'>Voir plus</span>
                         <Eye className=' ms-2' />
                       </Link>
                     </div>

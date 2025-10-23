@@ -1,5 +1,6 @@
 import React from 'react';
 import { Users, UserCheck, School, Calendar, TrendingUp, TrendingDown } from 'lucide-react';
+import Title from '../Components/ui/Title';
 
 const Dashboard: React.FC = () => {
   const stats = [
@@ -18,19 +19,21 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Tableau de bord</h1>
+      <Title
+        title='Tableau de bord'
+        description='Visualisez les statistiques et informations clés de votre établissement.'
+      >
         <div className="text-sm text-gray-500">
           Dernière mise à jour: {new Date().toLocaleDateString('fr-FR')}
         </div>
-      </div>
-
+      </Title>
+      
       {/* Statistiques */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => {
           const Icon = stat.icon;
           const isPositive = stat.trend.startsWith('+');
-          
+
           return (
             <div key={stat.label} className="bg-white p-6 rounded-lg shadow-sm border">
               <div className="flex items-center justify-between">

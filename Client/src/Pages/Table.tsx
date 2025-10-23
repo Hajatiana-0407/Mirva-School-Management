@@ -62,9 +62,6 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
     return colors[color as keyof typeof colors] || 'text-gray-600 hover:text-gray-800';
   };
 
-
-
-
   return (
     <div className="space-y-4">
       <div className="overflow-visible">
@@ -76,13 +73,13 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                 {columns.map((column) => (
                   <th
                     key={column.key}
-                    className="text-left py-3 px-4 font-semibold text-gray-700 uppercase whitespace-nowrap"
+                    className="text-left text-sm md:text-md py-3 px-4 font-semibold text-gray-700 uppercase whitespace-nowrap"
                   >
                     {column.label}
                   </th>
                 ))}
                 {actions && actions.length > 0 && (
-                  <th className="text-center py-3 px-4 font-semibold text-gray-700 uppercase">
+                  <th className="text-center text-sm md:text-md  py-3 px-4 font-semibold text-gray-700 uppercase">
                     Actions
                   </th>
                 )}
@@ -102,7 +99,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                 : (!isLoading && !currentItems.length) ? (
                   <tr>
                     <td colSpan={columns.length + 1} className=''>
-                      <div className='text-gray-400 text-md text-center pt-6'>
+                      <div className='text-gray-400 text-sm md:text-md text-center pt-6'>
                       Nous n’avons trouvé aucun élément.
                       </div>
                     </td>
@@ -115,7 +112,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                         {columns.map((column) => (
                           <td
                             key={column.key}
-                            className="py-3 px-4 text-gray-900 truncate max-w-80"
+                            className="py-3 px-4 text-gray-900 truncate max-w-80 text-sm md:text-md "
                           >
                             {column.render
                               ? column.render(item[column.key], item)

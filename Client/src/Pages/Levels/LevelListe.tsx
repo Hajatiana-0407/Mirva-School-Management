@@ -45,7 +45,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
         return <div
             className="p-2 rounded text-xs text-gray-400 hover:bg-gray-50 cursor-pointer"
             onClick={() => {
-                navigate('/levels?onglet=subject-level-coef')
+                navigate('/levels?o=subject-level-coef')
                 setIdLevelToAddSubject(subjects.id_niveau);
             }}
         >

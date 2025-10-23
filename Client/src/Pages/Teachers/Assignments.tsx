@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import TeacherSubject from '../TeacherSubject'
-import { ArrowLeft, Save } from 'lucide-react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Save } from 'lucide-react';
+import { useParams } from 'react-router-dom';
 import { AppDispatch } from '../../Redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import Loading from '../../Components/ui/Loading';
@@ -12,6 +12,7 @@ import { object, string } from 'yup';
 import useForm from '../../Hooks/useForm';
 import Profile from '../../Components/ui/Profile';
 import { useHashPermission } from '../../Hooks/useHashPermission';
+import Title from '../../Components/ui/Title';
 
 
 // Validation de donnée avec yup 
@@ -22,7 +23,6 @@ const assignationSchema = object({
 const Assignments = () => {
     const { error, single: { data: teacher, action } } = useSelector(getTeacherState);
     const { id } = useParams();
-    const navigate = useNavigate();
     const dispatch: AppDispatch = useDispatch();
     const permission = useHashPermission('teachers');
 
@@ -50,13 +50,11 @@ const Assignments = () => {
 
     return (
         <form className='space-y-6' onSubmit={handleSubmit} >
-            <input type="hidden" name='id_personnel' value={teacher?.id_personnel} onChange={() => { }} />
             {/* Entete */}
-            <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold text-gray-900">
-                    <ArrowLeft className="h-6 w-6 inline-block me-1 cursor-pointer" onClick={() => navigate(-1)} />
-                    Attribution des classes et des matières
-                </h1>
+            <Title
+                title='Assignation des classes et matières'
+                description='Gérez l’attribution des enseignants aux classes et aux matières.'
+            >
                 {permission.update && permission.create &&
                     <button
                         className="bg-blue-600 text-white px-4 py-2 rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center disabled:bg-blue-300"
@@ -67,11 +65,11 @@ const Assignments = () => {
                             ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
                             <Save className="w-4 h-4" />
                         }
-                        <span>Enregistrer</span>
+                        <span className='max-md:hidden-susp'>Enregistrer</span>
                     </button>
                 }
-            </div>
-
+            </Title>
+            <input type="hidden" name='id_personnel' value={teacher?.id_personnel} onChange={() => { }} />
             {teacher &&
                 <div className='w-full py-5 mb-5 flex justify-center bg-blue-50 border border-blue-100 rounded'>
                     <Profile

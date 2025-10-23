@@ -12,6 +12,7 @@ import { AppDispatch } from "../../../Redux/store";
 import { updateSchoolInfo } from "./redux/SchoolAsyncThunk";
 import { useHashPermission } from "../../../Hooks/useHashPermission";
 import ImageProfile from "../../../Components/ui/ImageProfile";
+import Title from "../../../Components/ui/Title";
 
 // Validation de donnée avec yup 
 const schoolInfoSchema = object({
@@ -49,7 +50,10 @@ const School = () => {
     if (action.isLoading) return <Loading />
     return (
         <form onSubmit={handleSubmit} id="__etablissement-form" className="space-y-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Informations de l'établissement</h3>
+            <Title
+                title="Informations de l’établissement"
+                description="Consultez et modifiez les informations principales de votre établissement."
+            ></Title>
             <div className="flex gap-5 flex-col lg:flex-row items-center justify-center">
                 <div className="w-[15rem] h-[15rem]">
                     <ImageProfile

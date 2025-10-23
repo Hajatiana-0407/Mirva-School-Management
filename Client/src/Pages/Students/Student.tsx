@@ -16,6 +16,7 @@ import Profile from '../../Components/ui/Profile';
 import RegisterForm from '../../Components/Forms/RegisterForm';
 import StudentForm from '../../Components/Forms/StudentForm';
 import { useHashPermission } from '../../Hooks/useHashPermission';
+import Title from '../../Components/ui/Title';
 
 
 const Student = () => {
@@ -141,18 +142,20 @@ const Student = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Liste des étudiants</h1>
+      <Title
+        title='Liste des étudiants'
+        description='Consultez et gérez les informations des étudiants inscrits.'
+      >
         {permission.create &&
           <button
             onClick={() => setShowModalRegister(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
-            <span>Nouvelle inscription  </span>
+            <span  className='max-md:hidden-susp'>Nouvelle inscription  </span>
           </button>
         }
-      </div>
+      </Title>
 
       {/* Girl statistique */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -12,6 +12,7 @@ import { RoleInitialValue, RoleType } from '../../../Utils/Types'
 import { getAppState } from '../../../Redux/AppSlice'
 import ConfirmDialog from '../../ConfirmDialog'
 import { useHashPermission } from '../../../Hooks/useHashPermission'
+import Title from '../../../Components/ui/Title'
 
 const getPermissionIcon = (hasPermission: boolean) => {
     return hasPermission ? (
@@ -81,11 +82,10 @@ const UserRole: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h2 className="text-2xl font-semibold text-gray-900">Gestion des rôles et permissions</h2>
-                    <p className="text-gray-600 mt-1">Définissez les droits d'accès pour chaque type d'utilisateur</p>
-                </div>
+            <Title
+                title='Gestion des rôles et permissions'
+                description="Définissez les droits d'accès pour chaque type d'utilisateur"
+            >
                 {permissions.create &&
                     <button
                         onClick={() => {
@@ -94,10 +94,10 @@ const UserRole: React.FC = () => {
                         className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
                     >
                         <Plus className="w-5 h-5" />
-                        <span>Nouveau rôle</span>
+                        <span className='max-md:hidden-susp'>Nouveau rôle</span>
                     </button>
                 }
-            </div>
+            </Title>
             {/* Search and Filters */}
             <div>
                 <InputError message={error} />

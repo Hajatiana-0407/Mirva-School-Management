@@ -12,6 +12,7 @@ import Modal from "../../Modal"
 import SchoolYearForm from "../../../Components/Forms/SchoolYearForm"
 import { getAppState } from "../../../Redux/AppSlice"
 import { useHashPermission } from "../../../Hooks/useHashPermission"
+import Title from "../../../Components/ui/Title"
 
 const SchoolYearSchema = object({
 });
@@ -72,24 +73,25 @@ const GeneralSettings = () => {
     }, [schoolYearData.length])
     return (
         <div className="space-y-6">
+            <Title
+                title="Réglages généraux de l’école"
+                description="Configurez facilement les paramètres de votre établissement."
+            >
+                {schoolYearPermission.create &&
+                    <button
+                        type="button"
+                        onClick={() => setShowModalSchoolYear(true)}
+                        className="flex items-center gap-1 text-blue-600 underline"
+                    >
+                        <Plus className="w-4 h-4" />
+                        <span>Nouvelle année scolaire</span>
+                    </button>
+                }
+            </Title>
             <form onSubmit={handleSchoolYearChangeSubmit} className="space-y-4">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center text-lg space-x-2 text-gray-900 font-medium">
-                        <div className="bg-green-500 w-4 h-4 rounded-full"></div>
-                        <h3 className="">Année scolaire actif</h3>
-                    </div>
-                    <div>
-                        {schoolYearPermission.create &&
-                            <button
-                                type="button"
-                                onClick={() => setShowModalSchoolYear(true)}
-                                className="flex items-center gap-1 text-blue-600 underline"
-                            >
-                                <Plus className="w-4 h-4" />
-                                <span>Nouvelle année scolaire</span>
-                            </button>
-                        }
-                    </div>
+                <div className="flex items-center text-lg space-x-2 text-gray-900 font-medium">
+                    <div className="bg-green-500 w-4 h-4 rounded-full"></div>
+                    <h3 className="">Année scolaire actif</h3>
                 </div>
                 <div className="grid lg:grid-cols-3 gap-4">
                     <div className="flex-1">
@@ -103,7 +105,7 @@ const GeneralSettings = () => {
                         />
                     </div>
                     <div className="flex-1 flex items-center gap-4">
-                        <div className="flex items-center ">
+                        <div className="flex items-center max-lg:hidden">
                             <p>du</p>
                         </div>
                         <Input
@@ -119,7 +121,7 @@ const GeneralSettings = () => {
                         />
                     </div>
                     <div className="flex-1 flex items-center gap-4">
-                        <div className="flex items-center ">
+                        <div className="flex items-center max-lg:hidden">
                             <p>au</p>
                         </div>
                         <Input
