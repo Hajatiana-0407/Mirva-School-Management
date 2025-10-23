@@ -11,6 +11,7 @@ import { getAppState } from '../../Redux/AppSlice';
 import { getClasseState } from './redux/ClasseSlice';
 import ClasseForm from '../../Components/Forms/ClasseForm';
 import { useHashPermission } from '../../Hooks/useHashPermission';
+import Title from '../../Components/ui/Title';
 
 
 const Classes: React.FC = () => {
@@ -75,18 +76,21 @@ const Classes: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Gestion des classes</h1>
+
+      <Title
+        title='Gestion des classes'
+        description='Organisez facilement les classes et leurs niveaux.'
+      >
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors w-max"
           >
             <Plus className="w-4 h-4" />
-            <span>Nouvelle classe</span>
+            <span className='max-md:hidden-susp'>Nouvelle classe</span>
           </button>
         }
-      </div>
+      </Title>
 
       <div className="bg-white p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6">

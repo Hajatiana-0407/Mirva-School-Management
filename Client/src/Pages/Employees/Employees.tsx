@@ -15,6 +15,7 @@ import Profile from '../../Components/ui/Profile';
 import EmployeForm from '../../Components/Forms/EmployeForm';
 import { getShortDate } from '../../Utils/Utils';
 import { useHashPermission } from '../../Hooks/useHashPermission';
+import Title from '../../Components/ui/Title';
 
 // Mapping des types à des couleurs de fond
 export const typeBgColors: Record<string, string> = {
@@ -184,18 +185,20 @@ const Employees: React.FC = () => {
     <div className="space-y-6">
 
       {/* Entete */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Gestion des employés</h1>
+      <Title
+        title='Gestion des employés'
+        description='Gérez et suivez l’ensemble des employés de votre établissement.'
+      >
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
-            <span>Nouveau employés</span>
+            <span className='max-md:hidden-susp' >Nouveau employés</span>
           </button>
         }
-      </div>
+      </Title>
 
       {/* Filtrage  */}
       <div className="bg-white p-6 rounded-lg shadow-sm border">

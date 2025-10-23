@@ -11,6 +11,7 @@ import { getAppState } from '../../Redux/AppSlice';
 import { SchoolYearType } from '../../Utils/Types';
 import SchoolYearForm from '../../Components/Forms/SchoolYearForm';
 import { useHashPermission } from '../../Hooks/useHashPermission';
+import Title from '../../Components/ui/Title';
 
 
 
@@ -84,19 +85,20 @@ const SchoolYear = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Gestion des années scolaires</h1>
+      <Title
+        title='Gestion des années scolaires'
+        description='Gérez et planifiez les années scolaires.'
+      >
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
-            <span>Nouvelle année scolaire</span>
+            <span className='max-md:hidden-susp'>Nouvelle année scolaire</span>
           </button>
         }
-      </div>
-
+      </Title>
       <div className="bg-white p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">

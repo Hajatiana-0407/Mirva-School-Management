@@ -8,20 +8,21 @@ import Table from "../Table";
 import ConfirmDialog from "../ConfirmDialog";
 import { AppDispatch } from "../../Redux/store";
 import { deleteLevel } from "./redux/LevelAsyncThunk";
+import { useNavigate } from "react-router-dom";
 
 type LevelListePropsType = {
     handleEdit: (level: levelType) => void
-    setActiveTab: React.Dispatch<React.SetStateAction<number>>;
     setIdLevelToAddSubject: React.Dispatch<React.SetStateAction<number>>
 }
 
 type ActionColTypeLevel = SubjectType&{ coefficient: number}; 
-const LevelListe = ({ handleEdit, setActiveTab, setIdLevelToAddSubject }: LevelListePropsType) => {
+const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType) => {
     const { datas, action } = useSelector(getLevelState);
     const [searchTerm, setSearchTerm] = useState('');
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
     const [levelToDelete, setLevelToDelete] = useState<levelType | null>(null);
     const dispatch: AppDispatch = useDispatch();
+    const navigate = useNavigate() ; 
 
 
     // HANDLERS
@@ -44,7 +45,7 @@ const LevelListe = ({ handleEdit, setActiveTab, setIdLevelToAddSubject }: LevelL
         return <div
             className="p-2 rounded text-xs text-gray-400 hover:bg-gray-50 cursor-pointer"
             onClick={() => {
-                setActiveTab(2);
+                navigate('/levels?o=subject-level-coef')
                 setIdLevelToAddSubject(subjects.id_niveau);
             }}
         >

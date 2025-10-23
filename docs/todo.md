@@ -57,4 +57,4 @@
 - [x] Ajout d'une message dans tableau si il n'y a auccun element a afficher 
 - [x] Metre les entete en MAJ et gras 
 - [ ] Ajout de boutton deconnexion et information sur le compte sur le sideBare 
-- [ ] Gerer le responsive globale 
+- [x] Gerer le responsive globale 

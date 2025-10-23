@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import { getStudentByMatricule } from "./redux/StudentAsyncThunk";
 import { AppDispatch } from "../../Redux/store";
 import Loading from "../../Components/ui/Loading";
 import { baseUrl } from "../../Utils/Utils";
 import InfoBlock from "../../Components/InfoBlock";
-import { ArrowLeft, CalendarDays, Globe, GraduationCap, HeartPulse, Home, PenBox, Phone, Tag, User } from "lucide-react";
+import { CalendarDays, Globe, GraduationCap, HeartPulse, Home, PenBox, Phone, Tag, User } from "lucide-react";
 import Modal from "../Modal";
 import { getStudentState } from "./redux/StudentSlice";
 import { getAppState } from "../../Redux/AppSlice";
@@ -15,10 +15,10 @@ import StudentForm from "../../Components/Forms/StudentForm";
 import HeadingSmall from "../../Components/ui/HeadingSmall";
 import DocumentImage from "../../Components/DocumentImage";
 import { useHashPermission } from "../../Hooks/useHashPermission";
+import Title from "../../Components/ui/Title";
 
 const StudentSinglePage = () => {
     const { id: matricule } = useParams();
-    const navigate = useNavigate();
     const { hiddeTheModalActive } = useSelector(getAppState);
     const { single: { data: student, action: { isLoading } } } = useSelector(getStudentState)
     // ? Modale
@@ -48,11 +48,10 @@ const StudentSinglePage = () => {
     if (isLoading) return <Loading />
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold text-gray-900">
-                    <ArrowLeft className="h-6 w-6 inline-block me-1 cursor-pointer" onClick={() => navigate(-1)} />
-                    {student?.nom.toUpperCase()} {student?.prenom} ( {student?.matricule_etudiant} )
-                </h1>
+            <Title
+                title={`${student?.nom.toUpperCase()} ${student?.prenom} ( ${student?.matricule_etudiant} )`}
+                description="Consultez les informations personnelles et scolaires."
+            >
                 {permission.update &&
                     <button
                         onClick={() => {
@@ -61,21 +60,20 @@ const StudentSinglePage = () => {
                         className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
                     >
                         <PenBox className="w-4 h-4" />
-                        <span>Modifié</span>
+                        <span className="max-md:hidden-susp">Modifié</span>
                     </button>
                 }
-            </div>
+            </Title>
             <div className="space-y-4">
 
                 {/* Bloc principal : Photo + Identité */}
-                <div className="flex gap-4 items-start">
+                <div className="flex gap-4 flex-col md:flex-row items-center">
                     {/* PHOTO D IDENTITE */}
                     <div className='w-[16.2rem] h-[16.2rem]'>
                         <ImageProfile url={student?.photo} isInput={false} />
                     </div>
-
                     {/* Identité + infos importantes */}
-                    <div className="flex-1 grid grid-cols-1 gap-3">
+                    <div className="flex-1 grid grid-cols-1 gap-3 w-full">
                         <InfoBlock
                             icon={<User className="w-6 h-6 text-blue-500" />}
                             label="Nom & Prénom"

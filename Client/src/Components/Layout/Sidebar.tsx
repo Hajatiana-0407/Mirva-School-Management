@@ -39,6 +39,7 @@ interface MenuItemType {
 interface SidebarPropsType {
   collapsed: boolean;
   onToggleCollapse: () => void;
+  widowWidth: number
 }
 
 
@@ -105,7 +106,7 @@ const flattenMenuItems = (items: MenuItemType[]): MenuItemType[] => {
   return flat;
 };
 
-const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
+const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) => {
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({
     'course': true,
   });
@@ -178,6 +179,7 @@ const Sidebar = ({ collapsed, onToggleCollapse }: SidebarPropsType) => {
               <NavLink
                 to={menu.path}
                 title={collapsed ? menu.label : ''}
+                onClick={() => { widowWidth < 1000 ? onToggleCollapse() : '' }}
                 className={({ isActive }: { isActive: boolean }) =>
                   clsx(
                     {

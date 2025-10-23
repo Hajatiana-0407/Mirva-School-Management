@@ -81,7 +81,7 @@ function App() {
 
 
   return (
-    < >
+    <div className='' >
       <AnimatedBackground />
       <ToastContainer
         position="top-right"
@@ -141,7 +141,7 @@ function App() {
           </Route>
         </Route>
       </Routes>
-    </>
+    </div>
   );
 }
 

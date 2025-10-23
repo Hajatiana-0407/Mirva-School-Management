@@ -14,6 +14,7 @@ import Profile from '../../Components/ui/Profile';
 import { getShortDate } from '../../Utils/Utils';
 import RegisterForm from '../../Components/Forms/RegisterForm';
 import { useHashPermission } from '../../Hooks/useHashPermission';
+import Title from '../../Components/ui/Title';
 
 
 const Registration: React.FC = () => {
@@ -117,18 +118,20 @@ const Registration: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Inscription des élèves</h1>
+      <Title
+        title='Inscription des élèves'
+        description='Gérez les inscriptions des élèves pour la nouvelle année scolaire.'
+      >
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
-            <span>Nouvelle inscription  </span>
+            <span className='max-md:hidden-susp' >Nouvelle inscription  </span>
           </button>
         }
-      </div>
+      </Title>
       <div className="bg-white p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">

@@ -48,7 +48,7 @@ const AnimatedBackground: React.FC = () => {
     }, []);
 
     return (
-        <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        <div className="fixed inset-0 overflow-hidden pointer-events-none z-1">
             {objects.map((obj) => (
                 <div
                     key={obj.id}
