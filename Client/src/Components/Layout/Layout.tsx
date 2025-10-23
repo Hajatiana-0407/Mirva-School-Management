@@ -9,6 +9,9 @@ const Layout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
+  console.log('windth : ' , windowWidth );
+  
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
