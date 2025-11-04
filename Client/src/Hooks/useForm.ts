@@ -18,7 +18,7 @@ export default function useForm<T>(
     onSubmite: (next: (data: T) => void, e: React.FormEvent<HTMLFormElement>) => Promise<void>;
     resetError: () => void;
     forceError: (errors: Partial<Record<keyof T, string>>) => void;
-    HandleValidateSchema: (form: HTMLFormElement) => Promise<boolean>
+    HandleValidateSchema: (form: HTMLFormElement , step?: number ) => Promise<boolean>
 } {
     const [formValue, setAllFormValue] = useState(initial);
     const [formErrors, setFormErrors] = useState<Partial<Record<keyof T, string>>>();
@@ -111,7 +111,7 @@ export default function useForm<T>(
     };
 
     // Seulement pour testé si le schema est valide ( pour des formulaire a plusieur etape )
-    const HandleValidateSchema = async (form: HTMLFormElement) => {
+    const HandleValidateSchema = async (form: HTMLFormElement, step?: number) => {
         const { data } = getDataForm(form);
         try {
             const schemas = Array.isArray(schemaValidation)
@@ -120,10 +120,11 @@ export default function useForm<T>(
 
             // Fusion des erreurs de plusieurs schémas
             const allErrors: Partial<Record<keyof T, string>> = {};
-            for (const schema of schemas) {
+            if (step && schemas.length) {
+                const schemaStep = schemas?.[step - 1];
                 try {
                     const dataNested = nestData(data);
-                    await schema.validate(dataNested as T, { abortEarly: false });
+                    await schemaStep.validate(dataNested as T, { abortEarly: false });
                 } catch (error) {
                     if (error instanceof ValidationError) {
                         error.inner.forEach((err) => {
@@ -131,6 +132,22 @@ export default function useForm<T>(
                                 allErrors[err.path as keyof T] = err.message;
                             }
                         });
+                    }
+                }
+
+            } else {
+                for (const schema of schemas) {
+                    try {
+                        const dataNested = nestData(data);
+                        await schema.validate(dataNested as T, { abortEarly: false });
+                    } catch (error) {
+                        if (error instanceof ValidationError) {
+                            error.inner.forEach((err) => {
+                                if (err.path) {
+                                    allErrors[err.path as keyof T] = err.message;
+                                }
+                            });
+                        }
                     }
                 }
             }

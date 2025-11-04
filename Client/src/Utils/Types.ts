@@ -367,6 +367,7 @@ export type StudentDetailsType = StudentType & levelType & ClasseType & { mere?:
 // Registration ( INSCRIPTION )
 export type RegistrationType = {
     id_inscription?: number;
+    date_inscription?: string 
     // Élève
     matricule_etudiant?: string;
     nom: string;

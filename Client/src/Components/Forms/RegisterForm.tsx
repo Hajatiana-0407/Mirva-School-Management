@@ -5,7 +5,7 @@ import ImageProfile from '../../Components/ui/ImageProfile';
 import { User, UserCheck, CalendarDays, Phone, Mail, Check, MapPin, Home, ArrowRight, ArrowLeft, Activity, FolderOpen, GraduationCap, Timer, Users, Fingerprint } from 'lucide-react';
 import clsx from 'clsx';
 import InfoBlock from '../InfoBlock';
-import { object, string } from 'yup';
+import { AnyObjectSchema, object, string } from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { ApiReturnType, ClasseType, registrationInitialValue, RegistrationType, StudentFormDataInitialValue, StudentFormDataType } from '../../Utils/Types';
 import useForm from '../../Hooks/useForm';
@@ -22,9 +22,10 @@ import TuteurForm from './TuteurForm';
 import CheckInput from '../ui/CheckInput';
 import { getMatricule } from '../../Pages/Students/redux/StudentAsyncThunk';
 import Loading from '../ui/Loading';
+import * as Yup from 'yup'
 
 // ?  ===================== Schema de validation pour le formulaire  ===================== //
-const RegistrationSchema = object({
+const StudentSchema = Yup.object({
     // Élève
     matricule_etudiant: string().required('La matricule est obligatoire.'),
     nom: string().required('Le nom est obligatoire.'),
@@ -36,17 +37,21 @@ const RegistrationSchema = object({
     nationalite: string().required('La nationalité est obligatoire.'),
     annee_scolaire: string().required("Veuillez d'abord créer une nouvelle année scolaire dans la section configuration."),
 
+}) as AnyObjectSchema;
+const LevelSchema = object({
     // Scolarité
+    date_inscription: string().required("La date d'inscription est obligatoire."),
     niveau: string().required("Le niveau d'inscription est obligatoire."),
     classe: string().required("La classe souhaitée est obligatoire."),
-
-    date_inscription: string().required("La date d'inscription est obligatoire."),
-
+}) as AnyObjectSchema
+const ParentSchema = object({
     // Parents
     pere: personSchema,
     mere: personSchema,
     tuteur: personSchema
-});
+}) as AnyObjectSchema;
+
+const RegistrationSchema: AnyObjectSchema[] = [StudentSchema, LevelSchema, ParentSchema]
 
 
 // ? ===================== ETAPES DANS LE FORMULAIRE ===================== //
@@ -120,7 +125,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
     //! ===================== Wizard navigation ===================== //
     const handleNext = async (toStep?: number) => {
         const formulaire = document.querySelector<HTMLFormElement>('#__formulaire_eleve');
-        const next = await HandleValidateSchema(formulaire as HTMLFormElement);
+        const next = await HandleValidateSchema(formulaire as HTMLFormElement, step);
         if (next) {
             if (!toStep) {
                 setStep((prev) => Math.min(prev + 1, totalSteps));
@@ -382,6 +387,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                         defaultValue={new Date().toISOString().split('T')[0]}
                         icon={CalendarDays}
                         type='date'
+                        errorMessage={formErrors?.date_inscription}
                     />
                     <Input
                         label='Niveau d’inscription demandé'
