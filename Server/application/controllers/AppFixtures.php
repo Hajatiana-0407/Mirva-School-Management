@@ -675,8 +675,12 @@ class AppFixtures extends CI_Controller
             'eleve'
         ]);
 
-        $inscriptions = [];
 
+        $this->load->model('UtilisateurModel');
+        $role_etudiant = $this->UtilisateurModel->getIdRoleStudent();
+
+        $inscriptions = [];
+        $users = [];
         // Seconde
         $eleve_seconde1 = [
             ["numero" => 1, "sexe" => "Femme", "nom" => "ANDRIANJATOVO", "prenom" => "Harijaona Ainamamy Tanteraka", "matricule" => "91854", "naissance" => "2010-12-31", "note" => ""],
@@ -717,8 +721,8 @@ class AppFixtures extends CI_Controller
             ["numero" => 36, "sexe" => "Femme", "nom" => "RAZAFINDRABE", "prenom" => "Mikanto Rarintsoa", "matricule" => "92728", "naissance" => "2010-11-04", "note" => ""],
         ];
         $secondeInfo = [
-            'classe' => 3092,
-            'niveau' => 1703
+            'classe' => 3151,
+            'niveau' => 1727
         ];
 
         foreach ($eleve_seconde1 as $key => &$seconde) {
@@ -727,16 +731,23 @@ class AppFixtures extends CI_Controller
                 'prenom' => $seconde['prenom'],
                 'date_naissance' => $seconde['naissance'],
                 'matricule_etudiant' => $seconde['matricule'],
+                'sexe' => $seconde['sexe']
             ]);
 
             if ($eleve) {
                 $inscriptions[] = [
                     'numero' => $seconde['numero'],
-                    'annee_scolaire_id_annee_scolaire' => '386',
+                    'annee_scolaire_id_annee_scolaire' => 390,
                     'niveau_id_niveau' => $secondeInfo['niveau'],
                     'classe_id_classe' => $secondeInfo['classe'],
                     "eleve_id_eleve" => $eleve['id_eleve'],
                     'is_droit_payed' => true,
+                    'date_inscription' => '2025-08-10'
+                ];
+                $users[] = [
+                    'id_role' => $role_etudiant->id_role,
+                    'identifiant' => $eleve->matricule_etudiant,
+                    'password' => password_hash($eleve->matricule_etudiant, PASSWORD_DEFAULT)
                 ];
             }
         }
@@ -788,8 +799,8 @@ class AppFixtures extends CI_Controller
             ["numero" => 43, "sexe" => "Homme", "nom" => "RANDRIAMALALA", "prenom" => "Steeve Andrew", "matricule" => "92186", "naissance" => "2011-09-28"]
         ];
         $classe3em_info = [
-            'classe' => 3092,
-            'niveau' => 1703
+            'classe' => 3148,
+            'niveau' => 1726
         ];
         foreach ($eleves_3em as $key => &$etudiant) {
             $eleve = $this->EtudiantModel->insert([
@@ -797,16 +808,23 @@ class AppFixtures extends CI_Controller
                 'prenom' => $etudiant['prenom'],
                 'date_naissance' => $etudiant['naissance'],
                 'matricule_etudiant' => $etudiant['matricule'],
+                'sexe' => $etudiant['sexe']
             ]);
 
             if ($eleve) {
                 $inscriptions[] = [
                     'numero' => $etudiant['numero'],
-                    'annee_scolaire_id_annee_scolaire' => '386',
+                    'annee_scolaire_id_annee_scolaire' => 390,
                     'niveau_id_niveau' => $classe3em_info['niveau'],
                     'classe_id_classe' => $classe3em_info['classe'],
                     "eleve_id_eleve" => $eleve['id_eleve'],
                     'is_droit_payed' => true,
+                    'date_inscription' => '2025-08-10'
+                ];
+                $users[] = [
+                    'id_role' => $role_etudiant->id_role,
+                    'identifiant' => $eleve->matricule_etudiant,
+                    'password' => password_hash($eleve->matricule_etudiant, PASSWORD_DEFAULT)
                 ];
             }
         }
@@ -847,8 +865,8 @@ class AppFixtures extends CI_Controller
             ["numero" => 32, "sexe" => "Homme", "nom" => "HERIMAHATRATRA", "prenom" => "Mandrindra", "matricule" => "93238", "naissance" => "2009-05-27"]
         ];
         $premiere_info = [
-            'classe' => 3092,
-            'niveau' => 1703
+            'classe' => 3153,
+            'niveau' => 1728
         ];
         foreach ($eleve_permieres as $key => &$etudiant) {
             $eleve = $this->EtudiantModel->insert([
@@ -856,16 +874,23 @@ class AppFixtures extends CI_Controller
                 'prenom' => $etudiant['prenom'],
                 'date_naissance' => $etudiant['naissance'],
                 'matricule_etudiant' => $etudiant['matricule'],
+                'sexe' => $etudiant['sexe']
             ]);
 
             if ($eleve) {
                 $inscriptions[] = [
                     'numero' => $etudiant['numero'],
-                    'annee_scolaire_id_annee_scolaire' => '386',
+                    'annee_scolaire_id_annee_scolaire' => 390,
                     'niveau_id_niveau' => $premiere_info['niveau'],
                     'classe_id_classe' => $premiere_info['classe'],
                     "eleve_id_eleve" => $eleve['id_eleve'],
                     'is_droit_payed' => true,
+                    'date_inscription' => '2025-08-10'
+                ];
+                $users[] = [
+                    'id_role' => $role_etudiant->id_role,
+                    'identifiant' => $eleve->matricule_etudiant,
+                    'password' => password_hash($eleve->matricule_etudiant, PASSWORD_DEFAULT)
                 ];
             }
         }
@@ -894,8 +919,8 @@ class AppFixtures extends CI_Controller
         ];
 
         $terminaleA_info = [
-            'classe' => 3092,
-            'niveau' => 1703
+            'classe' => 3155,
+            'niveau' => 1729
         ];
         foreach ($eleve_terminaleA as $key => &$etudiant) {
             $eleve = $this->EtudiantModel->insert([
@@ -903,22 +928,30 @@ class AppFixtures extends CI_Controller
                 'prenom' => $etudiant['prenom'],
                 'date_naissance' => $etudiant['naissance'],
                 'matricule_etudiant' => $etudiant['matricule'],
+                'sexe' => $etudiant['sexe']
             ]);
 
             if ($eleve) {
                 $inscriptions[] = [
                     'numero' => $etudiant['numero'],
-                    'annee_scolaire_id_annee_scolaire' => '386',
+                    'annee_scolaire_id_annee_scolaire' => 390,
                     'niveau_id_niveau' => $terminaleA_info['niveau'],
                     'classe_id_classe' => $terminaleA_info['classe'],
                     "eleve_id_eleve" => $eleve['id_eleve'],
                     'is_droit_payed' => true,
+                    'date_inscription' => '2025-08-10'
+                ];
+                $users[] = [
+                    'id_role' => $role_etudiant->id_role,
+                    'identifiant' => $eleve->matricule_etudiant,
+                    'password' => password_hash($eleve->matricule_etudiant, PASSWORD_DEFAULT)
                 ];
             }
         }
 
         $this->model->insertBatchFixtures($inscriptions, 'inscription');
-        echo "✅ Insertion des eleve fini avec succée !" . PHP_EOL;
+        $this->model->insertBatchFixtures($users, 'users');
+        echo "Insertion des eleve fini avec succée !" . PHP_EOL;
     }
 
 
