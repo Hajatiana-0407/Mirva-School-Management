@@ -9,6 +9,7 @@ class InscriptionController extends CI_Controller
         parent::__construct();
         $this->load->model('InscriptionModel');
         $this->load->model('EtudiantModel');
+        $this->load->model('UtilisateurModel');
     }
 
     public function index()
@@ -214,6 +215,14 @@ class InscriptionController extends CI_Controller
         $this->load->model('InscriptionModel');
         $inscriptionData = $this->InscriptionModel->insert($inscription);
         if ($inscriptionData) {
+            // ? Creation de compte automatique 
+            $roleEtudiant =  $this->UtilisateurModel->getIdRoleStudent();
+            $this->UtilisateurModel->insert([
+                'id_role' => $roleEtudiant->id_role,
+                'identifiant' => $matricule,
+                'password' => password_hash( $matricule, PASSWORD_DEFAULT)
+            ]);
+
             echo json_encode(['error' => false, 'data' => $inscriptionData]);
         } else {
             echo json_encode(['error' => true, 'message' => "Erreur lors de l'enregistrement de l'inscription"]);

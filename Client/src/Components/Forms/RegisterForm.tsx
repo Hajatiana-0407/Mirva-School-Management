@@ -79,8 +79,8 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
     ];
 
 
-    console.log(error);
-    
+    console.log('Form erreur : ', formErrors);
+
     // ! Level input options
     const levelOptions = levelDatas.map((level) => ({ value: level.id_niveau as number, label: level.niveau }));
     // ! Année scolaire 
@@ -491,6 +491,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                         name='isDroitPaye'
                         label="Droit d'inscription"
                         description="Cocher si le droit d' inscription a été réglé"
+                        defaultValue={true}
                     />
                 </div>
 
