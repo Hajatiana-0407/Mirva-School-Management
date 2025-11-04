@@ -478,6 +478,7 @@ type Field = {
     value: string;
 };
 export type StudentFormDataType = {
+    matricule_etudiant?: Field;
     photo?: string;
     nom: Field;
     prenom: Field;

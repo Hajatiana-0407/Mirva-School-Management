@@ -1,5 +1,5 @@
 import React from 'react'
-import { User, UserCheck, CalendarDays, MapPin, Home, Phone, Mail, Globe, FolderOpen, X, PenBox, Check } from 'lucide-react';
+import { User, UserCheck, CalendarDays, MapPin, Home, Phone, Mail, FolderOpen, X, PenBox, Check, Fingerprint } from 'lucide-react';
 import InputError from '../../Components/ui/InputError';
 import Input from '../../Components/ui/Input';
 import ImageProfile from '../ui/ImageProfile';
@@ -15,6 +15,7 @@ import HeadingSmall from '../ui/HeadingSmall';
 // Validation de donnée avec yup 
 const StudentSchema = object({
     // Élève
+    matricule_etudiant: string().required('La matricule est obligatoire.'),
     nom: string().required('Le nom est obligatoire.'),
     prenom: string().required('Le prénom est obligatoire.'),
     sexe: string().required('Le sexe est obligatoire.'),
@@ -46,7 +47,7 @@ const StudentForm: React.FC<StudentFormPropsType> = ({ editingStudent, handleClo
     }
     return (
         <form className="space-y-4" onSubmit={handleSubmit}>
-            <InputError message={error} />
+
             {/* Information personnel */}
             <div className="flex flex-col md:flex-row items-center gap-5 space-y-2">
                 {/* PHOTO D IDENTITE */}
@@ -121,12 +122,14 @@ const StudentForm: React.FC<StudentFormPropsType> = ({ editingStudent, handleClo
                     type='select'
                     options={sexe}
                 />
+                {/* Nationalité  */}
+                <input type="hidden" name='nationalite' value={'Malagasy'} onChange={() => { }} />
                 <Input
-                    label='Nationalité'
-                    name='nationalite'
-                    defaultValue={editingStudent?.nationalite || ''}
-                    icon={Globe}
-                    errorMessage={formErrors?.nationalite}
+                    label='Matricule'
+                    name='matricule_etudiant'
+                    defaultValue={editingStudent?.matricule_etudiant || ''}
+                    icon={Fingerprint}
+                    errorMessage={formErrors?.matricule_etudiant}
                 />
             </div>
 
@@ -158,7 +161,7 @@ const StudentForm: React.FC<StudentFormPropsType> = ({ editingStudent, handleClo
                     type='file'
                 />
             </div>
-
+            <InputError message={error} />
             <div className="flex justify-end space-x-3 pt-4">
                 {handleCloseModal !== undefined &&
                     <button
@@ -186,6 +189,7 @@ const StudentForm: React.FC<StudentFormPropsType> = ({ editingStudent, handleClo
                     {editingStudent ? 'Modifier' : 'Ajouter'}
                 </button>
             </div>
+
         </form>
     )
 }
