@@ -35,7 +35,7 @@ const Title: React.FC<TitleProps> = ({ children, title, description }) => {
                 </div>
 
                 {children && (
-                    <div className="flex-shrink-0 flex items-center gap-2 ml-auto">{children}</div>
+                    <div className="flex-shrink-0 flex items-center gap-2">{children}</div>
                 )}
             </div>
 
