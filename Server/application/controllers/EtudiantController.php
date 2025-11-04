@@ -28,6 +28,23 @@ class EtudiantController extends CI_Controller
     {
 
         $id = $this->input->post($this->pk);
+        // ? Recuperation et verification de doublan matricule 
+        $matricule = $this->input->post('matricule_etudiant');
+
+        if ($this->EtudiantModel->isExist(
+            ['matricule_etudiant' => $matricule],
+            'and',
+            ['id_eleve' => $id]
+        )) {
+            echo json_encode([
+                'error' => true,
+                'message' => "Le matricule '$matricule' existe déjà."
+            ]);
+            return;
+        }
+
+
+
         // ================== INFORMATIONS DE L'ELEVE ==================
         // ? Photo d'identité de l'étudiant
         $photo_indetite = '';
@@ -78,6 +95,7 @@ class EtudiantController extends CI_Controller
         }
 
         $etudiant = [
+            'matricule_etudiant' => $matricule,
             'nom' => $this->input->post('nom'),
             'prenom' => $this->input->post('prenom'),
             'adresse' => $this->input->post('adresse'),
@@ -139,11 +157,16 @@ class EtudiantController extends CI_Controller
                 echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
             }
         } else {
-            echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+            echo json_encode(['error' => true,  'message' => 'Échec de la suppression']);
         }
     }
 
 
+    /**
+     * Statistique des liste des eleves
+     *
+     * @return void
+     */
     public function getStatistique()
     {
         $boys = $this->EtudiantModel->getCount(['sexe' => 'Homme']);
@@ -153,11 +176,11 @@ class EtudiantController extends CI_Controller
         $statistique = [
             'boy' => [
                 'nbr' => $boys,
-                'percent' =>  $all !== 0 ?  $boys * 100 / $all : 0 ,
+                'percent' =>  $all !== 0 ?  $boys * 100 / $all : 0,
             ],
             'girl' => [
                 'nbr' => $girls,
-                'percent' => $all !== 0 ?  $girls * 100 / $all : 0 ,
+                'percent' => $all !== 0 ?  $girls * 100 / $all : 0,
             ],
             'all' => [
                 'nbr' => $all,
@@ -165,5 +188,28 @@ class EtudiantController extends CI_Controller
             ]
         ];
         echo json_encode($statistique);
+    }
+
+    public function getNewMatricule()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
+            //? Creation d'un matricule unique 
+            $this->load->helper('matricule');
+            $lasted = $this->EtudiantModel->findLatest();
+            $matricule = '';
+            if ($lasted) {
+                $matricule = generateMatricule(STUDENT_PRIFIX, $lasted["matricule_etudiant"]);
+            } else {
+                $matricule = generateMatricule(STUDENT_PRIFIX);
+            }
+
+            echo json_encode([
+                'error' => false,
+                'data' => $matricule
+            ]);
+        } else {
+            echo json_encode(['error' => true,  'message' => 'Éche lors de la récupération du matricule']);
+        }
     }
 }

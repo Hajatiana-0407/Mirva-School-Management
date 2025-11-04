@@ -169,35 +169,36 @@ const StudentSlice = createSlice({
             }) => {
                 state.action.isLoading = false;
                 const { error, data, message } = action.payload;
-
-                const newStudent: StudentDetailsType = {
-                    id_eleve: data.eleve_id_eleve,
-                    nom: data.nom_eleve,
-                    prenom: data.prenom,
-                    photo: data.photo,
-                    matricule_etudiant: data.matricule_etudiant,
-                    email: data.email,
-                    telephone: data.telephone,
-                    nationalite: data.nationalite,
-                    sexe: data.sexe,
-                    classe: data.telephone,
-                    date_naissance: data.date_naissance,
-                    lieu_naissance: data.date_naissance,
-                    adresse: data.adresse,
-
-                    niveau: data.niveau,
-                    cycle: data.cycle,
-                    description: data.description,
-                    denomination: data.denomination,
-                    niveau_id_niveau: data.niveau_id_niveau,
-
-                    urgence_lien: data.urgence_lien,
-                    urgence_nom: data.urgence_nom,
-                    urgence_tel: data.urgence_tel
-                }
                 if (error) {
                     state.error = message as string;
                 } else {
+                    const newStudent: StudentDetailsType = {
+                        id_eleve: data.eleve_id_eleve,
+                        nom: data.nom_eleve,
+                        prenom: data.prenom,
+                        photo: data.photo,
+                        matricule_etudiant: data.matricule_etudiant,
+                        email: data.email,
+                        telephone: data.telephone,
+                        nationalite: data.nationalite,
+                        sexe: data.sexe,
+                        classe: data.telephone,
+                        date_naissance: data.date_naissance,
+                        lieu_naissance: data.date_naissance,
+                        adresse: data.adresse,
+
+                        niveau: data.niveau,
+                        cycle: data.cycle,
+                        description: data.description,
+                        denomination: data.denomination,
+                        niveau_id_niveau: data.niveau_id_niveau,
+
+                        urgence_lien: data.urgence_lien,
+                        urgence_nom: data.urgence_nom,
+                        urgence_tel: data.urgence_tel
+                    }
+
+                    
                     state.error = '';
                     state.datas.unshift(newStudent);
                 }

@@ -19,15 +19,21 @@ import {
   UserPlus,
   Notebook,
   BookOpenText,
-  ListChecks
+  Power,
+  NotebookPen,
+  UserRound
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getSchoolState } from '../../Pages/Settings/School/redux/SchoolSlice';
 import { getSchoolYearState } from '../../Pages/School-Year/redux/SchoolYearSlice';
 import { getAuthState } from '../../Pages/Auth/redux/AuthSlice';
+import ConfirmDialog from '../../Pages/ConfirmDialog';
+import { AppDispatch } from '../../Redux/store';
+import { logoutUser } from '../../Pages/Auth/redux/AuthAsyncThunk';
+import CollapsedMenuItem from '../CollapsedMenuItem';
 
 interface MenuItemType {
   id: string;
@@ -39,46 +45,37 @@ interface MenuItemType {
 interface SidebarPropsType {
   collapsed: boolean;
   onToggleCollapse: () => void;
-  widowWidth: number
+  widowWidth: number;
 }
-
-
-
 
 const menuItems: MenuItemType[] = [
   { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard, path: '/dashboard' },
-
   { id: 'registration', label: 'Inscriptions', icon: UserPlus, path: '/registration' },
   { id: 'students', label: 'Élèves', icon: Users, path: '/students' },
   { id: 'schedule', label: 'Emploi du temps', icon: Calendar, path: '/schedule' },
   { id: 'attendance', label: 'Présences', icon: UserCog, path: '/attendance' },
   { id: 'exams', label: 'Examens et Notes', icon: FileText, path: '/exams' },
-
-  // Section Lessons et exercice 
   {
     id: 'course',
-    label: 'Leçons et exerices',
+    label: 'Leçons et exercices',
     icon: Notebook,
     children: [
-      { id: 'lessons', label: 'Leçons', icon: UserCheck, path: '/lessons' },
-      { id: 'exercices', label: 'Exercices', icon: ListChecks, path: '/exercices' },
+      { id: 'lessons', label: 'Leçons', icon:  BookOpenText, path: '/lessons' },
+      { id: 'exercices', label: 'Exercices', icon: NotebookPen , path: '/exercices' },
     ],
   },
-  // Section Administration
   {
     id: 'management',
     label: 'Administration',
     icon: UserCheck,
     children: [
-      { id: 'employees', label: 'Employés', icon: BookOpenText, path: '/employees' },
+      { id: 'employees', label: 'Employés', icon: UserRound , path: '/employees' },
       { id: 'teachers', label: 'Enseignants', icon: UserCheck, path: '/teachers' },
       { id: 'parents', label: 'Parents', icon: Users, path: '/parents' },
       { id: 'payments', label: 'Paiements', icon: CreditCard, path: '/payments' },
       { id: 'messages', label: 'Messagerie', icon: MessageSquare, path: '/messages' },
     ],
   },
-
-  // Section Paramétrage
   {
     id: 'settingsSection',
     label: 'Configuration',
@@ -89,107 +86,91 @@ const menuItems: MenuItemType[] = [
       { id: 'classes', label: 'Classes', icon: School, path: '/classes' },
       { id: 'subjects', label: 'Matières', icon: BookOpen, path: '/subjects' },
       { id: 'settings', label: 'Paramètres', icon: Settings, path: '/settings' },
-      // Ici tu peux ajouter d'autres menus liés aux paramètres si besoin
     ],
   },
 ];
-
 
 const flattenMenuItems = (items: MenuItemType[]): MenuItemType[] => {
   let flat: MenuItemType[] = [];
   items.forEach(item => {
     flat.push(item);
-    if (item.children) {
-      flat = flat.concat(item.children);
-    }
+    if (item.children) flat = flat.concat(item.children);
   });
   return flat;
 };
 
 const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) => {
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({
-    'course': true,
+    course: true,
   });
-  const { datas: shoolInfo } = useSelector(getSchoolState)
-  const { activeSchoolYear } = useSelector(getSchoolYearState)
-  const { datas: { permissions } } = useSelector(getAuthState);
+  const { datas: shoolInfo } = useSelector(getSchoolState);
+  const { activeSchoolYear } = useSelector(getSchoolYearState);
+  const { datas: { permissions, user } } = useSelector(getAuthState);
+  const [isOpentDialog, setIsOpentDialog] = useState(false);
+  const dispatch: AppDispatch = useDispatch();
 
-  const handleToggleMenu = (id: string) => {
-    setOpenMenus((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+  const onConfirmLogout = () => {
+    setIsOpentDialog(false);
+    dispatch(logoutUser(user?.id_user as number));
   };
 
-  // Rendu des menus pour collapsed
+  const handleToggleMenu = (id: string) => {
+    setOpenMenus(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
   const renderCollapsedMenuItems = () => {
     const flatMenus = flattenMenuItems(menuItems);
-
     return (
       <ul>
         {flatMenus.map((menu, idx) => {
-          const Icon = menu.icon;
-
-          // ===================== L'utilisateur na pas le permission de lecture  ===================== //
-          if (!permissions?.[menu.id]?.read) return '';
-
-          return (
-            <li key={menu.id} className="relative">
-              {menu.path ? (
-                <NavLink
-                  to={menu.path}
-                  title={menu.label}
-                  className={({ isActive }: { isActive: boolean }) =>
-                    clsx(
-                      "px-4 justify-center w-full flex items-center py-3 text-left transition-colors group relative",
-                      isActive
-                        ? "bg-blue-50 text-blue-700 border-r-2 border-blue-700"
-                        : "text-gray-700 hover:bg-gray-50"
-                    )
-                  }
-                >
-                  <Icon className="w-5 h-5" />
-                  <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                    {menu.label}
-                  </div>
-                </NavLink>
-              ) : (
-                idx < flatMenus.length - 1 && (
-                  <hr className="border-t border-blue-200 mx-2" />
-                )
-              )}
-            </li>
-          );
+          if (!permissions?.[menu.id]?.read) return null;
+          if (menu.path) {
+            return (
+              <CollapsedMenuItem
+                key={menu.id}
+                id={menu.id}
+                label={menu.label}
+                icon={menu.icon}
+                path={menu.path}
+              />
+            );
+          }
+          if (idx < flatMenus.length - 1) {
+            return <hr key={`hr-${idx}`} className="border-t border-blue-200 mx-2" />;
+          }
+          return null;
         })}
       </ul>
     );
   };
-  // Rendu récursif des menus et sous-menus (pour non-collapsed)
+
   const renderMenuItems = (items: MenuItemType[], level = 0) => (
-    <ul className='space-y-0.5'>
-      {items.map((menu) => {
+    <ul className="space-y-0.5">
+      {items.map(menu => {
         const Icon = menu.icon;
         const hasChildren = !!menu.children?.length;
         const isOpen = openMenus[menu.id];
-        // ===================== L'utilisateur na pas le permission de lecture  ===================== //
-        if (!permissions?.[menu.id]?.read) return '';
+        if (!permissions?.[menu.id]?.read) return null;
+
         return (
           <li key={menu.id}>
             {menu.path ? (
               <NavLink
                 to={menu.path}
                 title={collapsed ? menu.label : ''}
-                onClick={() => { widowWidth < 1000 ? onToggleCollapse() : '' }}
+                onClick={() => {
+                  if (widowWidth < 1000) onToggleCollapse();
+                }}
                 className={({ isActive }: { isActive: boolean }) =>
                   clsx(
                     {
-                      "px-4 justify-center": collapsed,
-                      "px-6": !collapsed,
-                      "bg-blue-50 text-blue-700 border-r-2 border-blue-700": isActive,
-                      "text-gray-700 hover:bg-gray-50": !isActive,
+                      'px-4 justify-center': collapsed,
+                      'px-6': !collapsed,
+                      'bg-blue-50 text-blue-700 border-r-2 border-blue-700': isActive,
+                      'text-gray-700 hover:bg-gray-50': !isActive,
                     },
-                    "w-full  flex items-center py-3 text-left transition-colors group relative",
-                    level > 0 ? "pl-8" : ""
+                    'w-full flex items-center py-3 text-left transition-colors group relative',
+                    level > 0 ? 'pl-8' : ''
                   )
                 }
               >
@@ -202,11 +183,6 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
                         {isActive && <ChevronRight className="w-4 h-4 ml-auto" />}
                       </>
                     )}
-                    {collapsed && (
-                      <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                        {menu.label}
-                      </div>
-                    )}
                   </>
                 )}
               </NavLink>
@@ -214,9 +190,9 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
               <button
                 type="button"
                 className={clsx(
-                  "w-full flex items-center py-3 px-6 text-left transition-colors font-medium text-gray-800 hover:bg-gray-400/60 bg-gray-300/50",
-                  collapsed ? "justify-center px-4" : "",
-                  level > 0 ? "pl-8" : ""
+                  'w-full flex items-center py-3 px-6 text-left transition-colors font-medium text-gray-800 hover:bg-gray-400/60 bg-gray-300/50',
+                  collapsed ? 'justify-center px-4' : '',
+                  level > 0 ? 'pl-8' : ''
                 )}
                 onClick={() => handleToggleMenu(menu.id)}
               >
@@ -227,22 +203,17 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
                     <span className="ml-auto">
                       <ChevronDown
                         className={clsx(
-                          "w-4 h-4 transition-transform",
-                          isOpen ? "rotate-180" : ""
+                          'w-4 h-4 transition-transform',
+                          isOpen ? 'rotate-180' : ''
                         )}
                       />
                     </span>
                   </>
                 )}
-                {collapsed && (
-                  <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                    {menu.label}
-                  </div>
-                )}
               </button>
             )}
             {hasChildren && isOpen && !collapsed && (
-              <div className="mx-1 mb-1 rounded mt-0.5 shadow-inner  border-2 border-gray-300 ">
+              <div className="mx-1 mb-1 rounded mt-0.5 shadow-inner border-2 border-gray-300">
                 {renderMenuItems(menu.children!, level + 1)}
               </div>
             )}
@@ -253,14 +224,20 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
   );
 
   return (
-    <div className={`${collapsed ? 'w-16' : 'w-64'} bg-white shadow-lg transition-all duration-300 ease-in-out flex flex-col min-h-screen`}>
+    <div
+      className={`${collapsed ? 'w-16' : 'w-64'} bg-white shadow-lg transition-all duration-300 ease-in-out flex flex-col h-screen`}
+    >
       <div className="py-6 border-b border-r">
         <div className="flex items-center justify-center">
           {!collapsed && (
-            <div >
-              <h1 className="text-xl font-bold text-gray-800">{shoolInfo?.nom || "Nom de l'école"}</h1>
+            <div>
+              <h1 className="text-xl font-bold text-gray-800">
+                {shoolInfo?.nom || "Nom de l'école"}
+              </h1>
               <p className="text-sm text-gray-600">{shoolInfo?.slogan || 'Votre slogan'}</p>
-              <p className='text-xs font-semibold text-blue-600'> {activeSchoolYear?.nom} </p>
+              <p className="text-xs font-semibold text-blue-600">
+                {activeSchoolYear?.nom}
+              </p>
             </div>
           )}
           <button
@@ -276,9 +253,36 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
           </button>
         </div>
       </div>
-      <nav className="mt-6 flex-1 overflow-y-auto">
+
+      {/* Navigation */}
+      <nav className="mt-2 flex-1 overflow-y-auto scroll">
         {collapsed ? renderCollapsedMenuItems() : renderMenuItems(menuItems)}
       </nav>
+
+      {/* Bouton Déconnexion */}
+      <div className="h-max w-full border bg-gray-100">
+        <button
+          className={clsx(
+            {
+              'px-4 justify-center': collapsed,
+              'px-6': !collapsed,
+            },
+            'text-gray-700 hover:bg-gray-50 w-full flex items-center py-3 text-left transition-colors group relative'
+          )}
+          onClick={() => setIsOpentDialog(true)}
+        >
+          <Power className="w-5 h-5 text-gray-600 mr-3" />
+          {!collapsed && <span>Déconnexion</span>}
+        </button>
+      </div>
+
+      <ConfirmDialog
+        isOpen={isOpentDialog}
+        title="Confirmer la déconnexion"
+        message="Êtes-vous sûr de vouloir vous déconnecter ?"
+        onConfirm={onConfirmLogout}
+        onClose={() => setIsOpentDialog(false)}
+      />
     </div>
   );
 };

@@ -32,7 +32,7 @@ export const getAllStudent = createAsyncThunk('etudiant/getAll', async (): Promi
 })
 
 export const getStudentByMatricule = createAsyncThunk('etudiant/getOne', async (matricule: string): Promise<ApiReturnType> => {
-    let data: ApiReturnType = ApiReturnInitial ;
+    let data: ApiReturnType = ApiReturnInitial;
     await api.get(`admin/etudiant/${matricule}`)
         .then(response => {
             data.data = response.data
@@ -95,6 +95,18 @@ export const deleteStudent = createAsyncThunk('etudiant/suppression', async (id_
             console.error('Erreur lors de la suppréssion :', error.getMessage());
         });
     }
+    return data;
+})
+
+// NEW MATRICULE 
+export const getMatricule = createAsyncThunk('etudiant/matricule', async (): Promise<ApiReturnType> => {
+    let data: ApiReturnType = ApiReturnInitial;
+    await api.get('admin/etudiant-matricule')
+        .then(response => {
+            data = response.data;
+        }).catch(error => {
+            console.error('Erreur lors de la recupération du matricule  :', error.getMessage());
+        });
     return data;
 })
 

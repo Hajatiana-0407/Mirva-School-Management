@@ -20,19 +20,23 @@ class InscriptionController extends CI_Controller
     // ? Creation d'une nouvel inscription 
     public function create()
     {
-        $this->load->helper('matricule');
-        //? Creation d'un matricule unique 
-        $lasted = $this->EtudiantModel->findLatest();
-        $matricule = '';
-        if ($lasted) {
-            $matricule = generateMatricule(STUDENT_PRIFIX, $lasted["matricule_etudiant"]);
-        } else {
-            $matricule = generateMatricule(STUDENT_PRIFIX);
+
+        // ? Recuperation et verification de doublan matricule 
+        $matricule = $this->input->post('matricule_etudiant');
+        if ($this->EtudiantModel->isExist([
+            'matricule_etudiant' => $matricule
+        ])) {
+            echo json_encode([
+                'error' => true,
+                'message' => "Le matricule '$matricule' existe déjà."
+            ]);
+            return;
         }
 
 
         // ? ================== INFORMATIONS DES PARENTS ==================
         $dataPost = $this->input->post(null, true);
+
         function getParentData($parentData, $defaultType)
         {
             if (empty($parentData['nom'])) {
@@ -46,7 +50,7 @@ class InscriptionController extends CI_Controller
                 'profession' => isset($parentData['profession']) ? htmlspecialchars($parentData['profession']) : '',
                 'adresse' => isset($parentData['adresse']) ? htmlspecialchars($parentData['adresse']) : '',
                 'telephone' => isset($parentData['telephone']) ? htmlspecialchars($parentData['telephone']) : '',
-                'email' => isset($parentData['email']) ? htmlspecialchars($parentData['email']) : '' , 
+                'email' => isset($parentData['email']) ? htmlspecialchars($parentData['email']) : '',
                 'contact_urgence' => isset($parentData['contact_urgence']) ? htmlspecialchars($parentData['contact_urgence']) : 0
             ];
         }
@@ -57,7 +61,7 @@ class InscriptionController extends CI_Controller
             'tuteur' => isset($dataPost['tuteur']) ? getParentData($dataPost['tuteur'], 'tuteur') : null
         ];
 
-        $parent_eleve = [] ; 
+        $parent_eleve = [];
         foreach ($parents as $key => $parent) {
             if ($parent !== null) {
                 $this->load->model('ParentModel');
@@ -187,12 +191,12 @@ class InscriptionController extends CI_Controller
         }
 
         //! Enregistrement de la liaison parent eleve dans la base de donnée
-        if ( !empty( $parent_eleve ) && $eleve_id ) { 
-            $this->load->model('ParentEleveModele') ; 
-            for ($i=0; $i < count($parent_eleve) ; $i++) { 
-                $parent_eleve[ $i ]['eleve_id_eleve'] = $eleve_id ; 
+        if (!empty($parent_eleve) && $eleve_id) {
+            $this->load->model('ParentEleveModele');
+            for ($i = 0; $i < count($parent_eleve); $i++) {
+                $parent_eleve[$i]['eleve_id_eleve'] = $eleve_id;
             }
-            $this->ParentEleveModele->insertBatch( $parent_eleve ) ; 
+            $this->ParentEleveModele->insertBatch($parent_eleve);
         }
 
         $inscription = [

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Archive } from 'lucide-react';
+import { Plus, Search, Archive, CheckCircle, Clock } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
@@ -105,15 +105,23 @@ const Registration: React.FC = () => {
     },
     { key: 'telephone', label: 'Téléphone' },
     {
-      key: 'is_droit_payed', label: 'Droit d\'inscription ', render: (value: string) => (
-        <div className={clsx({
-          'bg-green-300 text-green-800': value === '1',
-          'bg-red-300 text-red-800': value !== '1',
-        }, 'rounded-full text-xs text-center italic w-20')}>
-          {value === '1' ? 'Payé' : 'Non payé'}
-        </div>
-      )
-    }
+      key: 'is_droit_payed', label: 'Droit', render: (value: string) => {
+        const colors = {
+          '1': 'bg-green-100 text-green-800',
+          '0': 'bg-yellow-100 text-yellow-800',
+        };
+        const icons = {
+          '1': <CheckCircle className="w-4 h-4" />,
+          '0': <Clock className="w-4 h-4" />,
+        };
+        return (
+          <span className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${colors[value as keyof typeof colors]}`}>
+            {icons[value as keyof typeof icons]}
+            <span>{value == '1' ? 'Payé' : 'En attente'}</span>
+          </span>
+        );
+      }
+    },
   ];
 
   return (

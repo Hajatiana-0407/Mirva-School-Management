@@ -137,6 +137,7 @@ $route['api/admin/etudiant/create'] = 'EtudiantController/create';
 $route['api/admin/etudiant/delete'] = 'EtudiantController/delete';
 $route['api/admin/etudiant/statistique'] = 'EtudiantController/getStatistique';
 $route['api/admin/etudiant/(:any)'] = 'EtudiantController/findOne/$1';
+$route['api/admin/etudiant-matricule'] = 'EtudiantController/getNewMatricule';
 
 // ******************* ROUTE PARENT ********************** //
 $route['api/admin/parent'] = 'ParentController';
@@ -217,11 +218,11 @@ $GLOBALS['secure'] = [
 
     // Étudiant
     'api/admin/etudiant' => true,
-    'api/admin/etudiant/update' => true,
-    'api/admin/etudiant/create' => true,
-    'api/admin/etudiant/delete' => true,
-    'api/admin/etudiant/statistique' => true,
-    'api/admin/etudiant/*' => true,
+    // 'api/admin/etudiant/update' => true,
+    // 'api/admin/etudiant/create' => true,
+    // 'api/admin/etudiant/delete' => true,
+    // 'api/admin/etudiant/statistique' => true,
+    // 'api/admin/etudiant/*' => true,
 
     // Parent
     'api/admin/parent' => true,

@@ -118,6 +118,9 @@ const Student = () => {
             {item.niveau}
           </span>
           {value}
+          {!value && !item.niveau &&
+            <div className='text-gray-400 italic'>non inscrit</div>
+          }
         </div>
       )
     },
@@ -152,7 +155,7 @@ const Student = () => {
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
-            <span  className='max-md:hidden-susp'>Nouvelle inscription  </span>
+            <span className='max-md:hidden-susp'>Nouvelle inscription  </span>
           </button>
         }
       </Title>

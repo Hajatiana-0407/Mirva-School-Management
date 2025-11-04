@@ -6,7 +6,7 @@ import clsx from 'clsx';
 
 
 const Layout = () => {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(window.innerWidth < 1000 );
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const Layout = () => {
       <div className={clsx(
         { "pl-[16rem]": !sidebarCollapsed && windowWidth > 1000 },
         { "pl-[4rem]": !(!sidebarCollapsed && windowWidth > 1000) }
-        , "flex-1 flex flex-col overflow-hidden  transition-all duration-300 max-h-screen"
+        , "flex-1 flex flex-col overflow-hidden  transition-all duration-300 max-h-screen w-screen"
       )} >
         <Header />
         <main className="flex-1 overflow-y-auto p-3 md:p-6 relative">
