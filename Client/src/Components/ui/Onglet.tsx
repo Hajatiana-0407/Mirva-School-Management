@@ -22,7 +22,7 @@ const Onglet: React.FC<OngletPropsType> = ({ onlgets, type = 'hidden' }) => {
         }
     }, [searchParams])
     return (
-        <div className="shadow-sm space-y-6">
+        <div className="space-y-6">
             <div className="bg-white rounded-md shadow-sm border py-3 px-6">
                 <nav className="flex space-x-2 overflow-x-auto">
                     {onlgets.map((tab, idx) => {

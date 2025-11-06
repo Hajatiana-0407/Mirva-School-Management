@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { LevelSubjectType, SubjectType } from '../../Utils/Types';
 import { hexToRgba } from '../../Utils/Utils';
-import { Archive, Pencil, Plus } from 'lucide-react';
+import { Archive, Plus } from 'lucide-react';
 import ConfirmDialog from '../ConfirmDialog';
+import clsx from 'clsx';
 
 type Props = {
     subject: SubjectType;
@@ -43,13 +44,15 @@ const SubjectComponent = ({ subject, levelSubject, nameKey, onDelete, type = "up
     return (
         <div key={`${nameKey}`} className="w-100 min-h-10 gap-1 grid grid-cols-12 my-2">
             <div
-                className="col-span-4 text-gray-500 flex items-center justify-center border relative"
+                className={clsx(
+                    {'border-blue-200' :  type !== "update" } , 
+                    "col-span-4 flex items-center justify-center border relative"
+                )}
                 style={{ backgroundColor: hexToRgba(subject.couleur, 0.1) }}
             >
                 <span className='absolute top-0 right-0 text-xl'>
-                    {type === "update" ?
-                        <Pencil size={15} className='text-green-500' /> :
-                        <Plus size={15} className='text-blue-500' />
+                    {type !== "update" &&
+                        <Plus size={20} className='text-blue-500' />
                     }
                 </span>
                 {subject.denomination}
