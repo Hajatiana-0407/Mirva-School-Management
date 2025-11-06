@@ -10,7 +10,7 @@ $config['jwt_key'] = 'TA_CLE_SECRETE_SUPER_LONGUE_ET_COMPLEXE';
 | URL to your CodeIgniter root. Typically this will be your base URL,
 | WITH a trailing slash:
 |
-|	http://example.com/
+|	http://example.com/ 
 |
 | WARNING: You MUST set this value!
 |
@@ -389,7 +389,7 @@ $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'ci_session';
 $config['sess_samesite'] = 'Lax';
 $config['sess_expiration'] = 7200;
-$config['sess_save_path'] = NULL;
+$config['sess_save_path'] = APPPATH . 'cache/sessions/';
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = FALSE;
