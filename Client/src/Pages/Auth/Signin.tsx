@@ -1,14 +1,12 @@
 // import React from 'react'
 
-import Input from "../../Components/ui/Input"
 import useForm from "../../Hooks/useForm"
 import { object, string } from "yup"
-import { GraduationCap, ImagePlus, KeyRound, LogIn, Mail } from "lucide-react"
+import { GraduationCap, Lock, LogIn, User } from "lucide-react"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch } from "../../Redux/store"
 import { getAuthState } from "./redux/AuthSlice"
 import { getSchoolState } from "../Settings/School/redux/SchoolSlice"
-import { baseUrl } from "../../Utils/Utils"
 import { loginUser } from "./redux/AuthAsyncThunk"
 import InputError from "../../Components/ui/InputError"
 import { useNavigate } from "react-router-dom"
@@ -58,59 +56,64 @@ const Signin = () => {
     }, [datas.isLoggedIn])
 
     return (
-        <div className="w-screen h-screen pt-[calc(100vh/5)]">
-            <div className="relative shadow bg-white  p-4 w-[95%] sm:w-96 bg-surface mx-auto border-ring border rounded">
-                <div className="flex justify-center items-center mb-4 rounded-lg mx-auto">
-                    {schoolAction.isLoading ? <Loading />
-                        : school?.logo ? <div className="flex justify-center items-center p-2 rounded-lg mx-auto border w-full bg-gray-50 overflow-hidden">
-                            <img src={baseUrl(school?.logo)} alt="Logo" className="max-h-28 max-w-full object-cover " />
+        <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-amber-50 flex items-center justify-center px-4">
+            {schoolAction.isLoading ? <Loading /> :
+                <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 relative border-ring border">
+                    <div className="text-center mb-8">
+                        <div className="bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <GraduationCap className="h-8 w-8 text-white" />
                         </div>
-                            : school?.nom
-                                ? <div className="flex items-center gap-2 text-gray-600 border w-full py-2 justify-center bg-gray-50 rounded">
-                                    <GraduationCap />
-                                    <span className="font-semibold text-xl "> {school?.nom} </span>
-                                </div>
-                                : <div className="flex items-center gap-2 text-gray-500 border w-full py-2 justify-center bg-gray-50 rounded">
-                                    <ImagePlus />
-                                    <span className="font-semibold text-xl ">Votre logo ici</span>
-                                </div>
-                    }
-                </div>
-                <form action="" onSubmit={handleSubmit} className="flex flex-col gap-4 my-2">
-                    <Input
-                        label="Identifiant"
-                        type="text"
-                        name="identifiant"
-                        placeholder="Votre identifiant"
-                        errorMessage={formErrors?.identifiant}
-                        icon={Mail}
-                        iconColor="text-gray-700"
-                    />
-                    <div>
-                        <Input
-                            label="Mot de passe"
-                            type="password"
-                            name="password"
-                            placeholder="votre mot de passe"
-                            errorMessage={formErrors?.password}
-                            icon={KeyRound}
-                            iconColor="text-gray-700"
-                        />
-                        <InputError message={error} />
+                        <h1 className="text-2xl font-bold text-gray-600">Connexion</h1>
+                        <p className="text-gray-600 mt-2"> {school.nom && school.nom} {school.adresse && "- " + school.adresse}</p>
                     </div>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+                                Idetifiant :
+                            </label>
+                            <div className="relative">
+                                <User className="h-5 w-5 text-gray-400 absolute left-3 top-3.5" />
+                                <input
+                                    type="text"
+                                    id="identifiant"
+                                    name="identifiant"
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                    placeholder="Entrez votre nom d'utilisateur"
+                                />
+                            </div>
+                            <InputError message={formErrors?.identifiant} />
+                        </div>
 
+                        <div>
+                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                                Mot de passe :
+                            </label>
+                            <div className="relative">
+                                <Lock className="h-5 w-5 text-gray-400 absolute left-3 top-3.5" />
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                    placeholder="Entrez votre mot de passe"
+                                />
+                            </div>
+                            <InputError message={formErrors?.password} />
+                            <InputError message={error} />
+                        </div>
 
-                    <button type="submit" className="bg-gradient-to-r from-teal-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all flex justify-center items-center space-x-2">
-                        {!action.isLoading &&
-                            <LogIn className="w-4 h-4" />
-                        }
-                        {action.isLoading &&
-                            <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-                        }
-                        <span>Se connecter</span>
-                    </button>
-                </form>
-            </div>
+                        <button type="submit" className="w-full bg-gradient-to-r from-teal-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all flex justify-center items-center space-x-2">
+                            {!action.isLoading &&
+                                <LogIn className="w-4 h-4" />
+                            }
+                            {action.isLoading &&
+                                <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                            }
+                            <span>Se connecter</span>
+                        </button>
+                    </form>
+                </div>
+            }
         </div>
     )
 }
