@@ -12,11 +12,30 @@ class UtilisateurModel extends CI_Model
     }
 
 
+    /**
+     * return le role pour les etudiant 
+     *
+     * @return void
+     */
     public function getIdRoleStudent()
     {
         return $this->db->select('*')
             ->from('roles')
             ->where('nom', 'Étudiant')
+            ->get()
+            ->row();
+    }
+
+    /**
+     * return le role pour les enseignats 
+     *
+     * @return void
+     */
+    public function getIdRoleTeacher()
+    {
+        return $this->db->select('*')
+            ->from('roles')
+            ->where('nom', 'Enseignant')
             ->get()
             ->row();
     }

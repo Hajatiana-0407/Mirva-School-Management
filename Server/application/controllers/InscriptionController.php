@@ -219,8 +219,9 @@ class InscriptionController extends CI_Controller
             $roleEtudiant =  $this->UtilisateurModel->getIdRoleStudent();
             $this->UtilisateurModel->insert([
                 'id_role' => $roleEtudiant->id_role,
+                'id_eleve' => $inscriptionData['id_eleve'],
                 'identifiant' => $matricule,
-                'password' => password_hash( $matricule, PASSWORD_DEFAULT)
+                'password' => password_hash($matricule, PASSWORD_DEFAULT)
             ]);
 
             echo json_encode(['error' => false, 'data' => $inscriptionData]);

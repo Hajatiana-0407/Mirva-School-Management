@@ -746,8 +746,8 @@ class AppFixtures extends CI_Controller
                 ];
                 $users[] = [
                     'id_role' => $role_etudiant->id_role,
-                    'identifiant' => $eleve->matricule_etudiant,
-                    'password' => password_hash($eleve->matricule_etudiant, PASSWORD_DEFAULT)
+                    'identifiant' => $eleve['matricule_etudiant'],
+                    'password' => password_hash('password-' . $eleve['matricule_etudiant'], PASSWORD_DEFAULT)
                 ];
             }
         }
@@ -823,8 +823,8 @@ class AppFixtures extends CI_Controller
                 ];
                 $users[] = [
                     'id_role' => $role_etudiant->id_role,
-                    'identifiant' => $eleve->matricule_etudiant,
-                    'password' => password_hash($eleve->matricule_etudiant, PASSWORD_DEFAULT)
+                    'identifiant' => $eleve['matricule_etudiant'],
+                    'password' => password_hash('password-' . $eleve['matricule_etudiant'], PASSWORD_DEFAULT)
                 ];
             }
         }
@@ -889,8 +889,8 @@ class AppFixtures extends CI_Controller
                 ];
                 $users[] = [
                     'id_role' => $role_etudiant->id_role,
-                    'identifiant' => $eleve->matricule_etudiant,
-                    'password' => password_hash($eleve->matricule_etudiant, PASSWORD_DEFAULT)
+                    'identifiant' => $eleve['matricule_etudiant'],
+                    'password' => password_hash('password-' . $eleve['matricule_etudiant'], PASSWORD_DEFAULT)
                 ];
             }
         }
@@ -943,8 +943,8 @@ class AppFixtures extends CI_Controller
                 ];
                 $users[] = [
                     'id_role' => $role_etudiant->id_role,
-                    'identifiant' => $eleve->matricule_etudiant,
-                    'password' => password_hash($eleve->matricule_etudiant, PASSWORD_DEFAULT)
+                    'identifiant' => $eleve['matricule_etudiant'],
+                    'password' => password_hash('password-' . $eleve['matricule_etudiant'], PASSWORD_DEFAULT)
                 ];
             }
         }

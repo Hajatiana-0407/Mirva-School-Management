@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { BookOpenCheck, ListChecks, Plus } from 'lucide-react';
 import Modal from '../Modal';
-import { AppDispatch } from '../../Redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { levelType } from '../../Utils/Types';
 import { getAppState } from '../../Redux/AppSlice';
@@ -9,18 +8,20 @@ import LevelSubject from './LevelSubject';
 import LevelListe from './LevelListe';
 import Onglet from '../../Components/ui/Onglet';
 import LevelForm from '../../Components/Forms/LevelForm';
-import { getAllLevel } from './redux/LevelAsyncThunk';
 import { useHashPermission } from '../../Hooks/useHashPermission';
+import { AppDispatch } from '../../Redux/store';
+import { getAllLevel } from './redux/LevelAsyncThunk';
+import Title from '../../Components/ui/Title';
 
 
 
 const Levels = () => {
-  const dispatch: AppDispatch = useDispatch();
   const permission = useHashPermission();
   const { hiddeTheModalActive } = useSelector(getAppState);
   const [showModal, setShowModal] = useState(false);
   const [editingLevel, setEditingLevel] = useState<levelType | null>(null);
   const [idLevelToAddSubject, setIdLevelToAddSubject] = useState<number>(0);
+  const dispatch: AppDispatch = useDispatch();
 
   // HANDLERS
   const handleEdit = (level: levelType) => {
@@ -48,8 +49,10 @@ const Levels = () => {
 
     <div className="space-y-6">
       {/* EN TETE  */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Gestion des niveaux</h1>
+      <Title
+        title='Gestion des niveaux'
+        description='Gérer les différents niveaux et leurs paramètres.'
+      >
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
@@ -59,19 +62,20 @@ const Levels = () => {
             <span>Nouveau niveau</span>
           </button>
         }
-      </div>
+      </Title>
 
       {/* ONGLETS */}
       <Onglet
+        type='delete'
         onlgets={[
           {
-            key:'list-level' , 
+            key: 'list-level',
             label: 'Listes des niveaux',
             component: <LevelListe handleEdit={handleEdit} setIdLevelToAddSubject={setIdLevelToAddSubject} />,
             Icon: ListChecks
           },
           {
-            key:'subject-level-coef' , 
+            key: 'subject-level-coef',
             label: 'Niveau & Matiere',
             component: <LevelSubject idLevelToAddSubject={idLevelToAddSubject} />,
             Icon: BookOpenCheck

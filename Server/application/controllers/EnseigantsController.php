@@ -107,10 +107,19 @@ class EnseigantsController extends CI_Controller
             $result = $this->EnseignantModel->insert($data);
 
             if ($result) {
-
                 // ? Teste si le type est proffesseur ( enseignant ) 
                 $assignations = $this->input->post('assignations');
                 if ($assignations) {
+                    // ? Creation de compte utilisateur pour le prof
+                    $this->load->model('UtilisateurModel');
+                    $roleEnseignant =  $this->UtilisateurModel->getIdRoleTeacher();
+                    $this->UtilisateurModel->insert([
+                        'id_role' => $roleEnseignant->id_role,
+                        'id_personnel' => $result['id_personnel'],
+                        'identifiant' => $matricule,
+                        'password' => password_hash($matricule, PASSWORD_DEFAULT)
+                    ]);
+
                     $this->load->model('MatiereClasseProfModel');
                     $assignation_data = [];
                     $isAll = false;

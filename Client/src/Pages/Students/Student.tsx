@@ -179,7 +179,7 @@ const Student = () => {
               <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
             )}
             <span className={`text-sm ${statistique?.girl.nbr >= statistique?.boy.nbr ? 'text-green-600' : 'text-red-600'}`}>
-              {parseInt(statistique?.girl?.percent)} %
+              {parseInt(statistique?.girl?.percent) || 0 } %
             </span>
           </div>
         </div>
@@ -202,7 +202,7 @@ const Student = () => {
               <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
             )}
             <span className={`text-sm ${statistique?.boy.nbr >= statistique?.girl.nbr ? 'text-green-600' : 'text-red-600'}`}>
-              {parseInt(statistique?.boy?.percent)} %
+              {parseInt(statistique?.boy?.percent) || 0 } %
             </span>
           </div>
         </div>
