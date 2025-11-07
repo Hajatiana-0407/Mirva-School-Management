@@ -100,5 +100,4 @@ class CI_Controller {
 	{
 		return self::$instance;
 	}
-
 }
