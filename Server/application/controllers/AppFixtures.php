@@ -626,11 +626,12 @@ class AppFixtures extends CI_Controller
      * @param boolean $clean
      * @return void
      */
-    private function loadLecon($clean = false)
+    private function loadLeconExercice($clean = false)
     {
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
             'lecon',
+            'exercice',
         ]);
 
         if ($clean) {
@@ -665,11 +666,36 @@ class AppFixtures extends CI_Controller
             // Insertion des loçons pour le prof dans la base de donnée
             $this->model->insertBatchFixtures($lecons, 'lecon');
         }
+        $id = 1;
+        foreach ($teachersId as $id) {
+            $assignations = $this->model->getAssignationByTeacher($id);
+            $exercices = [];
+            foreach ($assignations as $assignation) {
+                $titre = $this->faker->sentence(6);
+                $this->load->helper(['url', 'text']);
+                $slug = url_title(convert_accented_characters($titre . ' ' . $id), 'dash', TRUE);
+                $exercice = [
+                    'titre' => $titre,
+                    'slug' => $slug,
+                    'description' => $this->faker->paragraph(3),
+                    'contenu' => $this->faker->paragraphs(5, true),
+                    'fichier_support' => $this->faker->optional()->fileExtension(),
+                    'ficher_principale' => $this->faker->url,
+                    'created_at' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d H:i:s'),
+                    'id_prof' => $assignation['id_prof'],
+                    'id_matiere' => $assignation['id_matiere'],
+                    'id_niveau' => $assignation['id_niveau']
+                ];
+                $exercices[] = $exercice;
+                $id++;
+            }
+            // Insertion des loçons pour le prof dans la base de donnée
+            $this->model->insertBatchFixtures($exercices, 'exercice');
+        }
     }
 
 
-    private function registration($clean = false)
-    {
+    private function registration($clean = false){
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
             'inscription',
@@ -972,7 +998,7 @@ class AppFixtures extends CI_Controller
         $this->loadConfigurations();
         $this->loadPersonnel();
         $this->LoadEleveParent();
-        $this->loadlecon();
+        $this->loadLeconExercice();
         $this->loadUser();
 
         echo "✅ Fausse base de données générée avec succès !" . PHP_EOL;

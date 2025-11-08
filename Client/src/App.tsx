@@ -32,12 +32,13 @@ import ProtectedRoute from './Security/ProtectedRoute';
 import { getAuthState, testAuthentication } from './Pages/Auth/redux/AuthSlice';
 import Assignments from './Pages/Teachers/Assignments';
 import Lesson from './Pages/Lessons/Lesson';
-import Exercice from './Pages/Exercice/Exercice';
+import Exercice from './Pages/Exercices/Exercice';
 import LessonSingle from './Pages/Lessons/LessonSingle';
 import { setNavigator } from './Utils/navigate';
 import { getModuleState } from './Redux/Other/slices/ModuleSlice';
 import { getAllModule } from './Redux/Other/asyncThunk/ModuleAsyncThunk';
 import AnimatedBackground from './Components/ui/AnimatedBackground';
+import ExerciceSingle from './Pages/Exercices/ExerciceSingle';
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
@@ -135,7 +136,10 @@ function App() {
               <Route index element={<Lesson />} />
               <Route path=':slug' element={<LessonSingle />} />
             </Route>
-            <Route path="exercices" element={<Exercice />} />
+            <Route path='exercices'>
+              <Route index element={<Exercice />} />
+              <Route path=':slug' element={<ExerciceSingle />} />
+            </Route>
             {/* 404 Not found  */}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Route>

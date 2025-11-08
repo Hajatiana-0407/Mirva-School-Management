@@ -581,6 +581,31 @@ export const LessonInitialValue: LessonType = {
     ...levelInitial
 
 }
+// ===================== Exercice ===================== //
+export type ExerciceType = {
+    id_exercice?: number;
+    slug: string;
+    titre: string;
+    lecon_description: string;
+    contenu?: string;
+    ficher_principale?: string;
+    fichier_support?: string;
+    id_matiere?: number;
+    id_prof?: number;
+    id_niveau?: number;
+    created_at?: any;
+    published?: number
+} & EmployeeType & SubjectType & levelType;
+
+export const ExerciceInitialValue: ExerciceType = {
+    titre: '',
+    slug: '',
+    lecon_description: '',
+    ...employeeInitialValue,
+    ...subjectInitialValue,
+    ...levelInitial
+
+}
 
 
 // ===================== Roles ===================== //
