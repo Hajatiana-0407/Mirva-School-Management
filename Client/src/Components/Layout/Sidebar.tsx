@@ -264,10 +264,10 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
         <button
           className={clsx(
             {
-              'px-4': collapsed,
+              'px-4 justify-center': collapsed,
               'px-6': !collapsed,
             },
-            'text-gray-700 hover:bg-gray-50 w-full gap-3 flex items-center justify-center py-3 text-left transition-colors group relative'
+            'text-gray-700 hover:bg-gray-50 w-full gap-3 flex items-center  py-3 text-left transition-colors group relative'
           )}
           onClick={() => setIsOpentDialog(true)}
         >
