@@ -14,6 +14,7 @@ import StudentReducer from '../Pages/Students/redux/StudentSlice'
 import ParentReducer from '../Pages/Parents/redux/ParentSlice'
 import AuthReduce from '../Pages/Auth/redux/AuthSlice'
 import LessonReducer from '../Pages/Lessons/redux/LessonSlice'
+import ExerciceReducer from '../Pages/Exercices/redux/ExerciceSlice'
 import RoleReducer from '../Pages/Settings/UserRoles/redux/UserRolesSlice';
 import ModuleReducer from './Other/slices/ModuleSlice'
 
@@ -34,6 +35,7 @@ export const store = configureStore({
         parent: ParentReducer,
         auth: AuthReduce,
         lesson: LessonReducer,
+        exercice: ExerciceReducer,
         role: RoleReducer,
         module: ModuleReducer
     }

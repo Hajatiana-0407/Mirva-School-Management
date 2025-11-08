@@ -1,10 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class LeconModel extends CI_Model
+class ExerciceModel extends CI_Model
 {
-    protected $table = 'lecon';
-    protected $primaryKey = 'id_lecon';
+    protected $table = 'exercice';
+    protected $primaryKey = 'id_exercice';
 
     public function __construct()
     {
@@ -36,17 +36,17 @@ class LeconModel extends CI_Model
 
         // Construction de la requête principale
         $this->db->select('
-        l.id_lecon,
-        l.slug, 
-        l.titre, 
-        l.published, 
-        l.description AS lecon_description, 
-        l.ficher_principale, 
-        l.fichier_support, 
-        l.id_matiere,
-        l.id_prof, 
-        l.id_niveau, 
-        l.created_at,
+        e.id_exercice,
+        e.slug, 
+        e.titre, 
+        e.published, 
+        e.description AS exercice_description, 
+        e.ficher_principale, 
+        e.fichier_support, 
+        e.id_matiere,
+        e.id_prof, 
+        e.id_niveau, 
+        e.created_at,
         m.denomination,
         m.abbreviation,
         m.couleur, 
@@ -56,21 +56,21 @@ class LeconModel extends CI_Model
         p.prenom,
         p.photo
     ')
-            ->from('lecon l')
-            ->join('matiere m', 'm.id_matiere = l.id_matiere', 'inner')
-            ->join('niveau n', 'n.id_niveau = l.id_niveau', 'inner')
-            ->join('personnel p', 'p.id_personnel = l.id_prof', 'left');
+            ->from('exercice e')
+            ->join('matiere m', 'm.id_matiere = e.id_matiere', 'inner')
+            ->join('niveau n', 'n.id_niveau = e.id_niveau', 'inner')
+            ->join('personnel p', 'p.id_personnel = e.id_prof', 'left');
 
         // Si c'est un enseignant → afficher uniquement ses leçons
         if ($role === 'Enseignant' && isset($user_info['id_personnel'])) {
-            $this->db->where('l.id_prof', $user_info['id_personnel']);
+            $this->db->where('e.id_prof', $user_info['id_personnel']);
         }
 
         // Si c'est un élève → afficher les leçons de son niveau uniquement
         if ($role === 'Étudiant' && $niveau_utilisateur !== null) {
             $this->db
                 ->where('n.id_niveau', $niveau_utilisateur->id_niveau)
-                ->where('l.published', 1);
+                ->where('e.published', 1);
         }
 
         // Si aucun niveau trouvé pour un élève → renvoyer une liste vide
@@ -80,8 +80,8 @@ class LeconModel extends CI_Model
 
         // Exécution finale
         return $this->db
-            ->group_by('l.id_lecon')
-            ->order_by('l.created_at', 'DESC')
+            ->group_by('e.id_exercice')
+            ->order_by('e.created_at', 'DESC')
             ->get()
             ->result_array();
     }
@@ -111,16 +111,16 @@ class LeconModel extends CI_Model
         }
 
         $this->db->select('
-                l.id_lecon,
-                l.slug , 
-                l.titre  , 
-                l.published , 
-                l.description as lecon_description , 
-                l.ficher_principale, l.fichier_support , 
-                l.id_matiere ,
-                l.id_prof , 
-                l.id_niveau, 
-                l.created_at,
+                e.id_exercice,
+                e.slug , 
+                e.titre  , 
+                e.published , 
+                e.description as exercice_description , 
+                e.ficher_principale, e.fichier_support , 
+                e.id_matiere ,
+                e.id_prof , 
+                e.id_niveau, 
+                e.created_at,
                 m.denomination ,
                 m.abbreviation ,
                 m.couleur , 
@@ -129,23 +129,23 @@ class LeconModel extends CI_Model
                 p.nom ,
                 p.prenom ,
                 p.photo')
-            ->from('lecon l')
-            ->join('matiere m', 'm.id_matiere = l.id_matiere', 'inner')
-            ->join('niveau n', 'n.id_niveau = l.id_niveau', 'inner')
-            ->join('personnel p', 'p.id_personnel = l.id_prof', 'left')
+            ->from('exercice e')
+            ->join('matiere m', 'm.id_matiere = e.id_matiere', 'inner')
+            ->join('niveau n', 'n.id_niveau = e.id_niveau', 'inner')
+            ->join('personnel p', 'p.id_personnel = e.id_prof', 'left')
             ->where($this->primaryKey, $id);
 
 
         // Si c'est un enseignant → afficher uniquement ses leçons
         if ($role === 'Enseignant' && isset($user_info['id_personnel'])) {
-            $this->db->where('l.id_prof', $user_info['id_personnel']);
+            $this->db->where('e.id_prof', $user_info['id_personnel']);
         }
 
         // Si c'est un élève → afficher les leçons de son niveau uniquement
         if ($role === 'Étudiant' && $niveau_utilisateur !== null) {
             $this->db
                 ->where('n.id_niveau', $niveau_utilisateur->id_niveau)
-                ->where('l.published', 1);
+                ->where('e.published', 1);
         }
 
         // Si aucun niveau trouvé pour un élève → renvoyer une liste vide
@@ -155,8 +155,8 @@ class LeconModel extends CI_Model
 
         // Exécution finale
         return $this->db
-            ->group_by('l.id_lecon')
-            ->order_by('l.created_at', 'DESC')
+            ->group_by('e.id_exercice')
+            ->order_by('e.created_at', 'DESC')
             ->get()
             ->row_array();
     }

@@ -1,21 +1,21 @@
 <?php
 
-class LeconController extends CI_Controller
+class ExerciceController extends CI_Controller
 {
-    protected $pk = 'id_lecon';
+    protected $pk = 'id_exercice';
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('LeconModel');
+        $this->load->model('ExerciceModel');
         $this->load->helper(['url', 'text']);
     }
 
     public function index()
     {
-        $lecons = $this->LeconModel->findAll();
+        $exercices = $this->ExerciceModel->findAll();
         $this->output
             ->set_content_type('application/json')
-            ->set_output(json_encode($lecons));
+            ->set_output(json_encode($exercices));
     }
 
     public function create()
@@ -26,8 +26,8 @@ class LeconController extends CI_Controller
             switch ($user['user_data']['role']) {
                 case 'Administrateur':
                 case 'Enseignant':
-                    $latest = $this->LeconModel->findLatest();
-                    $slug = $latest ? url_title(convert_accented_characters($post['titre'] . ' ' . $latest['id_lecon']), 'dash', TRUE) : url_title(convert_accented_characters($post['titre'] . ' ' . 1), 'dash', TRUE);
+                    $latest = $this->ExerciceModel->findLatest();
+                    $slug = $latest ? url_title(convert_accented_characters($post['titre'] . ' ' . $latest['id_exercice']), 'dash', TRUE) : url_title(convert_accented_characters($post['titre'] . ' ' . 1), 'dash', TRUE);
                     $data = [
                         'id_prof' => $post['id_prof'] !== ''  ? $post['id_prof'] : null,
                         'id_niveau' => $post['id_niveau'] !== ''  ? $post['id_niveau'] : null,
@@ -58,7 +58,7 @@ class LeconController extends CI_Controller
                             return;
                         }
                     }
-                    $inserted = $this->LeconModel->insert($data);
+                    $inserted = $this->ExerciceModel->insert($data);
                     if ($inserted) {
                         $this->output
                             ->set_content_type('application/json')
@@ -100,8 +100,8 @@ class LeconController extends CI_Controller
             $post = $this->input->post(null, true);
             $user = $post['user'];
 
-            $id_lecon = $post['id_lecon'] ?? null;
-            if (!$id_lecon) {
+            $id_exercice = $post['id_exercice'] ?? null;
+            if (!$id_exercice) {
                 echo json_encode([
                     'error' => true,
                     'message' => 'Aucune leçon trouvé.',
@@ -120,7 +120,7 @@ class LeconController extends CI_Controller
                         'description' => $post['description'] ?? '',
                         'contenu' => $post['contenu'] ?? '',
                         'published' => $post['published'] ?? false,
-                        'slug' => url_title(convert_accented_characters($post['titre'] . ' ' . $id_lecon), 'dash', TRUE)
+                        'slug' => url_title(convert_accented_characters($post['titre'] . ' ' . $id_exercice), 'dash', TRUE)
                     ];
 
                     // ? =====================  ===================== //
@@ -142,7 +142,7 @@ class LeconController extends CI_Controller
                             return;
                         }
                     }
-                    $inserted = $this->LeconModel->update($id_lecon,  $data);
+                    $inserted = $this->ExerciceModel->update($id_exercice,  $data);
                     if ($inserted) {
                         $this->output
                             ->set_content_type('application/json')
@@ -188,7 +188,7 @@ class LeconController extends CI_Controller
             if (!empty($input[$this->pk])) {
                 $id = $input[$this->pk];
 
-                $data = $this->LeconModel->delete($id);
+                $data = $this->ExerciceModel->delete($id);
 
                 if ($data) {
                     echo json_encode(['error' => false, 'data' => $data]);
@@ -207,13 +207,13 @@ class LeconController extends CI_Controller
     public function publish()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user'])) {
-            $id_lecon = $this->input->post($this->pk) ?? null;
-            if ($id_lecon) {
-                $updated = $this->LeconModel->update($id_lecon, ['published' => true]);
+            $id_exercice = $this->input->post($this->pk) ?? null;
+            if ($id_exercice) {
+                $updated = $this->ExerciceModel->update($id_exercice, ['published' => true]);
                 if ($updated) {
                     echo json_encode([
                         'error' => false,
-                        'data' => $id_lecon
+                        'data' => $id_exercice
                     ]);
                 } else {
                     echo json_encode([
