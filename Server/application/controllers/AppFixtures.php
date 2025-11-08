@@ -668,7 +668,7 @@ class AppFixtures extends CI_Controller
     }
 
 
-    private function registration()
+    private function registration($clean = false)
     {
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
@@ -676,80 +676,69 @@ class AppFixtures extends CI_Controller
             'eleve'
         ]);
 
+
         $this->load->model('UtilisateurModel');
         $role_etudiant = $this->UtilisateurModel->getIdRoleStudent();
 
         $inscriptions = [];
         $users = [];
-
-        // Fonction pour formater le matricule avec tiret
-        $formatMatricule = function ($matricule) {
-            if (strlen($matricule) > 2) {
-                return substr($matricule, 0, 2) . '-' . substr($matricule, 2);
-            }
-            return $matricule;
-        };
-
-        // ==================== SECONDE ====================
+        // Seconde
         $eleve_seconde1 = [
-            ["numero" => 1, "sexe" => "Femme", "nom" => "ANDRIANJATOVO", "prenom" => "Harijaona Ainamamy Tanteraka", "matricule" => "91-854", "naissance" => "2010-12-31", "note" => ""],
-            ["numero" => 2, "sexe" => "Femme", "nom" => "ANDRIAMIFIDISOA", "prenom" => "Karila Megane", "matricule" => "92-441", "naissance" => "2011-01-12", "note" => ""],
-            ["numero" => 3, "sexe" => "Femme", "nom" => "RANDRIAMANJATO", "prenom" => "To'Ahy Vanielle", "matricule" => "91-951", "naissance" => "2012-01-18", "note" => "4è"],
-            ["numero" => 4, "sexe" => "Femme", "nom" => "IALINIRINA", "prenom" => "Fehiazy Marcia", "matricule" => "91-952", "naissance" => "2011-11-24", "note" => ""],
-            ["numero" => 5, "sexe" => "Homme", "nom" => "RAKOTONDRAHOVA", "prenom" => "Dilan Maté Maherinihasina", "matricule" => "93-387", "naissance" => "2012-04-17", "note" => "Nouv"],
-            ["numero" => 6, "sexe" => "Femme", "nom" => "RAMBOAVOLANIRINA HARIVELO", "prenom" => "Ny Avo", "matricule" => "91-839", "naissance" => "2010-08-10", "note" => ""],
-            ["numero" => 7, "sexe" => "Femme", "nom" => "RAHARINJATOVO", "prenom" => "Mitia", "matricule" => "91-905", "naissance" => "2010-04-16", "note" => "4è"],
-            ["numero" => 8, "sexe" => "", "nom" => "NOMENJANAHARY", "prenom" => "Rojo Nantenaina", "matricule" => "93-384", "naissance" => "2010-11-26", "note" => "Nouv"],
-            ["numero" => 9, "sexe" => "Homme", "nom" => "ANDRIANANTENAINA", "prenom" => "Dimbinavalona", "matricule" => "93-388", "naissance" => "2009-10-23", "note" => "Nouv"],
-            ["numero" => 10, "sexe" => "Femme", "nom" => "RAJAONARIVONY", "prenom" => "Alicia", "matricule" => "93-385", "naissance" => "2012-07-12", "note" => ""],
-            ["numero" => 11, "sexe" => "", "nom" => "RAJAONARISON", "prenom" => "Herimaminjanahary Idealisoa", "matricule" => "93-389", "naissance" => "2011-07-04", "note" => "Nouv"],
-            ["numero" => 12, "sexe" => "Homme", "nom" => "ANDRIANANTENAINA", "prenom" => "Mandresy Johan", "matricule" => "91-997", "naissance" => "2011-07-18", "note" => ""],
-            ["numero" => 13, "sexe" => "Femme", "nom" => "RAMILIARISON", "prenom" => "Nirimamijely Christella Myrrhia", "matricule" => "93-150", "naissance" => "2011-09-04", "note" => "4è"],
-            ["numero" => 14, "sexe" => "Homme", "nom" => "TIAMANANDAZA", "prenom" => "Ismaël Fabrice", "matricule" => "91-743", "naissance" => "2009-08-26", "note" => ""],
-            ["numero" => 15, "sexe" => "Homme", "nom" => "HAJARIVONJILALINA", "prenom" => "Nirina Nicolas", "matricule" => "92-637", "naissance" => "2009-05-23", "note" => ""],
-            ["numero" => 16, "sexe" => "Homme", "nom" => "RASAMOELINA", "prenom" => "Arena", "matricule" => "92-104", "naissance" => "2010-11-18", "note" => ""],
-            ["numero" => 17, "sexe" => "Femme", "nom" => "NOMENJANANAHARY", "prenom" => "Fitia", "matricule" => "93-390", "naissance" => "2010-04-21", "note" => "Nouv"],
-            ["numero" => 18, "sexe" => "Homme", "nom" => "RAKOTONIMANGA", "prenom" => "Mahenina", "matricule" => "92-503", "naissance" => "2011-12-02", "note" => ""],
-            ["numero" => 19, "sexe" => "Femme", "nom" => "VEROARISOA", "prenom" => "Daniela Guadagno", "matricule" => "91-986", "naissance" => "2011-02-26", "note" => ""],
-            ["numero" => 20, "sexe" => "Homme", "nom" => "RAJONIKARA", "prenom" => "Irohaj", "matricule" => "92-922", "naissance" => "2010-09-24", "note" => ""],
-            ["numero" => 21, "sexe" => "Homme", "nom" => "ANDRIAMASINORO", "prenom" => "Joie Djibril", "matricule" => "93-391", "naissance" => "2011-09-13", "note" => "Nouv"],
-            ["numero" => 22, "sexe" => "Homme", "nom" => "RAMAROSON", "prenom" => "Heriniaina Onja Charles", "matricule" => "92-806", "naissance" => "2010-09-24", "note" => ""],
-            ["numero" => 23, "sexe" => "Femme", "nom" => "ANDRIANOKOLOINA", "prenom" => "Miangalisoa Fandresena Fitia", "matricule" => "92-003", "naissance" => "2011-09-29", "note" => ""],
-            ["numero" => 24, "sexe" => "Femme", "nom" => "RASOLOARIJAO", "prenom" => "Ny Antsa Ravo", "matricule" => "93-234", "naissance" => "2010-12-11", "note" => ""],
-            ["numero" => 25, "sexe" => "Femme", "nom" => "RAMANANKIERANA", "prenom" => "Liantsoa", "matricule" => "92-736", "naissance" => "2011-04-04", "note" => ""],
-            ["numero" => 26, "sexe" => "Femme", "nom" => "RAZAFIMANDIMBY", "prenom" => "Hasina Andrianina Fitia", "matricule" => "92-004", "naissance" => "2011-05-02", "note" => ""],
-            ["numero" => 27, "sexe" => "Femme", "nom" => "RAKOTOMALALA", "prenom" => "Irintsoa Famenomamy", "matricule" => "92-182", "naissance" => "2011-01-01", "note" => ""],
-            ["numero" => 28, "sexe" => "Femme", "nom" => "JEAN ARIVAHY", "prenom" => "Harena Savanah", "matricule" => "91-891", "naissance" => "2011-05-04", "note" => ""],
-            ["numero" => 29, "sexe" => "Homme", "nom" => "RAKOTONOMENJANAHARY", "prenom" => "Toky Ny Avo", "matricule" => "92-645", "naissance" => "2010-06-29", "note" => ""],
-            ["numero" => 30, "sexe" => "Femme", "nom" => "ANDRIAHERINTSOA", "prenom" => "Kanto Narindra", "matricule" => "93-396", "naissance" => "2012-03-28", "note" => "Nouv"],
-            ["numero" => 31, "sexe" => "Homme", "nom" => "ANJARATIANA", "prenom" => "Nomenjanahary Nasoavina Anthonio", "matricule" => "93-377", "naissance" => "2012-03-22", "note" => "Nouv"],
-            ["numero" => 32, "sexe" => "Femme", "nom" => "RABENARISON", "prenom" => "Princia", "matricule" => "92-356", "naissance" => "2010-02-25", "note" => ""],
-            ["numero" => 33, "sexe" => "Homme", "nom" => "ANDRIAMPARANY", "prenom" => "Nathan", "matricule" => "91-956", "naissance" => "2010-08-10", "note" => ""],
-            ["numero" => 34, "sexe" => "Femme", "nom" => "RANDRIANASOLO", "prenom" => "Haingovola Zayonne", "matricule" => "92-945", "naissance" => "2011-06-03", "note" => ""],
-            ["numero" => 35, "sexe" => "Homme", "nom" => "RANAIVOARISON", "prenom" => "Heriniaina Christian", "matricule" => "91-858", "naissance" => "2010-05-06", "note" => ""],
-            ["numero" => 36, "sexe" => "Femme", "nom" => "RAZAFINDRABE", "prenom" => "Mikanto Rarintsoa", "matricule" => "92-728", "naissance" => "2010-11-04", "note" => ""],
+            ["numero" => 1, "sexe" => "Femme", "nom" => "ANDRIANJATOVO", "prenom" => "Harijaona Ainamamy Tanteraka", "matricule" => "91.854", "naissance" => "2010-12-31", "note" => ""],
+            ["numero" => 2, "sexe" => "Femme", "nom" => "ANDRIAMIFIDISOA", "prenom" => "Karila Megane", "matricule" => "92.441", "naissance" => "2011-01-12", "note" => ""],
+            ["numero" => 3, "sexe" => "Femme", "nom" => "RANDRIAMANJATO", "prenom" => "To'Ahy Vanielle", "matricule" => "91.951", "naissance" => "2012-01-18", "note" => "4è"],
+            ["numero" => 4, "sexe" => "Femme", "nom" => "IALINIRINA", "prenom" => "Fehiazy Marcia", "matricule" => "91.952", "naissance" => "2011-11-24", "note" => ""],
+            ["numero" => 5, "sexe" => "Homme", "nom" => "RAKOTONDRAHOVA", "prenom" => "Dilan Maté Maherinihasina", "matricule" => "93.387", "naissance" => "2012-04-17", "note" => "Nouv"],
+            ["numero" => 6, "sexe" => "Femme", "nom" => "RAMBOAVOLANIRINA HARIVELO", "prenom" => "Ny Avo", "matricule" => "91.839", "naissance" => "2010-08-10", "note" => ""],
+            ["numero" => 7, "sexe" => "Femme", "nom" => "RAHARINJATOVO", "prenom" => "Mitia", "matricule" => "91.905", "naissance" => "2010-04-16", "note" => "4è"],
+            ["numero" => 8, "sexe" => "", "nom" => "NOMENJANAHARY", "prenom" => "Rojo Nantenaina", "matricule" => "93.384", "naissance" => "2010-11-26", "note" => "Nouv"],
+            ["numero" => 9, "sexe" => "Homme", "nom" => "ANDRIANANTENAINA", "prenom" => "Dimbinavalona", "matricule" => "93.388", "naissance" => "2009-10-23", "note" => "Nouv"],
+            ["numero" => 10, "sexe" => "Femme", "nom" => "RAJAONARIVONY", "prenom" => "Alicia", "matricule" => "93.385", "naissance" => "2012-07-12", "note" => ""],
+            ["numero" => 11, "sexe" => "", "nom" => "RAJAONARISON", "prenom" => "Herimaminjanahary Idealisoa", "matricule" => "93.389", "naissance" => "2011-07-04", "note" => "Nouv"],
+            ["numero" => 12, "sexe" => "Homme", "nom" => "ANDRIANANTENAINA", "prenom" => "Mandresy Johan", "matricule" => "91.997", "naissance" => "2011-07-18", "note" => ""],
+            ["numero" => 13, "sexe" => "Femme", "nom" => "RAMILIARISON", "prenom" => "Nirimamijely Christella Myrrhia", "matricule" => "93.150", "naissance" => "2011-09-04", "note" => "4è"],
+            ["numero" => 14, "sexe" => "Homme", "nom" => "TIAMANANDAZA", "prenom" => "Ismaël Fabrice", "matricule" => "91.743", "naissance" => "2009-08-26", "note" => ""],
+            ["numero" => 15, "sexe" => "Homme", "nom" => "HAJARIVONJILALINA", "prenom" => "Nirina Nicolas", "matricule" => "92.637", "naissance" => "2009-05-23", "note" => ""],
+            ["numero" => 16, "sexe" => "Homme", "nom" => "RASAMOELINA", "prenom" => "Arena", "matricule" => "92.104", "naissance" => "2010-11-18", "note" => ""],
+            ["numero" => 17, "sexe" => "Femme", "nom" => "NOMENJANANAHARY", "prenom" => "Fitia", "matricule" => "93.390", "naissance" => "2010-04-21", "note" => "Nouv"],
+            ["numero" => 18, "sexe" => "Homme", "nom" => "RAKOTONIMANGA", "prenom" => "Mahenina", "matricule" => "92.503", "naissance" => "2011-12-02", "note" => ""],
+            ["numero" => 19, "sexe" => "Femme", "nom" => "VEROARISOA", "prenom" => "Daniela Guadagno", "matricule" => "91.986", "naissance" => "2011-02-26", "note" => ""],
+            ["numero" => 20, "sexe" => "Homme", "nom" => "RAJONIKARA", "prenom" => "Irohaj", "matricule" => "92.922", "naissance" => "2010-09-24", "note" => ""],
+            ["numero" => 21, "sexe" => "Homme", "nom" => "ANDRIAMASINORO", "prenom" => "Joie Djibril", "matricule" => "93.391", "naissance" => "2011-09-13", "note" => "Nouv"],
+            ["numero" => 22, "sexe" => "Homme", "nom" => "RAMAROSON", "prenom" => "Heriniaina Onja Charles", "matricule" => "92.806", "naissance" => "2010-09-24", "note" => ""],
+            ["numero" => 23, "sexe" => "Femme", "nom" => "ANDRIANOKOLOINA", "prenom" => "Miangalisoa Fandresena Fitia", "matricule" => "92.003", "naissance" => "2011-09-29", "note" => ""],
+            ["numero" => 24, "sexe" => "Femme", "nom" => "RASOLOARIJAO", "prenom" => "Ny Antsa Ravo", "matricule" => "93.234", "naissance" => "2010-12-11", "note" => ""],
+            ["numero" => 25, "sexe" => "Femme", "nom" => "RAMANANKIERANA", "prenom" => "Liantsoa", "matricule" => "92.736", "naissance" => "2011-04-04", "note" => ""],
+            ["numero" => 26, "sexe" => "Femme", "nom" => "RAZAFIMANDIMBY", "prenom" => "Hasina Andrianina Fitia", "matricule" => "92.004", "naissance" => "2011-05-02", "note" => ""],
+            ["numero" => 27, "sexe" => "Femme", "nom" => "RAKOTOMALALA", "prenom" => "Irintsoa Famenomamy", "matricule" => "92.182", "naissance" => "2011-01-01", "note" => ""],
+            ["numero" => 28, "sexe" => "Femme", "nom" => "JEAN ARIVAHY", "prenom" => "Harena Savanah", "matricule" => "91.891", "naissance" => "2011-05-04", "note" => ""],
+            ["numero" => 29, "sexe" => "Homme", "nom" => "RAKOTONOMENJANAHARY", "prenom" => "Toky Ny Avo", "matricule" => "92.645", "naissance" => "2010-06-29", "note" => ""],
+            ["numero" => 30, "sexe" => "Femme", "nom" => "ANDRIAHERINTSOA", "prenom" => "Kanto Narindra", "matricule" => "93.396", "naissance" => "2012-03-28", "note" => "Nouv"],
+            ["numero" => 31, "sexe" => "Homme", "nom" => "ANJARATIANA", "prenom" => "Nomenjanahary Nasoavina Anthonio", "matricule" => "93.377", "naissance" => "2012-03-22", "note" => "Nouv"],
+            ["numero" => 32, "sexe" => "Femme", "nom" => "RABENARISON", "prenom" => "Princia", "matricule" => "92.356", "naissance" => "2010-02-25", "note" => ""],
+            ["numero" => 33, "sexe" => "Homme", "nom" => "ANDRIAMPARANY", "prenom" => "Nathan", "matricule" => "91.956", "naissance" => "2010-08-10", "note" => ""],
+            ["numero" => 34, "sexe" => "Femme", "nom" => "RANDRIANASOLO", "prenom" => "Haingovola Zayonne", "matricule" => "92.945", "naissance" => "2011-06-03", "note" => ""],
+            ["numero" => 35, "sexe" => "Homme", "nom" => "RANAIVOARISON", "prenom" => "Heriniaina Christian", "matricule" => "91.858", "naissance" => "2010-05-06", "note" => ""],
+            ["numero" => 36, "sexe" => "Femme", "nom" => "RAZAFINDRABE", "prenom" => "Mikanto Rarintsoa", "matricule" => "92.728", "naissance" => "2010-11-04", "note" => ""],
         ];
-        $secondeInfo =  [
-            'classe' => 3183,
-            'niveau' => 1738
+        $secondeInfo = [
+            'classe' => 3151,
+            'niveau' => 1727
         ];
 
         foreach ($eleve_seconde1 as $key => &$seconde) {
-            // Formater le matricule avec tiret
-            $matriculeFormate = $formatMatricule($seconde['matricule']);
-
             $eleve = $this->EtudiantModel->insert([
                 'nom' => $seconde['nom'],
                 'prenom' => $seconde['prenom'],
                 'date_naissance' => $seconde['naissance'],
-                'matricule_etudiant' => $matriculeFormate,
+                'matricule_etudiant' => $seconde['matricule'],
                 'sexe' => $seconde['sexe']
             ]);
 
             if ($eleve) {
                 $inscriptions[] = [
                     'numero' => $seconde['numero'],
-                    'annee_scolaire_id_annee_scolaire' => 392,
+                    'annee_scolaire_id_annee_scolaire' => 390,
                     'niveau_id_niveau' => $secondeInfo['niveau'],
                     'classe_id_classe' => $secondeInfo['classe'],
                     "eleve_id_eleve" => $eleve['id_eleve'],
@@ -758,40 +747,76 @@ class AppFixtures extends CI_Controller
                 ];
                 $users[] = [
                     'id_role' => $role_etudiant->id_role,
-                    'identifiant' => $matriculeFormate,
-                    'password' => password_hash('password-' . $matriculeFormate, PASSWORD_DEFAULT),
+                    'identifiant' => $eleve['matricule_etudiant'],
+                    'password' => password_hash('password-' . $eleve['matricule_etudiant'], PASSWORD_DEFAULT),
                     'id_eleve' => $eleve['id_eleve']
                 ];
             }
         }
 
-        // ==================== 3EME ====================
-        $eleves_3em  = [
-            ["numero" => 1, "sexe" => "Femme", "nom" => "MANDIMBISON", "prenom" => "Ny Lova Estelle", "matricule" => "92-042", "naissance" => "2011-12-12"],
-            ["numero" => 2, "sexe" => "Homme", "nom" => "RANDRIANALIMANANA", "prenom" => "Fanilo", "matricule" => "91-950", "naissance" => "2011-06-29"],
-            // ... (appliquer le même formatage pour tous les autres élèves)
+        // 3eme 
+        $eleves_3em = [
+            ["numero" => 1, "sexe" => "Femme", "nom" => "MANDIMBISON", "prenom" => "Ny Lova Estelle", "matricule" => "92.042", "naissance" => "2011-12-12"],
+            ["numero" => 2, "sexe" => "Homme", "nom" => "RANDRIANALIMANANA", "prenom" => "Fanilo", "matricule" => "91.950", "naissance" => "2011-06-29"],
+            ["numero" => 3, "sexe" => "Homme", "nom" => "ANJARANANTENAINA", "prenom" => "ZAVA Stanley Iadanantsoa", "matricule" => "92.360", "naissance" => "2010-08-13"],
+            ["numero" => 4, "sexe" => "Homme", "nom" => "RANDRIAMAHERY", "prenom" => "Iloniaina Johary Kael", "matricule" => "92.650", "naissance" => "2010-11-03"],
+            ["numero" => 5, "sexe" => "Femme", "nom" => "RAKOTOSON", "prenom" => "Hosea", "matricule" => "92.121", "naissance" => "2012-04-13"],
+            ["numero" => 6, "sexe" => "Homme", "nom" => "RAJAONARIVO", "prenom" => "Toaviniaina", "matricule" => "92.915", "naissance" => "2012-04-28"],
+            ["numero" => 7, "sexe" => "Femme", "nom" => "ANDRIANIAINA", "prenom" => "Safidy Irinah", "matricule" => "92.205", "naissance" => "2012-11-27"],
+            ["numero" => 8, "sexe" => "Homme", "nom" => "RASOLOFOHARISON", "prenom" => "Matthieu Antenaina", "matricule" => "93.229", "naissance" => "2011-05-27"],
+            ["numero" => 9, "sexe" => "Homme", "nom" => "RANDRIAMANANA", "prenom" => "Aiko Notahiana", "matricule" => "92.233", "naissance" => "2012-02-01"],
+            ["numero" => 10, "sexe" => "Femme", "nom" => "VONJY VELONOMENA", "prenom" => "Aina", "matricule" => "92.108", "naissance" => "2012-08-11"],
+            ["numero" => 11, "sexe" => "Femme", "nom" => "RAHARINJATOVO", "prenom" => "Mirindra", "matricule" => "92.092", "naissance" => "2011-09-24"],
+            ["numero" => 12, "sexe" => "Femme", "nom" => "RAMAROJAONA", "prenom" => "Stheicy Raphaëlla", "matricule" => "93.232", "naissance" => "2012-11-24"],
+            ["numero" => 13, "sexe" => "Homme", "nom" => "RAMAROSON", "prenom" => "Aina Fanantenana", "matricule" => "91.807", "naissance" => "2010-07-04"],
+            ["numero" => 14, "sexe" => "Femme", "nom" => "RAKOTOARIMANANA", "prenom" => "Henintsoa Miah Adriana", "matricule" => "91.954", "naissance" => "2012-08-05"],
+            ["numero" => 15, "sexe" => "Femme", "nom" => "RALAMBONIRINA", "prenom" => "Aina Mitia", "matricule" => "92.062", "naissance" => "2012-05-07"],
+            ["numero" => 16, "sexe" => "Homme", "nom" => "ANDRIANOMENJANAHARY", "prenom" => "Todisoa Ely", "matricule" => "91.942", "naissance" => "2011-05-18"],
+            ["numero" => 17, "sexe" => "Femme", "nom" => "ANDRIAMPARA", "prenom" => "Miantsa Fitia", "matricule" => "92.134", "naissance" => "2013-05-05"],
+            ["numero" => 18, "sexe" => "Femme", "nom" => "MIANDRIHARISON", "prenom" => "Maelle", "matricule" => "92.109", "naissance" => "2013-01-04"],
+            ["numero" => 19, "sexe" => "Femme", "nom" => "RASOANAIVO", "prenom" => "Grace Iriana Ariel", "matricule" => "92.259", "naissance" => "2011-06-27"],
+            ["numero" => 20, "sexe" => "Homme", "nom" => "RAKOTONIAINA", "prenom" => "Nambinintsoa Myranto", "matricule" => "92.613", "naissance" => "2011-08-04"],
+            ["numero" => 21, "sexe" => "Femme", "nom" => "RAKOTONDRAHASINA", "prenom" => "Gianah Muriella", "matricule" => "92.739", "naissance" => "2011-08-03"],
+            ["numero" => 22, "sexe" => "Femme", "nom" => "SITRAKA", "prenom" => "Ny Aina Koloina", "matricule" => "92.716", "naissance" => "2011-09-25"],
+            ["numero" => 23, "sexe" => "Femme", "nom" => "RAVAOARIMALALA", "prenom" => "Fanomezantsoa Sarobidy Aurelia", "matricule" => "92.943", "naissance" => "2012-07-28"],
+            ["numero" => 24, "sexe" => "Homme", "nom" => "RAMANANDRAITSIORY", "prenom" => "Israël", "matricule" => "92.593", "naissance" => "2011-09-03"],
+            ["numero" => 25, "sexe" => "Homme", "nom" => "RAKOTOARISOA", "prenom" => "Ny Mahery Fortuna", "matricule" => "92.018", "naissance" => "2011-08-05"],
+            ["numero" => 26, "sexe" => "Femme", "nom" => "ANDRIANOARINIAINA", "prenom" => "Mikalo Malala", "matricule" => "92.122", "naissance" => "2012-06-26"],
+            ["numero" => 27, "sexe" => "Homme", "nom" => "RAPHEHISON", "prenom" => "Aaron Seghan", "matricule" => "92.788", "naissance" => "2008-07-31"],
+            ["numero" => 28, "sexe" => "Homme", "nom" => "ANDRIAMAMPANDRY", "prenom" => "Abrahama Fahendrena", "matricule" => "92.929", "naissance" => "2012-04-24"],
+            ["numero" => 29, "sexe" => "Femme", "nom" => "RAKOTONIRINA", "prenom" => "Aina Fitia", "matricule" => "92.114", "naissance" => "2011-06-24"],
+            ["numero" => 30, "sexe" => "Femme", "nom" => "SHA", "prenom" => "Misaina Tisha Yasmine", "matricule" => "91.980", "naissance" => "2011-10-06"],
+            ["numero" => 31, "sexe" => "Homme", "nom" => "RAKOTOARISOA", "prenom" => "Tsanta Fitahiana", "matricule" => "91.988", "naissance" => "2011-09-15"],
+            ["numero" => 32, "sexe" => "Femme", "nom" => "RAKOTOARIMANANA", "prenom" => "Tinah Niaina Kévane Emanuella", "matricule" => "93.193", "naissance" => "2010-04-23"],
+            ["numero" => 33, "sexe" => "Homme", "nom" => "RABEARILAFY", "prenom" => "Taratra Finoana", "matricule" => "92.887", "naissance" => "2012-04-08"],
+            ["numero" => 34, "sexe" => "Homme", "nom" => "LALANDE", "prenom" => "Tantely", "matricule" => "92.083", "naissance" => "2011-12-09"],
+            ["numero" => 35, "sexe" => "Femme", "nom" => "MIALITIANA", "prenom" => "Nilainasoa", "matricule" => "93.097", "naissance" => "2011-01-02"],
+            ["numero" => 36, "sexe" => "Homme", "nom" => "RANAIVOJAONA", "prenom" => "Solofoniaina Aaron", "matricule" => "92.039", "naissance" => "2012-02-07"],
+            ["numero" => 37, "sexe" => "Femme", "nom" => "ANJARAVONIMANITRA", "prenom" => "Navalona Li Aimée", "matricule" => "92.080", "naissance" => "2012-04-11"],
+            ["numero" => 38, "sexe" => "Femme", "nom" => "HANITRINIAINA", "prenom" => "Antsa Fitia", "matricule" => "93.107", "naissance" => "2012-03-17"],
+            ["numero" => 39, "sexe" => "Homme", "nom" => "ANDRIAMIHAJATIANA", "prenom" => "Tsiaro Laurick", "matricule" => "91.926", "naissance" => "2010-03-28"],
+            ["numero" => 40, "sexe" => "Homme", "nom" => "RABARISON", "prenom" => "Ny Andolalaina Fitia Noah", "matricule" => "91.968", "naissance" => "2011-09-27"],
+            ["numero" => 41, "sexe" => "Femme", "nom" => "RAMIANDRISOA", "prenom" => "Kanto Ny Rima Milanto", "matricule" => "92.942", "naissance" => "2012-06-06"],
+            ["numero" => 42, "sexe" => "Femme", "nom" => "RAKOTOARISON", "prenom" => "Gabriella Harimalaza", "matricule" => "92.944", "naissance" => "2010-05-17"],
+            ["numero" => 43, "sexe" => "Homme", "nom" => "RANDRIAMALALA", "prenom" => "Steeve Andrew", "matricule" => "92.186", "naissance" => "2011-09-28"]
         ];
         $classe3em_info = [
-            'classe' => 3183,
-            'niveau' => 1738
+            'classe' => 3148,
+            'niveau' => 1726
         ];
-
         foreach ($eleves_3em as $key => &$etudiant) {
-            // Formater le matricule avec tiret
-            $matriculeFormate = $formatMatricule($etudiant['matricule']);
-
             $eleve = $this->EtudiantModel->insert([
                 'nom' => $etudiant['nom'],
                 'prenom' => $etudiant['prenom'],
                 'date_naissance' => $etudiant['naissance'],
-                'matricule_etudiant' => $matriculeFormate,
+                'matricule_etudiant' => $etudiant['matricule'],
                 'sexe' => $etudiant['sexe']
             ]);
 
             if ($eleve) {
                 $inscriptions[] = [
                     'numero' => $etudiant['numero'],
-                    'annee_scolaire_id_annee_scolaire' => 392,
+                    'annee_scolaire_id_annee_scolaire' => 390,
                     'niveau_id_niveau' => $classe3em_info['niveau'],
                     'classe_id_classe' => $classe3em_info['classe'],
                     "eleve_id_eleve" => $eleve['id_eleve'],
@@ -800,20 +825,140 @@ class AppFixtures extends CI_Controller
                 ];
                 $users[] = [
                     'id_role' => $role_etudiant->id_role,
-                    'identifiant' => $matriculeFormate,
-                    'password' => password_hash('password-' . $matriculeFormate, PASSWORD_DEFAULT),
+                    'identifiant' => $eleve['matricule_etudiant'],
+                    'password' => password_hash('password-' . $eleve['matricule_etudiant'], PASSWORD_DEFAULT),
                     'id_eleve' => $eleve['id_eleve']
                 ];
             }
         }
 
-        // Continuer de la même manière pour les autres classes...
-        // (appliquer le même formatage pour Première et Terminale)
+        // 1er 
+        $eleve_permieres = [
+            ["numero" => 1, "sexe" => "Femme", "nom" => "RAMILIARISON", "prenom" => "Lucianah", "matricule" => "93.395", "naissance" => "2010-01-24"],
+            ["numero" => 2, "sexe" => "Homme", "nom" => "GARINA", "prenom" => "Hassim Alvin", "matricule" => "92.336", "naissance" => "2010-11-09"],
+            ["numero" => 3, "sexe" => "Homme", "nom" => "RATSIMANARISOA", "prenom" => "One I Anjara", "matricule" => "93.221", "naissance" => "2011-05-17"],
+            ["numero" => 4, "sexe" => "Homme", "nom" => "ANDRIAMASIMANDRESY", "prenom" => "Romain Claudion", "matricule" => "93.185", "naissance" => "2009-12-10"],
+            ["numero" => 5, "sexe" => "Homme", "nom" => "NDRIAMBELONANDRO", "prenom" => "Noah Yvan", "matricule" => "92.638", "naissance" => "2009-12-02"],
+            ["numero" => 6, "sexe" => "Homme", "nom" => "ANDRIAMITSARA", "prenom" => "Ilo Fandresena", "matricule" => "93.382", "naissance" => "2010-11-08"],
+            ["numero" => 7, "sexe" => "Homme", "nom" => "MAHARINJATOVO", "prenom" => "Miharilafy", "matricule" => "93.192", "naissance" => "2009-01-15"],
+            ["numero" => 8, "sexe" => "Femme", "nom" => "RANDRIANARISON", "prenom" => "Tiffany", "matricule" => "93.237", "naissance" => "2010-06-01"],
+            ["numero" => 9, "sexe" => "Femme", "nom" => "RASOLONDRAIBE", "prenom" => "Henintsoa Navalona", "matricule" => "91.732", "naissance" => "2009-09-09"],
+            ["numero" => 10, "sexe" => "Homme", "nom" => "RANDRIANANTENAINA", "prenom" => "Jhonathan Guadagno", "matricule" => "91.735", "naissance" => "2010-06-20"],
+            ["numero" => 11, "sexe" => "Homme", "nom" => "RAJAOMORASATA", "prenom" => "Jeri Mifaly Fahasoavana", "matricule" => "93.386", "naissance" => "2009-04-27"],
+            ["numero" => 12, "sexe" => "Femme", "nom" => "RABESAHALA", "prenom" => "Tefiharilanja Iharantsoa", "matricule" => "92.759", "naissance" => "2008-11-21"],
+            ["numero" => 13, "sexe" => "Homme", "nom" => "MIALITIANA", "prenom" => "Lahatriniaina", "matricule" => "93.098", "naissance" => "2009-03-16"],
+            ["numero" => 14, "sexe" => "Femme", "nom" => "RASAMISON", "prenom" => "Fanasin'Ny Avo Carmella", "matricule" => "93.184", "naissance" => "2010-11-02"],
+            ["numero" => 15, "sexe" => "Homme", "nom" => "FOREIX", "prenom" => "DAN Nicolas", "matricule" => "92.644", "naissance" => "2009-02-13"],
+            ["numero" => 16, "sexe" => "Homme", "nom" => "RAVELOMANANTSOA", "prenom" => "Fandresena Noah", "matricule" => "92.647", "naissance" => "2009-12-04"],
+            ["numero" => 17, "sexe" => "Homme", "nom" => "IALISON", "prenom" => "Sitrakiniavo", "matricule" => "93.069", "naissance" => "2007-12-04"],
+            ["numero" => 18, "sexe" => "Homme", "nom" => "RAMAROTAFIKA", "prenom" => "Lovasoa", "matricule" => "93.114", "naissance" => "2006-11-18"],
+            ["numero" => 19, "sexe" => "Homme", "nom" => "RANDRIAMAMPIONONA", "prenom" => "Heriniaina Feno", "matricule" => "93.224", "naissance" => "2008-03-02"],
+            ["numero" => 20, "sexe" => "Femme", "nom" => "RALAIMANARIVO", "prenom" => "Aina Sarobidy", "matricule" => "92.818", "naissance" => "2010-12-04"],
+            ["numero" => 21, "sexe" => "Femme", "nom" => "RAFANOMEZANJANAHARY", "prenom" => "Saotrafitia Miahy", "matricule" => "92.358", "naissance" => "2010-06-13"],
+            ["numero" => 22, "sexe" => "Femme", "nom" => "ANDRIAHERINTSOA", "prenom" => "Rojovola Santatra", "matricule" => "93.209", "naissance" => "2010-06-08"],
+            ["numero" => 23, "sexe" => "Homme", "nom" => "RANDRIANARISOA", "prenom" => "Mandranto Fanaja", "matricule" => "91.831", "naissance" => "2010-09-18"],
+            ["numero" => 24, "sexe" => "Homme", "nom" => "MAMINIAINA", "prenom" => "Ambinintsoa Finaritra", "matricule" => "93.225", "naissance" => "2009-06-12"],
+            ["numero" => 25, "sexe" => "Femme", "nom" => "RAKOTOMALALA", "prenom" => "Miando Nifitia Sarobidy", "matricule" => "93.108", "naissance" => "2011-02-11"],
+            ["numero" => 26, "sexe" => "Femme", "nom" => "FANOMEZANTSOA", "prenom" => "Françia", "matricule" => "91.749", "naissance" => "2009-10-05"],
+            ["numero" => 27, "sexe" => "Femme", "nom" => "RAFANOMEZANJANAHARY", "prenom" => "Fitahiana Windina", "matricule" => "91.941", "naissance" => "2009-11-01"],
+            ["numero" => 28, "sexe" => "Homme", "nom" => "MAHEFASOA", "prenom" => "Miarolaza", "matricule" => "91.749", "naissance" => "2009-10-05"],
+            ["numero" => 29, "sexe" => "Homme", "nom" => "ANDRIAMBAONTSOA", "prenom" => "Rindra Tantely", "matricule" => "93.223", "naissance" => "2008-10-23"],
+            ["numero" => 30, "sexe" => "Femme", "nom" => "ANDRIAMBAONTSOA", "prenom" => "Kanto Valisoa", "matricule" => "91.873", "naissance" => "2010-11-08"],
+            ["numero" => 31, "sexe" => "Homme", "nom" => "ANDRIANASOLO", "prenom" => "Tiavina Ajaina", "matricule" => "92.431", "naissance" => "2008-10-04"],
+            ["numero" => 32, "sexe" => "Homme", "nom" => "HERIMAHATRATRA", "prenom" => "Mandrindra", "matricule" => "93.238", "naissance" => "2009-05-27"]
+        ];
+        $premiere_info = [
+            'classe' => 3153,
+            'niveau' => 1728
+        ];
+        foreach ($eleve_permieres as $key => &$etudiant) {
+            $eleve = $this->EtudiantModel->insert([
+                'nom' => $etudiant['nom'],
+                'prenom' => $etudiant['prenom'],
+                'date_naissance' => $etudiant['naissance'],
+                'matricule_etudiant' => $etudiant['matricule'],
+                'sexe' => $etudiant['sexe']
+            ]);
+
+            if ($eleve) {
+                $inscriptions[] = [
+                    'numero' => $etudiant['numero'],
+                    'annee_scolaire_id_annee_scolaire' => 390,
+                    'niveau_id_niveau' => $premiere_info['niveau'],
+                    'classe_id_classe' => $premiere_info['classe'],
+                    "eleve_id_eleve" => $eleve['id_eleve'],
+                    'is_droit_payed' => true,
+                    'date_inscription' => '2025-08-10'
+                ];
+                $users[] = [
+                    'id_role' => $role_etudiant->id_role,
+                    'identifiant' => $eleve['matricule_etudiant'],
+                    'password' => password_hash('password-' . $eleve['matricule_etudiant'], PASSWORD_DEFAULT),
+                    'id_eleve' => $eleve['id_eleve']
+                ];
+            }
+        }
+
+
+
+        // terminale A 
+        $eleve_terminaleA = $eleves = [
+            ["numero" => 1, "sexe" => "Femme", "nom" => "GODIN RAZANAJATOVO", "prenom" => "Francia", "matricule" => "93.072", "naissance" => "2007-08-16"],
+            ["numero" => 2, "sexe" => "Homme", "nom" => "RASOAMANANA", "prenom" => "Maminirina Anthonio", "matricule" => "92.196", "naissance" => "2008-06-19"],
+            ["numero" => 3, "sexe" => "Homme", "nom" => "RATIANARIJAONA", "prenom" => "Maël Iavosoa", "matricule" => "91.658", "naissance" => "2009-09-25"],
+            ["numero" => 4, "sexe" => "Femme", "nom" => "RAZAFINDRAVONY", "prenom" => "Mirantsoa Aina Ravaka", "matricule" => "92.627", "naissance" => "2009-11-07"],
+            ["numero" => 5, "sexe" => "Homme", "nom" => "ANDRIATSILAIZINA", "prenom" => "Akohaja Arona", "matricule" => "93.115", "naissance" => "2010-12-12"],
+            ["numero" => 6, "sexe" => "Femme", "nom" => "JOHNSON", "prenom" => "Rebecca Koloinaniaina", "matricule" => "93.112", "naissance" => "2007-09-22"],
+            ["numero" => 7, "sexe" => "Femme", "nom" => "ANDRIAMIHARIMANANA", "prenom" => "Rojonirina Nitah", "matricule" => "93.113", "naissance" => "2010-03-22"],
+            ["numero" => 8, "sexe" => "Homme", "nom" => "RAMILIARISON", "prenom" => "Steeve Ny Aina", "matricule" => "91.647", "naissance" => "2003-12-20"],
+            ["numero" => 9, "sexe" => "Femme", "nom" => "RAZAFINDRALAMBO", "prenom" => "Hery Ny Avo Liantsoa", "matricule" => "91.686", "naissance" => "2008-12-27"],
+            ["numero" => 10, "sexe" => "Homme", "nom" => "HARISON", "prenom" => "Andriamampionona Tiavina Nolhan", "matricule" => "91.679", "naissance" => "2009-03-09"],
+            ["numero" => 11, "sexe" => "Femme", "nom" => "RANDRIANARISOA", "prenom" => "Harilanto Nancia", "matricule" => "92.192", "naissance" => "2008-11-04"],
+            ["numero" => 12, "sexe" => "Femme", "nom" => "RANDRIANIRINA", "prenom" => "Benjamina Rollande", "matricule" => "91.744", "naissance" => "2008-08-24"],
+            ["numero" => 13, "sexe" => "Homme", "nom" => "HERINANDRIANINA", "prenom" => "Fenotiana Nilsen", "matricule" => "91.711", "naissance" => "2007-09-13"],
+            ["numero" => 14, "sexe" => "Femme", "nom" => "ANDRIAMAMPIONONA", "prenom" => "Finaritra Iarilaza", "matricule" => "91.674", "naissance" => "2009-08-05"],
+            ["numero" => 15, "sexe" => "Homme", "nom" => "RAJOELISON", "prenom" => "Ambinintsoa", "matricule" => "92.925", "naissance" => "2007-12-07"],
+            ["numero" => 16, "sexe" => "Femme", "nom" => "RAKOTONARIVO", "prenom" => "Taniah", "matricule" => "91.695", "naissance" => "2008-03-02"],
+            ["numero" => 17, "sexe" => "Femme", "nom" => "RAZAFINDRABE", "prenom" => "Hary Laina Tsara", "matricule" => "91.307", "naissance" => "2008-10-09"]
+        ];
+
+        $terminaleA_info = [
+            'classe' => 3155,
+            'niveau' => 1729
+        ];
+        foreach ($eleve_terminaleA as $key => &$etudiant) {
+            $eleve = $this->EtudiantModel->insert([
+                'nom' => $etudiant['nom'],
+                'prenom' => $etudiant['prenom'],
+                'date_naissance' => $etudiant['naissance'],
+                'matricule_etudiant' => $etudiant['matricule'],
+                'sexe' => $etudiant['sexe']
+            ]);
+
+            if ($eleve) {
+                $inscriptions[] = [
+                    'numero' => $etudiant['numero'],
+                    'annee_scolaire_id_annee_scolaire' => 390,
+                    'niveau_id_niveau' => $terminaleA_info['niveau'],
+                    'classe_id_classe' => $terminaleA_info['classe'],
+                    "eleve_id_eleve" => $eleve['id_eleve'],
+                    'is_droit_payed' => true,
+                    'date_inscription' => '2025-08-10'
+                ];
+                $users[] = [
+                    'id_role' => $role_etudiant->id_role,
+                    'identifiant' => $eleve['matricule_etudiant'],
+                    'password' => password_hash('password-' . $eleve['matricule_etudiant'], PASSWORD_DEFAULT),
+                    'id_eleve' => $eleve['id_eleve']
+                ];
+            }
+        }
 
         $this->model->insertBatchFixtures($inscriptions, 'inscription');
         $this->model->insertBatchFixtures($users, 'users');
         echo "Insertion des eleve fini avec succée !" . PHP_EOL;
     }
+
 
 
     /**
