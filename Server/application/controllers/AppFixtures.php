@@ -560,6 +560,7 @@ class AppFixtures extends CI_Controller
             'users'
         ]);
 
+        
         if ($clean) {
             // On efface seulement la base de données
             return;
@@ -1016,7 +1017,6 @@ class AppFixtures extends CI_Controller
         $this->loadConfigurations(true);
         $this->loadPersonnel(true);
         $this->LoadEleveParent(true);
-        $this->loadlecon(true);
         $this->loadRoles(true);
 
         echo "✅ Suppression des données avec succès !" . PHP_EOL;
