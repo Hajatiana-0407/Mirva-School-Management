@@ -565,7 +565,8 @@ class AppFixtures extends CI_Controller
             return;
         }
 
-        $personnels_id = $this->model->getIds('personnel', 'id_personnel');
+        // $personnels_id = $this->model->getIds('personnel', 'id_personnel');
+        $personnels_id =  $this->model->getAllIdTeacher();
         $eleves_id = $this->model->getIds('eleve', 'id_eleve');
         $parent_id = $this->model->getIds('parents', 'id_parent');
 

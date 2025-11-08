@@ -67,6 +67,26 @@ class NiveauController extends CI_Controller
         echo json_encode($datas);
     }
 
+    /**
+     * Prendre le niveau par le professeur 
+     *
+     * @param integer $id_prof
+     * @return void
+     */
+    public function nveauEnseignant($id_prof = 0)
+    {
+        $datas = [];
+        if ($id_prof > 0) {
+            $datas =  $this->NiveauModel->getLevelByTeacherId($id_prof);
+        }
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode([
+                'error' => false , 
+                'data' => $datas 
+            ]));
+    }
+
     public function update()
     {
 

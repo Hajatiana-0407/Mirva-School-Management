@@ -29,7 +29,7 @@ type InfoType = {
     nom: string,
     prenom: string,
     matricule?: string
-    id_personne?: number,
+    id_personnel?: number,
     id_eleve?: number,
     id_parent?: number,
 }

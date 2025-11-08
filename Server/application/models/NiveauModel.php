@@ -68,7 +68,7 @@ class NiveauModel extends CI_Model
             ->from('classe c')
             ->where('c.niveau_id_niveau', $niveau->id_niveau)
             ->get()->result();
-            
+
         return $niveau;
     }
 
@@ -95,5 +95,40 @@ class NiveauModel extends CI_Model
             return  $this->findOneById($id);
         }
         return $updated;
+    }
+
+    // ======= Prendre les niveau lié a une prof donner  =======
+    public function getLevelByTeacherId($id)
+    {
+        $niveaux =  $this->db->select($this->table . '.* , COUNT(c.id_classe) as total_classe ,  COUNT(mn.niveau_id_niveau) as total_matiere')
+            ->from($this->table)
+            ->join('classe c', 'c.niveau_id_niveau = ' . $this->table . '.' . $this->primaryKey, 'left')
+            ->join('classe_proffesseur_matiere cpm', 'cpm.classe_id_classe = c.id_classe', 'inner')
+            ->where('cpm.professeur_id_professeur', $id)
+            ->join('matiere_niveau mn', 'mn.niveau_id_niveau = ' . $this->table . '.' . $this->primaryKey, 'left')
+            ->order_by($this->primaryKey, 'DESC')
+            ->group_by($this->table . '.' . $this->primaryKey)
+            ->get()
+            ->result();
+
+        // Liste des matieres pour chaque niveau
+        foreach ($niveaux as  &$niveau) {
+            $niveau->matiere['listes'] = $this->db->select('mn.matiere_id_matiere , mn.coefficient ,   m.*')
+                ->from('matiere_niveau mn')
+                ->join('matiere m', 'm.id_matiere = mn.matiere_id_matiere', 'inner')
+                ->where('mn.niveau_id_niveau', $niveau->id_niveau)
+                ->group_by('m.id_matiere')
+                ->get()->result();
+            $niveau->matiere['id_niveau'] = $niveau->id_niveau;
+        }
+
+        // Liste des classe pour chaque niveau
+        foreach ($niveaux as  &$niveau) {
+            $niveau->classe['listes'] = $this->db->select('c.*')
+                ->from('classe c')
+                ->where('c.niveau_id_niveau', $niveau->id_niveau)
+                ->get()->result();
+        }
+        return $niveaux;
     }
 }

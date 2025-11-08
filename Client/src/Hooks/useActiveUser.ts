@@ -5,7 +5,7 @@ export const useActiveUser = () => {
     const { datas: { user } } = useSelector(getAuthState);
     return {
         isTeacher : user?.role?.toLocaleLowerCase() === 'enseignant' , 
-        isStudent : user?.role?.toLocaleLowerCase() === 'Étudiant' , 
-        isParent : user?.role?.toLocaleLowerCase() === 'Parent' , 
+        isStudent : user?.role?.toLocaleLowerCase() === 'étudiant' , 
+        isParent : user?.role?.toLocaleLowerCase() === 'parent' , 
     }
 }

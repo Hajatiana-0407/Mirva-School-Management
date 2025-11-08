@@ -32,15 +32,15 @@ class AuthModel extends CI_Model
         ];;
         if ($user) {
             // Personnel 
-            if (!!$user->id_personnel) {
+            if (!!$user->id_personnel !== null ) {
                 $info =  $this->db->select('p.id_personnel,  p.nom , p.prenom , p.photo , p.matricule_personnel as matricule')
-                    ->from('personnel p')
-                    ->where('id_personnel',  $user->id_personnel)
-                    ->get()
-                    ->row();
+                ->from('personnel p')
+                ->where('id_personnel',  $user->id_personnel)
+                ->get()
+                ->row();
             }
             // Etudiant 
-            if (!!$user->id_eleve) {
+            if ($user->id_eleve !== null ) {
                 $info =  $this->db->select('e.id_eleve , e.nom , e.prenom , e.photo , e.matricule_etudiant as matricule')
                     ->from('eleve e')
                     ->where('id_eleve',  $user->id_eleve)
@@ -48,13 +48,14 @@ class AuthModel extends CI_Model
                     ->row();
             }
             // Parent
-            if (!!$user->id_parent !== null) {
+            if ($user->id_parent !== null) {
                 $info =  $this->db->select('p.id_parent ,  p.nom , p.prenom')
                     ->from('parents p')
                     ->where('id_parent',  $user->id_parent)
                     ->get()
                     ->row();
             }
+
 
             if ($user->id_eleve === null)
                 unset($user->id_eleve);
@@ -110,7 +111,7 @@ class AuthModel extends CI_Model
         ];;
         if ($user) {
             // Personnel 
-            if (!!$user->id_personnel) {
+            if (!!$user->id_personnel !== null ) {
                 $info =  $this->db->select('p.id_personnel,  p.nom , p.prenom , p.photo , p.matricule_personnel as matricule')
                     ->from('personnel p')
                     ->where('id_personnel',  $user->id_personnel)
@@ -118,7 +119,7 @@ class AuthModel extends CI_Model
                     ->row();
             }
             // Etudiant 
-            if (!!$user->id_eleve) {
+            if (!!$user->id_eleve !== null) {
                 $info =  $this->db->select('e.id_eleve , e.nom , e.prenom , e.photo , e.matricule_etudiant as matricule')
                     ->from('eleve e')
                     ->where('id_eleve',  $user->id_eleve)
@@ -126,7 +127,7 @@ class AuthModel extends CI_Model
                     ->row();
             }
             // Parent
-            if (!!$user->id_parent !== null) {
+            if ($user->id_parent !== null) {
                 $info =  $this->db->select('p.id_parent ,  p.nom , p.prenom')
                     ->from('parents p')
                     ->where('id_parent',  $user->id_parent)
