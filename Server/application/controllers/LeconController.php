@@ -10,7 +10,6 @@ class LeconController extends CI_Controller
         $this->load->helper(['url', 'text']);
     }
 
-    // Get Etablissement Info
     public function index()
     {
         $lecons = $this->LeconModel->findAll();
@@ -24,9 +23,9 @@ class LeconController extends CI_Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user'])) {
             $post = $this->input->post(null, true);
             $user = $post['user'];
-            switch ($user['role']) {
+            switch ($user['user_data']['role']) {
                 case 'admin':
-                case 'prof':
+                case 'Enseignant':
                     $latest = $this->LeconModel->findLatest();
                     $slug = $latest ? url_title(convert_accented_characters($post['titre'] . ' ' . $latest['id_lecon']), 'dash', TRUE) : url_title(convert_accented_characters($post['titre'] . ' ' . 1), 'dash', TRUE);
                     $data = [
@@ -83,7 +82,6 @@ class LeconController extends CI_Controller
                     ]);
                     break;
             }
-
             return;
         } else {
             echo json_encode([
@@ -111,9 +109,9 @@ class LeconController extends CI_Controller
                 ]);
                 return;
             }
-            switch ($user['role']) {
+            switch ($user['user_data']['role']) {
                 case 'admin':
-                case 'prof':
+                case 'Enseignant':
                     $data = [
                         'id_prof' => $post['id_prof'] !== ''  ? $post['id_prof'] : null,
                         'id_niveau' => $post['id_niveau'] !== ''  ? $post['id_niveau'] : null,
@@ -209,8 +207,7 @@ class LeconController extends CI_Controller
     public function publish()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user'])) {
-            $post = $this->input->post(null, true);
-            $id_lecon = $post[$this->pk] ?? null;
+            $id_lecon = $this->input->post($this->pk) ?? null;
             if ($id_lecon) {
                 $updated = $this->LeconModel->update($id_lecon, ['published' => true]);
                 if ($updated) {

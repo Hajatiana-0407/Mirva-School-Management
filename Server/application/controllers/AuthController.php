@@ -31,6 +31,16 @@ class AuthController extends CI_Controller
                 // Modification de last_login 
                 $this->AuthModel->update($user->id_user, ['last_login' => (new DateTime())->format('Y-m-d H:i:s'), 'status' => true]);
 
+                // ! Creation de la session utilisateur 
+                // $this->session->set_userdata(array(
+                //     'role' => $user->role,
+                //     'id_user' => $user->id_user,
+                //     // ** *** //
+                //     'user_identity' => $response['info'],
+                //     'permissions' => $response['permissions']
+                // ));
+                //! *** // 
+
                 echo json_encode(['error' => false, 'data' => $token]);
                 return;
             } else if ($user) {

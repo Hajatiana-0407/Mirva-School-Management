@@ -4,19 +4,20 @@ import HeadingSmall from "../ui/HeadingSmall";
 import * as Yup from "yup";
 import CheckInput from "../ui/CheckInput";
 import VideoOrFileInput from "../ui/VideoOrFileInput";
-import { LessonInitialValue, LessonType, LevelSubjectType } from "../../Utils/Types";
+import { ApiReturnType, LessonInitialValue, LessonType, LevelSubjectType, levelType } from "../../Utils/Types";
 import useForm from "../../Hooks/useForm";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuthState } from "../../Pages/Auth/redux/AuthSlice";
 import { useEffect, useState } from "react";
 import { AppDispatch } from "../../Redux/store";
-import { getAllLevel, getLelvelSubjectByIdNiveau } from "../../Pages/Levels/redux/LevelAsyncThunk";
+import { getAllLevel, getLelvelSubjectByIdNiveau, getLevelByTeacherId } from "../../Pages/Levels/redux/LevelAsyncThunk";
 import { getLevelState } from "../../Pages/Levels/redux/LevelSlice";
 import Loading from "../ui/Loading";
 import InputError from "../ui/InputError";
 import { createLesson, updatelesson } from "../../Pages/Lessons/redux/LessonAsyncThunk";
 import { getLessonState } from "../../Pages/Lessons/redux/LessonSlice";
 import { baseUrl } from "../../Utils/Utils";
+import { useActiveUser } from "../../Hooks/useActiveUser";
 
 // Schéma de validation pour leçon
 export const lessonSchema = Yup.object({
@@ -34,12 +35,14 @@ type LessonFormPropsType = {
 
 const LessonForm: React.FC<LessonFormPropsType> = ({ lesson, handleCloseModal }) => {
     const { formErrors, onSubmite } = useForm(lessonSchema, LessonInitialValue)
-    const { } = useSelector(getAuthState);
-    const { datas: levels } = useSelector(getLevelState);
+    const { datas: { info } } = useSelector(getAuthState);
+    const { datas: levelsState } = useSelector(getLevelState);
+    const [levels, setLevels] = useState<levelType[]>([])
     const { action, error } = useSelector(getLessonState);
     const dispatch: AppDispatch = useDispatch();
     const [isCheckingLevel, setIsCheckingLevel] = useState(false)
     const [subjectOptions, setSubjectOptions] = useState<{ value: number, label: string }[]>([]);
+    const { isTeacher, isStudent } = useActiveUser();
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         onSubmite((validateData: any) => {
@@ -47,13 +50,46 @@ const LessonForm: React.FC<LessonFormPropsType> = ({ lesson, handleCloseModal })
                 : dispatch(createLesson(validateData));
         }, e);
     }
+
+    useEffect(() => {
+        // Si utilisateur est prof ( on recuper seulement les niveau que cette prof enseigne 
+        if (isTeacher) {
+            dispatch(getLevelByTeacherId(info?.id_personnel as number))
+                .unwrap()
+                .then((response: ApiReturnType) => {
+                    if (!response.error) {
+                        if (response.data) {
+                            setLevels(response.data as LessonType[]);
+                        }
+                    } else {
+                        console.error('Erreur lors de recuperation de niveau par utilisatuer ');
+                    }
+                })
+                .catch((err) => {
+                    console.error("Erreur lors de la recherche par niveau", err);
+                })
+                .finally(() => {
+                    setIsCheckingLevel(false);
+                });
+
+        } else {
+            setLevels(levelsState);
+        }
+        return () => { }
+    }, [levelsState])
+
+
+    /**
+     * Prendre toute les matiere pour le niveau active 
+     * @param id_level 
+     */
     const getSubjectByIdLevel = (id_level: number) => {
         dispatch(getLelvelSubjectByIdNiveau(id_level))
             .unwrap()
             .then((response: LevelSubjectType[]) => {
                 if (!!response) {
                     let options: any[] = [];
-                    if (response.length) {
+                    if (response.length > 0) {
                         options = response.map((subject) => ({
                             value: subject.id_matiere as number,
                             label: subject.denomination
@@ -70,13 +106,21 @@ const LessonForm: React.FC<LessonFormPropsType> = ({ lesson, handleCloseModal })
             });
     }
 
+    /**
+     * Detecte chaque changement de niveau 
+     * @param level_id 
+     * @returns 
+     */
     const handleChangeLevel = (level_id: number) => {
         if (!level_id) return;
         getSubjectByIdLevel(level_id);
     }
 
+    /**
+     * Si l'etat du niveau est encore vide on recupere dans le back 
+     */
     useEffect(() => {
-        if (!levels.length) {
+        if (!levelsState.length && !isTeacher) {
             dispatch(getAllLevel());
         }
         return () => { }
@@ -90,25 +134,27 @@ const LessonForm: React.FC<LessonFormPropsType> = ({ lesson, handleCloseModal })
     }, [dispatch, levels.length])
 
     // ===================== levels options ===================== //
-    let levelsOptions = levels.filter(level => !lesson ? true : lesson.id_niveau !== level.id_niveau).map((level) => ({
+    let levelsOptions = levels?.length > 0 ? levels.filter(level => !lesson ? true : lesson.id_niveau !== level.id_niveau).map((level) => ({
         value: level.id_niveau as number, label: level.niveau
-    }))
+    })) : [];
     // ? mettre le Niveau dans edit en premier
-    levels.map(level => {
-        if (!!lesson && lesson.id_niveau === level.id_niveau) {
-            levelsOptions.unshift({
-                value: level.id_niveau as number,
-                label: level.niveau
-            })
-        }
-    })
+    if (levels.length > 0) {
+        levels.map(level => {
+            if (!!lesson && lesson.id_niveau === level.id_niveau) {
+                levelsOptions.unshift({
+                    value: level.id_niveau as number,
+                    label: level.niveau
+                })
+            }
+        })
+    }
     // =====================  ===================== //
 
     const published = lesson ? (lesson.published == 0 ? false : true) : true;
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             {/* levels  */}
-            <input type="hidden" name="id_prof" value='' onChange={() => { }} />
+            <input type="hidden" name="id_prof" value={isTeacher ? info?.id_personnel : ''} onChange={() => { }} />
             {lesson &&
                 <input type="hidden" name="id_lecon" value={lesson?.id_lecon} onChange={() => { }} />
             }
@@ -202,7 +248,8 @@ const LessonForm: React.FC<LessonFormPropsType> = ({ lesson, handleCloseModal })
                     }
                     <button
                         type="submit"
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+                        disabled={isStudent}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center disabled:bg-blue-400"
                     >
                         {action.isLoading || action.isUpdating ?
                             <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :

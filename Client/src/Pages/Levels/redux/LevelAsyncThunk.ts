@@ -18,10 +18,10 @@ export const getAllLevel = createAsyncThunk('niveau/getAll', async (): Promise<l
 })
 
 // UPDATE
-export const updateLevel = createAsyncThunk('niveau/modification', async ({ level, id }: { level: any , id: number }, { dispatch }): Promise<ApiReturnType> => {
+export const updateLevel = createAsyncThunk('niveau/modification', async ({ level, id }: { level: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
     level.append('id_niveau', id.toString());
     let data: ApiReturnType = ApiReturnInitial;
-    await api.post('admin/niveau/update', level ).then(response => {
+    await api.post('admin/niveau/update', level).then(response => {
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
@@ -33,9 +33,9 @@ export const updateLevel = createAsyncThunk('niveau/modification', async ({ leve
 })
 
 // CREATE
-export const createLevel = createAsyncThunk('niveau/ajout', async (level: any , { dispatch }): Promise<ApiReturnType> => {
+export const createLevel = createAsyncThunk('niveau/ajout', async (level: any, { dispatch }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
-    await api.post('admin/niveau/create', level ).then(response => {
+    await api.post('admin/niveau/create', level).then(response => {
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
@@ -81,12 +81,25 @@ export const getLelvelSubjectByIdNiveau = createAsyncThunk('niveau/matiere', asy
 
 
 export const registerSubjectLevelCoef = createAsyncThunk('niveau/matiere/coef', async (datas: any) => {
-    await api.post(`admin/niveau-matiere/enrigistrer` , datas 
+    await api.post(`admin/niveau-matiere/enrigistrer`, datas
     ).then(response => {
         datas = response.data;
     }).catch(error => {
         console.error('Erreur lors de la récupération des données:', error.getMessage());
     });
+})
+
+
+export const getLevelByTeacherId = createAsyncThunk('niveau/enseignant', async (id_prof: number): Promise<ApiReturnType> => {
+    let datas: ApiReturnType = ApiReturnInitial;
+    if (id_prof) {
+        await api.get(`admin/niveau-enseignant/${id_prof}`).then(response => {
+            datas = response.data;
+        }).catch(error => {
+            console.error('( Niveau par prof ) Erreur lors de la récupération des données:', error.getMessage());
+        });
+    }
+    return datas;
 })
 
 

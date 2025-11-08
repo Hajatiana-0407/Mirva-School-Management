@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Trash, PenBox, Download, Eye, BellPlus, Share, Share2 } from 'lucide-react';
+import { Plus, Search, Filter, Trash, PenBox, Download, Eye, BellPlus, Share, Share2, BookOpen, GraduationCap } from 'lucide-react';
 import Modal from '../Modal';
 import { getAppState } from '../../Redux/AppSlice';
 import { LessonType } from '../../Utils/Types';
@@ -18,6 +18,7 @@ import DownloadProgression from '../../Components/DownloadProgression';
 import { Link } from 'react-router-dom';
 import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
+import { useActiveUser } from '../../Hooks/useActiveUser';
 
 
 
@@ -33,6 +34,7 @@ const Lesson = () => {
   const [showProgress, setShowProgress] = useState(false)
   const dispatch: AppDispatch = useDispatch();
   const permission = useHashPermission();
+  const { isStudent } = useActiveUser();
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -90,7 +92,8 @@ const Lesson = () => {
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+            disabled={isStudent}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors disabled:bg-blue-400"
           >
             <Plus className="w-4 h-4" />
             <span className='max-md:hidden-susp'>Nouvelle leçon</span>
@@ -146,12 +149,14 @@ const Lesson = () => {
               let actions = [
                 {
                   label: 'Supprimer',
+                  type: 'delete',
                   color: 'text-red-500',
                   onClick: () => handleDelete(lesson),
                   icon: Trash
                 },
                 {
                   label: 'Modifier',
+                  type: 'update',
                   color: 'text-green-500',
                   onClick: () => handlEdit(lesson),
                   icon: PenBox
@@ -167,6 +172,7 @@ const Lesson = () => {
               if (lesson.published == 0) {
                 actions.push({
                   label: 'Publié',
+                  type: '',
                   color: 'text-orange-600',
                   onClick: () => handlePublish(lesson),
                   icon: Share
@@ -176,13 +182,18 @@ const Lesson = () => {
                 <div key={`${lesson.id_lecon}_${idx}`} className="bg-white rounded-lg shadow p-4 border flex flex-col">
                   <div className="flex items-center justify-between mb-2">
                     <span
-                      className="px-3 py-1 rounded-full text-xs font-semibold border"
+                      className="px-3 py-1 flex items-center gap-1 relative rounded-full text-xs font-semibold border"
                       style={{ backgroundColor: hexToRgba(lesson.couleur, 0.3), border: '1px solid ' + hexToRgba(lesson.couleur, 0.8) }}
                     >
+                      <BookOpen className='w-4 h-4' />
                       {lesson.denomination || 'Matière'}
                     </span>
                     <div className='flex items-center'>
-                      <span className="bg-gray-100  px-2 py-1 rounded-full text-xs text-gray-500">{lesson.niveau || ''}</span>
+                      <span className="bg-gray-100  flex items-center gap-1 px-2 py-1 rounded-full text-xs text-gray-900">
+                        <GraduationCap className='w-4 h-4' />
+                        {lesson.niveau || ''}
+
+                      </span>
                       {isNew && (
                         <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold text-green-500">
                           <BellPlus className='animate-bell-infinite' />
@@ -222,6 +233,8 @@ const Lesson = () => {
                       {lesson.lecon_description}
                     </p>
                   </div>
+
+                  {/* Boutons d'actions */}
                   <div className="mt-auto flex items-center justify-between space-x-2">
                     <div>
                       <Link
@@ -232,7 +245,7 @@ const Lesson = () => {
                       </Link>
                     </div>
                     <div className='space-x-2 flex '>
-                      {lesson.published == 0 &&
+                      {lesson.published == 0 && !isStudent &&
                         <button
                           className="bg-orange-600 relative rounded-lg p-2 text-white hover:bg-orange-700 transition group"
                           title="Publié"

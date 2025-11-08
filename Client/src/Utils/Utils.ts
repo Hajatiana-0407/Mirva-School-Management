@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import {  StudentFormDataType, TokenDecodeType } from "./Types";
+import { StudentFormDataType, TokenDecodeType } from "./Types";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import api from "./api";
@@ -9,9 +9,9 @@ import { toast } from "react-toastify";
 
 export const cycles = ['Primaire', 'Collège', 'Lycée'];
 export const hexToRgba = (hex: string, alpha = 1): string => {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
+  const r = parseInt(hex?.slice(1, 3), 16);
+  const g = parseInt(hex?.slice(3, 5), 16);
+  const b = parseInt(hex?.slice(5, 7), 16);
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
@@ -161,13 +161,13 @@ export const nestData = (flatData: Record<string, any>): Record<string, any> => 
 type DecodePropsType = {
   exp: number;
   iat: number;
-  data: TokenDecodeType ;
+  data: TokenDecodeType;
 }
 export const decodeToken = (token: string): DecodePropsType => {
   const tokenDecode: {
     exp: number;
     iat: number;
-    data: TokenDecodeType ;
+    data: TokenDecodeType;
   } = jwtDecode(token);
   return tokenDecode;
 }
@@ -286,3 +286,6 @@ export const download = async (
     toast.error("Erreur lors du téléchargement.");
   }
 };
+
+
+
