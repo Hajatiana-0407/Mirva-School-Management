@@ -102,7 +102,7 @@ const Lesson = () => {
       </Title>
 
       <div className="bg-white p-6 rounded-lg shadow-sm border">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="relative">
               <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -120,160 +120,160 @@ const Lesson = () => {
             </button>
           </div>
         </div>
+      </div>
 
-        <div>
-          {datas.length === 0 && action.isLoading &&
-            <div className='w-full border'>
-              <Loading />
-            </div>
-          }
-          {!action.isLoading && !datas.length && (
-            <div className='text-gray-400 text-md text-center pt-6'>
-              Nous n’avons trouvé aucun élément.
-            </div>
-          )}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {datas.length > 0 && datas.map((lesson: LessonType, idx: number) => {
-              const createdAt = lesson.created_at ? new Date(lesson.created_at) : null;
-              const isNew = createdAt && (Date.now() - createdAt.getTime()) < 2 * 24 * 60 * 60 * 1000;
+      <div>
+        {datas.length === 0 && action.isLoading &&
+          <div className='w-full border'>
+            <Loading />
+          </div>
+        }
+        {!action.isLoading && !datas.length && (
+          <div className='text-gray-400 text-md text-center pt-6'>
+            Nous n’avons trouvé aucun élément.
+          </div>
+        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {datas.length > 0 && datas.map((lesson: LessonType, idx: number) => {
+            const createdAt = lesson.created_at ? new Date(lesson.created_at) : null;
+            const isNew = createdAt && (Date.now() - createdAt.getTime()) < 2 * 24 * 60 * 60 * 1000;
 
-              // Détection du type de fichier
-              const fileUrl = baseUrl(lesson.ficher_principale) || '';
+            // Détection du type de fichier
+            const fileUrl = baseUrl(lesson.ficher_principale) || '';
 
-              // Détection vidéo
-              const isVideo = fileUrl.match(/\.(mp4|webm|ogg|mov|avi|mkv)$/i);
-              // Détection image
-              const isImage = fileUrl.match(/\.(jpg|jpeg|png|gif|webp|bmp)$/i);
+            // Détection vidéo
+            const isVideo = fileUrl.match(/\.(mp4|webm|ogg|mov|avi|mkv)$/i);
+            // Détection image
+            const isImage = fileUrl.match(/\.(jpg|jpeg|png|gif|webp|bmp)$/i);
 
-              // Action 
-              let actions = [
-                {
-                  label: 'Supprimer',
-                  type: 'delete',
-                  color: 'text-red-500',
-                  onClick: () => handleDelete(lesson),
-                  icon: Trash
-                },
-                {
-                  label: 'Modifier',
-                  type: 'update',
-                  color: 'text-green-500',
-                  onClick: () => handlEdit(lesson),
-                  icon: PenBox
-                },
-                {
-                  label: 'Télécharger',
-                  color: 'text-blue-500',
-                  onClick: () => handleDownload(lesson),
-                  icon: Download
-                },
-              ]
-              // Si la leçon n'est pas encore publlié 
-              if (lesson.published == 0) {
-                actions.push({
-                  label: 'Publié',
-                  type: '',
-                  color: 'text-orange-600',
-                  onClick: () => handlePublish(lesson),
-                  icon: Share
-                })
-              }
-              return (
-                <div key={`${lesson.id_lecon}_${idx}`} className="bg-white rounded-lg shadow p-4 border flex flex-col">
-                  <div className="flex items-center justify-between mb-2">
-                    <span
-                      className="px-3 py-1 flex items-center gap-1 relative rounded-full text-xs font-semibold border"
-                      style={{ backgroundColor: hexToRgba(lesson.couleur, 0.3), border: '1px solid ' + hexToRgba(lesson.couleur, 0.8) }}
-                    >
-                      <BookOpen className='w-4 h-4' />
-                      {lesson.denomination || 'Matière'}
-                    </span>
-                    <div className='flex items-center'>
-                      <span className="bg-gray-100  flex items-center gap-1 px-2 py-1 rounded-full text-xs text-gray-900">
-                        <GraduationCap className='w-4 h-4' />
-                        {lesson.niveau || ''}
-
-                      </span>
-                      {isNew && (
-                        <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold text-green-500">
-                          <BellPlus className='animate-bell-infinite' />
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-center my-2">
-                    <Profile fullName={lesson.nom ? `${lesson.nom} ${lesson.prenom}` : 'Administrateur'} photo={lesson.photo as string} copy={false} />
-                  </div>
-                  {/* Indication des nouveau cours */}
-                  <div className="flex items-center mb-1">
-                    <h2 className="font-bold text-lg">{lesson.titre}</h2>
-                  </div>
-
-                  {/* Date d'ajout */}
-                  <span className="text-xs text-gray-400 mb-2">
-                    {createdAt ? `Ajouté le ${createdAt.toLocaleDateString()}` : ''}
+            // Action 
+            let actions = [
+              {
+                label: 'Supprimer',
+                type: 'delete',
+                color: 'text-red-500',
+                onClick: () => handleDelete(lesson),
+                icon: Trash
+              },
+              {
+                label: 'Modifier',
+                type: 'update',
+                color: 'text-green-500',
+                onClick: () => handlEdit(lesson),
+                icon: PenBox
+              },
+              {
+                label: 'Télécharger',
+                color: 'text-blue-500',
+                onClick: () => handleDownload(lesson),
+                icon: Download
+              },
+            ]
+            // Si la leçon n'est pas encore publlié 
+            if (lesson.published == 0) {
+              actions.push({
+                label: 'Publié',
+                type: '',
+                color: 'text-orange-600',
+                onClick: () => handlePublish(lesson),
+                icon: Share
+              })
+            }
+            return (
+              <div key={`${lesson.id_lecon}_${idx}`} className="bg-white rounded-lg shadow p-4 border flex flex-col">
+                <div className="flex items-center justify-between mb-2">
+                  <span
+                    className="px-3 py-1 flex items-center gap-1 relative rounded-full text-xs font-semibold border"
+                    style={{ backgroundColor: hexToRgba(lesson.couleur, 0.3), border: '1px solid ' + hexToRgba(lesson.couleur, 0.8) }}
+                  >
+                    <BookOpen className='w-4 h-4' />
+                    {lesson.denomination || 'Matière'}
                   </span>
+                  <div className='flex items-center'>
+                    <span className="bg-gray-100  flex items-center gap-1 px-2 py-1 rounded-full text-xs text-gray-900">
+                      <GraduationCap className='w-4 h-4' />
+                      {lesson.niveau || ''}
 
-                  {/* Aperçu vidéo ou icône fichier */}
-                  <div className="mb-4 flex justify-center items-center h-32 bg-gray-50 rounded">
-                    {isVideo ? (
-                      <video src={fileUrl} controls className="rounded shadow h-32 max-w-full" />
-                    ) :
-                      isImage ?
-                        <img src={fileUrl} alt="Image" className="rounded shadow h-28 max-w-full" />
-                        :
-                        (
-                          getFileIcon(fileUrl, 28)
-                        )}
-                  </div>
-
-                  {/* Description du leçcon */}
-                  <div className="max-w-full">
-                    <p className="text-gray-500 text-sm mb-4 line-clamp-3 text-justify">
-                      {lesson.lecon_description}
-                    </p>
-                  </div>
-
-                  {/* Boutons d'actions */}
-                  <div className="mt-auto flex items-center justify-between space-x-2">
-                    <div>
-                      <Link
-                        to={`/lessons/${lesson.slug}`}
-                        className="bg-blue-600 border border-blue-700 rounded-lg px-4 py-1 text-white hover:bg-blue-700 transition flex items-center">
-                        <span className='max-md:hidden-susp'>Voir plus</span>
-                        <Eye className=' ms-2' />
-                      </Link>
-                    </div>
-                    <div className='space-x-2 flex '>
-                      {lesson.published == 0 && !isStudent &&
-                        <button
-                          className="bg-orange-600 relative rounded-lg p-2 text-white hover:bg-orange-700 transition group"
-                          title="Publié"
-                          onClick={() => { handlePublish(lesson) }}
-                        >
-                          <Share2 className='w-5 h-5' />
-                          <div className="hidden group-hover:block absolute z-20 left-full bottom-full mt-1 px-2 py-1 bg-orange-500 text-white rounded-full rounded-bl-none text-sm shadow">
-                            Publié
-                          </div>
-                        </button>
-                      }
-                      <button
-                        className="bg-green-600 relative rounded-lg p-2 text-white hover:bg-green-700 transition group"
-                        title="Télécharger"
-                        onClick={() => { handleDownload(lesson) }}
-                      >
-                        <Download className='w-5 h-5' />
-                        <div className="hidden group-hover:block absolute z-20 left-full bottom-full mt-1 px-2 py-1 bg-green-500 text-white rounded-full rounded-bl-none text-sm shadow">
-                          Télécharger
-                        </div>
-                      </button>
-                      <ActionMenu actions={actions} />
-                    </div>
+                    </span>
+                    {isNew && (
+                      <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold text-green-500">
+                        <BellPlus className='animate-bell-infinite' />
+                      </span>
+                    )}
                   </div>
                 </div>
-              );
-            })}
-          </div>
+                <div className="flex items-center my-2">
+                  <Profile fullName={lesson.nom ? `${lesson.nom} ${lesson.prenom}` : 'Administrateur'} photo={lesson.photo as string} copy={false} />
+                </div>
+                {/* Indication des nouveau cours */}
+                <div className="flex items-center mb-1">
+                  <h2 className="font-bold text-lg">{lesson.titre}</h2>
+                </div>
+
+                {/* Date d'ajout */}
+                <span className="text-xs text-gray-400 mb-2">
+                  {createdAt ? `Ajouté le ${createdAt.toLocaleDateString()}` : ''}
+                </span>
+
+                {/* Aperçu vidéo ou icône fichier */}
+                <div className="mb-4 flex justify-center items-center h-32 bg-gray-50 rounded">
+                  {isVideo ? (
+                    <video src={fileUrl} controls className="rounded shadow h-32 max-w-full" />
+                  ) :
+                    isImage ?
+                      <img src={fileUrl} alt="Image" className="rounded shadow h-28 max-w-full" />
+                      :
+                      (
+                        getFileIcon(fileUrl, 28)
+                      )}
+                </div>
+
+                {/* Description du leçcon */}
+                <div className="max-w-full">
+                  <p className="text-gray-500 text-sm mb-4 line-clamp-3 text-justify">
+                    {lesson.lecon_description}
+                  </p>
+                </div>
+
+                {/* Boutons d'actions */}
+                <div className="mt-auto flex items-center justify-between space-x-2">
+                  <div>
+                    <Link
+                      to={`/lessons/${lesson.slug}`}
+                      className="bg-blue-600 border border-blue-700 rounded-lg px-4 py-1 text-white hover:bg-blue-700 transition flex items-center">
+                      <span className='max-md:hidden-susp'>Voir plus</span>
+                      <Eye className=' ms-2' />
+                    </Link>
+                  </div>
+                  <div className='space-x-2 flex '>
+                    {lesson.published == 0 && !isStudent &&
+                      <button
+                        className="bg-orange-600 relative rounded-lg p-2 text-white hover:bg-orange-700 transition group"
+                        title="Publié"
+                        onClick={() => { handlePublish(lesson) }}
+                      >
+                        <Share2 className='w-5 h-5' />
+                        <div className="hidden group-hover:block absolute z-20 left-full bottom-full mt-1 px-2 py-1 bg-orange-500 text-white rounded-full rounded-bl-none text-sm shadow">
+                          Publié
+                        </div>
+                      </button>
+                    }
+                    <button
+                      className="bg-green-600 relative rounded-lg p-2 text-white hover:bg-green-700 transition group"
+                      title="Télécharger"
+                      onClick={() => { handleDownload(lesson) }}
+                    >
+                      <Download className='w-5 h-5' />
+                      <div className="hidden group-hover:block absolute z-20 left-full bottom-full mt-1 px-2 py-1 bg-green-500 text-white rounded-full rounded-bl-none text-sm shadow">
+                        Télécharger
+                      </div>
+                    </button>
+                    <ActionMenu actions={actions} />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
