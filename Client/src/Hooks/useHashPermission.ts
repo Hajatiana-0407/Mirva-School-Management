@@ -22,10 +22,10 @@ export const useHashPermission = (id?: string, redirect = true): {
 
     // ? GERER LA PERMISSION DE LECTURE GLOBALEMENT 
     if (!permissions?.[identification]?.read) {
-        if (redirect) {
-            localStorage.removeItem('token');
-            navigate('/signin')
-        }
+        // if (redirect) {
+        //     localStorage.removeItem('token');
+        //     navigate('/signin')
+        // }
 
         return {
             create: !!permissions?.[identification]?.create,
