@@ -32,7 +32,7 @@ type InfoType = {
     id_personnel?: number,
     id_eleve?: number,
     id_parent?: number,
-    photo?: string , 
+    photo?: string,
 }
 
 export type TokenDecodeType = {
@@ -42,7 +42,7 @@ export type TokenDecodeType = {
 }
 export type User = {
     id_user?: number;
-    role_id?: 'admin' | 'teacher' | 'student' | 'parent' | string ,
+    role_id?: 'admin' | 'teacher' | 'student' | 'parent' | string,
     identifiant: string | null;
     password?: string | null;
     role: 'admin' | 'secretaire' | 'proffesseur' | 'parent' | 'etudiant' | string | null;
@@ -138,8 +138,10 @@ export type levelType = {
     niveau: string;
     cycle: string;
     description: string;
-    classe?: { listes: ClasseType[] };
-    matiere?: { listes: SubjectType[] };
+    classe?: { listes: ClasseType[], id_niveau?: number };
+    matiere?: { listes: SubjectType[], id_niveau?: number };
+    prof?: { listes: EmployeeType[], id_niveau?: number };
+    created_at?: string
 }
 export const levelInitial: levelType = {
     niveau: '',

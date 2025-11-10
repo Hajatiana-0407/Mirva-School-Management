@@ -153,7 +153,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
     ];
 
     const actions = [
-        { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
+        { icon: Eye, label: 'Voir', onClick: (item: any) => navigate(`/level-details/${ item.id_niveau }`), color: 'blue' },
         { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
         { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleDelete, color: 'red' },
     ];
