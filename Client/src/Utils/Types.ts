@@ -32,6 +32,7 @@ type InfoType = {
     id_personnel?: number,
     id_eleve?: number,
     id_parent?: number,
+    photo?: string , 
 }
 
 export type TokenDecodeType = {
@@ -41,7 +42,7 @@ export type TokenDecodeType = {
 }
 export type User = {
     id_user?: number;
-    role_id?: string,
+    role_id?: 'admin' | 'teacher' | 'student' | 'parent' | string ,
     identifiant: string | null;
     password?: string | null;
     role: 'admin' | 'secretaire' | 'proffesseur' | 'parent' | 'etudiant' | string | null;
