@@ -8,9 +8,9 @@ import UserRole from './UserRoles/UserRole';
 import { useHashPermission } from '../../Hooks/useHashPermission';
 
 const Settings: React.FC = () => {
-  const generalPermission = useHashPermission('general-settings', false);
-  const etablissementPermission = useHashPermission('school-settings', false);
-  const rolePermission = useHashPermission('roles-settings', false);
+  const generalPermission = useHashPermission( { id : 'general-settings'  , redirect : false } );
+  const etablissementPermission = useHashPermission( { id : 'school-settings'  , redirect : false } );
+  const rolePermission = useHashPermission( { id : 'roles-settings'  , redirect : false } );
   let tabs = [
     { key: 'account', label: 'Permètre du compte', Icon: UserCog, component: <div className='bg-white p-6 shadow-sm border rounded-md'><AccountSettings /></div> }
   ];

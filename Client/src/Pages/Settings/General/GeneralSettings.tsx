@@ -24,7 +24,7 @@ const GeneralSettings = () => {
     const [showModalSchoolYear, setShowModalSchoolYear] = useState(false)
     const { hiddeTheModalActive } = useSelector(getAppState);
     const [schoolYearOptions, setSchoolYearOptions] = useState<any[]>([]);
-    const schoolYearPermission = useHashPermission('school-year');
+    const schoolYearPermission = useHashPermission({ id : 'school-year' });
 
     useEffect(() => {
         if (activeSchoolYear) {

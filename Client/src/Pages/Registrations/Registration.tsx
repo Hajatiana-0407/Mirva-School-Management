@@ -27,7 +27,7 @@ const Registration: React.FC = () => {
   const { datas: registrations, action } = useSelector(getRegistrationState);
   const dispatch: AppDispatch = useDispatch();
   const { hiddeTheModalActive } = useSelector(getAppState);
-  const permission = useHashPermission();
+  const permission = useHashPermission( { redirect : true  });
 
 
   // ? ===================== HANDLERS ===================== //

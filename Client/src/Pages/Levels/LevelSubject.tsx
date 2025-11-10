@@ -36,8 +36,8 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
     const [subjectCoefToDelete, setSubjectCoefToDelete] = useState<number[]>([]);
     const { onSubmite } = useForm<any>(LevelSubjectSchema, {});
     const [isAlertOpen, setIsAlertOpen] = useState(false)
-    const permission = useHashPermission();
-    const permissionSubject = useHashPermission('subjects');
+    const permission = useHashPermission(  { redirect : true  });
+    const permissionSubject = useHashPermission({ id: 'subjects'});
     const [showModalSubject, setShowModalSubject] = useState(false)
     const { hiddeTheModalActive } = useSelector(getAppState);
 

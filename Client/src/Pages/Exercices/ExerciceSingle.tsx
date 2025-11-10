@@ -24,7 +24,7 @@ const ExerciceSingle = () => {
     const { hiddeTheModalActive } = useSelector(getAppState);
     const [showModal, setShowModal] = useState(false);
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-    const permission = useHashPermission();
+    const permission = useHashPermission(  { redirect : true  });
 
 
     // Progession pour le telechargement 

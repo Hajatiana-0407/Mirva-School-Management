@@ -16,7 +16,7 @@ import Title from '../../Components/ui/Title';
 
 
 const Levels = () => {
-  const permission = useHashPermission();
+  const permission = useHashPermission(  { redirect : true  });
   const { hiddeTheModalActive } = useSelector(getAppState);
   const [showModal, setShowModal] = useState(false);
   const [editingLevel, setEditingLevel] = useState<levelType | null>(null);

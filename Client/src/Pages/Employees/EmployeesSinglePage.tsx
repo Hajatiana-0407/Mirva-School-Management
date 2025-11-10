@@ -24,7 +24,7 @@ const EmployeesSinglePage = () => {
     const dispatch: AppDispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
     const { hiddeTheModalActive } = useSelector(getAppState);
-    const permission = useHashPermission();
+    const permission = useHashPermission(  { redirect : true  });
 
     useEffect(() => {
         if (id) {

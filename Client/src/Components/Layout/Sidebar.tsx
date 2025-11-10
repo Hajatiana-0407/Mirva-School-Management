@@ -109,6 +109,7 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
   const [isOpentDialog, setIsOpentDialog] = useState(false);
   const dispatch: AppDispatch = useDispatch();
 
+
   const onConfirmLogout = () => {
     setIsOpentDialog(false);
     dispatch(logoutUser(user?.id_user as number));

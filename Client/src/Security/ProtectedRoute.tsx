@@ -6,7 +6,7 @@ import { AppDispatch } from "../Redux/store";
 import { useHashPermission } from "../Hooks/useHashPermission";
 
 export default function ProtectedRoute() {
-    const teste = useHashPermission();
+    const teste = useHashPermission(  { redirect : true  });
     const { datas } = useSelector(getAuthState);
     const dispatch: AppDispatch = useDispatch();
 

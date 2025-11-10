@@ -23,7 +23,7 @@ const Classes: React.FC = () => {
   const [editingClass, setEditingClass] = useState<ClasseType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [classToArchive, setClassToArchive] = useState<ClasseType | null>(null);
-  const permission = useHashPermission();
+  const permission = useHashPermission(  { redirect : true  });
 
 
 

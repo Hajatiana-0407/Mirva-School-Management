@@ -26,7 +26,7 @@ interface TableProps {
 const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, actionType = 'button' }: TableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-  const permission = useHashPermission();
+  const permission = useHashPermission(  { redirect : true  });
 
   // RECHERCHE
   const filteredData = data.filter((item) =>

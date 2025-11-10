@@ -3,7 +3,11 @@ import { useLocation } from "react-router-dom"
 import { getAuthState } from "../Pages/Auth/redux/AuthSlice";
 import { navigate } from "../Utils/navigate";
 
-export const useHashPermission = (id?: string, redirect = true): {
+type HashPermissionPropsType = {
+    id?: string;
+    redirect?: boolean
+}
+export const useHashPermission = ( props ?: HashPermissionPropsType ): {
     create: boolean;
     read: boolean;
     delete: boolean;
@@ -16,16 +20,15 @@ export const useHashPermission = (id?: string, redirect = true): {
     let identification = '';
     const pathTab = pathname.replace(/^\/+|\/+$/g, "").split('/')
     identification = pathTab[0] || '';
-    if (!!id) {
-        identification = id;
+    if (!!props?.id) {
+        identification = props?.id;
     }
-
     // ? GERER LA PERMISSION DE LECTURE GLOBALEMENT 
-    if (!permissions?.[identification]?.read) {
-        // if (redirect) {
-        //     localStorage.removeItem('token');
-        //     navigate('/signin')
-        // }
+    if ( !!permissions[identification] &&  !permissions[identification].read) {
+        if (props?.redirect) {
+            localStorage.removeItem('token');
+            navigate('/signin')
+        }
 
         return {
             create: !!permissions?.[identification]?.create,

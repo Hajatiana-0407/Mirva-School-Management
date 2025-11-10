@@ -25,7 +25,7 @@ const ActionMenu = ({ actions }: Props) => {
     top: 0,
     left: 0,
   });
-  const permission = useHashPermission();
+  const permission = useHashPermission(  { redirect : true  });
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   // Toggle menu et calcule la position du bouton

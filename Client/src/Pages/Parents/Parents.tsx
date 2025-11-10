@@ -60,7 +60,7 @@ const Parents = () => {
   const [showModalModif, setShowModalModif] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
   const { formErrors, onSubmite } = useForm(ParentSchema, {})
-  const permission = useHashPermission();
+  const permission = useHashPermission(  { redirect : true  });
 
   const handleEdit = (parent: ParentType) => {
     setParentToUpdate(parent);

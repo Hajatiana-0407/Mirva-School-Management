@@ -24,7 +24,7 @@ const StudentSinglePage = () => {
     // ? Modale
     const [showModal, setShowModal] = useState(false);
     const dispatch: AppDispatch = useDispatch();
-    const permission = useHashPermission();
+    const permission = useHashPermission(  { redirect : true  });
 
 
     useEffect(() => {

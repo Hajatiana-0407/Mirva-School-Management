@@ -51,7 +51,7 @@ const Employees: React.FC = () => {
   const { datas: employees, action } = useSelector(getEmployeState);
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
-  const permission = useHashPermission();
+  const permission = useHashPermission(  { redirect : true  });
 
 
   //Handlers
