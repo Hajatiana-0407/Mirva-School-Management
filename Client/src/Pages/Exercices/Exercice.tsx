@@ -62,7 +62,7 @@ const Exercice = () => {
     setShowProgress(true);
     await download({
       title: exercice.titre,
-      description: exercice.lecon_description,
+      description: exercice.exercice_description,
       principalFileUrl: exercice.ficher_principale || "",
       supportFileUrl: exercice.fichier_support,
     }, (percent: number) => setProgress(percent))
@@ -231,7 +231,7 @@ const Exercice = () => {
                 {/* Description du leçcon */}
                 <div className="max-w-full">
                   <p className="text-gray-500 text-sm mb-4 line-clamp-3 text-justify">
-                    {exercice.lecon_description}
+                    {exercice.exercice_description}
                   </p>
                 </div>
 
