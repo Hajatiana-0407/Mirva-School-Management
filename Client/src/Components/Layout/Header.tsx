@@ -6,6 +6,7 @@ import ConfirmDialog from '../../Pages/ConfirmDialog';
 import { useState } from 'react';
 import { AppDispatch } from '../../Redux/store';
 import { logoutUser } from '../../Pages/Auth/redux/AuthAsyncThunk';
+import { baseUrl } from '../../Utils/Utils';
 
 const Header = () => {
   const { datas: auth } = useSelector(getAuthState);
@@ -48,19 +49,33 @@ const Header = () => {
           </button>
 
           <div className="flex items-center space-x-3">
+
+            {/* Compte utilisateur */}
             <Link
               to={'/settings?o=account'}
-            className='flex items-center space-x-3'>
+              className='flex items-center space-x-3'>
               <div className="text-right">
-                <p className="text-sm font-medium text-gray-700"> {auth.user?.identifiant || 'Identifiant'} </p>
+                <p className="text-sm font-medium text-gray-700">
+                  {auth.user?.role_id == 'admin' ? auth.user?.identifiant
+                    : auth.info?.prenom ? auth.info?.prenom : auth.user?.identifiant
+                  }
+                </p>
                 <p className="text-xs text-gray-500 flex items-center justify-end">
                   <span className='inline-block w-3 h-3 me-2 bg-green-500 rounded-full'></span>
                   {auth.user?.role || 'Role'}
                 </p>
               </div>
-              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                <User className="w-4 h-4 text-white" />
-              </div>
+              
+              
+              {auth.info?.photo ?
+                <div className="w-8 h-8  rounded-full flex items-center justify-center overflow-hidden">
+                  <img src={baseUrl(auth.info?.photo )} alt="" className="w-full h-full object-cover" />
+                </div>
+                : <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                  <User className="w-4 h-4 text-white" />
+                </div>
+              }
+
             </Link>
             <button
               onClick={handleLogoutclick}

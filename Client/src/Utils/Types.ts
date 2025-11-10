@@ -32,6 +32,7 @@ type InfoType = {
     id_personnel?: number,
     id_eleve?: number,
     id_parent?: number,
+    photo?: string,
 }
 
 export type TokenDecodeType = {
@@ -41,6 +42,7 @@ export type TokenDecodeType = {
 }
 export type User = {
     id_user?: number;
+    role_id?: 'admin' | 'teacher' | 'student' | 'parent' | string,
     identifiant: string | null;
     password?: string | null;
     role: 'admin' | 'secretaire' | 'proffesseur' | 'parent' | 'etudiant' | string | null;
@@ -136,8 +138,10 @@ export type levelType = {
     niveau: string;
     cycle: string;
     description: string;
-    classe?: { listes: ClasseType[] };
-    matiere?: { listes: SubjectType[] };
+    classe?: { listes: ClasseType[], id_niveau?: number };
+    matiere?: { listes: SubjectType[], id_niveau?: number };
+    prof?: { listes: EmployeeType[], id_niveau?: number };
+    created_at?: string
 }
 export const levelInitial: levelType = {
     niveau: '',
@@ -167,7 +171,12 @@ export const subjectInitialValue: SubjectType = {
 export type ClasseType = {
     id_classe?: number;
     denomination: string;
-    niveau_id_niveau: number
+    niveau_id_niveau: number;
+    niveau?: string;
+    created_at?: string ; 
+    matiere?: { listes: SubjectType[], id_niveau?: number };
+    prof?: { listes: EmployeeType[], id_niveau?: number };
+    eleve?: { listes: StudentType[], id_niveau?: number };
 }
 
 export const classeInitialState: ClasseType = {
@@ -367,7 +376,7 @@ export type StudentDetailsType = StudentType & levelType & ClasseType & { mere?:
 // Registration ( INSCRIPTION )
 export type RegistrationType = {
     id_inscription?: number;
-    date_inscription?: string 
+    date_inscription?: string
     // Élève
     matricule_etudiant?: string;
     nom: string;
@@ -586,7 +595,7 @@ export type ExerciceType = {
     id_exercice?: number;
     slug: string;
     titre: string;
-    lecon_description: string;
+    exercice_description: string;
     contenu?: string;
     ficher_principale?: string;
     fichier_support?: string;
@@ -600,7 +609,7 @@ export type ExerciceType = {
 export const ExerciceInitialValue: ExerciceType = {
     titre: '',
     slug: '',
-    lecon_description: '',
+    exercice_description: '',
     ...employeeInitialValue,
     ...subjectInitialValue,
     ...levelInitial
@@ -611,6 +620,7 @@ export const ExerciceInitialValue: ExerciceType = {
 // ===================== Roles ===================== //
 export type RoleType = {
     id_role?: number;
+    identification: string;
     nom: string;
     description: string;
     is_restrict: string;
@@ -619,6 +629,7 @@ export type RoleType = {
     permissions: Record<number, Permission & { label: string, is_for_all?: boolean, is_section?: boolean, }>;
 };
 export const RoleInitialValue: RoleType = {
+    identification: '',
     nom: '',
     description: '',
     is_restrict: '',

@@ -213,7 +213,7 @@ const ExerciceForm: React.FC<ExerciceFormPropsType> = ({ exercice, handleCloseMo
                             className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Écrivez ici une description pour cette exercice..."
                             name="description"
-                            defaultValue={exercice?.lecon_description}
+                            defaultValue={exercice?.exercice_description}
                         >
                         </textarea>
                         <InputError message={formErrors?.description} />

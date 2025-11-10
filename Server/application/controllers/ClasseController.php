@@ -12,8 +12,10 @@ class ClasseController extends CI_Controller
 
     public function index()
     {
-        $data = $this->ClasseModel->findAllClasseData();
-        echo json_encode($data);
+        $data = $this->ClasseModel->findAll();
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($data));
     }
 
     public function create()

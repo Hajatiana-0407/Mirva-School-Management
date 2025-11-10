@@ -31,7 +31,7 @@ const UserRole: React.FC = () => {
     const { hiddeTheModalActive } = useSelector(getAppState);
     const [roleToDelete, setRoleToDelete] = useState<RoleType | null>(null)
     const [showConfirmDialog, setShowConfirmDialog] = useState(false)
-    const permissions = useHashPermission('roles-settings');
+    const permissions = useHashPermission({ id: 'roles-settings'});
     const [searchTerm, setSearchTerm] = useState('');
 
     // Handler 

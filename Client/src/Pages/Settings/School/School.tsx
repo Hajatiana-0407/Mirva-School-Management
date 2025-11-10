@@ -31,7 +31,7 @@ const School = () => {
     const { action, datas: schoolInfo } = useSelector(getSchoolState);
     const { onSubmite, formErrors } = useForm(schoolInfoSchema, SchoolInfoInitialValue);
     const [idEteblissement, setIdEteblissement] = useState<number | null>(null);
-    const permission = useHashPermission();
+    const permission = useHashPermission(  { redirect : true  });
 
     // Effets
     useEffect(() => {

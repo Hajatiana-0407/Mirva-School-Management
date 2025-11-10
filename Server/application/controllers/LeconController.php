@@ -20,12 +20,12 @@ class LeconController extends CI_Controller
 
     public function create()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user'])) {
+        $sessions = $this->session->userData();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($sessions['role_id'])) {
             $post = $this->input->post(null, true);
-            $user = $post['user'];
-            switch ($user['user_data']['role']) {
-                case 'Administrateur':
-                case 'Enseignant':
+            switch ($sessions['role_id']) {
+                case 'admin':
+                case 'teacher':
                     $latest = $this->LeconModel->findLatest();
                     $slug = $latest ? url_title(convert_accented_characters($post['titre'] . ' ' . $latest['id_lecon']), 'dash', TRUE) : url_title(convert_accented_characters($post['titre'] . ' ' . 1), 'dash', TRUE);
                     $data = [
@@ -96,9 +96,9 @@ class LeconController extends CI_Controller
 
     public function update()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user'])) {
+        $sessions = $this->session->userData();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($sessions['role_id'])) {
             $post = $this->input->post(null, true);
-            $user = $post['user'];
 
             $id_lecon = $post['id_lecon'] ?? null;
             if (!$id_lecon) {
@@ -109,9 +109,9 @@ class LeconController extends CI_Controller
                 ]);
                 return;
             }
-            switch ($user['user_data']['role']) {
-                case 'Administrateur':
-                case 'Enseignant':
+            switch ($sessions['role_id']) {
+                case 'admin':
+                case 'teacher':
                     $data = [
                         'id_prof' => $post['id_prof'] !== ''  ? $post['id_prof'] : null,
                         'id_niveau' => $post['id_niveau'] !== ''  ? $post['id_niveau'] : null,
@@ -180,8 +180,8 @@ class LeconController extends CI_Controller
 
     public function delete()
     {
-
-        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+        $sessions = $this->session->userData();
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE' && isset($sessions['role_id'])) {
 
             $input = json_decode(file_get_contents('php://input'), true);
 
@@ -206,7 +206,8 @@ class LeconController extends CI_Controller
 
     public function publish()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user'])) {
+        $sessions = $this->session->userData();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($sessions['role_id'])) {
             $id_lecon = $this->input->post($this->pk) ?? null;
             if ($id_lecon) {
                 $updated = $this->LeconModel->update($id_lecon, ['published' => true]);

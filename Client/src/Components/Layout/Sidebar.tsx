@@ -11,7 +11,6 @@ import {
   MessageSquare,
   CreditCard,
   Settings,
-  ChevronRight,
   ChevronDown,
   Menu,
   ChevronLeft,
@@ -60,8 +59,8 @@ const menuItems: MenuItemType[] = [
     label: 'Leçons et exercices',
     icon: Notebook,
     children: [
-      { id: 'lessons', label: 'Leçons', icon:  BookOpenText, path: '/lessons' },
-      { id: 'exercices', label: 'Exercices', icon: NotebookPen , path: '/exercices' },
+      { id: 'lessons', label: 'Leçons', icon: BookOpenText, path: '/lessons' },
+      { id: 'exercices', label: 'Exercices', icon: NotebookPen, path: '/exercices' },
     ],
   },
   {
@@ -69,7 +68,7 @@ const menuItems: MenuItemType[] = [
     label: 'Administration',
     icon: UserCheck,
     children: [
-      { id: 'employees', label: 'Employés', icon: UserRound , path: '/employees' },
+      { id: 'employees', label: 'Employés', icon: UserRound, path: '/employees' },
       { id: 'teachers', label: 'Enseignants', icon: UserCheck, path: '/teachers' },
       { id: 'parents', label: 'Parents', icon: Users, path: '/parents' },
       { id: 'payments', label: 'Paiements', icon: CreditCard, path: '/payments' },
@@ -82,7 +81,7 @@ const menuItems: MenuItemType[] = [
     icon: Settings,
     children: [
       { id: 'school-year', label: 'Année scolaire', icon: Backpack, path: '/school-year' },
-      { id: 'levels', label: 'Niveaux', icon: GraduationCap, path: '/levels' },
+      { id: 'levels', label: 'Niveaux', icon: GraduationCap, path: '/levels?o=list-level' },
       { id: 'classes', label: 'Classes', icon: School, path: '/classes' },
       { id: 'subjects', label: 'Matières', icon: BookOpen, path: '/subjects' },
       { id: 'settings', label: 'Paramètres', icon: Settings, path: '/settings' },
@@ -108,6 +107,7 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
   const { datas: { permissions, user } } = useSelector(getAuthState);
   const [isOpentDialog, setIsOpentDialog] = useState(false);
   const dispatch: AppDispatch = useDispatch();
+
 
   const onConfirmLogout = () => {
     setIsOpentDialog(false);
@@ -180,7 +180,9 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
                     {!collapsed && (
                       <>
                         <span className="font-medium">{menu.label}</span>
-                        {isActive && <ChevronRight className="w-4 h-4 ml-auto" />}
+                        {isActive && (
+                          <div className='w-1.5 h-5 bg-blue-500 ml-auto rounded-full'></div>
+                        )}
                       </>
                     )}
                   </>
@@ -230,12 +232,12 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
       <div className="py-6 border-b border-r">
         <div className="flex items-center justify-center">
           {!collapsed && (
-            <div>
+            <div className='text-center'>
               <h1 className="text-xl font-bold text-gray-800">
                 {shoolInfo?.nom || "Nom de l'école"}
               </h1>
               <p className="text-sm text-gray-600">{shoolInfo?.slogan || 'Votre slogan'}</p>
-              <p className="text-xs font-semibold text-blue-600">
+              <p className="text-xs text-left font-semibold text-blue-600">
                 {activeSchoolYear?.nom}
               </p>
             </div>
@@ -255,19 +257,19 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
       </div>
 
       {/* Navigation */}
-      <nav className="mt-2 flex-1 overflow-y-auto scroll">
+      <nav className="mt-2 flex-1  overflow-y-auto scroll">
         {collapsed ? renderCollapsedMenuItems() : renderMenuItems(menuItems)}
       </nav>
 
       {/* Bouton Déconnexion */}
-      <div className="h-max w-full border bg-gray-100">
+      <div className="h-max w-full py-2">
         <button
           className={clsx(
             {
               'px-4 justify-center': collapsed,
               'px-6': !collapsed,
             },
-            'text-gray-700 hover:bg-gray-50 w-full gap-3 flex items-center  py-3 text-left transition-colors group relative'
+            'text-gray-700 hover:bg-slate-300 bg-slate-200 w-full gap-3 flex items-center  py-3 text-left transition-colors group relative'
           )}
           onClick={() => setIsOpentDialog(true)}
         >

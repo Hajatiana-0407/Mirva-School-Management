@@ -12,7 +12,7 @@ class NiveauModel extends CI_Model
     }
 
     // ======= FIND ALL =======
-    public function findAllLevelData()
+    public function findAll()
     {
         $niveaux =  $this->db->select($this->table . '.* , COUNT(c.id_classe) as total_classe ,  COUNT(mn.niveau_id_niveau) as total_matiere')
             ->from($this->table)
@@ -40,6 +40,22 @@ class NiveauModel extends CI_Model
                 ->from('classe c')
                 ->where('c.niveau_id_niveau', $niveau->id_niveau)
                 ->get()->result();
+            $niveau->classe['id_niveau'] = $niveau->id_niveau;
+        }
+
+        // Liste des enseignant pour chaque niveau
+        foreach ($niveaux as  &$niveau) {
+            $niveau->prof['listes'] = $this->db->select('p.*')
+                ->from('classe c')
+                ->join('niveau n', 'n.id_niveau = c.niveau_id_niveau', 'inner')
+                ->join('classe_proffesseur_matiere cpm', 'cpm.classe_id_classe = c.id_classe', 'inner')
+                ->join('personnel p', 'p.id_personnel = cpm.professeur_id_professeur', 'inner')
+                ->join('type_personnel tp', 'tp.id_type_personnel = p.id_type_personnel', 'inner')
+                ->where('n.id_niveau', $niveau->id_niveau)
+                ->where('tp.type', 'Enseignant')
+                ->group_by('p.id_personnel')
+                ->get()->result();
+            $niveau->prof['id_niveau'] = $niveau->id_niveau;
         }
         return $niveaux;
     }
@@ -68,35 +84,22 @@ class NiveauModel extends CI_Model
             ->from('classe c')
             ->where('c.niveau_id_niveau', $niveau->id_niveau)
             ->get()->result();
+        $niveau->classe['id_niveau'] = $niveau->id_niveau;
+
+        $niveau->prof['listes'] = $this->db->select('p.*')
+            ->from('classe c')
+            ->join('niveau n', 'n.id_niveau = c.niveau_id_niveau', 'inner')
+            ->join('classe_proffesseur_matiere cpm', 'cpm.classe_id_classe = c.id_classe', 'inner')
+            ->join('personnel p', 'p.id_personnel = cpm.professeur_id_professeur', 'inner')
+            ->join('type_personnel tp', 'tp.id_type_personnel = p.id_type_personnel', 'inner')
+            ->where('n.id_niveau', $niveau->id_niveau)
+            ->where('tp.type', 'Enseignant')
+            ->group_by('p.id_personnel')
+            ->get()->result();
+        $niveau->prof['id_niveau'] = $niveau->id_niveau;
 
         return $niveau;
     }
-
-    // ======= CREATE =======
-    public function insert($data)
-    {
-        $inserted = $this->db->insert($this->table, $data);
-
-        if ($inserted) {
-            $inserted_id = $this->db->insert_id();
-
-            return $this->findOneById($inserted_id);
-        }
-
-        return false;
-    }
-
-    // ======= UPDATE =======
-    public function update($id, $data)
-    {
-        $updated =  $this->db->where($this->primaryKey, $id)
-            ->update($this->table, $data);
-        if ($updated) {
-            return  $this->findOneById($id);
-        }
-        return $updated;
-    }
-
     // ======= Prendre les niveau lié a une prof donner  =======
     public function getLevelByTeacherId($id)
     {
@@ -128,6 +131,22 @@ class NiveauModel extends CI_Model
                 ->from('classe c')
                 ->where('c.niveau_id_niveau', $niveau->id_niveau)
                 ->get()->result();
+            $niveau->classe['id_niveau'] = $niveau->id_niveau;
+        }
+
+        // Liste des enseignant pour chaque niveau
+        foreach ($niveaux as  &$niveau) {
+            $niveau->prof['listes'] = $this->db->select('p.*')
+                ->from('classe c')
+                ->join('niveau n', 'n.id_niveau = c.niveau_id_niveau', 'inner')
+                ->join('classe_proffesseur_matiere cpm', 'cpm.classe_id_classe = c.id_classe', 'inner')
+                ->join('personnel p', 'p.id_personnel = cpm.professeur_id_professeur', 'inner')
+                ->join('type_personnel tp', 'tp.id_type_personnel = p.id_type_personnel', 'inner')
+                ->where('n.id_niveau', $niveau->id_niveau)
+                ->where('tp.type', 'Enseignant')
+                ->group_by('p.id_personnel')
+                ->get()->result();
+            $niveau->prof['id_niveau'] = $niveau->id_niveau;
         }
         return $niveaux;
     }

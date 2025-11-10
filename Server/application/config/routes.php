@@ -179,7 +179,7 @@ $GLOBALS['secure'] = [
     'api/admin/school/update' => true,
 
     // Classe
-    'api/admin/classe' => true,
+    // 'api/admin/classe' => true,
     'api/admin/classe/update' => true,
     'api/admin/classe/create' => true,
     'api/admin/classe/delete' => true,

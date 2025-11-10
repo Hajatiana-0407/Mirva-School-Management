@@ -12,6 +12,7 @@ import { useHashPermission } from '../../Hooks/useHashPermission';
 import { AppDispatch } from '../../Redux/store';
 import { getAllLevel } from './redux/LevelAsyncThunk';
 import Title from '../../Components/ui/Title';
+import { useActiveUser } from '../../Hooks/useActiveUser';
 
 
 
@@ -22,6 +23,7 @@ const Levels = () => {
   const [editingLevel, setEditingLevel] = useState<levelType | null>(null);
   const [idLevelToAddSubject, setIdLevelToAddSubject] = useState<number>(0);
   const dispatch: AppDispatch = useDispatch();
+  const { isStudent} = useActiveUser() ; 
 
   // HANDLERS
   const handleEdit = (level: levelType) => {
@@ -56,7 +58,8 @@ const Levels = () => {
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors disabled:bg-blue-400"
+            disabled={ isStudent }
           >
             <Plus className="w-4 h-4" />
             <span>Nouveau niveau</span>

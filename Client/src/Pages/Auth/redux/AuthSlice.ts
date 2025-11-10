@@ -26,6 +26,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     testAuthentication: (state) => {
+      state.action.isLoading = true;
       if (!state.datas.isLoggedIn) {
         const token = localStorage.getItem('token');
         if (token && token !== '') {
@@ -39,6 +40,7 @@ const authSlice = createSlice({
           }
         }
       }
+      state.action.isLoading = false;
     },
   },
   extraReducers: (builder) => {
@@ -90,7 +92,7 @@ const authSlice = createSlice({
         } else {
           // Effacer le token 
           localStorage.removeItem('token');
-          state.datas = AuthInitialValue ;
+          state.datas = AuthInitialValue;
         }
       })
       .addCase(logoutUser.rejected, (state) => {

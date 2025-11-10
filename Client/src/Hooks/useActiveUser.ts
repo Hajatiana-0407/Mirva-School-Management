@@ -4,8 +4,9 @@ import { getAuthState } from "../Pages/Auth/redux/AuthSlice";
 export const useActiveUser = () => {
     const { datas: { user } } = useSelector(getAuthState);
     return {
-        isTeacher : user?.role?.toLocaleLowerCase() === 'enseignant' , 
-        isStudent : user?.role?.toLocaleLowerCase() === 'étudiant' , 
-        isParent : user?.role?.toLocaleLowerCase() === 'parent' , 
+        isTeacher: user?.role_id?.toLocaleLowerCase() === 'teacher',
+        isStudent: user?.role_id?.toLocaleLowerCase() === 'student',
+        isParent: user?.role_id?.toLocaleLowerCase() === 'parent',
+        isAdmin: user?.role_id?.toLocaleLowerCase() === 'admin',
     }
 }

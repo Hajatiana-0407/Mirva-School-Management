@@ -24,7 +24,7 @@ const Subjects = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [subjectToArchive, setSubjectToArchive] = useState<SubjectType | null>(null);
   const dispatch: AppDispatch = useDispatch();
-  const permission = useHashPermission();
+  const permission = useHashPermission(  { redirect : true  });
 
 
   const columns = [

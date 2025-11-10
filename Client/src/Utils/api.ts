@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios"
 import { navigate } from "./navigate";
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL + 'api/',
+    withCredentials: true,
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
     }

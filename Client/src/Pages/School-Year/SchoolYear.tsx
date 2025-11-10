@@ -25,7 +25,7 @@ const SchoolYear = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [schoolYearToArchive, setSchoolYearToArchive] = useState<SchoolYearType | null>(null);
   const dispatch: AppDispatch = useDispatch();
-  const permission = useHashPermission();
+  const permission = useHashPermission(  { redirect : true  });
 
   const columns = [
     { key: 'nom', label: 'Année scolaire' },

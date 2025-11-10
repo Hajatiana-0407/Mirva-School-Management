@@ -19,9 +19,10 @@ const classeSchema = object({
 
 type ClasseFormPropsType = {
     handleClose?: () => void;
-    classe?: ClasseType | null
+    classe?: ClasseType | null;
+    idLevelToAddClasse?: number
 }
-const ClasseForm: React.FC<ClasseFormPropsType> = ({ classe, handleClose }) => {
+const ClasseForm: React.FC<ClasseFormPropsType> = ({ classe, handleClose, idLevelToAddClasse }) => {
     const dispatch: AppDispatch = useDispatch();
     const { action, error } = useSelector(getClasseState);
     const { onSubmite, formErrors } = useForm<ClasseType>(classeSchema, classeInitialState);
@@ -44,7 +45,11 @@ const ClasseForm: React.FC<ClasseFormPropsType> = ({ classe, handleClose }) => {
             <InputError message={error} />
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Niveau</label>
-                <select name='niveau_id_niveau' className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <select
+                    defaultValue={idLevelToAddClasse || ''}
+                    name='niveau_id_niveau'
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
                     {!classe && <option value="0">Sélectionner un niveau</option>}
 
                     {niveaux.map((niveau: levelType, key: number) => {

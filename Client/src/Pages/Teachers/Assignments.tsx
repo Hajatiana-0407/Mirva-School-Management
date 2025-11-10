@@ -24,7 +24,7 @@ const Assignments = () => {
     const { error, single: { data: teacher, action } } = useSelector(getTeacherState);
     const { id } = useParams();
     const dispatch: AppDispatch = useDispatch();
-    const permission = useHashPermission('teachers');
+    const permission = useHashPermission({ id : 'teachers'});
 
 
     const { onSubmite, formErrors } = useForm(assignationSchema, { id_personnel: teacher?.id_personnel || '' });

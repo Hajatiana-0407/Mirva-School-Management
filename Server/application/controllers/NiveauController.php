@@ -14,8 +14,10 @@ class NiveauController extends CI_Controller
 
     public function index()
     {
-        $data = $this->NiveauModel->findAllLevelData();
-        echo json_encode($data);
+        $data = $this->NiveauModel->findAll();
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($data));
     }
 
     public function create()
@@ -82,8 +84,8 @@ class NiveauController extends CI_Controller
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode([
-                'error' => false , 
-                'data' => $datas 
+                'error' => false,
+                'data' => $datas
             ]));
     }
 

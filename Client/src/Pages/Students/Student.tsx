@@ -32,7 +32,7 @@ const Student = () => {
   const [statistique, setStatistique] = useState<any>(null)
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const permission = useHashPermission();
+  const permission = useHashPermission(  { redirect : true  });
 
   const handleEdit = (student: StudentType) => {
     setEditingStudent(student);

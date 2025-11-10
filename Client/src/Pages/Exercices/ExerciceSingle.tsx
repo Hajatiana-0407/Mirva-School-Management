@@ -24,7 +24,7 @@ const ExerciceSingle = () => {
     const { hiddeTheModalActive } = useSelector(getAppState);
     const [showModal, setShowModal] = useState(false);
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-    const permission = useHashPermission();
+    const permission = useHashPermission(  { redirect : true  });
 
 
     // Progession pour le telechargement 
@@ -57,7 +57,7 @@ const ExerciceSingle = () => {
             setShowProgress(true);
             await download({
                 title: exercice.titre,
-                description: exercice.lecon_description,
+                description: exercice.exercice_description,
                 principalFileUrl: exercice.ficher_principale || "",
                 supportFileUrl: exercice.fichier_support,
             }, (percent: number) => setProgress(percent))
@@ -187,7 +187,7 @@ const ExerciceSingle = () => {
                         Description
                     </h2>
                     <p className="text-gray-700 leading-relaxed">
-                        {exercice.lecon_description || 'Aucune description disponible.'}
+                        {exercice.exercice_description || 'Aucune description disponible.'}
                     </p>
                 </section>
 

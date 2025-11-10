@@ -24,7 +24,7 @@ const Teachers: React.FC = () => {
   const [editingEmployees, setEditingEmployees] = useState<TeacherType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [teacherToArchive, setTeacherToArchive] = useState<TeacherType | null>(null);
-  const permission = useHashPermission();
+  const permission = useHashPermission(  { redirect : true  });
 
   const { hiddeTheModalActive } = useSelector(getAppState);
   // *** //

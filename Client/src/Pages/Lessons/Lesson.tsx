@@ -33,7 +33,7 @@ const Lesson = () => {
   const [progress, setProgress] = useState(0)
   const [showProgress, setShowProgress] = useState(false)
   const dispatch: AppDispatch = useDispatch();
-  const permission = useHashPermission();
+  const permission = useHashPermission(  { redirect : true  });
   const { isStudent } = useActiveUser();
 
   const handleCloseModal = () => {
