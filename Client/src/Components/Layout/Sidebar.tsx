@@ -82,7 +82,7 @@ const menuItems: MenuItemType[] = [
     icon: Settings,
     children: [
       { id: 'school-year', label: 'Année scolaire', icon: Backpack, path: '/school-year' },
-      { id: 'levels', label: 'Niveaux', icon: GraduationCap, path: '/levels' },
+      { id: 'levels', label: 'Niveaux', icon: GraduationCap, path: '/levels?o=list-level' },
       { id: 'classes', label: 'Classes', icon: School, path: '/classes' },
       { id: 'subjects', label: 'Matières', icon: BookOpen, path: '/subjects' },
       { id: 'settings', label: 'Paramètres', icon: Settings, path: '/settings' },

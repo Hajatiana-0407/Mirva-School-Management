@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, GraduationCap, Plus, Save } from "lucide-react"
+import { ArrowDown, ArrowRight, BookOpen, GraduationCap, Plus, Save } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { getLevelState } from "./redux/LevelSlice";
@@ -36,8 +36,8 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
     const [subjectCoefToDelete, setSubjectCoefToDelete] = useState<number[]>([]);
     const { onSubmite } = useForm<any>(LevelSubjectSchema, {});
     const [isAlertOpen, setIsAlertOpen] = useState(false)
-    const permission = useHashPermission(  { redirect : true  });
-    const permissionSubject = useHashPermission({ id: 'subjects'});
+    const permission = useHashPermission({ redirect: true });
+    const permissionSubject = useHashPermission({ id: 'subjects' });
     const [showModalSubject, setShowModalSubject] = useState(false)
     const { hiddeTheModalActive } = useSelector(getAppState);
 
@@ -199,7 +199,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* LISTE DES MATIERE A AJOUTER  */}
                 <div className="lg:col-span-1">
-                    <div className="bg-white rounded-lg shadow-sm border">
+                    <div className="bg-white rounded-lg border">
                         <div className="p-4 flex justify-between items-center">
                             <HeadingSmall title="Matières disponible." />
                             {permissionSubject.create &&
@@ -224,9 +224,10 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                                         <span>{subject.denomination}</span>
                                         <button
                                             onClick={() => { handleAddSubjectInLevel(subject) }}
-                                            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+                                            className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-green-700 transition-colors"
                                         >
-                                            <ArrowRight className="inline-block ms-1 h-5 w-5" />
+                                            <ArrowDown className="m-0 h-5 w-5 hidden max-lg:block" />
+                                            <ArrowRight className="m-0 h-5 w-5 hidden lg:block" />
                                         </button>
                                     </div>
                                 } else {
@@ -290,7 +291,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                                                 return '';
                                             })}
                                         </div>
-                                        <div className="flex pt-4">
+                                        <div className="flex justify-end pt-4">
                                             {permission.create &&
                                                 <button
                                                     type="submit"

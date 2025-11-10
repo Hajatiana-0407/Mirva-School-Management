@@ -1,44 +1,99 @@
 import { Archive, Edit, Eye, Filter, Search } from "lucide-react"
-import { levelType, SubjectType } from "../../Utils/Types";
+import { ClasseType, levelType, SubjectType } from "../../Utils/Types";
 import { hexToRgba } from "../../Utils/Utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getLevelState } from "./redux/LevelSlice";
 import Table from "../Table";
 import ConfirmDialog from "../ConfirmDialog";
 import { AppDispatch } from "../../Redux/store";
-import { deleteLevel } from "./redux/LevelAsyncThunk";
+import { deleteLevel, getAllLevel } from "./redux/LevelAsyncThunk";
 import { useNavigate } from "react-router-dom";
+import Modal from "../Modal";
+import ClasseForm from "../../Components/Forms/ClasseForm";
+import { getAppState } from "../../Redux/AppSlice";
+import { getClasseState } from "../Classes/redux/ClasseSlice";
 
 type LevelListePropsType = {
     handleEdit: (level: levelType) => void
     setIdLevelToAddSubject: React.Dispatch<React.SetStateAction<number>>
 }
 
-type ActionColTypeLevel = SubjectType&{ coefficient: number}; 
+type ActionColTypeLevel = SubjectType & { coefficient: number };
 const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType) => {
     const { datas, action } = useSelector(getLevelState);
+    const { datas : Classes } = useSelector( getClasseState )
     const [searchTerm, setSearchTerm] = useState('');
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
     const [levelToDelete, setLevelToDelete] = useState<levelType | null>(null);
+    const [showClasseModale, setShowClasseModale] = useState(false)
+    const [idLevelToAddClasse, setIdLevelToAddClasse] = useState<number | null>(null);
+    const { hiddeTheModalActive } = useSelector(getAppState)
+
     const dispatch: AppDispatch = useDispatch();
-    const navigate = useNavigate() ; 
+    const navigate = useNavigate();
 
+    // Contenue pour la liste des classes
+    const getContentClasseCol = (classes: { listes: ClasseType[], id_niveau: number }) => {
+        if (classes.listes.length > 0) {
+            return (
+                <div className=''>
+                    <div className="ml-2 py-2 flex gap-1 items-center min-w-40  max-w-52 flex-wrap">
+                        {classes.listes?.map((classe) => (
+                            <div
+                                key={classe.id_classe}
+                                className="px-2 py-1 rounded text-xs font-medium hover:opacity-80 border bg-gray-200"
+                            >
+                                <span>{classe.denomination}</span>
+                            </div>
+                        ))}
+                    </div>
+                    <div
+                        className="p-2 rounded text-xs text-gray-500 hover:bg-gray-50 cursor-pointer"
+                        onClick={() => {
+                            setIdLevelToAddClasse(classes.id_niveau)
+                            setShowClasseModale(true);
+                        }}
+                    >
+                        + Ajouter
+                    </div>
+                </div>)
+        }
+        return <div
+            className="p-2 rounded text-xs text-gray-500 hover:bg-gray-50 cursor-pointer"
+            onClick={() => {
+                setIdLevelToAddClasse(classes.id_niveau)
+                setShowClasseModale(true);
+            }}
+        >
+            + Ajouter
+        </div>
+    }
 
-    // HANDLERS
+    // Contenue pour le liste des matieres
     const getContentMatiereCol = (subjects: { listes: ActionColTypeLevel[]; id_niveau: number }) => {
         if (subjects.listes.length > 0) {
             return (
-                <div className='flex justify-start items-center gap-2'>
-                    {subjects.listes.slice(0, 2).map((subject: ActionColTypeLevel) => (
-                        <div key={subject.id_matiere} className='px-2  py-1 rounded text-xs font-medium  hover:opacity-80' style={{ backgroundColor: hexToRgba(subject.couleur, 0.5) }}>
-                            <span>
-                                {subject.abbreviation} ({ subject.coefficient})
-                            </span>
-                        </div>)
-                    )}
-                    <div className='text-center text-gray-400 text-xs'>
-                        {subjects.listes.length > 2 ? `+${subjects.listes.length - 2}` : ''}
+                <div className=''>
+                    <div className="ml-2 py-2 flex gap-1 items-center min-w-40  max-w-52 flex-wrap">
+                        {subjects.listes?.map((subject) => (
+                            <div
+                                key={subject.id_matiere}
+                                className="px-2 py-1 rounded text-xs font-medium hover:opacity-80"
+                                style={{ backgroundColor: hexToRgba(subject.couleur, 0.5) }}
+                            >
+                                <span>{subject.abbreviation}</span>
+                            </div>
+                        ))}
+                    </div>
+                    <div
+                        className="p-2 rounded text-xs text-gray-500 hover:bg-gray-50 cursor-pointer"
+                        onClick={() => {
+                            navigate('/levels?o=subject-level-coef')
+                            setIdLevelToAddSubject(subjects.id_niveau);
+                        }}
+                    >
+                        + Ajouter
                     </div>
                 </div>)
         }
@@ -52,6 +107,8 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
             + Ajouter
         </div>
     }
+
+    // HANDLERS
     const handleDelete = (level: any) => {
         setLevelToDelete(level);
         setShowConfirmDialog(true);
@@ -63,21 +120,42 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
         setShowConfirmDialog(false);
         setLevelToDelete(null);
     };
+    const handleClasseModaleClose = () => {
+        setShowClasseModale(false);
+        setIdLevelToAddClasse(null);
+    }
 
+
+    // Modale 
+    useEffect(() => {
+        if (showClasseModale && hiddeTheModalActive) {
+            handleClasseModaleClose();
+        }
+    }, [hiddeTheModalActive]);
+
+    useEffect(() => {
+        dispatch(getAllLevel());
+    }, [dispatch ,Classes ]);
 
     // TABLEAU //
     const columns = [
-        { key: 'niveau', label: 'Niveau' },
+        {
+            key: 'niveau', label: 'Niveau', render: (value: string) => (
+                <div className="font-semibold uppercase">
+                    {value}
+                </div>
+            )
+        },
         { key: 'cycle', label: 'Cycle' },
         { key: 'description', label: 'Description' },
-        { key: 'total_classe', label: 'Nombre de classe', render: (value: number) => <div className={value == 0 ? "text-gray-300" : ''}>{value > 0 ? value : 'Aucune'} </div> },
+        { key: 'classe', label: 'Classes', render: getContentClasseCol },
         { key: 'matiere', label: 'Matières', render: getContentMatiereCol },
     ];
 
     const actions = [
         { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
-        { icon: Edit, type:'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
-        { icon: Archive,type:'delete', label: 'Archiver', onClick: handleDelete, color: 'red' },
+        { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
+        { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleDelete, color: 'red' },
     ];
 
     return (
@@ -118,6 +196,15 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
                 title="Suppression du niveau"
                 message={`Êtes-vous sûr de vouloir archiver le niveau ${levelToDelete?.niveau} ?`}
             />
+
+            {/* Modal pour ajouter/modifier une matière */}
+            <Modal
+                isOpen={showClasseModale}
+                onClose={handleClasseModaleClose}
+                title={'Nouvelle matière'}
+            >
+                <ClasseForm handleClose={handleClasseModaleClose} idLevelToAddClasse={idLevelToAddClasse as number} />
+            </Modal>
         </>
     )
 }

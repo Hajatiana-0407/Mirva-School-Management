@@ -40,6 +40,7 @@ class NiveauModel extends CI_Model
                 ->from('classe c')
                 ->where('c.niveau_id_niveau', $niveau->id_niveau)
                 ->get()->result();
+            $niveau->classe['id_niveau'] = $niveau->id_niveau;
         }
         return $niveaux;
     }
@@ -63,11 +64,12 @@ class NiveauModel extends CI_Model
             ->group_by('m.id_matiere')
             ->get()->result();
         $niveau->matiere['id_niveau'] = $niveau->id_niveau;
-
+        
         $niveau->classe['listes'] = $this->db->select('c.*')
-            ->from('classe c')
-            ->where('c.niveau_id_niveau', $niveau->id_niveau)
-            ->get()->result();
+        ->from('classe c')
+        ->where('c.niveau_id_niveau', $niveau->id_niveau)
+        ->get()->result();
+        $niveau->classe['id_niveau'] = $niveau->id_niveau;
 
         return $niveau;
     }

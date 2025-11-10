@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { LevelSubjectType, SubjectType } from '../../Utils/Types';
 import { hexToRgba } from '../../Utils/Utils';
-import { Archive, Plus } from 'lucide-react';
+import {  Plus, Trash2 } from 'lucide-react';
 import ConfirmDialog from '../ConfirmDialog';
 import clsx from 'clsx';
 
@@ -42,10 +42,10 @@ const SubjectComponent = ({ subject, levelSubject, nameKey, onDelete, type = "up
     }
 
     return (
-        <div key={`${nameKey}`} className="w-100 min-h-10 gap-1 grid grid-cols-12 my-2">
+        <div key={`${nameKey}`} className="w-100 min-h-10 gap-1 grid grid-cols-12 my-2 border-r">
             <div
                 className={clsx(
-                    {'border-blue-200' :  type !== "update" } , 
+                    { 'border-blue-200': type !== "update" },
                     "col-span-4 flex items-center justify-center border relative"
                 )}
                 style={{ backgroundColor: hexToRgba(subject.couleur, 0.1) }}
@@ -60,7 +60,7 @@ const SubjectComponent = ({ subject, levelSubject, nameKey, onDelete, type = "up
             <input
                 type="number"
                 min={1}
-                className="px-3 py-2 border col-span-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-2 border col-span-7 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Coefficient..."
                 value={value}
                 onChange={(e) => setValue(parseInt(e.target.value))}
@@ -68,10 +68,10 @@ const SubjectComponent = ({ subject, levelSubject, nameKey, onDelete, type = "up
                 required
             />
             <div
-                className='col-span-1 cursor-pointer border rounded  bg-gray-100 hover:bg-gray-200 transition-all duration-200 text-red-600 hover:text-red-800 flex justify-center items-center'
+                className='col-span-1 cursor-pointer transition-all duration-200 text-red-600 hover:text-red-700 flex justify-center items-center'
                 onClick={() => { handleDelete() }}
             >
-                <Archive />
+                <Trash2 />
             </div>
             <ConfirmDialog
                 title='Suppression du matière'
