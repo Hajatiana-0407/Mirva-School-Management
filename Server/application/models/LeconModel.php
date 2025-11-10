@@ -14,14 +14,14 @@ class LeconModel extends CI_Model
 
     public function findAll()
     {
-        $user = $_POST['user'] ?? null;
-        $user_data = $user['user_data'] ?? null;
-        $user_info = $user['user_info'] ?? null;
-        $role = $user_data['role'] ?? null;
+        $session = $this->session->userData();
+
+        // Si l'utilisateur est non connecter
+        if( !isset( $session['role_id'])) return [] ; 
 
         // Définition du niveau de l'élève si applicable
         $niveau_utilisateur = null;
-        if ($role === 'Étudiant' && isset($user_info['id_eleve'])) {
+        if ($session['role_id'] == 'student') {
             $niveau_utilisateur = $this->db
                 ->select('n.*')
                 ->from('inscription i')
@@ -29,7 +29,7 @@ class LeconModel extends CI_Model
                 ->join('classe c', 'c.id_classe = i.classe_id_classe', 'inner')
                 ->join('niveau n', 'n.id_niveau = c.niveau_id_niveau', 'inner')
                 ->where('a.isActif', 1)
-                ->where('i.eleve_id_eleve', $user_info['id_eleve'])
+                ->where('i.eleve_id_eleve', isset($session['user_identity']['id_eleve']) ? $session['user_identity']['id_eleve'] : null)
                 ->get()
                 ->row();
         }
@@ -54,27 +54,26 @@ class LeconModel extends CI_Model
         n.cycle, 
         p.nom,
         p.prenom,
-        p.photo
-    ')
+        p.photo ')
             ->from('lecon l')
             ->join('matiere m', 'm.id_matiere = l.id_matiere', 'inner')
             ->join('niveau n', 'n.id_niveau = l.id_niveau', 'inner')
             ->join('personnel p', 'p.id_personnel = l.id_prof', 'left');
 
         // Si c'est un enseignant → afficher uniquement ses leçons
-        if ($role === 'Enseignant' && isset($user_info['id_personnel'])) {
-            $this->db->where('l.id_prof', $user_info['id_personnel']);
+        if ($session['role_id'] == 'teacher'  ) {
+            $this->db->where('l.id_prof', isset($session['user_identity']['id_personnel']) ? $session['user_identity']['id_personnel'] : null);
         }
 
         // Si c'est un élève → afficher les leçons de son niveau uniquement
-        if ($role === 'Étudiant' && $niveau_utilisateur !== null) {
+        if ($session['role_id'] == 'student' && $niveau_utilisateur !== null) {
             $this->db
                 ->where('n.id_niveau', $niveau_utilisateur->id_niveau)
                 ->where('l.published', 1);
         }
 
         // Si aucun niveau trouvé pour un élève → renvoyer une liste vide
-        if ($role === 'Étudiant' && $niveau_utilisateur === null) {
+        if ($session['role_id'] == 'student' && $niveau_utilisateur === null) {
             return [];
         }
 
@@ -89,15 +88,11 @@ class LeconModel extends CI_Model
 
     public function findOneById($id)
     {
-        if (!!!$id)  return null;
-        $user = $_POST['user'] ?? null;
-        $user_data = $user['user_data'] ?? null;
-        $user_info = $user['user_info'] ?? null;
-        $role = $user_data['role'] ?? null;
+        $session = $this->session->userData();
 
         // Définition du niveau de l'élève si applicable
         $niveau_utilisateur = null;
-        if ($role === 'Étudiant' && isset($user_info['id_eleve'])) {
+        if ($session['role_id'] == 'student') {
             $niveau_utilisateur = $this->db
                 ->select('n.*')
                 ->from('inscription i')
@@ -105,7 +100,7 @@ class LeconModel extends CI_Model
                 ->join('classe c', 'c.id_classe = i.classe_id_classe', 'inner')
                 ->join('niveau n', 'n.id_niveau = c.niveau_id_niveau', 'inner')
                 ->where('a.isActif', 1)
-                ->where('i.eleve_id_eleve', $user_info['id_eleve'])
+                ->where('i.eleve_id_eleve', isset($session['user_identity']['id_eleve']) ? $session['user_identity']['id_eleve'] : null)
                 ->get()
                 ->row();
         }
@@ -134,22 +129,20 @@ class LeconModel extends CI_Model
             ->join('niveau n', 'n.id_niveau = l.id_niveau', 'inner')
             ->join('personnel p', 'p.id_personnel = l.id_prof', 'left')
             ->where($this->primaryKey, $id);
-
-
         // Si c'est un enseignant → afficher uniquement ses leçons
-        if ($role === 'Enseignant' && isset($user_info['id_personnel'])) {
-            $this->db->where('l.id_prof', $user_info['id_personnel']);
+        if ($session['role_id'] == 'teacher'  ) {
+            $this->db->where('l.id_prof', isset($session['user_identity']['id_personnel']) ? $session['user_identity']['id_personnel'] : null);
         }
 
         // Si c'est un élève → afficher les leçons de son niveau uniquement
-        if ($role === 'Étudiant' && $niveau_utilisateur !== null) {
+        if ($session['role_id'] == 'student' && $niveau_utilisateur !== null) {
             $this->db
                 ->where('n.id_niveau', $niveau_utilisateur->id_niveau)
                 ->where('l.published', 1);
         }
 
         // Si aucun niveau trouvé pour un élève → renvoyer une liste vide
-        if ($role === 'Étudiant' && $niveau_utilisateur === null) {
+        if ($session['role_id'] == 'student' && $niveau_utilisateur === null) {
             return [];
         }
 

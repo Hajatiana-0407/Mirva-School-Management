@@ -13,6 +13,10 @@ class MatiereNiveauModel extends CI_Model
     // ======= READ =======
     public function getLelvelSubjectByIdNiveau($id_niveau)
     {
+        $session = $this->session->userData();
+
+        // ? Si l'utilisateur n'est pas connecter ou etudiant 
+        if (!isset($session['role_id']) || $session['role_id'] === 'student') return [];
         $this->db->select('mn.* , m.* , n.*')
             ->from($this->table . ' mn')
             ->join('matiere m', 'm.id_matiere = mn.matiere_id_matiere', 'left')
@@ -20,13 +24,10 @@ class MatiereNiveauModel extends CI_Model
             ->where('n.id_niveau', $id_niveau);
 
         // Si l'utilisateur connecter est le porffesseur 
-        if (
-            isset($_POST['user']['user_data'])
-            && $_POST['user']['user_data']['role'] == 'Enseignant'
-        ) {
+        if ($session['role_id'] === 'teacher') {
             $this->db->join('classe c', 'c.niveau_id_niveau = n.id_niveau', 'inner')
                 ->join('classe_proffesseur_matiere cpm', 'cpm.matiere_id_matiere = m.id_matiere', 'inner')
-                ->where('cpm.professeur_id_professeur', $_POST['user']['user_info']['id_personnel'])
+                ->where('cpm.professeur_id_professeur', isset($session['user_identity']['id_personnel']) ? $session['user_identity']['id_personnel'] : null)
             ;
         }
         return $this->db

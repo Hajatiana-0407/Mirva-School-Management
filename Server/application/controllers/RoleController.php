@@ -21,7 +21,8 @@ class RoleController extends CI_Controller
 
     public function create()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user'])) {
+        $sessions = $this->session->useData();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($sessions['role_id'])) {
             $post = $this->input->post(null, true);
 
             $role = [
@@ -81,7 +82,8 @@ class RoleController extends CI_Controller
 
     public function update()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user'])) {
+        $sessions  = $this->session->userData() ; 
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($sessions['role_id'])) {
             $post = $this->input->post(null, true);
             $id_role = $post[$this->pk] ?? null;
             if (!$id_role) {

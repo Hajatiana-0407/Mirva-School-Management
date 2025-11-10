@@ -457,26 +457,30 @@ class AppFixtures extends CI_Controller
         $roles = [
             [
                 'nom' => 'Administrateur',
+                'identification' => 'admin',
                 'description' => 'Administrateur du système',
                 'is_restrict' => true,
                 'couleur' => $this->faker->hexColor,
             ],
             [
                 'nom' => 'Enseignant',
+                'identification' => 'teacher',
                 'description' => 'Professeur pouvant gérer ses classes, notes et présences',
                 'is_restrict' => true,
                 'couleur' => $this->faker->hexColor,
             ],
             [
                 'nom' => 'Étudiant',
+                'identification' => 'student',
                 'description' => 'Élève pouvant consulter ses notes, devoirs et emplois du temps',
                 'is_restrict' => true,
                 'couleur' => $this->faker->hexColor,
             ],
             [
                 'nom' => 'Parent',
+                'identification' => 'parent',
                 'description' => 'Parent d’élève pouvant consulter les résultats et paiements',
-                'is_restrict' => false,
+                'is_restrict' => true,
                 'couleur' => $this->faker->hexColor,
             ],
         ];
@@ -560,7 +564,7 @@ class AppFixtures extends CI_Controller
             'users'
         ]);
 
-        
+
         if ($clean) {
             // On efface seulement la base de données
             return;
@@ -696,7 +700,8 @@ class AppFixtures extends CI_Controller
     }
 
 
-    private function registration($clean = false){
+    private function registration($clean = false)
+    {
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
             'inscription',

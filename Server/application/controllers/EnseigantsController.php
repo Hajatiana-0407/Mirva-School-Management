@@ -110,6 +110,7 @@ class EnseigantsController extends CI_Controller
                 // ? Teste si le type est proffesseur ( enseignant ) 
                 $assignations = $this->input->post('assignations');
                 if ($assignations) {
+                    
                     // ? Creation de compte utilisateur pour le prof
                     $this->load->model('UtilisateurModel');
                     $roleEnseignant =  $this->UtilisateurModel->getIdRoleTeacher();

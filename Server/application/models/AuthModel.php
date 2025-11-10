@@ -16,7 +16,7 @@ class AuthModel extends CI_Model
     {
         if (!!!$identifiant) return null;
         // ? Selection du compte 
-        $user  = $this->db->select('u.* , r.nom as role')
+        $user  = $this->db->select('u.* , r.nom as role , r.identification as role_id')
             ->from($this->table . ' u')
             ->join('roles r', 'r.id_role = u.id_role', 'inner')
             ->where('u.identifiant', $identifiant)
@@ -95,7 +95,7 @@ class AuthModel extends CI_Model
         if (!!!$identifiant) return null;
         if (!!!$identifiant) return null;
         // ? Selection du compte 
-        $user  = $this->db->select('u.* , r.nom as role')
+        $user  = $this->db->select('u.* , r.nom as role , r.identification as role_id')
             ->from($this->table . ' u')
             ->join('roles r', 'r.id_role = u.id_role', 'inner')
             ->where('u.id_user', $identifiant)

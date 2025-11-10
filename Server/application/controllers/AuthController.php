@@ -32,16 +32,20 @@ class AuthController extends CI_Controller
                 $this->AuthModel->update($user->id_user, ['last_login' => (new DateTime())->format('Y-m-d H:i:s'), 'status' => true]);
 
                 // ! Creation de la session utilisateur 
-                // $this->session->set_userdata(array(
-                //     'role' => $user->role,
-                //     'id_user' => $user->id_user,
-                //     // ** *** //
-                //     'user_identity' => $response['info'],
-                //     'permissions' => $response['permissions']
-                // ));
+                $this->session->set_userdata(array(
+                    'role_id' => $user->role_id,
+                    'role' => $user->role,
+                    'id_user' => $user->id_user,
+                    // ** *** //
+                    'user_identity' => (array)$response['info'],
+                    'permissions' => $response['permissions']
+                ));
                 //! *** // 
 
-                echo json_encode(['error' => false, 'data' => $token]);
+                echo json_encode([
+                    'error' => false,
+                    'data' => $token
+                ]);
                 return;
             } else if ($user) {
                 echo json_encode(['error' => true, 'message' => 'Mot de passe incorrect']);
@@ -58,7 +62,7 @@ class AuthController extends CI_Controller
     public function logout()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $identifiant = $this->input->post('id_user', true);
+            $identifiant = $this->input->post('id_user');
 
             if (!$identifiant) {
                 echo json_encode(['error' => true, 'message'  => 'L\identifiant est null']);
@@ -67,6 +71,16 @@ class AuthController extends CI_Controller
             }
             $response = $this->AuthModel->update($identifiant,  ['last_login' => (new DateTime())->format('Y-m-d H:i:s'), 'status' => true]);
             if ($response) {
+                //  Détruire la session
+                $this->session->sess_destroy();
+
+                //  Supprimer le cookie manuellement
+                $session_name = $this->config->item('sess_cookie_name');
+
+                // Supprimer le cookie côté serveur
+                if (isset($_COOKIE[$session_name])) {
+                    unset($_COOKIE[$session_name]);
+                }
                 echo json_encode(['error' => false, 'data' => true]);
             } else {
                 echo json_encode(['error' => true, 'message' => 'Identifiant incorrect']);

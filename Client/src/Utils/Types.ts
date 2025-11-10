@@ -41,6 +41,7 @@ export type TokenDecodeType = {
 }
 export type User = {
     id_user?: number;
+    role_id?: string,
     identifiant: string | null;
     password?: string | null;
     role: 'admin' | 'secretaire' | 'proffesseur' | 'parent' | 'etudiant' | string | null;
@@ -367,7 +368,7 @@ export type StudentDetailsType = StudentType & levelType & ClasseType & { mere?:
 // Registration ( INSCRIPTION )
 export type RegistrationType = {
     id_inscription?: number;
-    date_inscription?: string 
+    date_inscription?: string
     // Élève
     matricule_etudiant?: string;
     nom: string;
@@ -586,7 +587,7 @@ export type ExerciceType = {
     id_exercice?: number;
     slug: string;
     titre: string;
-    lecon_description: string;
+    exercice_description: string;
     contenu?: string;
     ficher_principale?: string;
     fichier_support?: string;
@@ -600,7 +601,7 @@ export type ExerciceType = {
 export const ExerciceInitialValue: ExerciceType = {
     titre: '',
     slug: '',
-    lecon_description: '',
+    exercice_description: '',
     ...employeeInitialValue,
     ...subjectInitialValue,
     ...levelInitial
@@ -611,6 +612,7 @@ export const ExerciceInitialValue: ExerciceType = {
 // ===================== Roles ===================== //
 export type RoleType = {
     id_role?: number;
+    identification: string;
     nom: string;
     description: string;
     is_restrict: string;
@@ -619,6 +621,7 @@ export type RoleType = {
     permissions: Record<number, Permission & { label: string, is_for_all?: boolean, is_section?: boolean, }>;
 };
 export const RoleInitialValue: RoleType = {
+    identification: '',
     nom: '',
     description: '',
     is_restrict: '',
