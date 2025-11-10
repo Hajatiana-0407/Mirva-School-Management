@@ -171,7 +171,12 @@ export const subjectInitialValue: SubjectType = {
 export type ClasseType = {
     id_classe?: number;
     denomination: string;
-    niveau_id_niveau: number
+    niveau_id_niveau: number;
+    niveau?: string;
+    created_at?: string ; 
+    matiere?: { listes: SubjectType[], id_niveau?: number };
+    prof?: { listes: EmployeeType[], id_niveau?: number };
+    eleve?: { listes: StudentType[], id_niveau?: number };
 }
 
 export const classeInitialState: ClasseType = {

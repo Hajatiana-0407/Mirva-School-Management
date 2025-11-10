@@ -12,6 +12,7 @@ import { getClasseState } from './redux/ClasseSlice';
 import ClasseForm from '../../Components/Forms/ClasseForm';
 import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
+import { navigate } from '../../Utils/navigate';
 
 
 const Classes: React.FC = () => {
@@ -69,7 +70,7 @@ const Classes: React.FC = () => {
   ];
 
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
+    { icon: Eye, label: 'Voir', onClick: (item: any) => navigate(`/classes/${ item.id_classe}`), color: 'blue' },
     { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
     { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];

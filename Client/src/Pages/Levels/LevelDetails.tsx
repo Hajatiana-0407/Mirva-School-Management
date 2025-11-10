@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Users, BookOpen, Layers, PenBox } from "lucide-react";
+import { Users, BookOpen, Layers, PenBox, Eye } from "lucide-react";
 import HeadingSmall from "../../Components/ui/HeadingSmall";
 // import { getLevelById, getLevelSubjectsById } from "../../Store/Levels/levelActions"; // ajuster selon vos actions
 import { levelType, ClasseType, SubjectType } from "../../Utils/Types";
@@ -14,6 +14,7 @@ import LevelForm from "../../Components/Forms/LevelForm";
 import { useActiveUser } from "../../Hooks/useActiveUser";
 import Profile from "../../Components/ui/Profile";
 import { getAppState } from "../../Redux/AppSlice";
+import { getAllLevel } from "./redux/LevelAsyncThunk";
 
 const LevelDetails: React.FC = () => {
     const { id } = useParams<{ id?: string }>();
@@ -22,14 +23,23 @@ const LevelDetails: React.FC = () => {
     const [showModalLevel, setShowModalLevel] = useState(false)
     const { isStudent } = useActiveUser();
     const { hiddeTheModalActive } = useSelector(getAppState)
+    const [level, setLevel] = useState<levelType | null>(null)
 
     // selector existant (adapter si votre selector s'appelle différemment)
     const levelState = useSelector((state: any) => state.levels ?? {});
     const { datas = [], action = {} } = levelState;
 
     // trouvons le niveau ciblé dans le store
-    const level: levelType | undefined =
-        datas?.find((l: levelType) => String(l.id_niveau) === String(id)) || datas?.selected;
+    useEffect(() => {
+        if (!!datas) {
+            const level: levelType | undefined =
+                datas?.find((l: levelType) => String(l.id_niveau) === String(id)) || datas?.selected;
+            setLevel(level as levelType);
+        }
+
+        return () => { }
+    }, [datas])
+
 
     // HANDLERS
 
@@ -41,11 +51,8 @@ const LevelDetails: React.FC = () => {
         if (!id) return;
         // dispatch pour récupérer le niveau si absent
         if (!level) {
-            // adapter le nom de l'action selon votre store
-            //   dispatch(getLevelById(Number(id)));
+            dispatch(getAllLevel());
         }
-        // récupérer les matières / sujets liés
-        // dispatch(getLevelSubjectsById(Number(id)));
     }, [id, dispatch]);
 
     // Modale
@@ -152,13 +159,19 @@ const LevelDetails: React.FC = () => {
                         ) : (
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
                                 {classes.map((c) => (
-                                    <div key={c.id_classe} className="bg-white border rounded-lg p-3 flex items-center justify-between">
+                                    <Link
+                                        to={`/classes/${c.id_classe}`}
+                                        key={c.id_classe}
+                                        className="bg-white border rounded-lg p-3 flex items-center justify-between hover:bg-gray-100 transition-all duration-150"
+                                    >
                                         <div>
                                             <div className="font-medium">{c.denomination}</div>
                                             <div className="text-xs text-gray-500">ID: {c.id_classe}</div>
                                         </div>
-                                        <div className="text-xs text-gray-500"> </div>
-                                    </div>
+                                        <div className="text-xs text-gray-500">
+                                            <Eye className="w-5 h-5 text-blue-500" />
+                                        </div>
+                                    </Link>
                                 ))}
                             </div>
                         )}
@@ -190,6 +203,7 @@ const LevelDetails: React.FC = () => {
                             <div className="py-3 space-y-4">
                                 {level?.prof?.listes.map((teacher) => (
                                     <Profile
+                                        key={teacher.matricule_personnel}
                                         fullName={`${teacher.nom} ${teacher.prenom}`}
                                         photo={teacher.photo as string}
                                         copy={false}

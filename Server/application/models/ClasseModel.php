@@ -12,61 +12,151 @@ class ClasseModel extends CI_Model
     }
 
     // ======= READ =======
-    public function findAllClasseData()
+    public function findAll()
     {
-        return $this->db->select('*')
+        $classes =  $this->db->select('*')
             ->from($this->table)
             ->join('niveau', 'niveau.id_niveau = ' . $this->table . '.niveau_id_niveau', 'left')
             ->order_by($this->primaryKey, 'DESC')
             ->get()
-            ->result_array();
-    }
+            ->result();
 
-
-    // ======= CREATE =======
-    public function insert($data)
-    {
-        $inserted = $this->db->insert($this->table, $data);
-
-        if ($inserted) {
-            $inserted_id = $this->db->insert_id();
-
-            return $this->db
-                ->select('*')
-                ->from($this->table)
-                ->where($this->primaryKey , $inserted_id )
-                ->join('niveau', 'niveau.id_niveau = ' . $this->table . '.niveau_id_niveau', 'left')
-                ->get()->row();
+        foreach ($classes as  &$classe) {
+            $classe->matiere['listes'] = $this->db->select('m.*')
+                ->from('classe c')
+                ->join('niveau n', 'n.id_niveau = c.niveau_id_niveau', 'inner')
+                ->join('matiere_niveau mn', 'mn.niveau_id_niveau = n.id_niveau', 'inner')
+                ->join('matiere m', 'mn.matiere_id_matiere = m.id_matiere', 'inner')
+                ->where('c.id_classe', $classe->id_classe)
+                ->get()->result();
+            $classe->matiere['id_classe'] = $classe->id_classe;
         }
 
-        return false;
+        // Liste des enseignant pour chaque classe
+        foreach ($classes as  &$classe) {
+            $classe->prof['listes'] = $this->db->select('p.*')
+                ->from('classe c')
+                ->join('classe_proffesseur_matiere cpm', 'cpm.classe_id_classe = c.id_classe', 'inner')
+                ->join('personnel p', 'p.id_personnel = cpm.professeur_id_professeur', 'inner')
+                ->join('type_personnel tp', 'tp.id_type_personnel = p.id_type_personnel', 'inner')
+                ->where('c.id_classe', $classe->id_classe)
+                ->where('tp.type', 'Enseignant')
+                ->group_by('p.id_personnel')
+                ->get()->result();
+            $classe->prof['id_classe'] = $classe->id_classe;
+        }
+
+        // Liste de eleve inscrit dans la classe
+        foreach ($classes as  &$classe) {
+            $classe->eleve['listes'] = $this->db->select('e.*')
+                ->from('eleve e')
+                ->join('inscription i', 'i.eleve_id_eleve = e.id_eleve', 'inner')
+                ->join('classe c', 'c.id_classe = i.classe_id_classe', 'inner')
+                ->join('annee_scolaire an', 'an.id_annee_scolaire = i.annee_scolaire_id_annee_scolaire', 'inner')
+                ->where('an.isActif', '1')
+                ->where('c.id_classe', $classe->id_classe)
+                ->get()->result();
+            $classe->eleve['id_classe'] = $classe->id_classe;
+        }
+        return $classes;
     }
 
-    // ======= UPDATE =======
-    public function update($id, $data)
+
+    public  function findOneById($id)
     {
-        $updated =  $this->db->where($this->primaryKey, $id)
-            ->update($this->table, $data);
-        if ($updated) {
-            return $this->db
-                ->select('*')
-                ->from($this->table)
-                ->where($this->primaryKey , $id )
-                ->join('niveau', 'niveau.id_niveau = ' . $this->table . '.niveau_id_niveau', 'left')
-                ->get()->row();
-        }
-        return $updated;
+        if (!!!$id) return [];
+        $classe =  $this->db->select('*')
+            ->from($this->table)
+            ->join('niveau', 'niveau.id_niveau = ' . $this->table . '.niveau_id_niveau', 'left')
+            ->order_by($this->primaryKey, 'DESC')
+            ->where('id_classe', $id)
+            ->get()
+            ->row();
+
+        $classe->matiere['listes'] = $this->db->select('m.*')
+            ->from('classe c')
+            ->join('niveau n', 'n.id_niveau = c.niveau_id_niveau', 'inner')
+            ->join('matiere_niveau mn', 'mn.niveau_id_niveau = n.id_niveau', 'inner')
+            ->join('matiere m', 'mn.matiere_id_matiere = m.id_matiere', 'inner')
+            ->where('c.id_classe', $classe->id_classe)
+            ->get()->result();
+        $classe->matiere['id_classe'] = $classe->id_classe;
+
+
+        $classe->prof['listes'] = $this->db->select('p.*')
+            ->from('classe c')
+            ->join('classe_proffesseur_matiere cpm', 'cpm.classe_id_classe = c.id_classe', 'inner')
+            ->join('personnel p', 'p.id_personnel = cpm.professeur_id_professeur', 'inner')
+            ->join('type_personnel tp', 'tp.id_type_personnel = p.id_type_personnel', 'inner')
+            ->where('c.id_classe', $classe->id_classe)
+            ->where('tp.type', 'Enseignant')
+            ->group_by('p.id_personnel')
+            ->get()->result();
+        $classe->prof['id_classe'] = $classe->id_classe;
+
+        $classe->eleve['listes'] = $this->db->select('e.*')
+            ->from('eleve e')
+            ->join('inscription i', 'i.eleve_id_eleve = e.id_eleve', 'inner')
+            ->join('classe c', 'c.id_classe = i.classe_id_classe', 'inner')
+            ->join('annee_scolaire an', 'an.id_annee_scolaire = i.annee_scolaire_id_annee_scolaire', 'inner')
+            ->where('an.isActif', '1')
+            ->where('c.id_classe', $classe->id_classe)
+            ->get()->result();
+        $classe->eleve['id_classe'] = $classe->id_classe;
+
+        return $classe;
     }
+
 
 
     // ======= GET CLASSE BY ID_MATIERE =======
-    public function getAllClasseByIdMatiere( $id_matiere ){
-        return $this->db->select('classe.*')
+    public function getAllClasseByIdMatiere($id_matiere)
+    {
+        $classes =  $this->db->select('classe.*')
             ->from('classe')
             ->join('niveau', 'niveau.id_niveau = classe.niveau_id_niveau', 'left')
             ->join('matiere_niveau', 'matiere_niveau.niveau_id_niveau = niveau.id_niveau', 'left')
             ->where('matiere_niveau.matiere_id_matiere', $id_matiere)
             ->get()
             ->result_array();
+
+        foreach ($classes as  &$classe) {
+            $classe->matiere['listes'] = $this->db->select('m.*')
+                ->from('classe c')
+                ->join('niveau n', 'n.id_niveau = c.niveau_id_niveau', 'inner')
+                ->join('matiere_niveau mn', 'mn.niveau_id_niveau = n.id_niveau', 'inner')
+                ->join('matiere m', 'mn.matiere_id_matiere = m.id_matiere', 'inner')
+                ->where('c.id_classe', $classe->id_classe)
+                ->get()->result();
+            $classe->matiere['id_classe'] = $classe->id_classe;
+        }
+
+        // Liste des enseignant pour chaque classe
+        foreach ($classes as  &$classe) {
+            $classe->prof['listes'] = $this->db->select('p.*')
+                ->from('classe c')
+                ->join('classe_proffesseur_matiere cpm', 'cpm.classe_id_classe = c.id_classe', 'inner')
+                ->join('personnel p', 'p.id_personnel = cpm.professeur_id_professeur', 'inner')
+                ->join('type_personnel tp', 'tp.id_type_personnel = p.id_type_personnel', 'inner')
+                ->where('c.id_classe', $classe->id_classe)
+                ->where('tp.type', 'Enseignant')
+                ->group_by('p.id_personnel')
+                ->get()->result();
+            $classe->prof['id_classe'] = $classe->id_classe;
+        }
+
+        // Liste de eleve inscrit dans la classe
+        foreach ($classes as  &$classe) {
+            $classe->eleve['listes'] = $this->db->select('e.*')
+                ->from('eleve e')
+                ->join('inscription i', 'i.eleve_id_eleve = e.id_eleve', 'inner')
+                ->join('classe c', 'c.id_classe = i.classe_id_classe', 'inner')
+                ->join('annee_scolaire an', 'an.id_annee_scolaire = i.annee_scolaire_id_annee_scolaire', 'inner')
+                ->where('an.isActif', '1')
+                ->where('c.id_classe', $classe->id_classe)
+                ->get()->result();
+            $classe->eleve['id_classe'] = $classe->id_classe;
+        }
+        return $classes;
     }
 }

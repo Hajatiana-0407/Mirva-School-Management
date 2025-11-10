@@ -40,6 +40,7 @@ import { getAllModule } from './Redux/Other/asyncThunk/ModuleAsyncThunk';
 import AnimatedBackground from './Components/ui/AnimatedBackground';
 import ExerciceSingle from './Pages/Exercices/ExerciceSingle';
 import LevelDetails from './Pages/Levels/LevelDetails';
+import ClasseDetails from './Pages/Classes/ClasseDetails';
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
@@ -117,8 +118,11 @@ function App() {
               <Route index element={<Employees />} />
               <Route path=':id' element={<EmployeesSinglePage />} />
             </Route>
-            <Route path="classes" element={<Classes />} />
-
+            
+            <Route path='classes'>
+              <Route index element={<Classes />} />
+              <Route path=':id' element={<ClasseDetails />} />
+            </Route>
             <Route path='levels'>
               <Route index element={<Levels />} />
               <Route path=':active' element={<Levels />} />
