@@ -3,11 +3,15 @@ import Sidebar from './Sidebar';
 import Header from './Header';
 import { Outlet } from 'react-router-dom';
 import clsx from 'clsx';
+import { useSelector } from 'react-redux';
+import { getAuthState } from '../../Pages/Auth/redux/AuthSlice';
+import Loading from '../ui/Loading';
 
 
 const Layout = () => {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(window.innerWidth < 1000 );
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(window.innerWidth < 1000);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const { action: { isLoginOut } } = useSelector(getAuthState)
 
   useEffect(() => {
     const handleResize = () => {
@@ -26,6 +30,13 @@ const Layout = () => {
 
   return (
     <div className="bg-gray-50 relative h-screen max-h-screen">
+      
+      {/* Loading pour la déconexion */}
+      {isLoginOut &&
+        <div className='fixed inset-0 z-[60] bg-black/10 backdrop-blur-[2px]  transition-opacity flex items-center'>
+          <Loading title='Déconexion' />
+        </div>
+      }
       <div className='fixed top-0 left-0 bottom-0 z-50'>
         <Sidebar
           collapsed={sidebarCollapsed}
