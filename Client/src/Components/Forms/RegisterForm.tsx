@@ -504,7 +504,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                 {/* Navigation boutons */}
                 <div className="flex justify-between pt-4 ">
                     {step > 1 && (
-                        <button type="button" className="px-2 py-1 sm:px-4 smpy-2 _classe bg-gray-200 text-gray-700 rounded-lg" onClick={handlePrev}>
+                        <button type="button" className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-gray-200 text-gray-700 rounded-lg" onClick={handlePrev}>
                             <span>
                                 <ArrowLeft className="w-4 h-4 inline-block mr-1" />
                             </span>
@@ -512,7 +512,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                         </button>
                     )}
                     {step < totalSteps && (
-                        <button type="button" className="px-2 py-1 sm:px-4 smpy-2 _classe bg-blue-600 text-white rounded-lg ml-auto" onClick={() => handleNext()}>
+                        <button type="button" className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-blue-600 text-white rounded-lg ml-auto" onClick={() => handleNext()}>
                             Suivant
                             <span>
                                 <ArrowRight className="w-4 h-4 inline-block ml-1" />
@@ -520,7 +520,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                         </button>
                     )}
                     {step === totalSteps && (
-                        <button type="submit" className="px-2 py-1 sm:px-4 smpy-2 _classe bg-green-600 text-white rounded-lg flex items-center">
+                        <button type="submit" className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-green-600 text-white rounded-lg flex items-center">
                             {isLoading ?
                                 <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
                                 <Check className="w-4 h-4 inline-block mr-1" />

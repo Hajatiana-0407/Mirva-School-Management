@@ -102,7 +102,7 @@ const Signin = () => {
                             <InputError message={error} />
                         </div>
 
-                        <button type="submit" className="w-full bg-gradient-to-r from-teal-500 to-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg hover:shadow-lg transition-all flex justify-center items-center space-x-2">
+                        <button type="submit" className="w-full bg-gradient-to-r from-teal-500 to-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg hover:shadow-lg transition-all flex justify-center items-center space-x-2">
                             {!action.isLoading &&
                                 <LogIn className="w-4 h-4" />
                             }

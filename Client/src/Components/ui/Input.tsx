@@ -145,7 +145,7 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                             <div className="flex w-full flex-col items-start gap-2 relative">
                                 <label
                                     className={clsx(
-                                        "flex w-full items-center gap-2 px-2 py-1 sm:px-4 smpy-2 _classe border border-gray-400/60 rounded-lg cursor-pointer transition-colors"
+                                        "flex w-full items-center gap-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-400/60 rounded-lg cursor-pointer transition-colors"
                                     )}
                                 >
                                     <div className="w-5 h-5" />

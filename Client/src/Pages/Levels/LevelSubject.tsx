@@ -206,7 +206,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                                 <button
                                     type="submit"
                                     onClick={() => setShowModalSubject(true)}
-                                    className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+                                    className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
                                 >
                                     <Plus className="w-4 h-4" />
                                 </button>
@@ -224,7 +224,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                                         <span>{subject.denomination}</span>
                                         <button
                                             onClick={() => { handleAddSubjectInLevel(subject) }}
-                                            className="bg-green-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center justify-center space-x-2 hover:bg-green-700 transition-colors"
+                                            className="bg-green-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center justify-center space-x-2 hover:bg-green-700 transition-colors"
                                         >
                                             <ArrowDown className="m-0 h-5 w-5 hidden max-lg:block" />
                                             <ArrowRight className="m-0 h-5 w-5 hidden lg:block" />
@@ -294,7 +294,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                                             {permission.create &&
                                                 <button
                                                     type="submit"
-                                                    className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+                                                    className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
                                                 >
                                                     {levelSubjectAction.isUpdating ?
                                                         <div className="w-4 h-4 border-4 border-white border-t-transparent rounded-full animate-spin"></div>

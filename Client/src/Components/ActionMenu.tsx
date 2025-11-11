@@ -105,7 +105,7 @@ const ActionMenu = ({ actions }: Props) => {
                         setOpen(false);
                       }}
                       type="button"
-                      className={`w-full border border-gray-100 rounded text-left px-2 py-1 sm:px-4 smpy-2 _classe text-md hover:bg-gray-100 flex items-center gap-2 text-ellipsis overflow-hidden whitespace-nowrap  text-gray-600`}
+                      className={`w-full border border-gray-100 rounded text-left px-2 py-1 sm:px-4 sm:py-2 _classe text-md hover:bg-gray-100 flex items-center gap-2 text-ellipsis overflow-hidden whitespace-nowrap  text-gray-600`}
                     >
                       {action.icon && <action.icon className={`w-5 h-5 ${action.color}`} />}
                       {action.label}

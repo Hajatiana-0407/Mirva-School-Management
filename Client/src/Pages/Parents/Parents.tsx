@@ -192,7 +192,7 @@ const Parents = () => {
               setStudentToAddParent(null);
               setShowModal(true);
             }}
-            className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+            className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
             <span className='max-md:hidden-susp' >Ajouter</span>
@@ -212,7 +212,7 @@ const Parents = () => {
                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
-            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 smpy-2 _classe border border-gray-300 rounded-lg hover:bg-gray-50">
+            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-300 rounded-lg hover:bg-gray-50">
               <Filter className="w-4 h-4" />
               <span>Filtres</span>
             </button>
@@ -253,7 +253,7 @@ const Parents = () => {
               </div>
               <button
                 type='submit'
-                className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+                className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
               >
                 <Search className="w-4 h-4" />
                 <span>Rechercher</span>
@@ -314,14 +314,14 @@ const Parents = () => {
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="px-2 py-1 sm:px-4 smpy-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="px-2 py-1 sm:px-4 sm:py-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
               >
                 <X className='h-5 w-5 me-1 inline-block' />
                 Annuler
               </button>
               <button
                 type="submit"
-                className="px-2 py-1 sm:px-4 smpy-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+                className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
               >
                 {action.isLoading && <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div>}
                 {studentToAddParent?.pere || studentToAddParent?.mere || studentToAddParent?.tuteur ? <>
