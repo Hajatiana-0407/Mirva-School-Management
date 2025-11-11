@@ -39,7 +39,7 @@ const Header = () => {
         </div>
 
         <div className="flex items-center space-x-4">
-          <Link to={'/settings'} className="relative p-2 text-gray-500 hover:text-gray-700 transition-colors">
+          <Link to={'/back-office/settings'} className="relative p-2 text-gray-500 hover:text-gray-700 transition-colors">
             <Settings className="w-5 h-5" />
           </Link>
 
@@ -52,7 +52,7 @@ const Header = () => {
 
             {/* Compte utilisateur */}
             <Link
-              to={'/settings?o=account'}
+              to={'/back-office/settings?o=account'}
               className='flex items-center space-x-3'>
               <div className="text-right">
                 <p className="text-sm font-medium text-gray-700">

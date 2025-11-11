@@ -23,7 +23,7 @@ export const setupInterceptors = (): void => {
         async (error) => {
             if (error.response?.status === 401) {
                 localStorage.removeItem('token');
-                navigate('/signin');
+                navigate('/back-office/signin');
             }
             return Promise.reject(error);
         }

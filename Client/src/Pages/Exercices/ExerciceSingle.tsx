@@ -41,7 +41,7 @@ const ExerciceSingle = () => {
     const confirmDelete = async () => {
         if (exercice?.id_exercice) {
             await dispatch(deleteExercice(exercice.id_exercice));
-            navigate('/exercices');
+            navigate('/back-office/exercices');
         }
     };
 

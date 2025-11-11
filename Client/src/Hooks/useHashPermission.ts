@@ -7,7 +7,7 @@ type HashPermissionPropsType = {
     id?: string;
     redirect?: boolean
 }
-export const useHashPermission = ( props ?: HashPermissionPropsType ): {
+export const useHashPermission = (props?: HashPermissionPropsType): {
     create: boolean;
     read: boolean;
     delete: boolean;
@@ -19,15 +19,15 @@ export const useHashPermission = ( props ?: HashPermissionPropsType ): {
     const { datas: { permissions } } = useSelector(getAuthState);
     let identification = '';
     const pathTab = pathname.replace(/^\/+|\/+$/g, "").split('/')
-    identification = pathTab[0] || '';
+    identification = pathTab[0] === 'back-office' ? pathTab[1] || '' : pathTab[0] || '';
     if (!!props?.id) {
         identification = props?.id;
     }
     // ? GERER LA PERMISSION DE LECTURE GLOBALEMENT 
-    if ( !!permissions[identification] &&  !permissions[identification].read) {
+    if (!!permissions[identification] && !permissions[identification].read) {
         if (props?.redirect) {
             localStorage.removeItem('token');
-            navigate('/signin')
+            navigate('/back-office/signin')
         }
 
         return {

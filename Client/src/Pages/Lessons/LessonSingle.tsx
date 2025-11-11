@@ -41,7 +41,7 @@ const LessonSingle = () => {
     const confirmDelete = async () => {
         if (lesson?.id_lecon) {
             await dispatch(deleteLesson(lesson.id_lecon));
-            navigate('/lessons');
+            navigate('/back-office/lessons');
         }
     };
 

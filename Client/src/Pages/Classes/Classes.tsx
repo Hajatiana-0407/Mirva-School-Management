@@ -70,7 +70,7 @@ const Classes: React.FC = () => {
   ];
 
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: (item: any) => navigate(`/classes/${ item.id_classe}`), color: 'blue' },
+    { icon: Eye, label: 'Voir', onClick: (item: any) => navigate(`/back-office/classes/${ item.id_classe}`), color: 'blue' },
     { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
     { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];

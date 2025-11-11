@@ -62,8 +62,8 @@ const Teachers: React.FC = () => {
 
   // TABLEAUX 
   const actions = [
-    { icon: Eye, label: 'Voir le détail', onClick: (item: TeacherType) => navigate("/employees/" + item.matricule_personnel), color: 'blue' },
-    { icon: Plus, label: 'Classes et Matières', onClick: (item: TeacherType) => navigate("/teachers/" + item.matricule_personnel), color: 'purple' },
+    { icon: Eye, label: 'Voir le détail', onClick: (item: TeacherType) => navigate("/back-office/employees/" + item.matricule_personnel), color: 'blue' },
+    { icon: Plus, label: 'Classes et Matières', onClick: (item: TeacherType) => navigate("/back-office/teachers/" + item.matricule_personnel), color: 'purple' },
     { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
     { icon: Archive, type: 'delete', label: 'Supprimer', onClick: handleArchive, color: 'red' },
   ];
@@ -78,7 +78,7 @@ const Teachers: React.FC = () => {
           fullName={`${value} ${item.prenom}`}
           identification={item.matricule_personnel}
           photo={item.photo as string}
-          link={`/employees/${item.matricule_personnel}`}
+          link={`/back-office/employees/${item.matricule_personnel}`}
         />
       )
     },

@@ -44,7 +44,7 @@ const Signin = () => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (datas.isLoggedIn && !!token) {
-            navigate('/dashboard');
+            navigate('/back-office/dashboard');
         }
 
     }, [datas.isLoggedIn, action.isLoading]);
