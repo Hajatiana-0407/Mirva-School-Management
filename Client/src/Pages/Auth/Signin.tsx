@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 import { getSchoolInfo } from "../Settings/School/redux/SchoolAsyncThunk"
 import Loading from "../../Components/ui/Loading"
+import { baseUrl } from "../../Utils/Utils"
 
 export const LoginSchema = object({
     identifiant: string()
@@ -60,16 +61,22 @@ const Signin = () => {
             {schoolAction.isLoading ? <Loading /> :
                 <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 relative border-ring border">
                     <div className="text-center mb-8">
-                        <div className="bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <GraduationCap className="h-8 w-8 text-white" />
+                        <div className="w-full">
+                            {school.logo ?
+                                <img src={baseUrl( school.logo)} alt={ school.nom } className="max-h-24 mx-auto" />
+                                : <div className="bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <GraduationCap className="h-8 w-8 text-white" />
+                                </div>
+                            }
+
                         </div>
-                        <h1 className="text-2xl font-bold text-gray-600">Connexion</h1>
-                        <p className="text-gray-600 mt-2"> {school.nom && school.nom} {school.adresse && "- " + school.adresse}</p>
+                        <h1 className="text-2xl font-bold text-gray-600">Se connecter</h1>
+                        <p className="text-gray-600 mt-2"> {school.nom && school.nom} {school.slogan && "- " + school.slogan}</p>
                     </div>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                             <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
-                                Idetifiant :
+                                Identifiant :
                             </label>
                             <div className="relative">
                                 <User className="h-5 w-5 text-gray-400 absolute left-3 top-3.5" />
