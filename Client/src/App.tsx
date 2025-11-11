@@ -38,6 +38,12 @@ import { setNavigator } from './Utils/navigate';
 import { getModuleState } from './Redux/Other/slices/ModuleSlice';
 import { getAllModule } from './Redux/Other/asyncThunk/ModuleAsyncThunk';
 import AnimatedBackground from './Components/ui/AnimatedBackground';
+import Site from './Pages/Site/Site';
+
+
+
+
+
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
@@ -69,7 +75,8 @@ function App() {
       if (!!token) {
         dispatch(testAuthentication())
       } else {
-        navigate('/signin');
+        // navigate('/signin');
+        navigate('/Header')
       }
     }
   }, [isLoggedIn]);
@@ -95,6 +102,7 @@ function App() {
       />
       <Routes>
         {/* Authentification */}
+        <Route path='/Site' element={<Site />} />
         <Route path='/signin' element={<Signin />} />
         {/* Authentification */}
 
