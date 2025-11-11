@@ -47,6 +47,7 @@ interface SidebarPropsType {
   widowWidth: number;
 }
 
+// Liste des menues
 const menuItems: MenuItemType[] = [
   { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard, path: '/dashboard' },
   { id: 'registration', label: 'Inscriptions', icon: UserPlus, path: '/registration' },
@@ -165,7 +166,7 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
                   clsx(
                     {
                       'px-4 justify-center': collapsed,
-                      'px-6': !collapsed,
+                      'px-3 md:px-6': !collapsed,
                       'bg-blue-50 text-blue-700 border-r-2 border-blue-700': isActive,
                       'text-gray-700 hover:bg-gray-50': !isActive,
                     },
@@ -192,7 +193,7 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
               <button
                 type="button"
                 className={clsx(
-                  'w-full flex items-center py-3 px-6 text-left transition-colors font-medium text-gray-800 hover:bg-gray-400/60 bg-gray-300/50',
+                  'w-full flex items-center py-3 px-3 md:px-6 text-left transition-colors font-medium text-gray-800 hover:bg-gray-400/60 bg-gray-300/50',
                   collapsed ? 'justify-center px-4' : '',
                   level > 0 ? 'pl-8' : ''
                 )}
@@ -227,7 +228,7 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
 
   return (
     <div
-      className={`${collapsed ? 'w-16' : 'w-64'} bg-white shadow-lg transition-all duration-300 ease-in-out flex flex-col h-screen`}
+      className={`${collapsed ? 'w-10 sm:w-16' : 'w-64'} bg-white shadow-lg transition-all duration-300 ease-in-out flex flex-col h-screen`}
     >
       <div className="py-6 border-b border-r">
         <div className="flex items-center justify-center">
@@ -262,12 +263,12 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
       </nav>
 
       {/* Bouton Déconnexion */}
-      <div className="h-max w-full py-2">
+      <div className="h-max  py-2">
         <button
           className={clsx(
             {
-              'px-4 justify-center': collapsed,
-              'px-6': !collapsed,
+              'justify-center': collapsed,
+              'px-3 md:px-6': !collapsed,
             },
             'text-gray-700 hover:bg-slate-300 bg-slate-200 w-full gap-3 flex items-center  py-3 text-left transition-colors group relative'
           )}

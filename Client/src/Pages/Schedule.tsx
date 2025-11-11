@@ -51,11 +51,11 @@ const Schedule: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Emploi du temps</h1>
         <div className="flex items-center space-x-4">
-          <select className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <select className="px-2 py-1 sm:px-4 smpy-2 _classe border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="6ème A">6ème A</option>
             <option value="5ème B">5ème B</option>
             <option value="4ème C">4ème C</option>
@@ -64,15 +64,15 @@ const Schedule: React.FC = () => {
             type="week"
             value={selectedWeek}
             onChange={(e) => setSelectedWeek(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-2 py-1 sm:px-4 smpy-2 _classe border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-sm border">
-        <div className="flex items-center justify-between mb-6">
+      <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+        <div className="flex items-center justify-between mb-6 md:mb-6">
           <h2 className="text-lg font-semibold text-gray-900">Semaine du {selectedWeek}</h2>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors">
+          <button className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors">
             <Plus className="w-4 h-4" />
             <span>Ajouter un cours</span>
           </button>
@@ -186,13 +186,13 @@ const Schedule: React.FC = () => {
             <button
               type="button"
               onClick={handleCloseModal}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="px-2 py-1 sm:px-4 smpy-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
             >
               Annuler
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-2 py-1 sm:px-4 smpy-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               {editingSlot?.subject ? 'Modifier' : 'Ajouter'}
             </button>

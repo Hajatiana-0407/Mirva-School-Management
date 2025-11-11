@@ -57,19 +57,19 @@ const Messages: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Messagerie</h1>
         <button
           onClick={() => setShowModal(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+          className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
           <span>Nouveau message</span>
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
         {/* Liste des messages */}
         <div className="lg:col-span-1">
           <div className="bg-white rounded-lg shadow-sm border">
@@ -125,7 +125,7 @@ const Messages: React.FC = () => {
           <div className="bg-white rounded-lg shadow-sm border">
             {selectedMessage ? (
               <div>
-                <div className="p-6 border-b">
+                <div className="p-3 md:p-6 border-b">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-semibold text-gray-900">
                       {selectedMessage.sujet}
@@ -157,18 +157,18 @@ const Messages: React.FC = () => {
                     <span className="font-medium">À:</span> {selectedMessage.destinataire}
                   </div>
                 </div>
-                <div className="p-6">
+                <div className="p-3 md:p-6">
                   <div className="text-gray-700 whitespace-pre-wrap">
                     {selectedMessage.contenu}
                   </div>
                 </div>
-                <div className="p-6 border-t bg-gray-50">
+                <div className="p-3 md:p-6 border-t bg-gray-50">
                   <div className="flex items-center space-x-4">
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors">
+                    <button className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors">
                       <Reply className="w-4 h-4" />
                       <span>Répondre</span>
                     </button>
-                    <button className="bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-gray-700 transition-colors">
+                    <button className="bg-gray-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-gray-700 transition-colors">
                       <Forward className="w-4 h-4" />
                       <span>Transférer</span>
                     </button>
@@ -232,7 +232,7 @@ const Messages: React.FC = () => {
           <div className="flex items-center space-x-4">
             <button
               type="button"
-              className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="flex items-center space-x-2 px-2 py-1 sm:px-4 smpy-2 _classe border border-gray-300 rounded-lg hover:bg-gray-50"
             >
               <Paperclip className="w-4 h-4" />
               <span>Joindre un fichier</span>
@@ -242,13 +242,13 @@ const Messages: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowModal(false)}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="px-2 py-1 sm:px-4 smpy-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
             >
               Annuler
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+              className="px-2 py-1 sm:px-4 smpy-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"
             >
               <Send className="w-4 h-4" />
               <span>Envoyer</span>

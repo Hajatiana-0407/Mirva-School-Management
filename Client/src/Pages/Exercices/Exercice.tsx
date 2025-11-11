@@ -83,7 +83,7 @@ const Exercice = () => {
 
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
 
       <Title
         title='Exercices'
@@ -93,7 +93,7 @@ const Exercice = () => {
           <button
             onClick={() => setShowModal(true)}
             disabled={isStudent}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors disabled:bg-blue-400"
+            className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors disabled:bg-blue-400"
           >
             <Plus className="w-4 h-4" />
             <span className='max-md:hidden-susp'>Nouvelle exercice</span>
@@ -101,7 +101,7 @@ const Exercice = () => {
         }
       </Title>
 
-      <div className="bg-white p-6 rounded-lg shadow-sm border">
+      <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="relative">
@@ -114,7 +114,7 @@ const Exercice = () => {
                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
-            <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 smpy-2 _classe border border-gray-300 rounded-lg hover:bg-gray-50">
               <Filter className="w-4 h-4" />
               <span>Filtres</span>
             </button>
@@ -133,7 +133,7 @@ const Exercice = () => {
             Nous n’avons trouvé aucun élément.
           </div>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
           {datas.length > 0 && datas.map((exercice: ExerciceType, idx: number) => {
             const createdAt = exercice.created_at ? new Date(exercice.created_at) : null;
             const isNew = createdAt && (Date.now() - createdAt.getTime()) < 2 * 24 * 60 * 60 * 1000;

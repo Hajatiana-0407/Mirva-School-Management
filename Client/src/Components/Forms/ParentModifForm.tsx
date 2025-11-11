@@ -96,7 +96,7 @@ const ParentModifForm: React.FC<ParentModifFormPropsType> = ({ parent, handleClo
                         <button
                             type="button"
                             onClick={handleCloseModal}
-                            className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                            className="px-2 py-1 sm:px-4 smpy-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
                         >
                             <X className='h-5 w-5 me-1 inline-block' />
                             Annuler
@@ -104,7 +104,7 @@ const ParentModifForm: React.FC<ParentModifFormPropsType> = ({ parent, handleClo
                     }
                     <button
                         type="submit"
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center "
+                        className="px-2 py-1 sm:px-4 smpy-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center "
                     >
                         {isUpdating ?
                             <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :

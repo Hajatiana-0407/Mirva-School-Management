@@ -49,7 +49,7 @@ const Assignments = () => {
     }, [dispatch]);
 
     return (
-        <form className='space-y-6' onSubmit={handleSubmit} >
+        <form className='space-y-4 md:space-y-6' onSubmit={handleSubmit} >
             {/* Entete */}
             <Title
                 title='Assignation des classes et matières'
@@ -57,7 +57,7 @@ const Assignments = () => {
             >
                 {permission.update && permission.create &&
                     <button
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center disabled:bg-blue-300"
+                        className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center disabled:bg-blue-300"
                         type='submit'
                         disabled={action.isLoadingAssignation}
                     >
@@ -94,7 +94,7 @@ const Assignments = () => {
 
             {action.isLoading && <Loading />}
             {!action.isLoading &&
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
+                <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
                     <TeacherSubject assignationsInitialValue={teacher?.assignations} />
                 </div>
             }

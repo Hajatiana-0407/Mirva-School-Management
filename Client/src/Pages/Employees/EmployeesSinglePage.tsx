@@ -48,7 +48,7 @@ const EmployeesSinglePage = () => {
     if (action.isLoading) return <Loading />
     if (error) return <Page_404 message={error as string} />
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
             <Title
                 title={`${employee?.nom.toUpperCase()} ${employee?.prenom} (${employee?.matricule_personnel})`}
                 description="Consultez les informations complètes de l’employé."
@@ -58,7 +58,7 @@ const EmployeesSinglePage = () => {
                         onClick={() => {
                             setShowModal(true);
                         }}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+                        className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
                     >
                         <PenBox className="w-4 h-4" />
                         <span className="max-md:hidden-susp">Modifié</span>
@@ -68,7 +68,7 @@ const EmployeesSinglePage = () => {
             <div className="space-y-4">
 
                 {/* Bloc principal : Photo + Identité */}
-                <div className="flex gap-6 items-start">
+                <div className="flex gap-4 md:gap-6 items-start">
 
                     {/* Photo de profile  */}
                     <div className='w-[16.2rem] h-[16.2rem]'>

@@ -134,7 +134,7 @@ export const RenderFilePreview = ({ url, className = "" }: RenderFilePreviewProp
     }
 
     return (
-        <div className={`${commonClasses} p-6 text-center`}>
+        <div className={`${commonClasses} p-3 md:p-6 text-center`}>
             <FileIcon extension={ext} className="mx-auto mb-2" />
             <a
                 href={safeUrl}

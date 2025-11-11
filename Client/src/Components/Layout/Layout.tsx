@@ -46,11 +46,11 @@ const Layout = () => {
       </div>
       <div className={clsx(
         { "pl-[16rem]": !sidebarCollapsed && windowWidth > 1000 },
-        { "pl-[4rem]": !(!sidebarCollapsed && windowWidth > 1000) }
+        { "pl-[2.5rem] sm:pl-[4rem]": !(!sidebarCollapsed && windowWidth > 1000) }
         , "flex-1 flex flex-col overflow-hidden  transition-all duration-300 max-h-screen w-screen"
       )} >
         <Header />
-        <main className="flex-1 overflow-y-auto p-3 md:p-6 relative">
+        <main className="flex-1 overflow-y-auto p-3 md:p-3 md:p-6 relative">
           <Outlet />
         </main>
       </div>

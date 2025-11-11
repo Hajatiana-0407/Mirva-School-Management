@@ -49,7 +49,7 @@ const School = () => {
 
     if (action.isLoading) return <Loading />
     return (
-        <form onSubmit={handleSubmit} id="__etablissement-form" className="space-y-6">
+        <form onSubmit={handleSubmit} id="__etablissement-form" className="space-y-4 md:space-y-6">
             <Title
                 title="Informations de l’établissement"
                 description="Consultez et modifiez les informations principales de votre établissement."
@@ -104,7 +104,7 @@ const School = () => {
                     />
                     <InputError message={formErrors?.adresse} />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
                         <input
@@ -154,7 +154,7 @@ const School = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4">
                 <Input
                     label="Facebook"
                     name="facebook"
@@ -195,7 +195,7 @@ const School = () => {
             <div className="flex justify-end">
                 {permission.update &&
                     <button
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center"
+                        className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center"
                     >
                         {action.isUpdating
                             ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :

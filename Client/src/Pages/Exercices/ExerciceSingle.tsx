@@ -83,7 +83,7 @@ const ExerciceSingle = () => {
     if (!exercice) return <div className="text-center py-10 text-gray-500">Leçon introuvable.</div>;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
             <div className="flex items-center justify-between max-md:flex-wrap max-md:justify-center">
                 <h1 className="text-2xl font-bold text-gray-900 w-96 truncate inline-block">
                     <ArrowLeft className="h-6 w-6 inline-block me-1 cursor-pointer" onClick={() => navigate(-1)} />
@@ -91,7 +91,7 @@ const ExerciceSingle = () => {
                 </h1>
                 <div className="flex space-x-2">
                     <button
-                        className="bg-green-600 text-white px-4 py-2 gap-2 transition-colors rounded-lg hover:bg-green-700 flex items-center"
+                        className="bg-green-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe gap-2 transition-colors rounded-lg hover:bg-green-700 flex items-center"
                         onClick={handleDownload}
                     >
                         <Download className="w-4 h-4 " />
@@ -101,7 +101,7 @@ const ExerciceSingle = () => {
                     </button>
                     {permission.update &&
                         <button
-                            className="bg-blue-600 text-white px-4 py-2 gap-2 transition-colors rounded-lg hover:bg-blue-700 flex items-center"
+                            className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe gap-2 transition-colors rounded-lg hover:bg-blue-700 flex items-center"
                             onClick={handleEdit}
                         >
                             <PenBox className="w-4 h-4 " />
@@ -112,7 +112,7 @@ const ExerciceSingle = () => {
                     }
                     {permission.delete &&
                         <button
-                            className="bg-red-600 text-white px-4 py-2 gap-2 transition-colors rounded-lg hover:bg-red-700 flex items-center"
+                            className="bg-red-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe gap-2 transition-colors rounded-lg hover:bg-red-700 flex items-center"
                             onClick={handleDelete}
                         >
                             <Trash className="w-4 h-4 " />
@@ -123,7 +123,7 @@ const ExerciceSingle = () => {
                     }
                     { exercice.published == 0 &&
                         <button
-                            className="bg-orange-600 text-white px-4 py-2 gap-2 transition-colors rounded-lg hover:bg-orange-700 flex items-center"
+                            className="bg-orange-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe gap-2 transition-colors rounded-lg hover:bg-orange-700 flex items-center"
                             onClick={handlePublish}
                         >
                             <Share2 className="w-4 h-4 " />
@@ -135,7 +135,7 @@ const ExerciceSingle = () => {
                 </div>
             </div>
 
-            <div className="p-6 space-y-6 bg-gradient-to-b from-white to-gray-50 shadow-md border border-gray-200 rounded-2xl transition hover:shadow-lg duration-200">
+            <div className="p-3 md:p-6 space-y-4 md:space-y-6 bg-gradient-to-b from-white to-gray-50 shadow-md border border-gray-200 rounded-2xl transition hover:shadow-lg duration-200">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row items-center sm:justify-between gap-4 border-b-2 pb-4">
                     <div className="">

@@ -49,7 +49,7 @@ const Levels = () => {
   }, [dispatch]);
   return (
 
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* EN TETE  */}
       <Title
         title='Gestion des niveaux'
@@ -58,7 +58,7 @@ const Levels = () => {
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors disabled:bg-blue-400"
+            className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors disabled:bg-blue-400"
             disabled={ isStudent }
           >
             <Plus className="w-4 h-4" />
