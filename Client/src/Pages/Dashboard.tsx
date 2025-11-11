@@ -18,7 +18,7 @@ const Dashboard: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <Title
         title='Tableau de bord'
         description='Visualisez les statistiques et informations clés de votre établissement.'
@@ -29,13 +29,13 @@ const Dashboard: React.FC = () => {
       </Title>
       
       {/* Statistiques */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {stats.map((stat) => {
           const Icon = stat.icon;
           const isPositive = stat.trend.startsWith('+');
 
           return (
-            <div key={stat.label} className="bg-white p-6 rounded-lg shadow-sm border">
+            <div key={stat.label} className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">{stat.label}</p>
@@ -62,9 +62,9 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Contenu principal */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Activités récentes */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
+        <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Activités récentes</h2>
           <div className="space-y-4">
             {recentActivities.map((activity, index) => (
@@ -80,7 +80,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Événements à venir */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
+        <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Événements à venir</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">

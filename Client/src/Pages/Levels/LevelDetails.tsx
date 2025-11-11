@@ -64,7 +64,7 @@ const LevelDetails: React.FC = () => {
 
     if (action?.isLoading || (!level && action?.isLoading !== false)) {
         return (
-            <div className="p-6">
+            <div className="p-3 md:p-6">
                 <Loading />
             </div>
         );
@@ -72,7 +72,7 @@ const LevelDetails: React.FC = () => {
 
     if (!level) {
         return (
-            <div className="p-6">
+            <div className="p-3 md:p-6">
                 <div className="text-center text-gray-500">Niveau introuvable.</div>
             </div>
         );
@@ -82,7 +82,7 @@ const LevelDetails: React.FC = () => {
     const subjects: SubjectType[] = (level.matiere as any)?.listes || [];
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
 
             <Title
                 title={`Niveau : "${level.niveau}"`}
@@ -93,7 +93,7 @@ const LevelDetails: React.FC = () => {
                         onClick={() => {
                             setShowModalLevel(true);
                         }}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors disabled:bg-blue-400"
+                        className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors disabled:bg-blue-400"
                         disabled={isStudent}
                     >
                         <PenBox className="w-4 h-4" />
@@ -102,7 +102,7 @@ const LevelDetails: React.FC = () => {
                 }
             </Title>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
                 <div className="col-span-2 bg-white border rounded-lg p-4 shadow-sm">
                     <HeadingSmall title="Description" />
                     <p className="text-sm text-gray-600 mb-4">{level.description || "Aucune description fournie."}</p>

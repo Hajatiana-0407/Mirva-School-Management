@@ -102,7 +102,7 @@ const AccountForm: React.FC = () => {
 
             <div className="flex justify-end">
                 <button
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center"
+                    className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center"
                 >
                     {action.isUpdating
                         ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :

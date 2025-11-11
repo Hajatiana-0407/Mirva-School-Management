@@ -188,7 +188,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
 
     return (
         <form id='__formulaire_eleve' onSubmit={handleSubmit}>
-            <div className='space-y-6'>
+            <div className='space-y-4 md:space-y-6'>
                 <InputError message={error} />
                 {/* ETAPE 1 : INFORMATION SUR L'ELEVE */}
                 {matricule !== '' ?
@@ -449,10 +449,10 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                 </div>
 
                 {/* RÉSUMÉ DES INFORMATION IMPORTANTES ET VALIDATION */}
-                <div className={clsx({ hidden: step !== 4 }, "space-y-6")}>
+                <div className={clsx({ hidden: step !== 4 }, "space-y-4 md:space-y-6")}>
 
                     {/* Bloc principal : Photo + Identité */}
-                    <div className="flex gap-6 items-start">
+                    <div className="flex gap-4 md:gap-6 items-start">
 
                         {/* PHOTO D IDENTITE */}
                         <div className='w-[16.2rem] h-[16.2rem]'>
@@ -504,7 +504,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                 {/* Navigation boutons */}
                 <div className="flex justify-between pt-4 ">
                     {step > 1 && (
-                        <button type="button" className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg" onClick={handlePrev}>
+                        <button type="button" className="px-2 py-1 sm:px-4 smpy-2 _classe bg-gray-200 text-gray-700 rounded-lg" onClick={handlePrev}>
                             <span>
                                 <ArrowLeft className="w-4 h-4 inline-block mr-1" />
                             </span>
@@ -512,7 +512,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                         </button>
                     )}
                     {step < totalSteps && (
-                        <button type="button" className="px-4 py-2 bg-blue-600 text-white rounded-lg ml-auto" onClick={() => handleNext()}>
+                        <button type="button" className="px-2 py-1 sm:px-4 smpy-2 _classe bg-blue-600 text-white rounded-lg ml-auto" onClick={() => handleNext()}>
                             Suivant
                             <span>
                                 <ArrowRight className="w-4 h-4 inline-block ml-1" />
@@ -520,7 +520,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
                         </button>
                     )}
                     {step === totalSteps && (
-                        <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded-lg flex items-center">
+                        <button type="submit" className="px-2 py-1 sm:px-4 smpy-2 _classe bg-green-600 text-white rounded-lg flex items-center">
                             {isLoading ?
                                 <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
                                 <Check className="w-4 h-4 inline-block mr-1" />

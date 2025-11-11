@@ -11,7 +11,7 @@ const Title: React.FC<TitleProps> = ({ children, title, description }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="mb-6 ">
+        <div className="mb-6 md:mb-6 ">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div className="flex items-start gap-1">
                     <button

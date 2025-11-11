@@ -81,7 +81,7 @@ const UserRole: React.FC = () => {
     );
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
             <Title
                 title='Gestion des rôles et permissions'
                 description="Définissez les droits d'accès pour chaque type d'utilisateur"
@@ -91,7 +91,7 @@ const UserRole: React.FC = () => {
                         onClick={() => {
                             setShowRoleModal(true);
                         }}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+                        className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
                     >
                         <Plus className="w-5 h-5" />
                         <span className='max-md:hidden-susp'>Nouveau rôle</span>
@@ -134,11 +134,11 @@ const UserRole: React.FC = () => {
                     <span>Suppression</span>
                 </div>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
                 {action.isLoading && datas.length == 0
                     ? <Loading />
                     : filteredRoles.map((role) => (
-                        <div key={role.id_role} className="bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200 p-6  transition-all duration-200 ">
+                        <div key={role.id_role} className="bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200 p-3 md:p-6  transition-all duration-200 ">
                             <div className="flex items-start justify-between mb-4">
                                 <div className="flex items-center space-x-3">
                                     <div

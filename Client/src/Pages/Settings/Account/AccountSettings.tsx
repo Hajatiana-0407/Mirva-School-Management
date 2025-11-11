@@ -4,7 +4,7 @@ import Title from '../../../Components/ui/Title'
 
 const AccountSettings: React.FC = () => {
   return (
-    <div className='space-y-6'>
+    <div className='space-y-4 md:space-y-6'>
       <Title
         title='Paramètre de votre compte'
         description='Gérez les informations et préférences de votre compte utilisateur.'

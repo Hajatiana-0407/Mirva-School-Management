@@ -161,8 +161,8 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
 
     return (
         <>
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-                <div className="flex items-center justify-between mb-6">
+            <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+                <div className="flex items-center justify-between mb-6 md:mb-6">
                     <div className="flex items-center space-x-4">
                         <div className="relative">
                             <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -174,7 +174,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
                                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             />
                         </div>
-                        <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 smpy-2 _classe border border-gray-300 rounded-lg hover:bg-gray-50">
                             <Filter className="w-4 h-4" />
                             <span>Filtres</span>
                         </button>
