@@ -133,7 +133,7 @@ const Registration: React.FC = () => {
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+            className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
             <span className='max-md:hidden-susp' >Nouvelle inscription  </span>

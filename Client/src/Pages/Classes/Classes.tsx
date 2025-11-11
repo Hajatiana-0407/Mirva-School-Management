@@ -85,7 +85,7 @@ const Classes: React.FC = () => {
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors w-max"
+            className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors w-max"
           >
             <Plus className="w-4 h-4" />
             <span className='max-md:hidden-susp'>Nouvelle classe</span>
@@ -107,7 +107,7 @@ const Classes: React.FC = () => {
               />
 
             </div>
-            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 smpy-2 _classe border border-gray-300 rounded-lg hover:bg-gray-50">
+            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-300 rounded-lg hover:bg-gray-50">
               <Filter className="w-4 h-4" />
               <span>Filtres</span>
             </button>

@@ -73,12 +73,12 @@ const Attendance: React.FC = () => {
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="px-2 py-1 sm:px-4 smpy-2 _classe border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <select
             value={selectedClass}
             onChange={(e) => setSelectedClass(e.target.value)}
-            className="px-2 py-1 sm:px-4 smpy-2 _classe border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="6ème A">6ème A</option>
             <option value="5ème B">5ème B</option>
@@ -112,7 +112,7 @@ const Attendance: React.FC = () => {
           <h2 className="text-lg font-semibold text-gray-900">
             Présences - {selectedClass} - {new Date(selectedDate).toLocaleDateString('fr-FR')}
           </h2>
-          <button className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg hover:bg-blue-700 transition-colors">
+          <button className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg hover:bg-blue-700 transition-colors">
             Enregistrer les présences
           </button>
         </div>

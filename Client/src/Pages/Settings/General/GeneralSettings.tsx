@@ -149,7 +149,7 @@ const GeneralSettings = () => {
                 <div className="flex justify-end">
                     {schoolYearPermission.create &&
                         <button
-                            className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center"
+                            className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center"
                         >
                             {schoolYearAction.isLoading || schoolYearAction.isUpdating
                                 ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
@@ -172,11 +172,11 @@ const GeneralSettings = () => {
             {/* <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Sauvegarde et restauration</h3>
                 <div className="flex space-x-4">
-                    <button className="bg-green-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-green-700 transition-colors">
+                    <button className="bg-green-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-green-700 transition-colors">
                         <Download className="w-4 h-4" />
                         <span>Exporter les données</span>
                     </button>
-                    <button className="bg-orange-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe rounded-lg flex items-center space-x-2 hover:bg-orange-700 transition-colors">
+                    <button className="bg-orange-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-orange-700 transition-colors">
                         <Upload className="w-4 h-4" />
                         <span>Importer les données</span>
                     </button>

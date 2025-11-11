@@ -31,7 +31,7 @@ const InfoBlock = ({ icon, label, value, important }: InfoBlockPropsType) => {
             </div>
 
             {/* Texte */}
-            <div className="flex flex-col px-2 py-1 sm:px-4 smpy-2 _classe">
+            <div className="flex flex-col px-2 py-1 sm:px-4 sm:py-2 _classe">
                 <span className="text-xs uppercase tracking-wide text-gray-500">
                     {label}
                 </span>

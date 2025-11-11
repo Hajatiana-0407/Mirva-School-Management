@@ -91,7 +91,7 @@ const ExerciceSingle = () => {
                 </h1>
                 <div className="flex space-x-2">
                     <button
-                        className="bg-green-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe gap-2 transition-colors rounded-lg hover:bg-green-700 flex items-center"
+                        className="bg-green-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe gap-2 transition-colors rounded-lg hover:bg-green-700 flex items-center"
                         onClick={handleDownload}
                     >
                         <Download className="w-4 h-4 " />
@@ -101,7 +101,7 @@ const ExerciceSingle = () => {
                     </button>
                     {permission.update &&
                         <button
-                            className="bg-blue-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe gap-2 transition-colors rounded-lg hover:bg-blue-700 flex items-center"
+                            className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe gap-2 transition-colors rounded-lg hover:bg-blue-700 flex items-center"
                             onClick={handleEdit}
                         >
                             <PenBox className="w-4 h-4 " />
@@ -112,7 +112,7 @@ const ExerciceSingle = () => {
                     }
                     {permission.delete &&
                         <button
-                            className="bg-red-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe gap-2 transition-colors rounded-lg hover:bg-red-700 flex items-center"
+                            className="bg-red-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe gap-2 transition-colors rounded-lg hover:bg-red-700 flex items-center"
                             onClick={handleDelete}
                         >
                             <Trash className="w-4 h-4 " />
@@ -123,7 +123,7 @@ const ExerciceSingle = () => {
                     }
                     { exercice.published == 0 &&
                         <button
-                            className="bg-orange-600 text-white px-2 py-1 sm:px-4 smpy-2 _classe gap-2 transition-colors rounded-lg hover:bg-orange-700 flex items-center"
+                            className="bg-orange-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe gap-2 transition-colors rounded-lg hover:bg-orange-700 flex items-center"
                             onClick={handlePublish}
                         >
                             <Share2 className="w-4 h-4 " />

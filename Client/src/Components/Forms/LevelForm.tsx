@@ -100,7 +100,7 @@ const LevelForm: React.FC<LevelFormPropsType> = ({ handleClose, level }) => {
                     <button
                         type="button"
                         onClick={handleClose}
-                        className="px-2 py-1 sm:px-4 smpy-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                        className="px-2 py-1 sm:px-4 sm:py-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
                     >
                         <X className='inline-block w-5 h-5 me-1' />
                         Annuler
@@ -108,7 +108,7 @@ const LevelForm: React.FC<LevelFormPropsType> = ({ handleClose, level }) => {
                 }
                 <button
                     type="submit"
-                    className="px-2 py-1 sm:px-4 smpy-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+                    className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
                 >
                     {action.isLoading || action.isUpdating ?
                         <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
