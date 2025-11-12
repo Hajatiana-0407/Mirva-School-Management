@@ -20,7 +20,7 @@ import ModuleReducer from './Other/slices/ModuleSlice'
 
 // ? Import reducer pour le site 
 import HeroReducer from '../Pages/website/Redux/Slice/Home/HeroSlice'
-import WelcomeReducer from '../Pages/website/Redux/Slice/Home/WelcomeSlice'
+import Presentatioreducer from '../Pages/website/Redux/Slice/Home/PresentationSlice'
 
 export const store = configureStore({
     reducer: {
@@ -45,7 +45,7 @@ export const store = configureStore({
 
         /**Reducer pour le site  */
         hero: HeroReducer , 
-        welcome : WelcomeReducer
+        presentation : Presentatioreducer
     }
 });
 
