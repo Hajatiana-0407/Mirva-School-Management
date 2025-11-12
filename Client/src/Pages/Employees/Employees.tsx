@@ -83,7 +83,7 @@ const Employees: React.FC = () => {
 
   // TABLEAUX 
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: (item: EmployeeType) => navigate("/employees/" + item.matricule_personnel), color: 'blue' },
+    { icon: Eye, label: 'Voir', onClick: (item: EmployeeType) => navigate("/back-office/employees/" + item.matricule_personnel), color: 'blue' },
     { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
     { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
@@ -98,7 +98,7 @@ const Employees: React.FC = () => {
           fullName={`${value} ${item.prenom}`}
           identification={item.matricule_personnel}
           photo={item.photo as string}
-          link={`/employees/${item.matricule_personnel}`}
+          link={`/back-office/employees/${item.matricule_personnel}`}
         />
       )
     },

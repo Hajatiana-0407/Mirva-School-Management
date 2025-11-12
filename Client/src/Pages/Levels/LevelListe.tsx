@@ -41,7 +41,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
                     <div className="ml-2 py-2 flex gap-1 items-center min-w-40  max-w-52 flex-wrap ">
                         {classes.listes?.map((classe) => (
                             <Link 
-                            to={`/classes/${ classe.id_classe }`}
+                            to={`/back-office/classes/${ classe.id_classe }`}
                                 key={classe.id_classe}
                                 className="px-2 py-1 rounded text-xs font-medium hover:opacity-80 border bg-gray-200"
                             >
@@ -90,7 +90,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
                     <div
                         className="p-2 rounded text-xs text-gray-500 hover:bg-gray-50 cursor-pointer"
                         onClick={() => {
-                            navigate('/levels?o=subject-level-coef')
+                            navigate('/back-office/levels?o=subject-level-coef')
                             setIdLevelToAddSubject(subjects.id_niveau);
                         }}
                     >
@@ -101,7 +101,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
         return <div
             className="p-2 rounded text-xs text-gray-400 hover:bg-gray-50 cursor-pointer"
             onClick={() => {
-                navigate('/levels?o=subject-level-coef')
+                navigate('/back-office/levels?o=subject-level-coef')
                 setIdLevelToAddSubject(subjects.id_niveau);
             }}
         >
@@ -154,7 +154,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
     ];
 
     const actions = [
-        { icon: Eye, label: 'Voir', onClick: (item: any) => navigate(`/level-details/${ item.id_niveau }`), color: 'blue' },
+        { icon: Eye, label: 'Voir', onClick: (item: any) => navigate(`/back-office/level-details/${ item.id_niveau }`), color: 'blue' },
         { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
         { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleDelete, color: 'red' },
     ];

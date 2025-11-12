@@ -93,7 +93,7 @@ const Student = () => {
 
   // ===================== TABLEAUX =====================
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: (item: RegistrationType) => navigate('/students/' + item.matricule_etudiant), color: 'blue' },
+    { icon: Eye, label: 'Voir', onClick: (item: RegistrationType) => navigate('/back-office/students/' + item.matricule_etudiant), color: 'blue' },
     { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
     { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
@@ -105,7 +105,7 @@ const Student = () => {
           fullName={`${value} ${item.prenom}`}
           identification={item.matricule_etudiant}
           photo={item.photo as string}
-          link={`/students/${item.matricule_etudiant}`}
+          link={`/back-office/students/${item.matricule_etudiant}`}
         />
       )
     },

@@ -149,7 +149,7 @@ const ClasseDetails: React.FC = () => {
                                             photo={student.photo as string}
                                             copy={false}
                                             identification={student.matricule_etudiant}
-                                            link={`/students/${student.matricule_etudiant}`}
+                                            link={`/back-office/students/${student.matricule_etudiant}`}
                                         />
                                         <div className="text-xs text-gray-500"></div>
                                     </div>
@@ -188,7 +188,7 @@ const ClasseDetails: React.FC = () => {
                                         photo={teacher.photo as string}
                                         copy={false}
                                         identification={teacher.matricule_personnel}
-                                        link={`/employees/${teacher.matricule_personnel}`}
+                                        link={`/back-office/employees/${teacher.matricule_personnel}`}
                                     />
                                 ))}
                             </div>

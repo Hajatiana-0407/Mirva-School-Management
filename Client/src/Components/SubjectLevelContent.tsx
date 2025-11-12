@@ -51,7 +51,7 @@ const SubjectLevelContent = ({ value, item }: SubjectLevelContentProps) => {
             {!value.length && (
                 <div
                     className="p-2 rounded text-xs text-gray-400 hover:bg-gray-50 cursor-pointer"
-                    onClick={() => navigate("/teachers/" + item.matricule_personnel)}
+                    onClick={() => navigate("/back-office/teachers/" + item.matricule_personnel)}
                 >
                     + Ajouter
                 </div>

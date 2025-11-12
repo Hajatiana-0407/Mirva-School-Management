@@ -331,7 +331,7 @@ const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) =
                                     {!classes.length && <>
                                         <div className="text-gray-500 bg-blue-100 text-center p-5 border rounded shadow-inner">
                                             <h6>Aucune classe trouver pour ce matière</h6>
-                                            <Link to={'/levels/level-subject'} className="text-blue-500 underline">Click ici pour ajouter</Link>
+                                            <Link to={'/back-office/levels/level-subject'} className="text-blue-500 underline">Click ici pour ajouter</Link>
                                         </div>
                                     </>}
                                 </div>
