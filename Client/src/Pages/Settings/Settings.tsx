@@ -12,7 +12,7 @@ const Settings: React.FC = () => {
   const etablissementPermission = useHashPermission( { id : 'school-settings'  , redirect : false } );
   const rolePermission = useHashPermission( { id : 'roles-settings'  , redirect : false } );
   let tabs = [
-    { key: 'account', label: 'Permètre du compte', Icon: UserCog, component: <div className='bg-white p-3 md:p-6 shadow-sm border rounded-md'><AccountSettings /></div> }
+    { key: 'account', label: 'Paramètre du compte', Icon: UserCog, component: <div className='bg-white p-3 md:p-6 shadow-sm border rounded-md'><AccountSettings /></div> }
   ];
 
   rolePermission.read && tabs.unshift(
