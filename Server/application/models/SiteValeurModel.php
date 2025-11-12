@@ -2,7 +2,7 @@
 class SiteValeurModel extends CI_Model
 {
     protected $table = 'site_valeur';
-    protected $pk = 'id_valeur';
+    protected $primaryKey = 'id_valeur';
 
     public function __construct()
     {

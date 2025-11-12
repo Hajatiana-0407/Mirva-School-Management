@@ -7,6 +7,7 @@ import { AppDispatch } from '../../../../Redux/store';
 import { getAllHero } from '../../Redux/AsyncThunk/HomeAsyncThunk';
 import { HeroSlideType, HeroSlideInitialValue } from '../../Type';
 import Loading from '../../../../Components/ui/Loading';
+import { baseUrl } from '../../../../Utils/Utils';
 
 const Hero: React.FC = () => {
     const [currentSlide, setCurrentSlide] = useState<number>(0);
@@ -69,7 +70,7 @@ const Hero: React.FC = () => {
                     >
                         <div
                             className="absolute inset-0 bg-cover bg-center bg-blend-overlay"
-                            style={{ backgroundImage: `url(${slide.image})` }}
+                            style={{ backgroundImage: `url(${baseUrl(slide.image)})` }}
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-40" />
                     </div>

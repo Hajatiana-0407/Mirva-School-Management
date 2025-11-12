@@ -16,37 +16,80 @@ class HeroController extends CI_Controller
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode([
-                'error' => false  , 
-                'data' => $data 
+                'error' => false,
+                'data' => $data
             ]));
     }
 
     public function create()
-    {}
+    {
+        $data = [
+            'titre' => $this->input->post('titre'),
+            'soustitre' => $this->input->post('soustitre'),
+            'cta' => $this->input->post('cta'),
+            'cta_link' => $this->input->post('cta_link'),
+        ];
+        
+        // ? Image
+        if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+            $imageIndetityUpload = upload_file('image', HERO_UPLOAD_DIR);
+            if ($imageIndetityUpload['success']) {
+                $data['image'] = $imageIndetityUpload['file_name'];
+            } else {
+                echo json_encode(['error' => true, 'message' => "Erreur upload photo d'identité de l'étudiant : " . $imageIndetityUpload['error']]);
+                return;
+            }
+        }
+
+        if ($this->HeroModel->isExist(
+            ["titre" => $data['titre']],
+        )) {
+            echo json_encode(['error' => true, 'message' => 'Le titre existe déjà.']);
+        } else {
+            $data =  $this->HeroModel->insert($data);
+            if ($data) {
+                echo json_encode(['error' => false, 'data' => $data]);
+            } else {
+                echo json_encode(['error' => true, 'message' => 'Une erreur c\'est produite.']);
+            }
+        }
+    }
     public function update()
     {
+        $id = $this->input->post($this->pk);
+        $data = [
+            'titre' => $this->input->post('titre'),
+            'soustitre' => $this->input->post('soustitre'),
+            'cta' => $this->input->post('cta'),
+            'cta_link' => $this->input->post('cta_link'),
+        ];
 
-        // $id_niveau = $this->input->post('id_niveau');
-        // $data = [
-        //     'niveau' => $this->input->post('niveau'),
-        //     'cycle' => $this->input->post('cycle'),
-        //     'description' => $this->input->post('description'),
-        // ];
 
-        // if ($this->HeroModel->isExist(
-        //     ["niveau" => $data['niveau']],
-        //     'and',
-        //     [$this->pk => $id_niveau]
-        // )) {
-        //     echo json_encode(['error' => true, 'message' => 'Le niveau existe déjà.']);
-        // } else {
-        //     $data =  $this->HeroModel->update($id_niveau, $data);
-        //     if ($data) {
-        //         echo json_encode(['error' => false, 'data' => $data]);
-        //     } else {
-        //         echo json_encode(['error' => true, 'message' => 'Une erreur c\'est produite.']);
-        //     }
-        // }
+        // ? Image
+        if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+            $imageIndetityUpload = upload_file('image', HERO_UPLOAD_DIR);
+            if ($imageIndetityUpload['success']) {
+                $data['image'] = $imageIndetityUpload['file_name'];
+            } else {
+                echo json_encode(['error' => true, 'message' => "Erreur upload photo d'identité de l'étudiant : " . $imageIndetityUpload['error']]);
+                return;
+            }
+        }
+
+        if ($this->HeroModel->isExist(
+            ["titre" => $data['titre']],
+            'and',
+            ['id_slide' => $id]
+        )) {
+            echo json_encode(['error' => true, 'message' => 'Le titre existe déjà.']);
+        } else {
+            $data =  $this->HeroModel->update($id, $data);
+            if ($data) {
+                echo json_encode(['error' => false, 'data' => $data]);
+            } else {
+                echo json_encode(['error' => true, 'message' => 'Une erreur c\'est produite.']);
+            }
+        }
     }
 
     public function delete()
@@ -56,15 +99,15 @@ class HeroController extends CI_Controller
 
             $input = json_decode(file_get_contents('php://input'), true);
 
-            if (!empty($input['id_niveau'])) {
-                $id = $input['id_niveau'];
+            if (!empty($input[$this->pk])) {
+                $id = $input[$this->pk];
 
                 $data = $this->HeroModel->delete($id);
 
                 if ($data) {
                     echo json_encode(['error' => false, 'data' => $data]);
                 } else {
-                    echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                    echo json_encode(['error' => false,  'message' => 'Échec de la suppression' ]);
                 }
             } else {
                 echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
