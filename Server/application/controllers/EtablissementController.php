@@ -21,6 +21,7 @@ class EtablissementController extends CI_Controller
         $id_etablissement = $this->input->post('id_etablissement');
         $nom = $this->input->post('nom');
         $code = $this->input->post('code');
+        $slogan = $this->input->post('slogan');
         $adresse = $this->input->post('adresse');
         $telephone = $this->input->post('telephone');
         $email = $this->input->post('email');
@@ -39,6 +40,7 @@ class EtablissementController extends CI_Controller
         $data = [
             'nom' => $nom,
             'code' => $code,
+            'slogan' => $slogan,
             'adresse' => $adresse,
             'telephone' => $telephone,
             'email' => $email,
