@@ -21,6 +21,7 @@ import ModuleReducer from './Other/slices/ModuleSlice'
 // ? Import reducer pour le site 
 import HeroReducer from '../Pages/website/Redux/Slice/Home/HeroSlice'
 import Presentatioreducer from '../Pages/website/Redux/Slice/Home/PresentationSlice'
+import ValueReducer from '../Pages/website/Redux/Slice/Home/ValueSlice'
 
 export const store = configureStore({
     reducer: {
@@ -45,7 +46,8 @@ export const store = configureStore({
 
         /**Reducer pour le site  */
         hero: HeroReducer , 
-        presentation : Presentatioreducer
+        presentation : Presentatioreducer,
+        values : ValueReducer
     }
 });
 

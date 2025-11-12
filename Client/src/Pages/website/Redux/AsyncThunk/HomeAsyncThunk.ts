@@ -28,3 +28,16 @@ export const getAllPresentation = createAsyncThunk('presentation/getAll', async 
         });
     return datas;
 })
+
+// Value
+export const getAllValue = createAsyncThunk('valeur/getAll', async (): Promise<ApiReturnType> => {
+    let datas: ApiReturnType = ApiReturnInitial;
+    await api.get('site/valeur')
+        .then(response => {
+            datas = response.data
+        })
+        .catch(error => {
+            console.error('( valeur ) Erreur lors de la récupération des données:', error);
+        });
+    return datas;
+})
