@@ -518,7 +518,7 @@ class AppFixtures extends CI_Controller
             ['nom' => 'settings', 'label' => 'Paramètres', 'description' => 'Paramètres et configuration du système', 'is_for_all' => true, 'is_section' => false],
 
             // Paramettre 
-            ['nom' => 'general-settings', 'label' => 'Paramètres généraux', 'description' => 'Configuration générale du système et des préférences globales', 'is_for_all' => false, 'is_section' => true ],
+            ['nom' => 'general-settings', 'label' => 'Paramètres généraux', 'description' => 'Configuration générale du système et des préférences globales', 'is_for_all' => false, 'is_section' => true],
             ['nom' => 'school-settings', 'label' => 'Paramètres de l’établissement', 'description' => 'Informations et configuration propres à l’établissement scolaire', 'is_for_all' => false, 'is_section' => false],
             ['nom' => 'roles-settings', 'label' => 'Paramètres des rôles et utilisateurs', 'description' => 'Gestion des rôles, permissions et utilisateurs du système', 'is_for_all' => false, 'is_section' => false],
         ];
@@ -992,6 +992,192 @@ class AppFixtures extends CI_Controller
     }
 
 
+    /**
+     * Undocumented function
+     *
+     * @param boolean $justClean
+     * @return void
+     */
+    public function loadSiteFixtures($clean = false)
+    {
+        // Vider les tables dans le bon ordre
+        $this->model->emptyDb([
+            'galerie',
+            'evenement',
+            'actualite',
+            'activite_prescolaire',
+            'programme_pedagogique',
+            'installation',
+            'pilier_educatif',
+            'valeur',
+            'notre_histoire',
+            'slogan',
+            'presentation',
+            'hero_slide',
+            'message_contact'
+        ]);
+
+        if ($clean == true) return;
+
+
+
+        // ===================== HERO SLIDES ===================== //
+        for ($i = 1; $i <= 3; $i++) {
+            $this->model->insertFixture('hero_slide', [
+                'titre' => "Bienvenue au Lycée MIRVA $i",
+                'soustitre' => "Former les leaders de demain grâce à une éducation d’excellence.",
+                'image' => $this->faker->imageUrl(1920, 1080, 'school'),
+                'cta' => 'Découvrir notre école',
+                'cta_link' => '/a-propos',
+                'actif' => true
+            ]);
+        }
+
+        // ===================== PRÉSENTATION ===================== //
+        $this->model->insertFixture('presentation', [
+            'titre' => 'Présentation de notre école',
+            'description' => "Notre établissement se distingue par la qualité de son enseignement, son encadrement pédagogique et ses infrastructures modernes.",
+            'image' => $this->faker->imageUrl(800, 600, 'campus'),
+            'nombre_eleves' => 1200,
+            'nombre_professeurs' => 65,
+            'annees_experience' => 25,
+            'taux_reussite' => 98.5,
+            'actif' => true
+        ]);
+
+        // ===================== SLOGANS ===================== //
+        $slogans = [
+            ['titre' => 'Apprendre', 'description' => 'Développer les compétences de chaque élève.', 'icone' => 'book-open'],
+            ['titre' => 'Grandir', 'description' => 'Encourager la curiosité et la créativité.', 'icone' => 'users'],
+            ['titre' => 'Réussir', 'description' => 'Préparer les élèves à un avenir prometteur.', 'icone' => 'award']
+        ];
+        foreach ($slogans as $s) {
+            $this->model->insertFixture('slogan', $s);
+        }
+
+        // ===================== NOTRE HISTOIRE ===================== //
+        $this->model->insertFixture('notre_histoire', [
+            'titre' => 'Notre Histoire',
+            'description' => "Fondée en 1998, notre école s’est imposée comme une référence de l’enseignement privé à Madagascar.",
+            'reconnaissance_par' => 'Ministère de l’Éducation Nationale',
+            'image' => $this->faker->imageUrl(900, 600, 'school'),
+            'actif' => true
+        ]);
+
+        // ===================== VALEURS (Vision / Mission) ===================== //
+        $valeurs = [
+            ['titre' => 'Notre Vision', 'description' => 'Former des citoyens responsables et épanouis.', 'icone' => 'eye'],
+            ['titre' => 'Notre Mission', 'description' => 'Offrir une éducation moderne et inclusive.', 'icone' => 'target'],
+            ['titre' => 'Nos Valeurs', 'description' => 'Respect, excellence, engagement et ouverture.', 'icone' => 'heart']
+        ];
+        foreach ($valeurs as $v) {
+            $this->model->insertFixture('valeur', $v);
+        }
+
+        // ===================== PILIERS ÉDUCATIFS ===================== //
+        $piliers = [
+            ['titre' => 'Innovation pédagogique', 'description' => 'Utilisation d’outils numériques et de méthodes actives.', 'icone' => 'lightbulb'],
+            ['titre' => 'Accompagnement', 'description' => 'Suivi personnalisé pour chaque élève.', 'icone' => 'user-check'],
+            ['titre' => 'Ouverture sur le monde', 'description' => 'Apprentissage des langues et échanges culturels.', 'icone' => 'globe']
+        ];
+        foreach ($piliers as $p) {
+            $this->model->insertFixture('pilier_educatif', $p);
+        }
+
+        // ===================== INSTALLATIONS ===================== //
+        $installations = [
+            ['titre' => 'Salles de classe modernes', 'description' => 'Des espaces lumineux et équipés pour un apprentissage optimal.', 'image' => $this->faker->imageUrl(800, 600, 'classroom')],
+            ['titre' => 'Bibliothèque', 'description' => 'Un lieu propice à la lecture et à la recherche.', 'image' => $this->faker->imageUrl(800, 600, 'library')],
+            ['titre' => 'Terrain multisport', 'description' => 'Favoriser le développement physique et l’esprit d’équipe.', 'image' => $this->faker->imageUrl(800, 600, 'sport')]
+        ];
+        foreach ($installations as $inst) {
+            $this->model->insertFixture('installation', $inst);
+        }
+
+        // ===================== PROGRAMME PÉDAGOGIQUE ===================== //
+        $points = [
+            'Méthodes d’enseignement interactives et participatives',
+            'Suivi personnalisé de chaque élève',
+            'Évaluation continue et formative',
+            'Préparation aux examens nationaux'
+        ];
+        $ordre = 1;
+        foreach ($points as $p) {
+            $this->model->insertFixture('programme_pedagogique', [
+                'titre' => 'Approche Pédagogique',
+                'contenu' => $p,
+                'ordre' => $ordre++,
+                'actif' => true
+            ]);
+        }
+
+        // ===================== ACTIVITÉS PRÉSCOLAIRES ===================== //
+        $activites = [
+            ['label' => 'Jeux éducatifs', 'icone' => 'gamepad'],
+            ['label' => 'Chants et danses', 'icone' => 'music'],
+            ['label' => 'Ateliers créatifs', 'icone' => 'paint-brush'],
+            ['label' => 'Lecture et contes', 'icone' => 'book']
+        ];
+        foreach ($activites as $a) {
+            $this->model->insertFixture('activite_prescolaire', $a);
+        }
+
+        // ===================== ACTUALITÉS ===================== //
+        for ($i = 0; $i < 5; $i++) {
+            $this->model->insertFixture('actualite', [
+                'titre' => $this->faker->sentence(4),
+                'contenu' => $this->faker->paragraph(4),
+                'date_publication' => $this->faker->date(),
+                'image' => $this->faker->imageUrl(800, 600, 'news'),
+                'publie' => true
+            ]);
+        }
+
+        // ===================== ÉVÉNEMENTS ===================== //
+        for ($i = 0; $i < 4; $i++) {
+            $this->model->insertFixture('evenement', [
+                'titre' => 'Événement ' . ($i + 1),
+                'description' => $this->faker->paragraph(),
+                'date_evenement' => $this->faker->date(),
+                'lieu' => $this->faker->city(),
+                'image' => $this->faker->imageUrl(800, 600, 'event'),
+                'publie' => true
+            ]);
+        }
+
+        $evenements = $this->model->getIds('evenement', 'id_evenement');
+
+        // ===================== GALERIE ===================== //
+        foreach ($evenements as $id) {
+            for ($j = 1; $j <= 3; $j++) {
+                $this->model->insertFixture('galerie', [
+                    'titre' => "Photo $j de l’événement",
+                    'url' => $this->faker->imageUrl(800, 600, 'gallery'),
+                    'categorie' => 'Événement',
+                    'id_evenement' => $id,
+                    'publie' => true
+                ]);
+            }
+        }
+
+        // ===================== MESSAGES CONTACT (démo) ===================== //
+        for ($i = 0; $i < 3; $i++) {
+            $this->model->insertFixture('message_contact', [
+                'nom' => $this->faker->name(),
+                'email' => $this->faker->email(),
+                'message' => $this->faker->sentence(10),
+                'date_message' => $this->faker->date(),
+                'lu' => $this->faker->boolean()
+            ]);
+        }
+
+
+        echo "✅ Fausse  données générée avec succès ( SITE WEB ) !" . PHP_EOL;
+    }
+
+
+
+
 
     /**
      * Create a fake data  in the data base 
@@ -1023,6 +1209,7 @@ class AppFixtures extends CI_Controller
         $this->loadPersonnel(true);
         $this->LoadEleveParent(true);
         $this->loadRoles(true);
+        $this->loadSiteFixtures(true);
 
         echo "✅ Suppression des données avec succès !" . PHP_EOL;
     }
