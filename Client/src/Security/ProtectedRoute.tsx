@@ -20,7 +20,7 @@ export default function ProtectedRoute() {
     const tokken = localStorage.getItem('token')
 
     if (!datas.isLoggedIn && !tokken) {
-        return <Navigate to="/back-office/signin" replace />;
+        return <Navigate to="/signin" replace />;
     }
     return <Outlet />;
 }

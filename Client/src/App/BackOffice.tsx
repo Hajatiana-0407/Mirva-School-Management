@@ -26,7 +26,6 @@ import Registration from '../Pages/Registrations/Registration';
 import Student from '../Pages/Students/Student';
 import StudentSinglePage from '../Pages/Students/StudentSinglePage';
 import Parents from '../Pages/Parents/Parents';
-import Signin from '../Pages/Auth/Signin';
 import ProtectedRoute from '../Security/ProtectedRoute';
 import { getAuthState, testAuthentication } from '../Pages/Auth/redux/AuthSlice';
 import Assignments from '../Pages/Teachers/Assignments';
@@ -70,7 +69,7 @@ function BackOffice() {
             if (!!token) {
                 dispatch(testAuthentication())
             } else {
-                navigate('/back-office/signin');
+                navigate('/signin');
             }
         }
     }, [isLoggedIn]);
@@ -83,10 +82,6 @@ function BackOffice() {
 
     return (
         <Routes>
-            {/* Authentification */}
-            <Route path='/signin' element={<Signin />} />
-            {/* Authentification */}
-
             <Route element={<Layout />}>
                 <Route element={<ProtectedRoute />}>
                     <Route index element={<Dashboard />} />

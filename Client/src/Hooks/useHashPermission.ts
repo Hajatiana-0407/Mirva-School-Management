@@ -27,7 +27,7 @@ export const useHashPermission = (props?: HashPermissionPropsType): {
     if (!!permissions[identification] && !permissions[identification].read) {
         if (props?.redirect) {
             localStorage.removeItem('token');
-            navigate('/back-office/signin')
+            navigate('/signin')
         }
 
         return {

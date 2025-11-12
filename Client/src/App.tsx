@@ -3,6 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import AnimatedBackground from './Components/ui/AnimatedBackground';
 import BackOffice from './App/BackOffice';
 import Website from './App/Website';
+import Signin from './Pages/Auth/Signin';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Routes>
         {/* Route pour le site */}
         <Route path="/*" element={<Website />} />
+        <Route path="/signin" element={<Signin />} />
         <Route path="/back-office/*" element={<BackOffice />} />
       </Routes>
     </div>
