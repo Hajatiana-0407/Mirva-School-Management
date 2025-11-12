@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import AnimatedBackground from './Components/ui/AnimatedBackground';
-import BackOffice from './Components/App/BackOffice';
-import Website from './Components/App/Website';
+import BackOffice from './App/BackOffice';
+import Website from './App/Website';
 
 function App() {
   return (
