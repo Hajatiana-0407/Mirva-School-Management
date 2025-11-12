@@ -20,7 +20,9 @@ import {
   BookOpenText,
   Power,
   NotebookPen,
-  UserRound
+  UserRound,
+  Computer,
+  Home
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
@@ -86,6 +88,14 @@ const menuItems: MenuItemType[] = [
       { id: 'classes', label: 'Classes', icon: School, path: '/back-office/classes' },
       { id: 'subjects', label: 'Matières', icon: BookOpen, path: '/back-office/subjects' },
       { id: 'settings', label: 'Paramètres', icon: Settings, path: '/back-office/settings' },
+    ],
+  },
+  {
+    id: 'website-settings',
+    label: 'Paramètres du site',
+    icon: Computer,
+    children: [
+      { id: 'homepage-settings', label: "Page d'accueil", icon: Home, path: '/back-office/homepage-settings' },
     ],
   },
 ];

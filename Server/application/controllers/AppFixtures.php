@@ -520,7 +520,29 @@ class AppFixtures extends CI_Controller
             // Paramettre 
             ['nom' => 'general-settings', 'label' => 'Paramètres généraux', 'description' => 'Configuration générale du système et des préférences globales', 'is_for_all' => false, 'is_section' => true],
             ['nom' => 'school-settings', 'label' => 'Paramètres de l’établissement', 'description' => 'Informations et configuration propres à l’établissement scolaire', 'is_for_all' => false, 'is_section' => false],
-            ['nom' => 'roles-settings', 'label' => 'Paramètres des rôles et utilisateurs', 'description' => 'Gestion des rôles, permissions et utilisateurs du système', 'is_for_all' => false, 'is_section' => false],
+            [
+                'nom' => 'roles-settings',
+                'label' => 'Paramètres des rôles et utilisateurs',
+                'description' => 'Gestion des rôles, permissions et utilisateurs du système',
+                'is_for_all' => false,
+                'is_section' => false
+            ],
+            [
+                'nom' => 'website-settings',
+                'label' => 'Paramètres du site',
+                'description' => 'Configuration des informations principales du site, telles que le nom, le logo et les coordonnées de contact',
+                'is_for_all' => false,
+                'is_section' => true,
+            ],
+            [
+                'nom' => 'homepage-settings',
+                'label' => 'Page d’accueil',
+                'description' => 'Personnalisation du contenu et de la mise en page de la page d’accueil du site',
+                'is_for_all' => false,
+                'is_section' => false,
+            ],
+
+
         ];
         $this->model->insertBatchFixtures($modules, 'modules');
 

@@ -38,6 +38,7 @@ import { getAllModule } from '../Redux/Other/asyncThunk/ModuleAsyncThunk';
 import ExerciceSingle from '../Pages/Exercices/ExerciceSingle';
 import LevelDetails from '../Pages/Levels/LevelDetails';
 import ClasseDetails from '../Pages/Classes/ClasseDetails';
+import HomeSetting from '../Pages/website/Admin/Home/HomeSetting';
 
 function BackOffice() {
     const dispatch: AppDispatch = useDispatch();
@@ -129,6 +130,8 @@ function BackOffice() {
                         <Route index element={<Exercice />} />
                         <Route path=':slug' element={<ExerciceSingle />} />
                     </Route>
+
+                    <Route path='homepage-settings' element={<HomeSetting/>} />
                     {/* 404 Not found  */}
                     <Route path="*" element={<Navigate to="/back-office/dashboard" replace />} />
                 </Route>
