@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : mer. 12 nov. 2025 à 04:20
+-- Généré le : mer. 12 nov. 2025 à 05:57
 -- Version du serveur : 10.4.22-MariaDB
 -- Version de PHP : 8.0.14
 
@@ -20,34 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `mirva`
 --
-
--- --------------------------------------------------------
-
---
--- Structure de la table `activite_prescolaire`
---
-
-CREATE TABLE `activite_prescolaire` (
-  `id_activite` int(11) NOT NULL,
-  `label` varchar(255) NOT NULL,
-  `icone` varchar(100) DEFAULT NULL,
-  `actif` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `actualite`
---
-
-CREATE TABLE `actualite` (
-  `id_actualite` int(11) NOT NULL,
-  `titre` varchar(255) NOT NULL,
-  `contenu` text NOT NULL,
-  `date_publication` date DEFAULT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `publie` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -188,22 +160,6 @@ CREATE TABLE `etablissement` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `evenement`
---
-
-CREATE TABLE `evenement` (
-  `id_evenement` int(11) NOT NULL,
-  `titre` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `date_evenement` date DEFAULT NULL,
-  `lieu` varchar(255) DEFAULT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `publie` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `exercice`
 --
 
@@ -225,37 +181,6 @@ CREATE TABLE `exercice` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `galerie`
---
-
-CREATE TABLE `galerie` (
-  `id_image` int(11) NOT NULL,
-  `titre` varchar(255) DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
-  `categorie` varchar(100) DEFAULT NULL,
-  `id_evenement` int(11) DEFAULT NULL,
-  `publie` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `hero_slide`
---
-
-CREATE TABLE `hero_slide` (
-  `id_slide` int(11) NOT NULL,
-  `titre` varchar(255) NOT NULL,
-  `soustitre` text DEFAULT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `cta` varchar(255) DEFAULT NULL,
-  `cta_link` varchar(255) DEFAULT NULL,
-  `actif` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `inscription`
 --
 
@@ -270,20 +195,6 @@ CREATE TABLE `inscription` (
   `is_droit_payed` tinyint(1) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `ancienne_ecole` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `installation`
---
-
-CREATE TABLE `installation` (
-  `id_installation` int(11) NOT NULL,
-  `titre` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `actif` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -312,35 +223,58 @@ CREATE TABLE `lecon` (
 --
 
 INSERT INTO `lecon` (`id_lecon`, `slug`, `titre`, `description`, `contenu`, `ficher_principale`, `fichier_support`, `id_matiere`, `id_prof`, `id_niveau`, `created_at`, `published`) VALUES
-(3083, 'quas-in-tempore-nihil-dolores-illum-et-in-officia-3112', 'Quas in tempore nihil dolores illum et in officia.', 'Consectetur dolorum incidunt numquam assumenda voluptatem. Voluptates et cum iusto harum sint. Labore suscipit nihil consequuntur natus mollitia aliquid eveniet.', 'Est aut laboriosam omnis harum non et. Quis distinctio optio occaecati. Deserunt sequi molestiae officiis quos placeat. Tenetur sunt labore repellat aspernatur.\n\nVoluptas sapiente doloribus itaque illum. Illo rerum dolor est quisquam corporis.\n\nFacilis reprehenderit deserunt deserunt rerum est. Non molestiae doloribus distinctio quo. Eius vitae dolorem expedita aliquam praesentium quo.\n\nTenetur eos natus impedit earum voluptas sed. Qui assumenda aliquid enim sit. Ex voluptatem et sit deserunt mollitia. Cum porro hic vel cumque assumenda dolore.\n\nAsperiores id nulla est quod qui iure et. Animi hic vel unde placeat earum voluptatem.', 'http://www.dias.com/quaerat-nam-nemo-omnis-ut-iste-illo-possimus', 'fdf', NULL, NULL, NULL, '2024-12-17 15:18:51', 0),
-(3084, 'reprehenderit-voluptas-odio-totam-in-sit-autem-3113', 'Reprehenderit voluptas odio totam in sit autem.', 'Id quia id accusamus enim ut. Ut quasi deserunt ullam dignissimos rerum at officia. Laudantium nesciunt nam dolorem consequatur minima. Ut vitae eos reiciendis sit quas enim harum.', 'Accusamus iure doloribus autem ut. Et ipsa nemo ut ea amet error est. Tempore voluptate fugiat nam assumenda sed voluptate. Placeat dignissimos quos sunt quibusdam voluptate aliquid. Amet porro id voluptatem explicabo voluptates aut odit.\n\nAdipisci voluptatum tempore consequatur odit non. Aut sed dolorem aliquam sint. Magni quisquam voluptates eveniet. Et autem voluptate quaerat eos.\n\nMagni atque natus ut et ea non. Aperiam magni explicabo iusto quibusdam sed nihil.\n\nQuisquam earum laboriosam et veniam ratione. Molestiae distinctio nam alias ullam sit. Voluptatibus quia sed pariatur dolorem nobis. Ut voluptate tenetur soluta est.\n\nAperiam vitae et nesciunt placeat. Et id non officiis provident labore et laborum dolores. Quo sapiente illo explicabo sed. Dolorum eius fugit repudiandae nihil.', 'http://www.henry.net/similique-similique-quae-ut-sed-numquam-autem', 'n3', NULL, NULL, NULL, '2025-09-11 05:21:29', 0),
-(3085, 'ut-ipsam-et-quos-illum-aut-quas-voluptatem-3114', 'Ut ipsam et quos illum aut quas voluptatem.', 'Est soluta et asperiores sint excepturi consequatur ipsa. Et culpa ipsam dolorum enim earum. Non et voluptate et doloribus velit.', 'Rerum voluptatem facere saepe architecto. Perferendis deleniti repellendus odit autem quisquam ad molestiae. Voluptas et aut quod sunt praesentium esse.\n\nDolorum accusantium optio enim officiis. Ullam perspiciatis et voluptatibus sunt nisi qui. Nostrum minima atque ut. Dolores quia consectetur sunt dolorem.\n\nUt et qui et magni suscipit architecto. Voluptas velit ea occaecati aperiam.\n\nVoluptas aut ipsa excepturi saepe expedita quibusdam. Occaecati nam natus aspernatur et temporibus. Quidem accusantium iste repellat. Rerum velit rerum suscipit asperiores dolore illum ut.\n\nDelectus illo ipsum et esse maxime. Ipsam nihil doloremque temporibus voluptatem. Labore suscipit ab sapiente rem inventore optio omnis. Aut atque itaque ut temporibus unde ea expedita.', 'http://www.deschamps.com/culpa-dignissimos-exercitationem-maxime', '', NULL, NULL, NULL, '2024-12-13 01:57:00', 0),
-(3086, 'ad-quos-nihil-omnis-reprehenderit-3115', 'Ad quos nihil omnis reprehenderit.', 'Omnis facere quis voluptas hic laudantium modi ipsa. Ut sed eos rerum aliquid corrupti. Aut libero quam consequuntur.', 'Et nobis nisi omnis fuga possimus. Ut excepturi vel laboriosam id quisquam. Sed et et culpa ipsa nostrum.\n\nBlanditiis modi dolorum alias amet ut. Ut ut et consequuntur dolorem molestiae.\n\nEa autem ut voluptate et vitae magnam labore. Nemo inventore corrupti repudiandae sit.\n\nEa sapiente eius sapiente eligendi ipsum qui. Totam cupiditate ullam corporis quo.\n\nQuaerat culpa voluptatem id consequuntur impedit reprehenderit harum. Eum aliquid maxime aspernatur cupiditate eius ipsum. Temporibus dolorum vero dolores perspiciatis. In veritatis temporibus velit quibusdam voluptatem voluptates aut.', 'https://samson.fr/autem-qui-voluptatum-velit-id-sunt-delectus.html', '', NULL, NULL, NULL, '2025-05-26 12:18:41', 0),
-(3087, 'alias-maxime-adipisci-est-assumenda-soluta-3116', 'Alias maxime adipisci est assumenda soluta.', 'Porro ut ut id rerum ex repellat. Tenetur totam dolorem ipsum quia ratione occaecati et. Quod animi porro quo deserunt voluptates. Eveniet praesentium ea accusantium nostrum sit voluptatibus quos. Ut illo doloremque ea dicta sed accusamus hic.', 'Quia nemo dolore voluptatem quaerat eum dolor molestiae commodi. Est corrupti et dolores mollitia molestiae eum possimus. Ut earum voluptatem delectus exercitationem ad assumenda. Non et dolorum aperiam voluptatum.\n\nCum quod pariatur et nesciunt porro. In quia enim temporibus quasi est numquam molestias. Hic molestias praesentium quia incidunt doloremque omnis.\n\nConsequatur voluptates perspiciatis illo beatae labore et. Harum reprehenderit non et exercitationem et autem. Quam ab expedita consequatur ut fugit.\n\nTempora natus natus et mollitia. Quis qui dicta iusto adipisci magnam exercitationem aut. Nulla sit modi maxime in numquam enim.\n\nQui libero eveniet voluptatibus autem. Qui placeat cum ratione omnis velit unde. Possimus enim quis dolorem accusantium eaque.', 'http://garnier.com/illo-qui-quae-ut-ab', 'kia', NULL, NULL, NULL, '2025-10-02 09:22:41', 0),
-(3088, 'ducimus-recusandae-consequuntur-nesciunt-mollitia-et-suscipit-3117', 'Ducimus recusandae consequuntur nesciunt mollitia et suscipit.', 'Debitis perferendis voluptas earum vitae magni. Magni vel aut dolore ipsam corporis assumenda rem. Repudiandae voluptatem sequi occaecati dolores dolorem.', 'Error ut ut qui eligendi quia deserunt. Saepe dignissimos dolore ut ratione. Quo est qui nisi deserunt quos quisquam. Quidem odit eum aut ipsa qui numquam unde.\n\nDoloremque voluptatibus et blanditiis deleniti consequatur error alias. Porro vel dolor doloremque quis officiis porro. Repellendus natus voluptas harum qui eligendi aut sed. Ad et dignissimos adipisci enim amet molestiae. Vitae eius aut non quod et in illo.\n\nQuis est dolore voluptas dolor vel. Sed aperiam consequatur repellat sint. Quisquam minima magni rerum rerum. Possimus accusantium hic provident eum sit eius.\n\nIpsum aut ratione magnam ad eaque. Cumque quis autem totam nam vero deleniti. Qui alias voluptas et tempora modi et eos.\n\nSimilique aut maiores qui suscipit inventore dolor consequatur. Ea voluptatem praesentium sit.', 'https://www.maillard.org/impedit-ipsum-incidunt-temporibus-fugit-nemo-non-repudiandae', '', NULL, NULL, NULL, '2025-02-20 05:40:46', 0),
-(3089, 'sit-est-illum-commodi-veniam-3118', 'Sit est illum commodi veniam.', 'Quos cum nam non magnam error. Beatae eaque et cum eum. Dolorem non enim et.', 'Ducimus ut nihil sint in ut. Laboriosam ad esse laborum placeat illum quisquam. Laudantium est quis quia beatae voluptates suscipit. Nihil sed sed enim quasi.\n\nVoluptatibus velit quam aut soluta eos facere. Eum temporibus nisi omnis sapiente sequi illum aspernatur. Quisquam ut illo dignissimos sunt laudantium voluptatibus odit. Quia molestias ducimus consequatur ut animi vitae. In accusamus quo quia excepturi.\n\nDolorem saepe adipisci at deserunt recusandae porro nesciunt. Illo aut ab repellendus eum eaque velit fugit reiciendis. Ea tempora voluptas necessitatibus officia quibusdam exercitationem. Ducimus nulla commodi veritatis ipsam atque necessitatibus maiores molestiae.\n\nMagni debitis dolorem voluptatum libero quia. Dignissimos sint aut corporis illum et beatae ipsum. Et provident dolorem cumque. Quod quia quia et aspernatur sint ullam odio odio.\n\nLaudantium qui et voluptates accusantium. At corrupti harum velit officiis ut. Non maiores natus recusandae aliquam. Ut itaque reprehenderit et ut qui.', 'http://charrier.com/minus-consectetur-iste-at-totam', '', NULL, NULL, NULL, '2025-07-06 19:10:17', 0),
-(3090, 'tempore-ullam-soluta-animi-sint-enim-temporibus-aut-iste-3119', 'Tempore ullam soluta animi sint enim temporibus aut iste.', 'Sed aperiam ut ut non. Provident vel eum et consequatur nemo laboriosam. Fuga minus voluptate soluta nulla architecto quasi nihil quo. Cum quo et occaecati delectus non impedit harum non.', 'Velit at beatae recusandae eius suscipit ea aut. Corrupti et autem accusamus numquam eos suscipit.\n\nPossimus est non nam deserunt ut. Et recusandae omnis eveniet ad. Ut molestiae consectetur natus.\n\nSed et nemo omnis illo quia. Non qui repellat non numquam et labore. Veritatis ducimus reprehenderit ut asperiores.\n\nAutem molestiae eos tempora et et. Eaque iste provident sequi facere asperiores voluptatibus. Debitis ut nobis deleniti reiciendis ut aut minima odio.\n\nNon aspernatur commodi aspernatur. Perspiciatis et sunt quo qui rerum dicta. Consequatur fuga alias quam adipisci cumque molestiae nostrum placeat. Corporis magnam consequuntur ducimus possimus.', 'http://humbert.net/neque-molestiae-velit-error-est-eum', '', NULL, NULL, NULL, '2025-09-23 06:49:49', 0),
-(3091, 'reiciendis-mollitia-beatae-et-ut-quam-et-3120', 'Reiciendis mollitia beatae et ut quam et.', 'Voluptatem aut tempore mollitia voluptatem qui enim. Harum ut corrupti ullam et consectetur. Natus odio tempora quo vero dicta voluptates. Maxime velit facilis labore iure quo iste aut. Aspernatur placeat animi animi nihil et soluta in.', 'Recusandae rerum vero aliquid consectetur voluptatem et quod sed. Nemo architecto cupiditate velit omnis in inventore voluptatem. Dignissimos sit architecto expedita sint laboriosam aut.\n\nVelit qui et eaque fugit dolores. Omnis esse et commodi ad dignissimos vel hic. Quisquam et vel quis eaque omnis maiores deserunt.\n\nAd eveniet accusamus aspernatur eveniet quia voluptate. In sit quod eaque eius. Est quasi cum optio minima. Aspernatur nam eos unde voluptatum et ad sint placeat. Qui magnam vero odio quos amet laborum ad iure.\n\nFugiat eligendi temporibus necessitatibus qui omnis atque harum. Repellendus rerum quis qui ipsum. Quia debitis excepturi quas libero corrupti quisquam officia.\n\nAb nostrum aliquam temporibus saepe quia nostrum. Quis omnis dolorem tenetur id perferendis. At placeat consequuntur deserunt deleniti ex. Omnis consequuntur et veniam. Consequatur reprehenderit ut doloribus corrupti.', 'https://petit.com/ut-et-doloremque-id-impedit-libero-velit.html', 'bed', NULL, NULL, NULL, '2024-12-17 21:37:43', 0),
-(3092, 'corporis-unde-cupiditate-corporis-aut-3121', 'Corporis unde cupiditate corporis aut.', 'Quasi qui omnis labore excepturi repellat. Labore iste autem qui deserunt sit est. Dignissimos esse nihil aut consequatur voluptates et. Cupiditate voluptatem qui provident et.', 'Consectetur et quo placeat sit soluta vero omnis. Necessitatibus debitis eos ut dolorum quasi fugit rerum. Rerum inventore natus qui doloribus similique et.\n\nEt sit sed quo a quibusdam animi quas. Et velit ad eaque aut commodi quo culpa sint. Et cupiditate vel tenetur et voluptatum.\n\nCorporis qui eum consequuntur accusantium atque. Maiores expedita ab ipsam dolor ut. Autem ab exercitationem consequatur nihil omnis. Quia nobis ut repellat cumque aliquam enim nihil.\n\nMollitia qui sunt culpa placeat. Perspiciatis dolorem occaecati eius dolorem in. Suscipit ut est et maiores nesciunt est commodi quos.\n\nQuia possimus impedit inventore ut asperiores et est. Dolorem omnis odit est ducimus aut exercitationem facere. Modi earum cum distinctio aut accusantium distinctio. Asperiores sed ducimus veritatis placeat laboriosam.', 'https://www.verdier.net/sed-illo-dolorem-qui-ea', '', NULL, NULL, NULL, '2025-04-01 05:52:18', 0),
-(3093, 'mollitia-enim-beatae-officia-eligendi-sit-commodi-3122', 'Mollitia enim beatae officia eligendi sit commodi.', 'Et quo voluptas animi qui reiciendis. Velit voluptatibus aliquam at perspiciatis repellendus. Minus enim aperiam et ipsa reiciendis ut recusandae qui.', 'Nesciunt iure ut aut eos quae aut quidem iste. Aut et fugit ea odit sit dolor. Accusamus qui rerum sit cum alias at dolores.\n\nMollitia ea nihil repellendus quia nostrum aut. Consectetur inventore atque temporibus qui. Qui quas ipsum atque soluta porro.\n\nEos modi quos non rerum possimus. Beatae inventore qui amet eaque et voluptatem nihil maiores. Odio velit quibusdam qui cupiditate aliquam corporis. Recusandae laudantium et aliquid sapiente qui sequi voluptatibus.\n\nAt ut saepe a nisi quam. Dolor eos deserunt illum illo. Deleniti deserunt quibusdam praesentium consequatur sed incidunt voluptas.\n\nEx vitae tempore ducimus corporis. Vitae vel hic eius vel sequi eveniet placeat. Voluptas aut omnis et facere et in qui.', 'http://dossantos.net/ducimus-dolor-nulla-eius-minima', '', NULL, NULL, NULL, '2025-07-29 04:15:17', 0),
-(3094, 'quo-ea-ut-sed-est-dolor-architecto-3123', 'Quo ea ut sed est dolor architecto.', 'Soluta recusandae odio fuga minus at ab excepturi qui. Laudantium odit reiciendis quia vel at eos. Nemo corporis rerum deserunt repellat quisquam eos iure.', 'At aut quasi culpa eligendi aut aut. Eius quam aliquam eius voluptatum. Explicabo porro et aut et.\n\nQuod dolore est iusto dolor sit distinctio. Qui enim aut et excepturi itaque error dolorem tempora. Voluptatem et voluptatem minima minima cupiditate praesentium.\n\nNisi libero saepe voluptas eaque cupiditate magnam pariatur id. Sunt voluptates labore eum nostrum rerum repellendus. Animi et labore reprehenderit.\n\nQuia ut quos natus. Qui voluptatem optio ea at cupiditate. Consequuntur aliquam harum praesentium veritatis sed.\n\nUt doloremque hic vel exercitationem maxime nam. Ratione quos aliquid et. Sed vitae harum voluptas. Quo ducimus repellat ea ut quia voluptatem expedita consequatur. Est et dolorum ipsa veritatis in facere.', 'http://www.poirier.fr/', '', NULL, NULL, NULL, '2025-11-02 16:15:27', 0),
-(3095, 'rerum-blanditiis-qui-sapiente-cupiditate-voluptas-ea-laudantium-magni-3124', 'Rerum blanditiis qui sapiente cupiditate voluptas ea laudantium magni.', 'Accusantium vero quaerat numquam nemo vitae quia. Sit ut consequatur et alias aliquid assumenda sunt non. Sapiente quia officiis reiciendis labore in autem iste. Atque qui officiis est quia quaerat quasi impedit.', 'Eius natus a inventore sint. Magni laudantium error ea nihil aut beatae. Et sit ut quia. Delectus recusandae vel natus similique rerum est placeat.\n\nTotam dolorem minima sed alias. Deserunt esse magnam ducimus voluptatibus ipsa quibusdam unde veniam. Eos occaecati voluptatem earum ut.\n\nMagni consequatur ipsam dolore et. Perferendis dolorem quod praesentium error delectus quos. Temporibus doloribus enim unde culpa qui. Sunt deleniti ut voluptatibus eius aut quis inventore eius.\n\nNecessitatibus laboriosam quis eos amet. Aliquam dignissimos qui dolorum adipisci atque vel. Maxime at soluta dolorem odit explicabo. Modi consequuntur doloremque soluta est delectus.\n\nRerum et nostrum sunt possimus a asperiores ut. At enim ut beatae cumque expedita saepe harum. Aut earum amet officiis alias similique.', 'http://bouvet.fr/harum-eos-quis-omnis.html', '', NULL, NULL, NULL, '2025-07-29 12:17:06', 0),
-(3096, 'et-quis-illum-est-consequuntur-nostrum-eaque-3125', 'Et quis illum est consequuntur nostrum eaque.', 'Laborum qui molestiae veritatis soluta sequi adipisci. Autem nihil velit deleniti nemo omnis iste dolorem. Consequuntur vel et eum quam alias cupiditate.', 'Odio sint quis quidem et. Qui dolorem doloremque ducimus delectus.\n\nEt error neque et laborum quasi. Aut aut voluptas tempora. Animi voluptatem corporis est consequuntur.\n\nDolor nihil quibusdam iste. Voluptatibus odit omnis voluptatibus sunt perferendis sint sapiente. Aut minus hic provident aut voluptate. Vel qui ut quaerat dicta non cum iusto.\n\nRerum perspiciatis ratione adipisci. Dolor et aut id vel est. Vitae ipsum totam modi et.\n\nAliquam est fugiat ullam sequi perferendis placeat. Est non temporibus iste non neque ut et aut. Eum velit laudantium mollitia fuga amet numquam. Ut ipsum ullam iure et.', 'http://www.dacosta.fr/minima-fuga-officiis-officiis-harum-culpa', '', NULL, NULL, NULL, '2025-11-04 07:28:28', 0),
-(3097, 'in-quis-sit-quia-distinctio-deserunt-iusto-3126', 'In quis sit quia distinctio deserunt iusto.', 'Et et eum quis tempore. Sed accusantium sed quia soluta accusantium cum minus aliquam. Qui maiores ipsum minima eius in.', 'Unde nihil exercitationem commodi debitis. Labore totam officiis accusantium provident excepturi.\n\nEnim perspiciatis et quia sequi distinctio. Necessitatibus est officia vel eveniet ut qui. Sed eos illum accusamus assumenda qui odio saepe. Necessitatibus enim pariatur corrupti explicabo qui quis cupiditate.\n\nSit mollitia dolor est excepturi provident. Ut aperiam quae atque ad architecto quos minima. Dignissimos dolorem id voluptas ut dolore. Iure libero eos consectetur quia voluptatem numquam eum. Aliquid a magnam officiis commodi nihil.\n\nIpsum quae ipsam expedita exercitationem aspernatur placeat nemo. Fugit aut cumque et qui.\n\nAnimi atque consequatur sequi quia numquam provident voluptates. Impedit aut natus quasi fuga dolor esse pariatur. Omnis molestiae quia non quo.', 'http://www.bazin.com/sit-atque-quam-ea-sequi', '', NULL, NULL, NULL, '2025-07-18 04:49:07', 0),
-(3098, 'aliquam-et-eius-animi-adipisci-3127', 'Aliquam et eius animi adipisci.', 'Optio vitae laborum qui aut adipisci reprehenderit. Ea consequatur autem quidem ea labore totam.', 'Incidunt provident esse similique minima harum possimus omnis. Molestias ullam minima mollitia porro.\n\nAnimi explicabo sint tempora ut magnam iusto quia quos. Deleniti et rerum odio. Laboriosam odio iusto accusamus facere.\n\nVoluptate delectus excepturi animi fugit animi. Libero illo quis aut placeat possimus. Laboriosam harum quaerat eum et.\n\nSint ea delectus qui aut soluta necessitatibus atque. Molestias dolores quisquam eligendi ex. Voluptates iure accusantium inventore repellendus. Eligendi temporibus quod dolore enim blanditiis modi.\n\nDolorem illo rem enim dolor molestias eos. Eum minima at voluptates recusandae nobis autem nulla quibusdam. Asperiores earum ipsa in et nisi sit et iusto. Accusamus assumenda aliquam asperiores. Alias iusto dignissimos quibusdam in maiores officia minima.', 'http://www.dubois.fr/atque-neque-assumenda-a-voluptates-impedit-quis-provident', '', NULL, NULL, NULL, '2025-01-03 17:54:13', 0),
-(3099, 'aut-voluptate-labore-consequatur-consequuntur-aut-non-3128', 'Aut voluptate labore consequatur consequuntur aut non.', 'Mollitia eaque porro perspiciatis laudantium et quia deserunt velit. Non eveniet et maiores. Est quibusdam dolorem dolores nesciunt rerum non.', 'Corporis et quas tempore doloremque et. Ut natus est eius molestias. Autem non quos numquam qui et fugiat. Consectetur dignissimos placeat quia. Dolorum saepe occaecati labore.\n\nIpsam quos qui debitis quibusdam mollitia est asperiores. Ut dolor aut consequatur similique et illo. Quos perferendis voluptas assumenda et quia excepturi rerum. Magni dolorem blanditiis quaerat suscipit.\n\nCorrupti delectus repellat error veritatis nobis. Dolores iure optio nesciunt libero reprehenderit. Voluptate sed ex commodi quae. Explicabo et officiis omnis aut.\n\nFugit quia labore voluptatem rerum provident aut rem. Est necessitatibus velit qui libero dicta dolore omnis. Rem nisi pariatur aut et temporibus aliquam enim. Id saepe qui ea.\n\nNon debitis hic voluptates consequatur rerum. Repudiandae dolorum animi consequatur sit. Consequuntur eaque suscipit eligendi ut neque quo. Sunt dolores quidem dolores inventore nisi mollitia sed. Et laborum deserunt enim iure ullam quasi dolorem.', 'https://blin.com/voluptates-repellendus-dolor-velit-qui-placeat-quia-sit.html', 'mag', NULL, NULL, NULL, '2024-12-05 16:34:16', 0),
-(3100, 'et-rerum-illum-eos-qui-3129', 'Et rerum illum eos qui.', 'Quis eligendi distinctio dolore ipsa assumenda hic veniam. Dolores maxime veritatis voluptate quo ipsa aut excepturi. Qui numquam vel dolorum dolores labore error quo.', 'Sed qui enim beatae tempora. Libero earum assumenda dolor sit repellat repellat. Cupiditate rerum et molestiae voluptate. Voluptates facilis quas porro dolore ipsam.\n\nDelectus et perspiciatis est reiciendis. Deleniti deserunt tempore aut alias laudantium quibusdam occaecati. Qui eum dolorum totam deleniti.\n\nOdio dolor sequi natus nostrum ex cupiditate facilis. Assumenda pariatur accusantium exercitationem sit non illo nostrum. Dolores hic occaecati ab rem eos.\n\nSed ipsum numquam explicabo ea quasi voluptate. Nemo ab in occaecati doloribus. Laudantium voluptas esse quis inventore aliquam sequi. Iusto totam porro quam aut odio est nisi nemo.\n\nEt ut quo ut at. Non magni fugiat sed sunt. Minima ea earum at beatae ipsam. Dolores suscipit explicabo pariatur in assumenda eligendi.', 'http://www.maurice.net/', '', NULL, NULL, NULL, '2025-05-05 16:01:36', 0),
-(3101, 'laboriosam-quia-aut-eligendi-nam-similique-et-3130', 'Laboriosam quia aut eligendi nam similique et.', 'Fuga dolor consequatur sunt aut. Est soluta blanditiis quos quam. Tempora est nobis quisquam sit aut quod amet at. Sit aut ea odit natus alias molestiae.', 'Labore alias suscipit asperiores inventore odio ad dolores incidunt. Et vitae omnis consequatur et est. Voluptates sequi distinctio et minima quisquam aperiam. Necessitatibus debitis dolores ut omnis.\n\nUt minus laudantium adipisci iste quod molestiae culpa. Fugit et quia alias rerum fuga nulla.\n\nVoluptas dolores quisquam quae laboriosam voluptates occaecati voluptas. Autem non impedit velit. Laudantium fugit quia dolores reprehenderit ea eaque maxime. Veniam ut quam odit vel.\n\nDebitis consequuntur debitis alias consequatur est velit. Accusantium rerum ipsa et facere. Dignissimos quo blanditiis labore et fugiat sequi. Harum natus itaque vel officiis ea.\n\nRepudiandae voluptas sapiente dolore consectetur. Libero omnis qui aut laudantium qui non ut. Id ab at optio incidunt.', 'http://www.diaz.fr/', 'bed', NULL, NULL, NULL, '2024-12-27 09:44:00', 0),
-(3102, 'aspernatur-et-voluptatibus-qui-accusamus-3131', 'Aspernatur et voluptatibus qui accusamus.', 'Qui autem quia velit velit sequi quia. Nostrum animi cumque qui possimus odit impedit quas. Ullam error repellat est.', 'Exercitationem saepe blanditiis perspiciatis et. Rerum et nobis beatae et quidem. Quisquam necessitatibus dolorum et et.\n\nVoluptate ullam aut eum blanditiis ea. Tempore autem at est culpa omnis. Soluta laboriosam quibusdam at ea in rerum.\n\nVoluptatem explicabo repellendus ad ullam commodi. Eaque a ducimus non vero ullam. Voluptates nisi tenetur nihil ducimus autem ut quasi earum.\n\nUt autem qui deleniti maiores. Iure est quia dolores ut. A quia reiciendis veniam. Quasi laudantium quibusdam eaque iste qui.\n\nQuas ut laudantium excepturi ut iste. Aut recusandae autem velit voluptatibus aliquam eos. Magni qui deleniti aperiam quia ratione beatae vitae. Architecto veritatis est repellat cum.', 'https://www.philippe.fr/quis-quis-velit-sed-aut-quo', '', NULL, NULL, NULL, '2024-11-11 02:55:42', 0),
-(3103, 'voluptas-eius-ipsa-itaque-dolor-molestiae-eum-3132', 'Voluptas eius ipsa itaque dolor molestiae eum.', 'Qui quo aut veniam ea et blanditiis voluptatem. Autem dolores expedita recusandae optio voluptatum officiis. Aut sunt voluptatem officiis repudiandae. Non provident nisi aut in.', 'Recusandae beatae sit ea assumenda. Fugit distinctio vero autem repellendus est. Temporibus enim aut nobis nemo.\n\nConsequuntur aut sit eum cum et. Necessitatibus animi voluptatem deserunt laborum voluptas et. Quo fugit et enim numquam quibusdam voluptatem molestiae ut. Excepturi sint sequi qui.\n\nTempora voluptatibus autem doloribus suscipit earum nobis quisquam. Sit beatae eum autem aperiam. Hic accusamus fugiat quibusdam sint. Facilis corporis ut suscipit est itaque sint.\n\nConsequatur est voluptatem eaque quia. Eius sit dolorum odit voluptatem esse eos voluptatem.\n\nMolestias nihil quaerat quisquam ullam est. Cum et necessitatibus tempora doloribus qui vel. Earum dolorem aspernatur perferendis voluptas laboriosam delectus.', 'https://weber.fr/officiis-sed-explicabo-natus-beatae.html', 'class', NULL, NULL, NULL, '2025-08-06 19:49:53', 0),
-(3104, 'illo-assumenda-est-animi-3133', 'Illo assumenda est animi.', 'Velit magnam vel cum. Minus culpa est est dolores sit. Quasi inventore voluptatibus enim incidunt possimus facere.', 'Illo ratione earum consequatur rerum occaecati quia inventore in. Ullam deleniti nisi sint alias. Exercitationem facilis dolor commodi est.\n\nCommodi qui vitae deleniti ipsum error earum inventore aut. Enim qui ut et et autem necessitatibus nostrum. Delectus modi aliquid est necessitatibus. Sed pariatur laudantium quia aliquid esse et sed. Debitis aut at velit aut rerum velit tempora cum.\n\nEnim nesciunt ab laborum eum vel. Nam dicta ad dolores et omnis. Necessitatibus minima vel ut voluptas. Quasi sint at aut autem ad.\n\nQuisquam omnis aliquam provident pariatur possimus tempora nihil. Earum odit perspiciatis ipsum. Est nihil nesciunt numquam qui eveniet voluptatibus ut laudantium.\n\nDolor accusamus culpa nobis qui molestiae quia quis. Vel quas magni consequuntur perspiciatis asperiores non. Culpa qui enim neque harum et magni dolores. Amet minima omnis praesentium.', 'http://www.gautier.com/magnam-ut-in-sapiente-odit-et', 'gph', NULL, NULL, NULL, '2025-07-17 11:16:12', 0),
-(3105, 'quisquam-quia-tempore-a-mollitia-3134', 'Quisquam quia tempore a mollitia.', 'Numquam consequatur sed enim accusantium deleniti fugiat quod. Dolorum quae quia similique nobis qui nam laborum. In qui impedit nihil hic amet vel.', 'Eveniet et eum et tempora. Aut veritatis dolores provident vero fugiat nihil vel. Molestias nihil dolores eligendi commodi est.\n\nSimilique qui fuga aut explicabo et qui possimus. Quia neque tempora nobis quas. Maiores in animi consequatur adipisci eveniet maxime. Commodi et voluptas aut in cumque quo sapiente.\n\nQuos delectus et autem sed voluptates. Est qui totam eligendi ipsa facere quisquam. Exercitationem sit quaerat nulla facilis.\n\nAt quibusdam et omnis assumenda fugit sed. Eum illum quia nihil autem nam suscipit magni. Expedita aliquam quia qui fugiat dolore. Cumque quaerat minus aut vel quidem corporis aperiam aut. Modi debitis necessitatibus nisi dolorem veritatis et.\n\nEa est quia perspiciatis deleniti autem distinctio ea temporibus. Et harum saepe ut consectetur sed recusandae. Ipsam officia cumque asperiores culpa animi possimus.', 'https://www.regnier.net/consequatur-ut-molestias-adipisci-a-expedita-doloremque-officia-et', 'gif', NULL, NULL, NULL, '2025-08-11 09:45:50', 0),
-(3106, 'eum-distinctio-sit-officiis-3135', 'Eum distinctio sit officiis.', 'Eius pariatur sint numquam accusantium. Et debitis similique ut vel voluptatem natus. Aliquam voluptatem quo quis fuga in. Eligendi aspernatur qui iste rerum ea.', 'Assumenda sunt est tenetur voluptas. Quas assumenda sequi consequatur exercitationem perferendis ducimus. Cupiditate tempore occaecati placeat numquam est eius natus consequatur.\n\nOmnis dolore eos porro et consequatur voluptatem repellat. Occaecati nihil in nobis veritatis suscipit voluptatibus. Nemo et a quaerat sit.\n\nIllum dolorem nam consequatur est. Labore ducimus eaque iure laboriosam amet vel et. Voluptate voluptate consequatur consequatur qui. Aspernatur consequatur est ipsum sed ex repellendus. Corporis eum alias deserunt facilis eum eos.\n\nConsequatur sunt est commodi necessitatibus autem autem aperiam sunt. Quo consequuntur vero non dolorem. Illum omnis impedit explicabo sint omnis. Voluptatem voluptas totam culpa molestiae incidunt perferendis eum aliquid.\n\nEt ut reiciendis aliquam eveniet exercitationem. Nostrum est aspernatur possimus quod alias.', 'https://peltier.fr/sed-neque-sunt-dolores-tenetur.html', 'mseed', NULL, NULL, NULL, '2025-02-20 15:05:52', 0),
-(3107, 'consequuntur-maxime-distinctio-ipsum-nam-error-3136', 'Consequuntur maxime distinctio ipsum nam error.', 'Est deleniti similique reiciendis saepe incidunt quasi. Sed possimus sed aut aut ex facere architecto. Quasi quis et eum quo exercitationem rerum praesentium.', 'Deserunt numquam temporibus et est. At aspernatur modi iusto qui laudantium. Aut quisquam non pariatur praesentium aut qui.\n\nId voluptatem saepe sit vitae corporis. Id occaecati eius deleniti dolores provident quis sit. Omnis sed in nesciunt necessitatibus.\n\nEst deserunt dolores aut tempore sed maxime. Ad ipsa ipsam quisquam nobis laboriosam repellat debitis. Dicta laudantium quo non harum. Necessitatibus qui dignissimos libero accusantium hic non est.\n\nRem tenetur praesentium facilis ut. Aut ut et inventore reiciendis. Aliquid reiciendis minima cum odio accusantium labore. Modi assumenda distinctio adipisci numquam exercitationem harum.\n\nVoluptates eos fugiat consequatur consequatur voluptas exercitationem. Numquam voluptas assumenda aliquam consequatur tempore.', 'http://www.buisson.fr/dolorum-eos-voluptatem-velit-suscipit-et-corporis-labore', '', NULL, NULL, NULL, '2024-12-27 18:46:49', 0),
-(3108, 'et-iusto-ex-commodi-atque-et-est-qui-3137', 'Et iusto ex commodi atque et est qui.', 'Et aliquam eos minus in est. Aut ea minus sed ut voluptatem.', 'Et minus ex pariatur. Aliquid sunt illo commodi non ipsum animi ut rerum. Nihil dolores ipsum est quod repudiandae amet eum. Nam ducimus recusandae dolorem et.\n\nFugit quia et nemo id pariatur omnis. Suscipit commodi vero aliquid non. Enim consequuntur sunt possimus iste ducimus ad. Sed nulla debitis aliquam voluptatem et ipsa magni. Doloribus eius aut qui culpa laudantium voluptatibus qui.\n\nEos quas ut necessitatibus maxime tempore. Et dolor accusamus sunt numquam odit dicta officiis laboriosam. Autem officia nihil eum consequatur sunt deleniti sit dolores.\n\nSed vel repudiandae incidunt nostrum porro. Ipsum sed corrupti autem voluptatibus. Quis eaque sed est et deserunt eaque neque sit.\n\nMaiores assumenda magnam aut optio. Ipsa id distinctio corporis distinctio id quos ea est. Consequatur dolores quae molestiae aut vel nihil eveniet enim. Qui rerum et ipsum voluptatum.', 'http://www.julien.fr/', '', NULL, NULL, NULL, '2025-10-01 04:59:45', 0),
-(3109, 'et-sequi-saepe-sit-porro-in-3138', 'Et sequi saepe sit porro in.', 'Minus maiores error non tempora. Repellat at aliquid quo impedit labore ex. Adipisci dolorem non velit autem sed. Omnis est sit modi delectus cumque sed.', 'Aut rerum perspiciatis expedita eum voluptas neque nihil ad. Assumenda occaecati aperiam corrupti illum quia dolor laborum.\n\nAperiam dolores et nihil molestiae et tenetur. Ducimus temporibus incidunt et.\n\nRerum reiciendis dolor aspernatur et quaerat. Ad corporis omnis ea officia officia saepe ut. Et illo suscipit voluptatem optio. Animi aut dolor id sit beatae.\n\nQuisquam qui esse nihil minus laudantium. Tenetur autem dolor voluptatum quidem ullam explicabo maiores. Culpa quis dicta quasi quas. Cumque voluptas omnis debitis et est eveniet.\n\nIure vel ut eius quaerat. Nesciunt repudiandae in ea voluptate excepturi et deleniti. Voluptatem maiores adipisci enim vitae nisi laudantium alias. Voluptatem sed vero ullam tempora quo et.', 'http://www.lopes.com/optio-eum-quis-tempore-dignissimos-eos', '', NULL, NULL, NULL, '2025-06-01 20:45:52', 0),
-(3110, 'laboriosam-perferendis-voluptatem-sed-delectus-eaque-nemo-3139', 'Laboriosam perferendis voluptatem sed delectus eaque nemo.', 'Quas nam quia aut delectus est placeat sint. Dicta tempora libero nihil recusandae magni ipsam. Nemo consequatur iste eum distinctio ducimus totam. Quo quibusdam repellat sed consequatur incidunt. Ullam voluptas iusto ut velit eligendi.', 'Dolorem aut omnis nesciunt non nisi rerum. Nostrum est ut et quos.\n\nVoluptatem nihil et autem dolorem. Maiores aut minima voluptas. Et ducimus qui repudiandae et officia repudiandae inventore.\n\nAt omnis maiores voluptatibus repudiandae. Quas odit ut est quae occaecati adipisci voluptatum libero. Laborum quas ut voluptatem maiores et illum debitis. Officiis architecto sit sint labore omnis neque aperiam. Quo atque possimus earum.\n\nVoluptate ex aut ut quo ratione voluptatem eos. Id consequuntur excepturi nisi tempore. Sunt sed dolorem quidem et est consequatur laboriosam.\n\nCorporis facere quam vel aliquid neque aliquam. Fuga iure beatae totam magnam provident nostrum. Aliquid ipsam praesentium aliquid omnis dolores sed omnis. Amet non dolorum voluptatem et doloribus ut eius.', 'http://berthelot.net/', 'sxw', NULL, NULL, NULL, '2025-02-23 03:59:27', 0),
-(3111, 'rerum-vel-sed-sit-ipsam-quos-et-in-3140', 'Rerum vel sed sit ipsam quos et in.', 'Laudantium incidunt rerum rerum cupiditate qui hic. Repudiandae tempore distinctio expedita architecto qui cumque. Necessitatibus vel hic deserunt.', 'Delectus veritatis veniam architecto qui sequi hic repudiandae. Nihil atque sint nisi ut odio consequatur rerum. Ducimus similique dolores aut provident. Cupiditate voluptas sed minus corrupti sunt excepturi.\n\nNihil consequatur eos ab. Aliquid impedit ipsum qui nisi aut. Ipsam fugiat doloribus molestias quo repudiandae natus. Consequuntur consequatur impedit et ipsam fugit nostrum.\n\nTemporibus repellendus et nostrum voluptatum autem nemo harum. Et nihil nesciunt aspernatur similique sequi. Quae sed sed dicta voluptatibus iusto. Ea nostrum non dignissimos nobis ad velit doloribus sequi.\n\nCum atque voluptatem voluptas eveniet quisquam. Sed unde cum dolorem eos ex reprehenderit est dolorem. Sequi aut minus ipsam.\n\nNulla saepe non excepturi aut inventore corrupti. Hic iusto et aut officiis veniam. Quis mollitia necessitatibus sunt eos voluptatem repellendus enim.', 'http://www.fabre.net/illo-quae-molestias-ab-pariatur-voluptatibus-nemo', '', NULL, NULL, NULL, '2024-11-28 22:15:08', 0);
+(3112, 'laboriosam-maiores-accusantium-aspernatur-aperiam-cum-rerum-cumque-3132', 'Laboriosam maiores accusantium aspernatur aperiam cum rerum cumque.', 'Molestiae voluptatibus labore et esse laboriosam. Nesciunt eius sit rem deleniti dolores nobis. Et deleniti amet id. Tenetur impedit doloribus numquam molestias et a.', 'Eum qui veritatis magnam nam. Corporis consequatur animi voluptates sit dolores. Dignissimos nostrum enim quis dolores qui vitae amet.\n\nAb voluptatum quos et consequatur. Dolor culpa commodi id fugiat corporis. Ut officia et consequatur officia maiores et a.\n\nNulla excepturi ea laboriosam et omnis. Eum nisi aspernatur qui sint molestiae consequatur. Officia quos quo reprehenderit numquam veritatis laboriosam. Odit sunt harum unde eius ipsam.\n\nDolorum ut necessitatibus cupiditate provident. Qui quibusdam ex enim quis. Fuga incidunt eos ex illo minima.\n\nBeatae aut cumque consequuntur voluptas dolorem dolorum accusantium. Omnis laudantium est enim est consequatur. Qui et numquam ut omnis voluptates corporis harum.', 'http://payet.fr/et-sit-quia-minima-exercitationem-enim-ut', '', NULL, NULL, NULL, '2025-10-14 05:25:51', 0),
+(3113, 'optio-illo-delectus-facilis-officia-placeat-3133', 'Optio illo delectus facilis officia placeat.', 'Voluptas ad aut consequatur molestiae alias molestiae porro eos. Sed aut ipsum modi ad repellendus impedit tempore. Omnis possimus deserunt facere iure quaerat.', 'Perspiciatis eum eaque aut voluptatem. Aliquid vitae iure facilis sed. Adipisci sunt commodi ut. Et ea molestiae cum perferendis sequi rerum iure.\n\nUt sit nobis voluptatem ea et molestias debitis animi. Itaque totam dolorem accusantium dignissimos laborum quibusdam et. Alias provident atque sed voluptatem et. Ad perspiciatis et quia ad atque magnam aperiam expedita.\n\nEos facere facilis aut illum sed repellendus dolore. Quam dolor similique fuga. Non consectetur sequi et tenetur. Aspernatur corporis veritatis nesciunt omnis.\n\nQuisquam doloribus quia ipsum sapiente. Sunt voluptatem cum odit dolorem perferendis dolorum non. Consequatur ad earum ut mollitia.\n\nSaepe nulla omnis neque quaerat quo et impedit. Repellat totam qui inventore perspiciatis.', 'http://jacques.com/perspiciatis-autem-est-qui-cumque-enim-incidunt', '', NULL, NULL, NULL, '2025-05-20 15:50:49', 0),
+(3114, 'commodi-ut-enim-reprehenderit-aspernatur-porro-error-consequatur-a-3134', 'Commodi ut enim reprehenderit aspernatur porro error consequatur a.', 'Omnis quia aut deleniti dolore. Molestias ad accusamus nemo. Sequi voluptates odio ut id ex vel vero unde.', 'Accusantium et ut omnis. Possimus et sed consequuntur qui reprehenderit dicta. Nulla aut adipisci repudiandae enim ex.\n\nIllum eos est dolore accusamus ducimus et deserunt. Expedita impedit et saepe dicta voluptatum earum repellendus. Delectus odit laudantium ducimus est.\n\nQuo est voluptatem magni cum voluptates qui nostrum. Laborum eum eum tempora recusandae laborum sed itaque. Nobis qui est qui qui. Voluptatem nihil ipsum delectus autem.\n\nArchitecto omnis magni voluptatem nihil. Voluptatem qui doloremque in facere. Reprehenderit nisi non ipsa labore.\n\nAspernatur expedita tempore beatae amet voluptas. Vitae occaecati vero aut et rerum qui. Cum excepturi animi aspernatur est repudiandae qui dolores.', 'http://meyer.com/et-hic-nihil-beatae-voluptatem-fugiat-illo-dolore', 'dae', NULL, NULL, NULL, '2025-03-14 22:10:57', 0),
+(3115, 'excepturi-et-quam-commodi-facilis-nobis-3135', 'Excepturi et quam commodi facilis nobis.', 'Incidunt repellat quas inventore maxime officiis necessitatibus quas. Eius quidem qui dolor quia sit. Odit veritatis molestias vitae autem minima. Nesciunt qui quia numquam nisi.', 'Velit voluptatibus tempora aperiam odit. Dolorem sapiente aperiam voluptatem voluptas magni mollitia. Cumque sequi optio aut illum esse quisquam. Corrupti excepturi enim repudiandae aut non eos adipisci.\n\nPerferendis iste soluta quia illum est eos totam. Similique laboriosam ducimus rerum repellendus. Quia nihil accusamus voluptas officia id perferendis ut.\n\nIpsam accusamus velit rem. Itaque maiores sint et voluptates. Est illum consequatur omnis eaque sit excepturi autem iusto.\n\nIpsa et quis rerum. Id consectetur vel asperiores quaerat nihil est molestias. Sit et saepe neque.\n\nIure ex cumque exercitationem aut nostrum enim. Autem doloribus quae et magnam. Voluptatem neque similique ut harum officiis totam nisi.', 'http://www.dasilva.fr/temporibus-reiciendis-dignissimos-vel-recusandae-consequatur-quas', 'stf', NULL, NULL, NULL, '2025-09-21 14:54:18', 0),
+(3116, 'dolores-totam-dolore-voluptatum-et-quod-aspernatur-et-a-3136', 'Dolores totam dolore voluptatum et quod aspernatur et a.', 'Dolor et eum officia et eum nostrum debitis. Ut ipsum consequatur sit exercitationem autem. Totam rerum dolor dolorum totam ut vitae.', 'Et dignissimos perferendis fuga officiis. Qui molestiae nisi consequuntur ut.\n\nQuo animi voluptatem maiores vel deleniti voluptas. Et laborum sed dolor aliquam atque labore. Nihil debitis quia sapiente eum. Et ipsam magni sint et voluptate.\n\nPlaceat voluptatem iure cum officia illo consequatur exercitationem. Sequi nam nesciunt omnis deserunt rerum quia. Voluptatum neque reiciendis esse omnis dolorum. Aut et debitis minus facere voluptates.\n\nOmnis mollitia magnam architecto earum rerum. Velit incidunt a iste iure voluptatum dolorem dicta. Quidem aliquam ut perferendis consequatur quod rerum. Et provident ullam magni qui eum rerum.\n\nNobis molestiae sunt modi illo molestias perspiciatis. Nostrum animi qui vero dolor. Rerum non vel quas.', 'https://picard.fr/fugit-adipisci-maiores-hic-facilis-rerum-nesciunt-qui-maxime.html', 'jnlp', NULL, NULL, NULL, '2025-03-04 16:50:50', 0),
+(3117, 'ducimus-voluptatem-aliquam-possimus-corporis-architecto-eius-rem-voluptatum-3137', 'Ducimus voluptatem aliquam possimus corporis architecto eius rem voluptatum.', 'Quia non alias et molestias ducimus aliquid ea voluptas. Distinctio perferendis corporis sit provident iure. Quos voluptas id magnam.', 'Eos aliquid hic magnam nemo vero voluptatibus quisquam. Sint optio non dolorem. Unde ipsum dicta praesentium architecto adipisci.\n\nNesciunt aliquid praesentium ut. Sit ut sit temporibus dolorem quam. Fuga ea enim tempore provident reprehenderit quisquam. Odit expedita dolorum qui quibusdam et omnis.\n\nEligendi voluptatem et quos provident. Deleniti voluptas et voluptatem eveniet esse rerum sed. Distinctio vero vero impedit fugiat.\n\nAspernatur ea ullam aut molestias at accusamus et. Voluptates beatae sed officia quibusdam voluptatum. Placeat sed quia nulla qui quis. Quas et et ab animi rerum.\n\nConsequatur beatae dolorum sunt. Nisi odio hic est ratione velit rerum voluptatem. Autem aut velit eaque numquam aut. Nobis incidunt cupiditate exercitationem sint eligendi.', 'https://www.jacquot.fr/mollitia-sit-sequi-similique', 'qam', NULL, NULL, NULL, '2025-01-03 12:57:08', 0),
+(3118, 'quasi-placeat-et-deserunt-nobis-3138', 'Quasi placeat et deserunt nobis.', 'Quia et cumque alias libero eos. Cupiditate cum vel nihil voluptatem vero et quia. Repellendus autem maiores at qui quis similique reprehenderit.', 'Sequi sint consectetur et facere. Eveniet repudiandae et eum ut harum ad at. Incidunt quidem soluta voluptatem voluptas quos deleniti atque.\n\nQui nihil ut iste quia ea. Id corporis alias nesciunt at sed.\n\nDolorem sit ut eaque aut nihil rerum. Ullam vel eum ut aut. Pariatur molestiae nesciunt eum quae rerum. Explicabo a non itaque consequatur dolorem qui molestias. Nostrum quibusdam adipisci ut consequuntur voluptas.\n\nDelectus perspiciatis molestiae eos et dignissimos eveniet. Adipisci ipsum molestiae qui maxime rerum. Atque quasi aut sit. Ut incidunt nulla qui error.\n\nTempore similique molestiae consequatur qui fugit est ea. Repellat accusamus quis ducimus consequatur delectus. Non ea quas molestiae vero facilis vel qui.', 'http://langlois.com/velit-et-quos-alias-maiores.html', '', NULL, NULL, NULL, '2025-10-26 01:28:54', 0),
+(3119, 'aliquam-ex-molestiae-aut-tempora-qui-dolores-laboriosam-3139', 'Aliquam ex molestiae aut tempora qui dolores laboriosam.', 'Dolor voluptas id nisi omnis est quia architecto. Distinctio et enim in fugiat asperiores eos. Ut neque aut sed et.', 'Velit omnis eligendi iste et. Odio et velit quibusdam aut. Magni excepturi at voluptatem amet ipsam illum consequatur.\n\nDolore architecto in quisquam provident rerum. Vel reiciendis soluta sapiente vel illum. Architecto molestiae quisquam asperiores repellat quas ut. Aut similique sequi eius. Occaecati occaecati et rerum libero.\n\nNulla labore autem cupiditate corporis ipsa autem. Vero voluptas est ut natus autem quos. Et similique ullam eos eligendi ducimus voluptates doloremque. Ea quibusdam voluptate quia quia.\n\nEarum enim esse architecto nihil dolorum qui aut. Aut nulla delectus minima adipisci aut. Consequatur fugiat et et. Quas delectus tempore quam.\n\nQui accusantium voluptatem et sint vel. Dolor incidunt quidem omnis autem voluptas architecto.', 'https://blanchet.com/error-et-ut-sint-totam-enim-nemo.html', 'wav', NULL, NULL, NULL, '2025-01-31 14:01:40', 0),
+(3120, 'doloremque-magni-officia-quibusdam-aut-quisquam-3140', 'Doloremque magni officia quibusdam aut quisquam.', 'Magni aliquid fuga quidem molestiae dicta. Deleniti nostrum aperiam consectetur velit voluptatibus. Facere quia nam quae autem qui.', 'Pariatur facere dolorem commodi eos et est sunt vel. Sit consequatur est error quis aspernatur incidunt dolorem. Illum mollitia consequatur est quis consequatur ut sit.\n\nAut deserunt perspiciatis perspiciatis. Dolores velit quisquam enim voluptate sapiente quis. Laboriosam blanditiis ab omnis autem aut.\n\nVoluptas dignissimos et qui vitae sit. Nesciunt aut incidunt quaerat quidem illo. Ea ipsum sint repellendus voluptatibus consequatur cumque. Esse est molestiae repellendus quia.\n\nQuam doloremque alias mollitia voluptatibus. Molestiae nemo aperiam similique eos quaerat et debitis. Expedita quis quis inventore odio consequatur tenetur. Eveniet quae aut labore.\n\nSed minima quisquam perspiciatis itaque ut. Nam accusamus dolorum accusamus voluptatibus tempora nesciunt ducimus. Nobis vel ut dolores.', 'http://www.bourgeois.com/quaerat-doloribus-ipsa-in-eum-tempore-tenetur', 'wmx', NULL, NULL, NULL, '2025-06-09 04:49:28', 0),
+(3121, 'est-qui-est-deleniti-rerum-eum-3141', 'Est qui est deleniti rerum eum.', 'Eveniet omnis aperiam ut quae. Rerum enim aliquam nemo. Eum eligendi quidem autem. Assumenda et ullam numquam vel. Alias cupiditate velit et magnam.', 'Adipisci qui quis ipsum blanditiis repellendus sed a quibusdam. Alias voluptates repudiandae est deserunt dolore omnis dolorem quia. Nulla corporis saepe est ut maxime qui. Culpa rerum iure excepturi.\n\nVel recusandae alias sed molestias occaecati consequatur. Vel expedita eum qui dolorum corporis. Quo asperiores iste quos maxime repudiandae blanditiis.\n\nFugiat alias et sed est dolorum sit velit suscipit. Doloremque dolor libero aperiam atque nisi aliquid saepe. Quidem aut pariatur non. Natus est natus aut voluptas quos ut.\n\nDolorem molestiae possimus qui eveniet aperiam et. Ut rerum soluta labore eveniet recusandae nulla. Aliquam sit corrupti eveniet ut et mollitia. Cumque autem non dolores id.\n\nUt reprehenderit aut et eum alias voluptas aliquam. Quam omnis assumenda provident aut. Asperiores ad nulla nesciunt quibusdam quo doloribus. Error maiores neque voluptatem.', 'http://www.collin.fr/id-molestiae-et-et-nisi', '', NULL, NULL, NULL, '2025-03-14 21:03:17', 0),
+(3122, 'rem-necessitatibus-ut-officiis-modi-3142', 'Rem necessitatibus ut officiis modi.', 'Ut iusto neque aut recusandae placeat saepe quisquam. Rerum et soluta perferendis veniam et neque neque. Tempora qui qui officia iste et quibusdam.', 'Fuga nobis alias beatae quas aliquid voluptatem ut mollitia. Vel consequuntur hic nostrum reiciendis sequi. Aspernatur similique nisi sunt sit ipsum aut quia. Veniam voluptatem sed velit cum.\n\nEt ipsum iusto id at quam temporibus voluptatem et. Illo debitis fugit ex quae recusandae et. Suscipit ad voluptatem omnis recusandae assumenda sit eveniet ex. Aliquam dolorem numquam sit repellendus recusandae dolor qui minus.\n\nVoluptatem enim cum sunt asperiores. Et est perspiciatis odit cum quasi sapiente sint officiis. Omnis odit labore est et quas possimus.\n\nUt eos in quia dicta suscipit itaque quod. Natus unde similique maxime cum natus. Rerum quam ullam voluptatum suscipit at et voluptas.\n\nIpsa aut ratione quod ea et numquam sequi. Magnam fugit iste maiores eius. Voluptates nulla iure qui ad ea blanditiis. Vero quibusdam nulla rerum neque optio aut.', 'https://etienne.fr/a-ut-maxime-sapiente-consequuntur-sint-perferendis.html', '', NULL, NULL, NULL, '2025-07-25 13:37:24', 0),
+(3123, 'omnis-unde-commodi-ut-dicta-aperiam-deleniti-3143', 'Omnis unde commodi ut dicta aperiam deleniti.', 'Debitis ut dolorem alias optio. Nisi autem explicabo ut quo est facilis doloribus. Aut mollitia praesentium non nesciunt. Id quasi aut aut deleniti et debitis ratione.', 'Tenetur eum accusantium consequatur sit incidunt. Accusamus placeat dolores laborum voluptatum reiciendis voluptatibus enim. Accusantium et qui eos quia repudiandae.\n\nSapiente id cumque autem dolorum pariatur. Id et voluptatum excepturi sit quod labore. At cupiditate qui eos necessitatibus sapiente ipsum velit. Quia qui est eum ea occaecati provident.\n\nUt repellat sit temporibus a ut doloremque deserunt. Provident minima aut sed exercitationem. Possimus ad temporibus et consequatur explicabo sed. Laborum alias et accusantium enim est.\n\nConsequuntur dolorem enim expedita aut. Recusandae dignissimos corporis deserunt non id illum. Sint laudantium aliquam et dignissimos a iusto quia.\n\nTemporibus delectus exercitationem esse suscipit neque iure fugiat earum. Quia ut nesciunt totam esse illo corporis necessitatibus hic. Laborum rerum quasi enim dolorem nemo recusandae.', 'http://www.lemonnier.fr/voluptas-voluptatibus-est-nihil-dolorum-magnam-voluptates-ea-est', '', NULL, NULL, NULL, '2025-02-07 21:44:29', 0),
+(3124, 'labore-ea-ratione-et-3144', 'Labore ea ratione et.', 'Autem optio fuga sit officia est. Voluptatem adipisci at consequatur sint alias cum neque. Dolore qui nisi inventore ratione quod deleniti. Saepe consequatur ut consequuntur.', 'Eius nemo adipisci ullam distinctio. Ut et nulla veritatis. Fugit id animi hic fuga.\n\nPlaceat inventore id explicabo in necessitatibus dolorem saepe. Necessitatibus rerum eveniet odio dolores sint distinctio. Dignissimos quaerat veritatis quaerat dolor sed nulla consequatur autem. Rem explicabo eos voluptatem neque.\n\nAccusantium veritatis esse excepturi velit. Harum quia beatae velit ab qui vitae mollitia. Temporibus quisquam ex quia et ullam.\n\nQuasi blanditiis saepe necessitatibus qui quae est. Pariatur architecto sed natus distinctio illo et officia. Nam et voluptatem quasi doloremque quae sit accusantium.\n\nSit expedita enim exercitationem pariatur ipsam. Dignissimos ratione fugit sunt modi. Molestias repellendus aut laborum rerum. Est quas eveniet saepe adipisci.', 'http://www.hamel.com/ad-officiis-a-molestias-dignissimos-et-architecto', 'fpx', NULL, NULL, NULL, '2025-09-18 18:16:17', 0),
+(3125, 'voluptatem-labore-autem-est-et-et-sunt-cumque-3137', 'Voluptatem labore autem est et et sunt cumque.', 'Ullam dolor repudiandae natus veniam et. Sint occaecati a beatae voluptatibus. Laudantium quisquam doloribus libero eaque officia.', 'Sint harum qui consequuntur suscipit animi voluptatem tempora. Totam iure cupiditate qui non excepturi est et placeat. Impedit et aspernatur quasi modi.\n\nEaque adipisci sit ea consectetur commodi. Illum numquam consequatur ea facilis voluptatem. Ullam aut tempora totam temporibus quae.\n\nMinus ullam ducimus molestias ea sapiente qui. Nam et laudantium quaerat dolor. Consectetur delectus maiores ad magnam doloribus neque possimus.\n\nRepellat officia autem voluptatum magni in. Magnam quia aut qui eos. Incidunt porro aut illo et labore vero mollitia.\n\nNumquam laboriosam dolorem aut qui. A asperiores minima minus tenetur amet dolorum. Provident explicabo atque voluptatem quos. Repudiandae sint quis repudiandae sed.', 'http://www.charrier.com/quia-et-voluptates-sunt-repellat.html', 'fh4', NULL, NULL, NULL, '2025-08-19 09:54:31', 0),
+(3126, 'quo-provident-omnis-placeat-unde-rerum-ratione-omnis-3138', 'Quo provident omnis placeat unde rerum ratione omnis.', 'Ea occaecati et nam suscipit fuga. Quia fuga sequi qui labore et. Est fugit amet sint illo debitis. Ullam sapiente sed et minima laboriosam. Doloremque deserunt recusandae tenetur debitis ex magni corrupti qui.', 'Repellat iure incidunt inventore molestias voluptatibus corrupti. Aut non sit et quia molestiae et quibusdam maiores. Rerum ratione quo occaecati necessitatibus ipsum ullam aut. Sit minima sed dolorum et ad ex nemo.\n\nHic rem molestias qui quam. Iste facere quos consectetur deserunt totam consequatur. Expedita corporis et sint expedita. Ut nulla pariatur quia modi.\n\nMinima debitis hic suscipit quam unde quibusdam nam. Eveniet rerum nihil libero aliquid id animi libero. Officia possimus eum ut nesciunt exercitationem.\n\nNon quia tempore voluptatum aspernatur quia fuga. Cupiditate maxime repellendus et. Qui et rerum quia tempora.\n\nDebitis quis vel ea eligendi nihil. Non earum ducimus et iusto dolores. Et beatae tenetur magni dolorem quos adipisci ratione cupiditate. Veritatis omnis reiciendis quia voluptas est ipsam et.', 'http://www.sauvage.com/molestias-quo-eligendi-dolor-ipsam-necessitatibus-aliquid-et-qui.html', '', NULL, NULL, NULL, '2025-09-23 11:17:04', 0),
+(3127, 'necessitatibus-est-sit-saepe-doloribus-doloribus-ipsa-iste-3139', 'Necessitatibus est sit saepe doloribus doloribus ipsa iste.', 'Aliquid eveniet tenetur in nihil qui reprehenderit. Voluptatibus aut cumque id corrupti. Quidem sed in aut possimus hic. Dicta qui adipisci earum molestias nesciunt aut autem.', 'Velit aut dolores exercitationem ea dignissimos ipsa. Eos veniam quod quia tempore iste modi sed. Molestiae dolores non exercitationem quidem sequi qui deleniti velit. Non harum numquam pariatur ea.\n\nAut ullam voluptatem velit. Modi repellendus aut repellat quia incidunt saepe illo. Ducimus non natus ex aut voluptas. Id saepe voluptatem quo est nihil eum. Voluptas deserunt temporibus est accusantium accusantium perferendis cupiditate quae.\n\nRepellat non laborum rerum. Laborum rerum dolores nesciunt exercitationem accusantium.\n\nSit sapiente voluptate laborum quod ea fugit nisi earum. Ea et nostrum enim dolor. Omnis maxime accusamus aliquam sapiente est. Qui in natus cum.\n\nEt sunt iusto ipsa earum quae earum. Inventore repudiandae omnis consequatur molestias aut neque esse est. Error qui quia non.', 'http://www.neveu.com/', 'emz', NULL, NULL, NULL, '2025-08-12 11:36:25', 0),
+(3128, 'corrupti-est-voluptatem-tempora-et-quo-quo-totam-3140', 'Corrupti est voluptatem tempora et quo quo totam.', 'Dolores ea rerum explicabo nesciunt. Quis nisi nulla earum amet pariatur non. Omnis ipsum perspiciatis quasi qui tenetur.', 'Ex minima non soluta quod. Nesciunt incidunt ipsum necessitatibus qui. Ex dolor totam omnis qui. Reiciendis quas quisquam et eum explicabo minima sed.\n\nUt aut maxime beatae. Hic eius dolores dolor voluptatem fugit est voluptatum. Eos non quasi et rem aliquam.\n\nVoluptatem libero sequi eos quis. Recusandae voluptatem fugiat quaerat aut. Corrupti nisi soluta harum nostrum odio aperiam.\n\nAut dolor odio nulla rem. Tempore mollitia et quis enim voluptatem ut at. Consectetur sit id nihil esse eos maiores. Iste quis neque dolorem repellendus enim.\n\nCorporis laborum cupiditate pariatur dolores repellendus libero. Cupiditate dolorem voluptatem qui ab. Facere et vitae molestiae in dolores. Numquam accusamus ea officia incidunt architecto possimus.', 'https://www.carlier.org/voluptas-natus-corporis-cumque-natus', '', NULL, NULL, NULL, '2025-01-11 10:13:49', 0),
+(3129, 'autem-perspiciatis-non-illum-reprehenderit-et-veniam-3141', 'Autem perspiciatis non illum reprehenderit et veniam.', 'Ut quis est ut vel aliquid vero. Sed beatae dignissimos laboriosam. Aspernatur accusantium ab quo velit cupiditate. Aut laudantium et perferendis.', 'Aut consectetur est est explicabo ab et. Consequuntur cum iste quos sit repudiandae sed aut iste. Neque doloremque molestias sunt et cupiditate nihil. Neque quia laboriosam porro facere ducimus.\n\nVel magnam minima molestias necessitatibus sint doloribus non qui. Quaerat porro dolore dolorem architecto. Minus veniam perferendis ducimus laborum amet harum impedit ut. Expedita sunt error ex totam voluptatem commodi sit. Ut sunt iusto facere molestiae.\n\nVeniam quae qui officia nulla rerum. Unde repellat consequatur nesciunt quis laboriosam vel ullam. Voluptatem et cupiditate maxime minus est.\n\nRem dolor excepturi enim praesentium et qui. Quibusdam dolor ut neque qui voluptas maxime. Illum placeat et accusantium mollitia fugit. Veritatis corporis et repellendus omnis numquam.\n\nEst sint omnis fugiat sint. Id est dolore qui minima maxime sed. Quo qui repudiandae ex. Voluptas velit exercitationem facere sunt. Necessitatibus unde odio nobis et sint doloribus voluptatum reprehenderit.', 'http://aubry.com/tenetur-assumenda-reiciendis-corrupti-et.html', 'vcx', NULL, NULL, NULL, '2025-04-05 12:22:56', 0),
+(3130, 'aut-voluptas-harum-porro-3142', 'Aut voluptas harum porro.', 'Corporis culpa excepturi ab sit sint voluptas qui. Ipsum quod voluptatum cum consequuntur sunt. Voluptatem molestias saepe et aut.', 'Aut nihil voluptatem dolores laudantium ut et voluptas hic. Earum aut illo et ut assumenda. Expedita aut et velit dicta qui. Laudantium nulla hic molestiae. Totam animi optio velit doloribus odio.\n\nRerum quidem ipsum voluptatibus recusandae dignissimos. Ratione quis consectetur dolore expedita ea nesciunt necessitatibus. Architecto mollitia consequatur reprehenderit id ullam.\n\nVelit voluptatem praesentium adipisci cupiditate et voluptatem fugiat. Sunt natus similique voluptate et illum. Nobis ut in et et officia.\n\nEa magnam non rerum ut. Enim nihil suscipit numquam est modi totam. Magnam dolores et quia in velit voluptas commodi molestias. Quasi illo eveniet quis enim.\n\nAut veniam non aliquam laboriosam ea non accusamus. Dolorem et commodi minima eos.', 'http://klein.org/', '', NULL, NULL, NULL, '2025-05-01 02:19:41', 0),
+(3131, 'provident-provident-quia-placeat-facilis-velit-magni-et-3143', 'Provident provident quia placeat facilis velit magni et.', 'Dolor id quia beatae voluptas corporis est sit. Aut tempora fugit nemo et consequatur tenetur voluptatem. Neque enim hic quasi modi. Dignissimos a minus autem.', 'Ducimus ab consequatur sint quidem accusantium exercitationem qui. Culpa id mollitia sequi molestiae pariatur. Fugit quia et iure. Laudantium et soluta vel omnis. Sint quis ut quibusdam accusamus et quo autem.\n\nConsequatur in cupiditate excepturi molestiae deserunt. Laboriosam rerum ipsam nihil pariatur voluptatem. Aut et sequi impedit.\n\nNumquam provident quaerat quaerat officia. Nihil at nam eum quis aut neque qui. Nisi perspiciatis neque reprehenderit mollitia culpa sed et.\n\nDolore et ipsam voluptatem voluptatem rerum aut qui excepturi. Aut eum sit itaque sit omnis. Quis pariatur qui dolores molestias.\n\nSed qui aperiam quod. Maxime consectetur aut ipsam debitis corporis id non culpa. Praesentium eos dolorem quae harum quae sint. Deserunt non magnam occaecati aliquam unde accusantium sunt.', 'http://pinto.com/dolore-beatae-illo-fuga-et-et', 'xpi', NULL, NULL, NULL, '2024-11-23 04:01:30', 0),
+(3132, 'alias-repellat-sunt-necessitatibus-voluptatem-in-deserunt-3144', 'Alias repellat sunt necessitatibus voluptatem in deserunt.', 'Eum voluptas velit consequuntur sunt. Minima cupiditate dolore aut quod ut quam. Rem sit quo aut veritatis quos quidem labore.', 'Similique ex voluptatum id iure distinctio rerum. Ea totam ratione sit ipsa facilis. Voluptatem voluptatum nisi exercitationem repudiandae nobis et earum corrupti.\n\nEsse eius rerum voluptatem. Omnis eum aut dolor aut voluptas esse. Non autem maiores sit voluptatem mollitia.\n\nEius unde minima similique aut tempora. Laboriosam molestias ut pariatur ut omnis est. Ad atque ipsum fugiat nemo molestiae eos. Dolorum esse consectetur illum eos et ex maiores officia.\n\nNisi molestias est qui facere fugit quo iusto. Voluptatem eligendi similique iusto. Nam iusto labore quo quaerat qui dolorem.\n\nQuia aliquid vitae amet numquam et numquam officiis. Dignissimos iusto rerum et vel. Ut inventore sed fugit harum asperiores atque. Alias eligendi architecto sed et nobis aliquam excepturi. Quo ea ea repudiandae ut sint similique.', 'https://berthelot.net/iste-tempore-voluptatem-et-alias-repellat-perferendis.html', '', NULL, NULL, NULL, '2024-11-27 14:18:48', 0),
+(3133, 'iste-ad-ratione-harum-fugiat-necessitatibus-nam-3145', 'Iste ad ratione harum fugiat necessitatibus nam.', 'Facere atque perferendis temporibus quis placeat vel. Blanditiis ratione modi error qui minima. Qui expedita deleniti dolores laboriosam.', 'Vitae iure voluptates inventore natus. Totam temporibus velit vel adipisci magni veritatis. Facilis animi nihil quis modi consequatur quia.\n\nEt dolor nemo molestiae deserunt rerum consequatur excepturi. Voluptates laboriosam ab omnis omnis illum. Dignissimos necessitatibus excepturi et ut qui dolor aliquam.\n\nOdio aliquid sint qui ex omnis sunt praesentium. Itaque odit suscipit voluptatem sint est. Dolore ut tempora voluptas rerum ipsa. Fugit ut nihil sed neque tenetur omnis.\n\nAccusamus reiciendis reprehenderit est distinctio et doloremque. Rerum porro vitae dolores non dignissimos. Et aliquid occaecati iste vero optio deleniti. Ut voluptatem odit officiis maxime rem voluptatem et libero.\n\nCum eos modi voluptatem omnis. Debitis accusantium sunt repellendus perspiciatis qui illo. Totam animi reiciendis aperiam hic at velit.', 'http://giraud.net/porro-adipisci-hic-quia-soluta-voluptas-minima-voluptatem.html', 'ivp', NULL, NULL, NULL, '2025-07-19 14:42:29', 0),
+(3134, 'maiores-repellat-doloribus-fugit-3146', 'Maiores repellat doloribus fugit.', 'Neque error ad voluptatem cupiditate ducimus consequatur saepe ullam. Corrupti consequatur voluptas ipsum aperiam quos. Autem cum vero et. Minus molestiae accusamus velit.', 'Et in nisi eligendi quia sint blanditiis. Veritatis eius qui vel voluptatum. Nihil beatae eos est.\n\nIn est rem numquam perferendis corrupti est impedit voluptatem. Qui facere voluptates quae eius. Sed esse eius ratione aut aut provident soluta quibusdam.\n\nOfficia aut iste mollitia animi. Saepe distinctio voluptates eveniet expedita eos quae consequatur. Deleniti id non aut harum voluptatibus. Cumque odio corrupti pariatur porro.\n\nIn facere et est qui quia. Deleniti nobis quasi culpa voluptate recusandae dolore.\n\nNumquam deleniti nam quia et sint. Deserunt tenetur eos consequatur recusandae consectetur odio. Eos autem rerum adipisci ut explicabo.', 'http://simon.com/quis-quam-unde-modi-culpa-quas-nihil-est-blanditiis.html', '', NULL, NULL, NULL, '2025-06-30 05:16:10', 0),
+(3135, 'deleniti-iure-fugiat-dolor-dolor-eveniet-sed-3139', 'Deleniti iure fugiat dolor dolor eveniet sed.', 'Velit voluptatum sunt et sit ad ad possimus quia. Est laboriosam quis consequatur ipsa. Facere quis non quidem impedit occaecati. Laboriosam repudiandae nulla voluptatem voluptatem rem aut eius.', 'Quae quia excepturi earum nemo inventore maxime. Eius nihil explicabo enim perspiciatis. Doloremque aut et odit ut non sint quia. Molestias nostrum ipsa exercitationem minima.\n\nSapiente exercitationem quia deserunt amet. Officiis et inventore rerum exercitationem. Aut eligendi tempore et fuga officia magni nihil eius. Est distinctio exercitationem molestiae nobis ad vel.\n\nLaboriosam ut omnis ipsum quaerat harum illum rerum autem. Doloremque praesentium fuga voluptatibus nulla sed quibusdam aliquam. Amet amet cum culpa culpa reiciendis laborum non.\n\nAut recusandae nam laborum dolorem in modi. Mollitia totam eaque qui error minus labore.\n\nFacere et eaque aperiam ducimus magnam. Voluptatem ex inventore debitis possimus necessitatibus est est exercitationem. Doloremque maxime rem perferendis.', 'http://goncalves.com/totam-natus-in-optio-consequatur-animi-et-perferendis', '', NULL, NULL, NULL, '2025-03-06 19:18:17', 0),
+(3136, 'distinctio-minima-laborum-quaerat-consequatur-non-3140', 'Distinctio minima laborum quaerat consequatur non.', 'Aut iste et qui non. Molestias nihil repellat et sequi commodi eligendi. Est et fugiat optio voluptatem maiores eaque dolor.', 'Quia alias ut sequi ea occaecati illum. Dicta nulla et ratione voluptatum eligendi veritatis quos. Sint necessitatibus quas totam quidem consequatur sit sapiente. Enim debitis voluptatem asperiores laborum veritatis excepturi.\n\nSint facere voluptatem et recusandae voluptatem pariatur. Blanditiis voluptate id explicabo et non dolorem mollitia. Accusamus et repellat nulla.\n\nNecessitatibus asperiores ipsum amet iusto. Sit corporis omnis dolor modi. Aliquam ratione sit doloribus dolor. Quo sint quos beatae voluptas.\n\nOdit et est aut modi. Quia praesentium nobis dicta vero. Dolores cumque numquam nulla. Recusandae totam quae quis impedit molestias perferendis. Libero at ipsam modi nobis ut.\n\nSapiente ea aut natus sed sint autem sit. At vitae voluptas voluptatem eaque consequatur. Velit cum voluptas iusto qui.', 'http://hubert.fr/', '', NULL, NULL, NULL, '2025-07-28 18:21:10', 0),
+(3137, 'suscipit-maxime-nam-illo-quod-temporibus-et-harum-3141', 'Suscipit maxime nam illo quod temporibus et harum.', 'Non earum accusamus nemo quaerat dolores. Amet earum ullam exercitationem suscipit cum et maiores. Ducimus veniam est et temporibus. Dolores ut repellat in iure. Odit sunt facere neque.', 'Molestiae sapiente occaecati nisi ea voluptates accusantium. Et facilis exercitationem quia libero. Nisi beatae aspernatur quo quos vel accusamus. Amet tempora et accusantium nemo.\n\nAlias veritatis consequatur optio. Qui alias magnam rem blanditiis sit quibusdam.\n\nIllum dolor placeat veniam rerum iste excepturi inventore. Dolores qui est et nihil provident necessitatibus. Totam earum quae accusamus. Provident aut beatae dolore in voluptates porro. Accusamus itaque autem enim et reprehenderit dolorem.\n\nSuscipit tenetur nostrum et molestiae dolores. At aut praesentium et ipsam tempora. Voluptatum eum modi id in sapiente.\n\nVoluptatem non corporis aut consequatur cumque sed est. Accusantium ipsam quod harum. Reiciendis cum soluta sit voluptatibus sed.', 'http://www.dacosta.com/', 'wmls', NULL, NULL, NULL, '2025-10-04 15:18:57', 0),
+(3138, 'mollitia-ea-aut-iure-velit-sapiente-voluptatem-qui-3142', 'Mollitia ea aut iure velit sapiente voluptatem qui.', 'Et consequatur ea nihil est illum eos. Debitis libero magnam et excepturi. Ipsa tempore non et iure.', 'Et veritatis et exercitationem et officia vitae perspiciatis. Ut placeat qui aut animi perspiciatis deleniti. Consequatur necessitatibus in tenetur sint. Repellendus facilis velit ut natus.\n\nRepellendus accusantium aut tempora aut non. Vitae quis omnis laboriosam nihil vero. Libero amet a et. Corrupti facilis in illo rerum eum sed minus voluptatem.\n\nConsectetur minus accusantium consequuntur sit amet corrupti. Iure sed et ducimus deleniti asperiores sit in. Possimus nobis voluptatem officia. Et error sint exercitationem ea tenetur.\n\nAlias dignissimos culpa numquam vitae voluptatem ipsa blanditiis. Molestias rerum rerum facilis omnis. Et consequatur numquam a rem. Officiis nemo ratione et ipsam quam dolor alias. Fugiat quo sapiente voluptatibus fugiat deserunt officiis.\n\nVoluptate sed non quam amet nihil enim odit. Exercitationem odit quod cupiditate veniam. Quia dolore quos veritatis doloremque. Earum quo non iste commodi et et ut.', 'https://martinez.net/neque-ipsum-nisi-eius-quaerat-ut-amet-et-deserunt.html', 'stw', NULL, NULL, NULL, '2025-04-06 07:42:47', 0),
+(3139, 'eum-ab-perspiciatis-voluptate-mollitia-maiores-culpa-ipsum-3143', 'Eum ab perspiciatis voluptate mollitia maiores culpa ipsum.', 'Veritatis dolor molestiae accusamus saepe et sit dolore. Voluptates nam aliquid qui alias. Sint qui nisi ullam doloremque tenetur quos. Illo voluptatem magni suscipit architecto autem quaerat et.', 'Nisi eum nisi nobis rem molestiae eligendi. Itaque sed non et est deserunt. Asperiores et et qui praesentium. Saepe incidunt possimus et inventore. Nostrum aut aut dolore magnam aut.\n\nRepellat recusandae dolores placeat temporibus sunt. Et adipisci possimus velit corrupti harum repellendus ratione. Dolor sed molestiae velit magni eos et et.\n\nSed dolor distinctio rerum incidunt provident sint cumque. Excepturi ex natus et necessitatibus aut numquam voluptas praesentium. Tenetur fuga a est voluptatibus ad id deserunt eveniet. Et porro quam excepturi facilis dolorem enim voluptas.\n\nNeque quo quod aut amet et. Voluptas est ut omnis expedita quidem repellendus. Eius qui quia suscipit neque et. Dolorem aspernatur placeat numquam amet itaque dicta voluptate suscipit.\n\nIpsa nisi nostrum optio magnam. Adipisci minima eos dicta minima consequuntur saepe eos laudantium.', 'http://www.dacosta.org/', '', NULL, NULL, NULL, '2025-08-27 14:45:21', 0),
+(3140, 'mollitia-quidem-quo-veniam-quod-ab-3144', 'Mollitia quidem quo veniam quod ab.', 'Optio quaerat odio voluptatem dolore aliquam vel mollitia. Quia ut eum ut fugiat et magni natus earum. Dolore autem commodi reprehenderit exercitationem.', 'Magnam omnis ipsum omnis. Qui et rem labore odit. Cupiditate quia tenetur expedita corrupti nam.\n\nDoloremque fuga iure optio inventore sequi itaque autem quia. Tenetur eaque ipsa et soluta soluta velit eligendi. Ipsa quia enim doloremque adipisci deleniti corporis. Consequatur et blanditiis quibusdam voluptatem dolorum reprehenderit. Dolor dolor sit voluptatem est praesentium.\n\nAspernatur ut ut pariatur molestias. Officia quo excepturi ullam rem. Libero ea recusandae minima occaecati corrupti saepe non fugit.\n\nUt omnis quas dolorum iusto sit iure. Nihil vitae quam qui vel ut sequi. Rem debitis et itaque distinctio quos est.\n\nOmnis doloribus et omnis minima vitae accusamus. Reprehenderit corporis doloremque pariatur praesentium cumque pariatur. Quia labore eaque temporibus consequatur. Fugiat eos et et.', 'http://www.guillon.com/', '', NULL, NULL, NULL, '2024-11-22 00:21:26', 0),
+(3141, 'est-impedit-debitis-temporibus-error-excepturi-voluptas-neque-voluptatem-3145', 'Est impedit debitis temporibus error excepturi voluptas neque voluptatem.', 'Quia eum vel non voluptatum dolor et eaque. Sequi tempora aperiam fuga temporibus suscipit ut et dolorum. Et temporibus sit modi sed expedita maiores nulla.', 'Non quia dolorum quia est at et inventore. Omnis ut culpa quos atque praesentium. Tempore voluptatem sapiente a excepturi doloremque dolor expedita. Voluptatem voluptates est ea.\n\nNulla repellendus quis voluptas et. Pariatur inventore cumque et. Harum dolorum sunt tempore quasi sapiente dolorem.\n\nFacilis tenetur fugit rerum in pariatur in voluptatem ipsam. Alias odit debitis nesciunt aut exercitationem sit.\n\nTemporibus aut doloremque aut voluptatibus in aut non. Nisi odit consequatur voluptatem non. Reiciendis explicabo quae eligendi fuga qui aut et. Non quibusdam velit odit sit dolorum.\n\nEt odit quidem possimus architecto sunt fuga praesentium sint. Pariatur fugit eaque nesciunt dolores qui numquam. Est sit cum reprehenderit non sit. Illo inventore praesentium qui aliquam est voluptas ut eius.', 'http://www.roux.org/quo-laboriosam-qui-ut-qui-qui-quae', '', NULL, NULL, NULL, '2025-03-03 01:17:10', 0),
+(3142, 'enim-consectetur-dicta-nisi-aliquam-sequi-3146', 'Enim consectetur dicta nisi aliquam sequi.', 'Qui voluptates voluptas neque nesciunt mollitia itaque vero. Ex nostrum ad voluptas cumque assumenda nam tempore. Vel eligendi non eaque vel consectetur ea ut.', 'Cumque nostrum porro perspiciatis aperiam. Eos qui in quis soluta. Quos ex saepe molestiae nostrum dolore. Nesciunt fugit eaque voluptatem autem velit necessitatibus at.\n\nVitae suscipit rerum ut sed. Quis consectetur tenetur sit impedit ducimus corrupti. Ducimus qui unde commodi aut.\n\nIllo accusantium blanditiis nemo minima qui. Deleniti eos optio cupiditate quidem consequatur labore. Et saepe esse laborum soluta et. Iusto vel quis officiis et.\n\nA alias voluptatum dolores et. Magni nostrum libero explicabo aut. Harum quis minus animi ut.\n\nSunt cumque laudantium quisquam. Sequi quaerat vel ea eveniet deserunt accusantium quos. Quibusdam vel nemo dolore. Neque nesciunt enim ex reprehenderit illum. Sed quisquam aut sequi sint vel.', 'https://www.lemonnier.com/saepe-qui-eveniet-quidem-fugit-cumque-quia-voluptates', 'wvx', NULL, NULL, NULL, '2025-06-12 13:55:05', 0),
+(3143, 'voluptatum-voluptas-et-quis-dolore-3147', 'Voluptatum voluptas et quis dolore.', 'Ut et sit itaque porro asperiores. Consequatur voluptatem provident harum velit. Consequatur molestiae sit nobis occaecati.', 'Facere et ut ea odit eligendi. Tenetur quod quibusdam quo laudantium.\n\nAb nesciunt quas fugit non. Deleniti minima nisi sapiente in. Voluptate et asperiores a dolores eos in placeat. Ab id et laboriosam et quia.\n\nIusto aut quod odit sunt aut veritatis nisi. Provident vel temporibus in est provident quis amet. Exercitationem minus autem odit qui in quis eum. Dolores aperiam aut sit occaecati porro iste.\n\nVel aut illum omnis dolore eius. Itaque quisquam est ut. Sint iure vel perferendis quo qui quis. Velit unde ad laudantium.\n\nAut cupiditate distinctio et veritatis et. Ut aut odio a. Rerum necessitatibus explicabo rem iusto.', 'http://baron.fr/quibusdam-excepturi-eum-qui-impedit-vero-quia', '', NULL, NULL, NULL, '2025-10-03 12:24:37', 0),
+(3144, 'dolorem-occaecati-cumque-praesentium-fugiat-explicabo-est-at-3148', 'Dolorem occaecati cumque praesentium fugiat explicabo est at.', 'Est architecto dolores voluptates provident aut autem. Vel consequuntur et voluptatem eius dolores illum. Reiciendis quod quia praesentium natus at officiis.', 'Vitae sapiente voluptas culpa voluptatem et ullam. Sit veniam qui asperiores nemo nihil. Voluptas repellat itaque nesciunt voluptatem dolorem quo.\n\nAliquam quam error dignissimos. Ducimus qui ducimus in id repudiandae qui. Deserunt odit voluptatem consectetur dolores modi ut.\n\nDelectus temporibus itaque est voluptatibus quidem. Quo aut reiciendis nesciunt sed rerum et quisquam. Molestiae ex similique voluptatum voluptatem ea sunt. Suscipit blanditiis voluptas ut mollitia odit beatae.\n\nAspernatur aut sit et nam suscipit itaque omnis. Sed pariatur sed veniam autem. Dolorum non tempore assumenda quo officiis et magni repellendus.\n\nDolorum totam consequatur et molestiae debitis quos sed omnis. Nihil veniam at sint reprehenderit aut. Veritatis dolor iure expedita velit animi.', 'http://www.meunier.com/', 'itp', NULL, NULL, NULL, '2025-07-18 17:31:55', 0),
+(3145, 'dolores-quia-qui-officia-quia-aperiam-nesciunt-3149', 'Dolores quia qui officia quia aperiam nesciunt.', 'Illo est et aut placeat. Animi commodi illo atque sint ut commodi repellat architecto. Voluptatem molestiae deserunt quisquam aliquid quia ut.', 'Optio unde corporis quis ullam temporibus earum nihil. Optio tenetur qui quisquam quaerat facere. Voluptas consequatur consequatur officiis velit fugit eius laborum nulla. Ut voluptatem corporis unde minus hic nam.\n\nTenetur error consequuntur accusantium omnis voluptatem vel ipsa. Aliquid pariatur laudantium est. Animi eum quos consequuntur eum.\n\nAperiam laborum praesentium sed. Commodi labore adipisci et reprehenderit. Voluptates rem dolorem nemo minima reprehenderit aut. Aut vel id omnis alias occaecati officiis. Natus voluptas dolorem eligendi quo molestias saepe.\n\nEnim ullam veniam repudiandae temporibus nobis laboriosam provident qui. Sapiente et voluptatem ea soluta. Voluptatem dolorem tempora sit possimus sapiente. Impedit omnis repudiandae minima velit maiores fugit voluptatem.\n\nEt sed eveniet tenetur eum minus enim. Praesentium eveniet ea dolorem enim dolorem eos molestias. Perspiciatis animi aspernatur dolor qui occaecati. Eum et adipisci libero earum sed est.', 'http://www.paris.com/possimus-nulla-sint-numquam-autem-et-officiis.html', 'dsc', NULL, NULL, NULL, '2025-07-21 10:43:43', 0),
+(3146, 'aliquid-accusantium-asperiores-ea-architecto-eum-rerum-autem-3150', 'Aliquid accusantium asperiores ea architecto eum rerum autem.', 'Et dicta magni sapiente quam. Voluptates recusandae perspiciatis fuga dolorum qui delectus repellat. Molestiae beatae dicta exercitationem.', 'Officiis eveniet sunt minus autem est id. Sed ex et qui voluptatibus animi hic quisquam. Est earum qui dolores modi quis assumenda et incidunt. Et id aut quod aperiam voluptatem sit.\n\nFuga exercitationem sed ab velit. Ad nam dignissimos aut quisquam eos voluptas tempore. Quia optio pariatur rerum fuga numquam fugit magni ea.\n\nAliquid a delectus omnis iure. Officiis ut natus nisi facere vitae. Et facere repellendus temporibus qui ut quis. Expedita perferendis sit possimus libero voluptatem. At ad alias velit ut commodi.\n\nSequi alias rerum consectetur labore. Quam pariatur incidunt molestiae et ut id. Nesciunt quia deleniti occaecati aut quisquam libero.\n\nQui cum aut dolorem recusandae et nostrum maiores non. Doloribus necessitatibus id ea voluptatibus deleniti corporis.', 'http://giraud.org/rerum-excepturi-perspiciatis-nesciunt-totam', '', NULL, NULL, NULL, '2024-12-25 01:56:03', 0),
+(3147, 'excepturi-sint-tenetur-aut-ex-sed-minima-3151', 'Excepturi sint tenetur aut ex sed minima.', 'Officia totam et incidunt cum. Et dolorem accusamus corrupti alias debitis dolores perspiciatis. Laboriosam ad quam molestiae alias deserunt. Rem culpa voluptatibus aspernatur similique minus aspernatur ipsa.', 'Cum nisi eveniet doloribus odit eos beatae voluptas illum. Sed iste dolorem nemo ut. Dolorem deserunt fugiat sunt mollitia consequatur. Enim ut amet voluptate dolor.\n\nSunt impedit dolore repellendus unde omnis dignissimos quas. Esse reprehenderit animi voluptas suscipit quia. Eum dolor tempore alias labore est ipsa ut reiciendis. Vitae tempore ut consequatur sit rem qui et. Est laboriosam consequatur laboriosam earum in voluptas.\n\nFuga quod quis ut natus quia. Magni eaque qui ducimus.\n\nAliquam saepe repellendus quia ducimus explicabo iusto saepe. Architecto dolorum vel saepe nemo ratione veritatis sit. Rerum eaque quidem omnis et natus corrupti est. Dignissimos maiores ullam nesciunt.\n\nAssumenda et consequatur ipsum et cupiditate. Repellat ipsa sed et quia a dolores. Rem sed quos dicta harum alias.', 'http://www.vaillant.fr/non-doloremque-et-nihil-provident-non-inventore-sunt.html', '', NULL, NULL, NULL, '2024-12-17 02:30:19', 0),
+(3148, 'quia-voluptatum-expedita-quod-ut-3152', 'Quia voluptatum expedita quod ut.', 'Voluptate iure et provident et corporis et ex. Quo aut dolorem enim est quam maxime.', 'Fuga exercitationem eum excepturi assumenda beatae voluptatem. Minus facere nisi omnis consequatur omnis nulla ut. Molestiae deserunt ullam tenetur repudiandae nemo.\n\nQuo deserunt eligendi ab illum voluptatem. Rerum suscipit unde ratione voluptatum.\n\nVoluptates sapiente eos nisi laudantium qui sit. Odit nostrum praesentium non est et aperiam. Non sit illum numquam ab labore iusto ex nesciunt. Quo non expedita ratione eveniet doloremque.\n\nSit accusamus magnam dicta quia culpa. Ipsam dolorem quod pariatur consequatur minima. Et officia itaque sequi cumque amet nihil magnam alias.\n\nQuia occaecati quos esse velit. Praesentium voluptatem fuga ut quia debitis soluta dolor quis. Ullam a dolorem vel voluptas.', 'http://ferrand.org/ab-aliquam-et-rerum-sint-qui.html', '', NULL, NULL, NULL, '2024-11-16 03:44:21', 0),
+(3149, 'eveniet-non-est-dolorem-numquam-nihil-doloremque-3153', 'Eveniet non est dolorem numquam nihil doloremque.', 'Vitae vitae veniam architecto eos praesentium earum. Explicabo quae quia ipsum.', 'Nisi ad rerum placeat quis. Quia reiciendis voluptas nisi et quia. Nihil at ipsa repudiandae minima ut. Voluptatem est aperiam quis quaerat nihil. Eaque ducimus iusto iure quia.\n\nLaborum dolore facere aspernatur. Et consectetur voluptatibus nobis nihil sit ea. Et sunt voluptate illo magnam. Quia unde laborum veniam nesciunt nobis.\n\nDeleniti incidunt praesentium quo quas ea. Dolorum similique aut autem totam porro quod. Nam corporis dolor fugit suscipit ipsa alias. Incidunt aspernatur eveniet culpa consequuntur ut fugit.\n\nOdit et nostrum qui rerum et nobis est asperiores. Accusamus explicabo ut praesentium. Autem dolorem veritatis maiores quod quaerat autem. Qui aut vitae similique eos enim quo quis consequuntur.\n\nVoluptatem nam aperiam unde cum voluptatem dignissimos. Similique aut sit suscipit esse. Sit maiores aut amet ea omnis asperiores tempora.', 'http://traore.org/sed-est-quas-tenetur-ut-laudantium', 'rdf', NULL, NULL, NULL, '2024-12-25 00:30:37', 0),
+(3150, 'in-animi-commodi-est-consequuntur-maiores-3146', 'In animi commodi est consequuntur maiores.', 'Exercitationem est tenetur voluptate nostrum repellendus. Labore dolores fugit aut magni et natus. Est adipisci id distinctio fugiat sed.', 'Soluta assumenda aliquam qui expedita. Enim perferendis itaque et non. Numquam non eos repellat cupiditate non numquam et. Quisquam eos voluptatem ut alias sunt optio non non.\n\nEst beatae esse sunt optio laborum laborum ratione. Et ut doloremque quod labore.\n\nIpsa eligendi quisquam at sint assumenda illum voluptate. Quo delectus aperiam inventore sunt quia accusamus sunt et. Voluptatem laudantium ut possimus.\n\nVitae accusamus ad ut. Ullam placeat aut rerum harum. Delectus qui minima repudiandae cum. Quidem nostrum ea ut voluptatibus et vel libero.\n\nSunt cumque aut nostrum hic et tempore. Aut voluptatibus at beatae maiores enim enim porro vel. Voluptatem fugit reiciendis aut dignissimos ut ea.', 'http://leclerc.fr/aut-sunt-rem-deleniti-et-mollitia', '', NULL, NULL, NULL, '2025-06-09 21:48:11', 0),
+(3151, 'cumque-deleniti-accusamus-atque-sed-porro-dolor-3147', 'Cumque deleniti accusamus atque sed porro dolor.', 'Qui voluptatem itaque pariatur quasi. Beatae dolorem voluptas quos occaecati amet accusantium ea voluptas. Tenetur qui natus non non ut quod. Et tempore neque dicta nihil in.', 'Deleniti omnis sed aut ut aliquam iusto sit. Facere ab commodi omnis laboriosam. Fugit deleniti corrupti quia.\n\nVoluptas atque corrupti optio ea eos aut. Qui libero sit reprehenderit explicabo. Quibusdam in voluptatibus ut officia deleniti debitis aut. Autem omnis occaecati corrupti distinctio.\n\nDolorem veniam possimus natus eos omnis at praesentium est. Porro sit tempore quos explicabo blanditiis voluptatum iste et. Magnam voluptate et expedita culpa maxime voluptatem commodi. Nihil consequuntur aspernatur deleniti itaque.\n\nEarum molestiae ut accusantium asperiores fuga velit harum dolore. Dolorem nulla sunt ipsam facere cum dolorum et est. Autem perferendis et officia vel nobis neque. Sed fuga est provident dolorem vel nihil dignissimos et.\n\nUt quo nobis eos ipsum. Sed necessitatibus voluptatem quia ut iste. Praesentium accusantium quis quidem et quasi.', 'http://www.moulin.com/et-hic-magni-voluptas-esse-et-expedita', 'sxi', NULL, NULL, NULL, '2025-09-30 07:08:26', 0),
+(3152, 'nihil-in-quis-et-amet-3148', 'Nihil in quis et amet.', 'Facilis incidunt et voluptas distinctio quis suscipit. Beatae quia quae sapiente saepe et. Doloribus dignissimos rerum assumenda nobis est maiores et.', 'Magnam tempora quaerat adipisci tempore amet laboriosam. Quaerat ut maxime voluptatem. Aliquam quia corporis minima quisquam quas.\n\nEst nesciunt non nulla veniam ad culpa ut. Qui voluptatem fugiat velit. Ullam vel aut et quia dolore expedita.\n\nVoluptatibus voluptas molestiae molestiae unde et. Eaque illum dolores et dolore. Vel dolor nostrum rerum ullam molestiae a ullam.\n\nAdipisci quia soluta optio consequatur officia minima molestiae rem. Quod quia sint voluptatibus fugiat ratione eaque. Veniam minus deserunt sunt est molestiae officiis velit ut.\n\nQuod perferendis dicta error nihil. Cupiditate reiciendis fuga et eveniet ut exercitationem. Dolores id molestiae illum rerum. Quam numquam eligendi ad sunt non laboriosam.', 'http://www.didier.com/iure-dolor-cum-nobis-dolorem-et-velit-est', '', NULL, NULL, NULL, '2025-07-20 01:47:23', 0),
+(3153, 'distinctio-est-harum-blanditiis-aut-suscipit-rerum-nostrum-3149', 'Distinctio est harum blanditiis aut suscipit rerum nostrum.', 'Inventore dolorem odit dolores vel sed. Repellendus et at mollitia eos aut. Enim quia veritatis quia quia.', 'A eos in hic amet molestiae iste. Et eius rerum accusantium et aut. Earum ipsum et ut beatae eligendi cumque. Animi et qui repellendus accusantium tempore accusantium doloribus quibusdam.\n\nVelit ipsam perspiciatis et sint. Ut at culpa molestiae praesentium fuga voluptatem. Nihil et voluptatem ut vitae dolorem iste. Distinctio omnis expedita veniam quo placeat quam.\n\nNon doloremque ut aliquam enim aliquid ut. Odit eos eligendi libero quos. Veniam ad totam laudantium voluptatum aut autem sapiente quae. Temporibus aut voluptatem aut sed.\n\nEt qui eveniet nobis voluptatem neque. Nobis aperiam autem alias. Itaque ut ullam occaecati. Placeat aut itaque incidunt placeat et quia sit.\n\nNam facilis perspiciatis aut illum eligendi. Nemo officia consequatur aliquam et. Nisi nesciunt vel laborum doloremque.', 'http://www.guillou.com/vel-asperiores-ipsam-aut-itaque', '', NULL, NULL, NULL, '2025-03-29 13:42:20', 0);
+INSERT INTO `lecon` (`id_lecon`, `slug`, `titre`, `description`, `contenu`, `ficher_principale`, `fichier_support`, `id_matiere`, `id_prof`, `id_niveau`, `created_at`, `published`) VALUES
+(3154, 'voluptas-voluptatibus-libero-iusto-cumque-ut-3150', 'Voluptas voluptatibus libero iusto cumque ut.', 'Quidem facere aspernatur sed quod. Dolorum facilis porro aperiam officiis dolore dignissimos ducimus. Ad labore vero in reprehenderit molestiae. Aut quia beatae blanditiis nobis.', 'Rem soluta molestiae esse veritatis. Repellat consectetur veniam beatae provident hic. Rerum et voluptas sunt odio quia voluptas velit sequi.\n\nFacere doloremque nostrum facere repellat dolor atque. Est qui non dolore voluptatibus ab. Ducimus odit omnis sit necessitatibus suscipit ad. Quia occaecati sint laboriosam quisquam. Dolorem fugiat sit quasi enim vitae aut.\n\nUt et officia qui enim maiores adipisci rerum. Cumque perspiciatis sed in quo iure doloribus. Consectetur nisi quo est consequuntur ut quis voluptatem.\n\nEt aliquam eveniet aut error ullam odit repellendus rerum. Debitis sit voluptatem dolorem ut. Impedit et fugit sunt voluptatem voluptas.\n\nQuis alias doloremque reprehenderit. Fugit qui corporis saepe. Aperiam possimus ut eius qui id.', 'http://www.gauthier.fr/temporibus-sunt-animi-placeat-voluptatem-deserunt-molestiae-corrupti-odio', '', NULL, NULL, NULL, '2025-03-26 06:46:53', 0),
+(3155, 'ipsam-ipsum-debitis-molestias-qui-veritatis-sunt-sint-voluptates-3151', 'Ipsam ipsum debitis molestias qui veritatis sunt sint voluptates.', 'Quia cum aut optio doloribus vitae. Ea aliquid laudantium voluptatem corrupti. Et aut delectus ratione et ullam voluptas maxime.', 'Porro reiciendis expedita voluptas enim consequuntur praesentium expedita odit. Autem tempore eveniet eum officiis dicta odio. Cum maxime modi optio sit dolor pariatur fuga. Aut eos ad dolore explicabo qui dicta.\n\nEt ea et amet repellendus assumenda officia totam. Fugit est at amet ad.\n\nMagni nisi nemo omnis eum facere dolores. Magnam laborum quam porro. Debitis expedita iste est sunt. Dolorem et in consectetur quisquam quod at.\n\nDeserunt et incidunt impedit dolorem. Aspernatur in ducimus est quo ea est est. Illum consequatur omnis voluptate aut. Inventore qui vel et qui ipsa.\n\nMolestias ut aperiam earum saepe delectus animi error quis. Consequatur tenetur aut consequatur eligendi et excepturi sed.', 'http://clement.com/', '', NULL, NULL, NULL, '2025-07-24 04:08:55', 0),
+(3156, 'excepturi-dicta-dolorem-excepturi-ipsa-3152', 'Excepturi dicta dolorem excepturi ipsa.', 'Repellat consequatur magni ratione magni officiis rem et porro. Eum accusamus illum nihil nemo aliquid ea. Et nihil autem pariatur voluptates sit.', 'Sunt fugit sint qui excepturi. Nesciunt qui sequi voluptates officia veniam. Et rerum laudantium debitis quidem alias provident voluptatem.\n\nMaiores explicabo dicta blanditiis omnis facilis qui. Ducimus reiciendis voluptatem dolore dolor laudantium et voluptatem. Voluptatem odio voluptatibus ut rerum.\n\nRerum dolor temporibus autem. Maiores et qui impedit dolore. Voluptas porro illum corrupti consequuntur ratione.\n\nHic qui sapiente molestiae totam maiores aut. Perspiciatis voluptatem commodi sapiente saepe quia. Beatae sint sequi ducimus praesentium. Qui aperiam cumque facilis in omnis enim.\n\nAspernatur quis debitis voluptatum autem quos qui dolor. Ut sit provident voluptas rerum laudantium. Qui quaerat dolore amet repudiandae est nesciunt et ratione. Sed natus magnam consequatur dolor eaque ut.', 'http://alves.fr/fugiat-ipsa-nihil-est-quisquam-qui-harum-eaque-amet.html', 'xenc', NULL, NULL, NULL, '2025-02-18 17:22:39', 0),
+(3157, 'odio-est-optio-sequi-ipsa-harum-ad-corporis-architecto-3153', 'Odio est optio sequi ipsa harum ad corporis architecto.', 'Aspernatur commodi quia deleniti ipsum rerum. A dolores maxime perspiciatis perspiciatis consectetur porro. Molestiae dicta quidem officiis nostrum saepe.', 'Sapiente placeat dolor odio inventore. Quia reprehenderit necessitatibus ducimus. Sint temporibus est ea.\n\nPerferendis quas rem sequi excepturi deserunt autem possimus. Doloribus accusantium tempora quasi sed reprehenderit. Possimus nobis id officia voluptatem dolores laboriosam possimus.\n\nUt quae nemo et et nihil deleniti tempore. Vel minus magni explicabo ea repellendus et. Et aliquid reiciendis voluptas quae quam iure. Et eveniet est accusantium autem.\n\nVitae dolor repudiandae reprehenderit facere fuga earum. Nulla itaque hic magnam dolores. Ipsa est quae et autem esse.\n\nAut eum aut vero quia. Commodi similique placeat porro quod dolores. Et harum dignissimos animi quos quos.', 'http://www.imbert.fr/consequatur-molestias-quia-rem-corporis-aperiam-libero', '', NULL, NULL, NULL, '2025-01-04 11:44:42', 0),
+(3158, 'suscipit-minus-quia-dolor-ea-3154', 'Suscipit minus quia dolor ea.', 'Nihil temporibus iste aliquam doloremque facere. Est nobis quidem veniam qui. Quod dolorem enim molestiae sed omnis dolores.', 'Impedit quis autem odit velit. Adipisci id mollitia adipisci ducimus. Dicta dolores atque dolorem at sint et. Ea qui laboriosam reprehenderit doloremque non.\n\nRerum voluptas eveniet a ipsum. Explicabo deserunt soluta unde sunt rerum ut voluptas corporis. Voluptatem laborum repellendus dolorem reiciendis impedit.\n\nMolestias suscipit molestiae quas ducimus. Et rerum quae laudantium quod quas occaecati et. Minus laudantium exercitationem neque non sit ab similique.\n\nNesciunt ratione quia et sint quia sunt quo. Rerum vero beatae sed facilis cum enim accusantium. Dolores neque mollitia sed minus vel est neque reprehenderit.\n\nDucimus expedita nobis sit officia. Velit inventore rerum animi iure ut adipisci et. Possimus enim vitae quidem aut.', 'http://allain.fr/vel-inventore-ratione-qui-facilis-unde-et.html', '', NULL, NULL, NULL, '2025-04-24 01:51:52', 0),
+(3159, 'et-consequatur-cum-dolore-3155', 'Et consequatur cum dolore.', 'Voluptatibus quibusdam aspernatur unde quis eaque error. Voluptatum est pariatur et recusandae autem laboriosam quo. Ducimus eius sit ipsa laudantium ipsa error. Ratione fugit voluptatibus itaque sunt alias impedit.', 'Eius maiores omnis sit sit. Vitae voluptas sint totam non magnam. Ea ipsum repudiandae corporis rerum dolorum officia perspiciatis. Nesciunt corrupti corrupti molestiae non ut facere dolores aut.\n\nRepudiandae et qui occaecati quis incidunt natus nam. Voluptates odio est vel consequatur aliquam qui. Similique corporis vel neque ducimus exercitationem quos. Cupiditate ab officiis minus quia aliquam doloremque.\n\nVoluptas natus itaque ipsam repellat neque qui asperiores quibusdam. Explicabo dolore vel dolores nesciunt id ratione consequatur. Officia enim voluptas aut eum. Ut voluptas dicta reiciendis reiciendis.\n\nDicta sunt id sed doloremque dignissimos non. Et cupiditate voluptas est id voluptatum. Perspiciatis dolor ipsum enim et modi suscipit qui. Porro et voluptate explicabo rem est minima. Assumenda nisi ad rerum non.\n\nNesciunt non sed ut possimus. Aut vel eveniet dolores accusamus. Sed illum eius minima magnam dolorum ut quaerat. Non eligendi omnis ex.', 'https://reynaud.net/provident-perferendis-repellendus-et-dolores-velit-optio-et.html', 'wgt', NULL, NULL, NULL, '2025-08-27 02:01:30', 0),
+(3160, 'quia-et-cumque-soluta-3156', 'Quia et cumque soluta.', 'Voluptas hic dolores eveniet in adipisci vero quaerat sapiente. Et facere natus nesciunt enim rem dolor beatae. Vel sed eum dolore unde maxime quo.', 'Quia distinctio ipsam qui et ea dolor. Iste sit illum odit. Odio non labore repudiandae excepturi qui et laboriosam maxime.\n\nDolor sed velit voluptatem corporis porro reprehenderit. At magnam aut commodi mollitia voluptas. Voluptas accusamus tempore illum. Sed aut repellendus tempore quia similique voluptate.\n\nVelit architecto sint illum eum velit repellat. Ducimus rerum quos inventore illum id rerum fuga. Et eum nihil qui unde. Qui sed odit debitis nemo quaerat.\n\nEnim ducimus dolorum recusandae ut ut adipisci. Velit autem doloribus quo sit magni aut. Asperiores nihil corporis quam unde ut qui in. Nobis fugiat qui sint autem totam quia.\n\nEst omnis alias velit. Et et eos earum repellat dolorem illum facere. Reprehenderit quia doloribus et vero nam placeat.', 'http://www.mallet.fr/', 'curl', NULL, NULL, NULL, '2025-07-29 10:36:19', 0),
+(3161, 'ut-porro-voluptas-sequi-tenetur-ullam-suscipit-3157', 'Ut porro voluptas sequi tenetur ullam suscipit.', 'Amet sint eos blanditiis aut tempora. Suscipit voluptatem in ducimus et quam eveniet rerum. Exercitationem exercitationem sequi iste similique ut voluptatem. Deleniti reprehenderit et possimus corporis.', 'Enim sint ab autem dolores. Repellat sed corporis inventore autem aperiam. Natus molestias saepe amet fugit ut nostrum temporibus autem.\n\nNostrum quae ducimus omnis. Voluptatem quibusdam sit distinctio at reprehenderit repellendus. Voluptatem magnam quia qui tenetur tempore at.\n\nSit consequatur quasi perspiciatis sunt iusto. Officia nam maiores perferendis illo perspiciatis natus omnis. Culpa et quisquam reprehenderit.\n\nQui enim voluptate et quam assumenda natus neque. Quae omnis delectus quaerat ullam placeat nihil recusandae. Aliquid consequuntur repellat et expedita non omnis.\n\nVoluptas dolorum hic doloribus minima sint eligendi. Aliquid odit sit placeat ea at. Eius omnis ut animi blanditiis sed neque corrupti.', 'http://lemaitre.com/et-ratione-eum-omnis-aliquid-ipsam-eaque-aliquam', '', NULL, NULL, NULL, '2025-10-24 21:01:29', 0),
+(3162, 'occaecati-enim-dolores-deleniti-quam-debitis-3158', 'Occaecati enim dolores deleniti quam debitis.', 'Eveniet recusandae et rerum quaerat tempore. Recusandae nesciunt omnis neque sit saepe non rerum. Consequuntur laudantium beatae quae laudantium.', 'Rem doloribus totam aut quod explicabo. Repellendus fugiat maxime cupiditate molestiae tenetur. Eum ea cumque ea numquam laboriosam id voluptatem.\n\nPerferendis nisi nulla similique distinctio fuga. Eos assumenda ut doloremque harum dicta modi. Velit est dolorum occaecati dolorum est. Quas ex velit facere quidem. Vitae unde ad veniam quaerat excepturi.\n\nOccaecati dolores sint commodi optio adipisci id ut. Est asperiores molestias molestiae rem repellat molestias distinctio. Minima et quo saepe molestias assumenda voluptatem. Consequatur rerum quo alias vero. Et similique eligendi neque voluptate aliquid sint.\n\nDignissimos et perferendis debitis eos iusto. Pariatur expedita consectetur cum repellendus. Possimus qui quis occaecati delectus inventore qui.\n\nCorrupti voluptate porro deserunt officia. Cupiditate consectetur et aliquam ea. Tenetur qui quia in quae quas.', 'http://morvan.com/', 'mathml', NULL, NULL, NULL, '2025-04-08 00:57:26', 0);
 
 -- --------------------------------------------------------
 
@@ -368,21 +302,6 @@ CREATE TABLE `matiere_niveau` (
   `niveau_id_niveau` int(11) NOT NULL,
   `coefficient` int(11) DEFAULT NULL,
   `heure_semaine` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `message_contact`
---
-
-CREATE TABLE `message_contact` (
-  `id_message` int(11) NOT NULL,
-  `nom` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `message` text NOT NULL,
-  `date_message` date DEFAULT NULL,
-  `lu` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -427,21 +346,6 @@ CREATE TABLE `note` (
   `annee_scolaire_id_annee_scolaire` int(11) NOT NULL,
   `matiere_id_matiere` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `notre_histoire`
---
-
-CREATE TABLE `notre_histoire` (
-  `id_histoire` int(11) NOT NULL,
-  `titre` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `reconnaissance_par` varchar(255) DEFAULT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `actif` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -533,52 +437,6 @@ CREATE TABLE `personnel` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `pilier_educatif`
---
-
-CREATE TABLE `pilier_educatif` (
-  `id_pilier` int(11) NOT NULL,
-  `titre` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `icone` varchar(100) DEFAULT NULL,
-  `actif` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `presentation`
---
-
-CREATE TABLE `presentation` (
-  `id_presentation` int(11) NOT NULL,
-  `titre` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `nombre_eleves` int(11) DEFAULT 0,
-  `nombre_professeurs` int(11) DEFAULT 0,
-  `annees_experience` int(11) DEFAULT 0,
-  `taux_reussite` decimal(5,2) DEFAULT 0.00,
-  `actif` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `programme_pedagogique`
---
-
-CREATE TABLE `programme_pedagogique` (
-  `id_point` int(11) NOT NULL,
-  `titre` varchar(255) NOT NULL,
-  `contenu` varchar(255) NOT NULL,
-  `ordre` int(11) DEFAULT 0,
-  `actif` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `roles`
 --
 
@@ -611,13 +469,192 @@ CREATE TABLE `role_permissions` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `slogan`
+-- Structure de la table `site_activite_prescolaire`
 --
 
-CREATE TABLE `slogan` (
+CREATE TABLE `site_activite_prescolaire` (
+  `id_activite` int(11) NOT NULL,
+  `label` varchar(255) NOT NULL,
+  `icone` varchar(100) DEFAULT NULL,
+  `actif` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `site_actualite`
+--
+
+CREATE TABLE `site_actualite` (
+  `id_actualite` int(11) NOT NULL,
+  `titre` varchar(255) NOT NULL,
+  `contenu` text NOT NULL,
+  `date_publication` date DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `publie` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `site_evenement`
+--
+
+CREATE TABLE `site_evenement` (
+  `id_evenement` int(11) NOT NULL,
+  `titre` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `date_evenement` date DEFAULT NULL,
+  `lieu` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `publie` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `site_galerie`
+--
+
+CREATE TABLE `site_galerie` (
+  `id_image` int(11) NOT NULL,
+  `titre` varchar(255) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `categorie` varchar(100) DEFAULT NULL,
+  `id_evenement` int(11) DEFAULT NULL,
+  `publie` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `site_hero_slide`
+--
+
+CREATE TABLE `site_hero_slide` (
+  `id_slide` int(11) NOT NULL,
+  `titre` varchar(255) NOT NULL,
+  `soustitre` text DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `cta` varchar(255) DEFAULT NULL,
+  `cta_link` varchar(255) DEFAULT NULL,
+  `actif` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `site_installation`
+--
+
+CREATE TABLE `site_installation` (
+  `id_installation` int(11) NOT NULL,
+  `titre` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `actif` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `site_message_contact`
+--
+
+CREATE TABLE `site_message_contact` (
+  `id_message` int(11) NOT NULL,
+  `nom` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `date_message` date DEFAULT NULL,
+  `lu` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `site_notre_histoire`
+--
+
+CREATE TABLE `site_notre_histoire` (
+  `id_histoire` int(11) NOT NULL,
+  `titre` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `reconnaissance_par` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `actif` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `site_pilier_educatif`
+--
+
+CREATE TABLE `site_pilier_educatif` (
+  `id_pilier` int(11) NOT NULL,
+  `titre` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `icone` varchar(100) DEFAULT NULL,
+  `actif` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `site_presentation`
+--
+
+CREATE TABLE `site_presentation` (
+  `id_presentation` int(11) NOT NULL,
+  `titre` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `nombre_eleves` int(11) DEFAULT 0,
+  `nombre_professeurs` int(11) DEFAULT 0,
+  `annees_experience` int(11) DEFAULT 0,
+  `taux_reussite` decimal(5,2) DEFAULT 0.00,
+  `actif` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `site_programme_pedagogique`
+--
+
+CREATE TABLE `site_programme_pedagogique` (
+  `id_point` int(11) NOT NULL,
+  `titre` varchar(255) NOT NULL,
+  `contenu` varchar(255) NOT NULL,
+  `ordre` int(11) DEFAULT 0,
+  `actif` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `site_slogan`
+--
+
+CREATE TABLE `site_slogan` (
   `id_slogan` int(11) NOT NULL,
   `titre` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
+  `icone` varchar(100) DEFAULT NULL,
+  `actif` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `site_valeur`
+--
+
+CREATE TABLE `site_valeur` (
+  `id_valeur` int(11) NOT NULL,
+  `titre` varchar(255) NOT NULL,
+  `description` text NOT NULL,
   `icone` varchar(100) DEFAULT NULL,
   `actif` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -653,35 +690,9 @@ CREATE TABLE `users` (
   `id_personnel` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
---
--- Structure de la table `valeur`
---
-
-CREATE TABLE `valeur` (
-  `id_valeur` int(11) NOT NULL,
-  `titre` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `icone` varchar(100) DEFAULT NULL,
-  `actif` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 --
 -- Index pour les tables déchargées
 --
-
---
--- Index pour la table `activite_prescolaire`
---
-ALTER TABLE `activite_prescolaire`
-  ADD PRIMARY KEY (`id_activite`);
-
---
--- Index pour la table `actualite`
---
-ALTER TABLE `actualite`
-  ADD PRIMARY KEY (`id_actualite`);
 
 --
 -- Index pour la table `annee_scolaire`
@@ -739,12 +750,6 @@ ALTER TABLE `etablissement`
   ADD PRIMARY KEY (`id_etablissement`);
 
 --
--- Index pour la table `evenement`
---
-ALTER TABLE `evenement`
-  ADD PRIMARY KEY (`id_evenement`);
-
---
 -- Index pour la table `exercice`
 --
 ALTER TABLE `exercice`
@@ -752,19 +757,6 @@ ALTER TABLE `exercice`
   ADD KEY `fk_lesson_matiere` (`id_matiere`),
   ADD KEY `fk_lesson_niveau` (`id_niveau`),
   ADD KEY `fk_lesson_prof` (`id_prof`);
-
---
--- Index pour la table `galerie`
---
-ALTER TABLE `galerie`
-  ADD PRIMARY KEY (`id_image`),
-  ADD KEY `fk_galerie_evenement` (`id_evenement`);
-
---
--- Index pour la table `hero_slide`
---
-ALTER TABLE `hero_slide`
-  ADD PRIMARY KEY (`id_slide`);
 
 --
 -- Index pour la table `inscription`
@@ -775,12 +767,6 @@ ALTER TABLE `inscription`
   ADD KEY `fk_inscription_annee_scolaire1_idx` (`annee_scolaire_id_annee_scolaire`),
   ADD KEY `fk_inscription_eleve_idx` (`eleve_id_eleve`),
   ADD KEY `fk_inscription_nievau` (`niveau_id_niveau`);
-
---
--- Index pour la table `installation`
---
-ALTER TABLE `installation`
-  ADD PRIMARY KEY (`id_installation`);
 
 --
 -- Index pour la table `lecon`
@@ -806,12 +792,6 @@ ALTER TABLE `matiere_niveau`
   ADD KEY `fk_matiere_has_classe_groupe_matiere1_idx` (`matiere_id_matiere`);
 
 --
--- Index pour la table `message_contact`
---
-ALTER TABLE `message_contact`
-  ADD PRIMARY KEY (`id_message`);
-
---
 -- Index pour la table `modules`
 --
 ALTER TABLE `modules`
@@ -832,12 +812,6 @@ ALTER TABLE `note`
   ADD KEY `fk_note_eleve1_idx` (`eleve_id_eleve`),
   ADD KEY `fk_note_annee_scolaire1_idx` (`annee_scolaire_id_annee_scolaire`),
   ADD KEY `fk_note_matiere1_idx` (`matiere_id_matiere`);
-
---
--- Index pour la table `notre_histoire`
---
-ALTER TABLE `notre_histoire`
-  ADD PRIMARY KEY (`id_histoire`);
 
 --
 -- Index pour la table `paiement`
@@ -869,24 +843,6 @@ ALTER TABLE `personnel`
   ADD KEY `fx_personne_type` (`id_type_personnel`);
 
 --
--- Index pour la table `pilier_educatif`
---
-ALTER TABLE `pilier_educatif`
-  ADD PRIMARY KEY (`id_pilier`);
-
---
--- Index pour la table `presentation`
---
-ALTER TABLE `presentation`
-  ADD PRIMARY KEY (`id_presentation`);
-
---
--- Index pour la table `programme_pedagogique`
---
-ALTER TABLE `programme_pedagogique`
-  ADD PRIMARY KEY (`id_point`);
-
---
 -- Index pour la table `roles`
 --
 ALTER TABLE `roles`
@@ -903,10 +859,83 @@ ALTER TABLE `role_permissions`
   ADD KEY `id_permission` (`id_permission`);
 
 --
--- Index pour la table `slogan`
+-- Index pour la table `site_activite_prescolaire`
 --
-ALTER TABLE `slogan`
+ALTER TABLE `site_activite_prescolaire`
+  ADD PRIMARY KEY (`id_activite`);
+
+--
+-- Index pour la table `site_actualite`
+--
+ALTER TABLE `site_actualite`
+  ADD PRIMARY KEY (`id_actualite`);
+
+--
+-- Index pour la table `site_evenement`
+--
+ALTER TABLE `site_evenement`
+  ADD PRIMARY KEY (`id_evenement`);
+
+--
+-- Index pour la table `site_galerie`
+--
+ALTER TABLE `site_galerie`
+  ADD PRIMARY KEY (`id_image`),
+  ADD KEY `fk_galerie_evenement` (`id_evenement`);
+
+--
+-- Index pour la table `site_hero_slide`
+--
+ALTER TABLE `site_hero_slide`
+  ADD PRIMARY KEY (`id_slide`);
+
+--
+-- Index pour la table `site_installation`
+--
+ALTER TABLE `site_installation`
+  ADD PRIMARY KEY (`id_installation`);
+
+--
+-- Index pour la table `site_message_contact`
+--
+ALTER TABLE `site_message_contact`
+  ADD PRIMARY KEY (`id_message`);
+
+--
+-- Index pour la table `site_notre_histoire`
+--
+ALTER TABLE `site_notre_histoire`
+  ADD PRIMARY KEY (`id_histoire`);
+
+--
+-- Index pour la table `site_pilier_educatif`
+--
+ALTER TABLE `site_pilier_educatif`
+  ADD PRIMARY KEY (`id_pilier`);
+
+--
+-- Index pour la table `site_presentation`
+--
+ALTER TABLE `site_presentation`
+  ADD PRIMARY KEY (`id_presentation`);
+
+--
+-- Index pour la table `site_programme_pedagogique`
+--
+ALTER TABLE `site_programme_pedagogique`
+  ADD PRIMARY KEY (`id_point`);
+
+--
+-- Index pour la table `site_slogan`
+--
+ALTER TABLE `site_slogan`
   ADD PRIMARY KEY (`id_slogan`);
+
+--
+-- Index pour la table `site_valeur`
+--
+ALTER TABLE `site_valeur`
+  ADD PRIMARY KEY (`id_valeur`);
 
 --
 -- Index pour la table `type_personnel`
@@ -925,38 +954,20 @@ ALTER TABLE `users`
   ADD KEY `fk_user_personnel` (`id_personnel`);
 
 --
--- Index pour la table `valeur`
---
-ALTER TABLE `valeur`
-  ADD PRIMARY KEY (`id_valeur`);
-
---
 -- AUTO_INCREMENT pour les tables déchargées
 --
-
---
--- AUTO_INCREMENT pour la table `activite_prescolaire`
---
-ALTER TABLE `activite_prescolaire`
-  MODIFY `id_activite` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT pour la table `actualite`
---
-ALTER TABLE `actualite`
-  MODIFY `id_actualite` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `annee_scolaire`
 --
 ALTER TABLE `annee_scolaire`
-  MODIFY `id_annee_scolaire` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=421;
+  MODIFY `id_annee_scolaire` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=423;
 
 --
 -- AUTO_INCREMENT pour la table `classe`
 --
 ALTER TABLE `classe`
-  MODIFY `id_classe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3620;
+  MODIFY `id_classe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3649;
 
 --
 -- AUTO_INCREMENT pour la table `depense`
@@ -968,103 +979,67 @@ ALTER TABLE `depense`
 -- AUTO_INCREMENT pour la table `droit_inscription`
 --
 ALTER TABLE `droit_inscription`
-  MODIFY `id_droit_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1579;
+  MODIFY `id_droit_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1591;
 
 --
 -- AUTO_INCREMENT pour la table `ecolage`
 --
 ALTER TABLE `ecolage`
-  MODIFY `id_ecolage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1823;
+  MODIFY `id_ecolage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1835;
 
 --
 -- AUTO_INCREMENT pour la table `eleve`
 --
 ALTER TABLE `eleve`
-  MODIFY `id_eleve` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2735;
+  MODIFY `id_eleve` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2745;
 
 --
 -- AUTO_INCREMENT pour la table `etablissement`
 --
 ALTER TABLE `etablissement`
-  MODIFY `id_etablissement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
-
---
--- AUTO_INCREMENT pour la table `evenement`
---
-ALTER TABLE `evenement`
-  MODIFY `id_evenement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_etablissement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
 
 --
 -- AUTO_INCREMENT pour la table `exercice`
 --
 ALTER TABLE `exercice`
-  MODIFY `id_exercice` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3006;
-
---
--- AUTO_INCREMENT pour la table `galerie`
---
-ALTER TABLE `galerie`
-  MODIFY `id_image` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
-
---
--- AUTO_INCREMENT pour la table `hero_slide`
---
-ALTER TABLE `hero_slide`
-  MODIFY `id_slide` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_exercice` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3057;
 
 --
 -- AUTO_INCREMENT pour la table `inscription`
 --
 ALTER TABLE `inscription`
-  MODIFY `id_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1728;
-
---
--- AUTO_INCREMENT pour la table `installation`
---
-ALTER TABLE `installation`
-  MODIFY `id_installation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_inscription` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1733;
 
 --
 -- AUTO_INCREMENT pour la table `lecon`
 --
 ALTER TABLE `lecon`
-  MODIFY `id_lecon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3112;
+  MODIFY `id_lecon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3163;
 
 --
 -- AUTO_INCREMENT pour la table `matiere`
 --
 ALTER TABLE `matiere`
-  MODIFY `id_matiere` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1965;
-
---
--- AUTO_INCREMENT pour la table `message_contact`
---
-ALTER TABLE `message_contact`
-  MODIFY `id_message` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_matiere` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1975;
 
 --
 -- AUTO_INCREMENT pour la table `modules`
 --
 ALTER TABLE `modules`
-  MODIFY `id_module` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2278;
+  MODIFY `id_module` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2302;
 
 --
 -- AUTO_INCREMENT pour la table `niveau`
 --
 ALTER TABLE `niveau`
-  MODIFY `id_niveau` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1910;
+  MODIFY `id_niveau` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1922;
 
 --
 -- AUTO_INCREMENT pour la table `note`
 --
 ALTER TABLE `note`
   MODIFY `id_note` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=851;
-
---
--- AUTO_INCREMENT pour la table `notre_histoire`
---
-ALTER TABLE `notre_histoire`
-  MODIFY `id_histoire` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `paiement`
@@ -1076,67 +1051,115 @@ ALTER TABLE `paiement`
 -- AUTO_INCREMENT pour la table `parents`
 --
 ALTER TABLE `parents`
-  MODIFY `id_parent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2021;
+  MODIFY `id_parent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2040;
 
 --
 -- AUTO_INCREMENT pour la table `personnel`
 --
 ALTER TABLE `personnel`
-  MODIFY `id_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3127;
-
---
--- AUTO_INCREMENT pour la table `pilier_educatif`
---
-ALTER TABLE `pilier_educatif`
-  MODIFY `id_pilier` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT pour la table `presentation`
---
-ALTER TABLE `presentation`
-  MODIFY `id_presentation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT pour la table `programme_pedagogique`
---
-ALTER TABLE `programme_pedagogique`
-  MODIFY `id_point` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3147;
 
 --
 -- AUTO_INCREMENT pour la table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id_role` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=407;
+  MODIFY `id_role` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=411;
 
 --
 -- AUTO_INCREMENT pour la table `role_permissions`
 --
 ALTER TABLE `role_permissions`
-  MODIFY `id_role_permission` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13044;
+  MODIFY `id_role_permission` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13140;
 
 --
--- AUTO_INCREMENT pour la table `slogan`
+-- AUTO_INCREMENT pour la table `site_activite_prescolaire`
 --
-ALTER TABLE `slogan`
+ALTER TABLE `site_activite_prescolaire`
+  MODIFY `id_activite` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT pour la table `site_actualite`
+--
+ALTER TABLE `site_actualite`
+  MODIFY `id_actualite` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT pour la table `site_evenement`
+--
+ALTER TABLE `site_evenement`
+  MODIFY `id_evenement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT pour la table `site_galerie`
+--
+ALTER TABLE `site_galerie`
+  MODIFY `id_image` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT pour la table `site_hero_slide`
+--
+ALTER TABLE `site_hero_slide`
+  MODIFY `id_slide` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT pour la table `site_installation`
+--
+ALTER TABLE `site_installation`
+  MODIFY `id_installation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT pour la table `site_message_contact`
+--
+ALTER TABLE `site_message_contact`
+  MODIFY `id_message` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT pour la table `site_notre_histoire`
+--
+ALTER TABLE `site_notre_histoire`
+  MODIFY `id_histoire` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT pour la table `site_pilier_educatif`
+--
+ALTER TABLE `site_pilier_educatif`
+  MODIFY `id_pilier` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT pour la table `site_presentation`
+--
+ALTER TABLE `site_presentation`
+  MODIFY `id_presentation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT pour la table `site_programme_pedagogique`
+--
+ALTER TABLE `site_programme_pedagogique`
+  MODIFY `id_point` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT pour la table `site_slogan`
+--
+ALTER TABLE `site_slogan`
   MODIFY `id_slogan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT pour la table `site_valeur`
+--
+ALTER TABLE `site_valeur`
+  MODIFY `id_valeur` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `type_personnel`
 --
 ALTER TABLE `type_personnel`
-  MODIFY `id_type_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=937;
+  MODIFY `id_type_personnel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=945;
 
 --
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1073;
-
---
--- AUTO_INCREMENT pour la table `valeur`
---
-ALTER TABLE `valeur`
-  MODIFY `id_valeur` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1084;
 
 --
 -- Contraintes pour les tables déchargées
@@ -1180,12 +1203,6 @@ ALTER TABLE `exercice`
   ADD CONSTRAINT `fk_exercice_matiere` FOREIGN KEY (`id_matiere`) REFERENCES `matiere` (`id_matiere`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_exercice_niveau` FOREIGN KEY (`id_niveau`) REFERENCES `niveau` (`id_niveau`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_exercice_prof` FOREIGN KEY (`id_prof`) REFERENCES `personnel` (`id_personnel`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Contraintes pour la table `galerie`
---
-ALTER TABLE `galerie`
-  ADD CONSTRAINT `fk_galerie_evenement` FOREIGN KEY (`id_evenement`) REFERENCES `evenement` (`id_evenement`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `inscription`
@@ -1246,6 +1263,12 @@ ALTER TABLE `personnel`
 ALTER TABLE `role_permissions`
   ADD CONSTRAINT `role_permissions_ibfk_1` FOREIGN KEY (`id_role`) REFERENCES `roles` (`id_role`) ON DELETE CASCADE,
   ADD CONSTRAINT `role_permissions_ibfk_2` FOREIGN KEY (`id_module`) REFERENCES `modules` (`id_module`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `site_galerie`
+--
+ALTER TABLE `site_galerie`
+  ADD CONSTRAINT `fk_galerie_evenement` FOREIGN KEY (`id_evenement`) REFERENCES `site_evenement` (`id_evenement`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `users`

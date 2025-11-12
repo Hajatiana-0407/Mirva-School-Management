@@ -1,7 +1,7 @@
 -- -----------------------------------------------------
 -- Table : hero_slide
 -- -----------------------------------------------------
-CREATE TABLE hero_slide (
+CREATE TABLE IF NOT EXISTS site_hero_slide (
   id_slide INT AUTO_INCREMENT PRIMARY KEY,
   titre VARCHAR(255) NOT NULL,
   soustitre TEXT,
@@ -14,7 +14,7 @@ CREATE TABLE hero_slide (
 -- -----------------------------------------------------
 -- Table : presentation
 -- -----------------------------------------------------
-CREATE TABLE presentation (
+CREATE TABLE IF NOT EXISTS site_presentation (
   id_presentation INT AUTO_INCREMENT PRIMARY KEY,
   titre VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE presentation (
 -- -----------------------------------------------------
 -- Table : slogan
 -- -----------------------------------------------------
-CREATE TABLE slogan (
+CREATE TABLE IF NOT EXISTS site_slogan (
   id_slogan INT AUTO_INCREMENT PRIMARY KEY,
   titre VARCHAR(255) NOT NULL,
   description TEXT,
@@ -40,7 +40,7 @@ CREATE TABLE slogan (
 -- -----------------------------------------------------
 -- Table : notre_histoire
 -- -----------------------------------------------------
-CREATE TABLE notre_histoire (
+CREATE TABLE IF NOT EXISTS site_notre_histoire (
   id_histoire INT AUTO_INCREMENT PRIMARY KEY,
   titre VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE notre_histoire (
 -- -----------------------------------------------------
 -- Table : valeur (anciennement vision_mission)
 -- -----------------------------------------------------
-CREATE TABLE valeur (
+CREATE TABLE IF NOT EXISTS site_valeur (
   id_valeur INT AUTO_INCREMENT PRIMARY KEY,
   titre VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE valeur (
 -- -----------------------------------------------------
 -- Table : pilier_educatif
 -- -----------------------------------------------------
-CREATE TABLE pilier_educatif (
+CREATE TABLE IF NOT EXISTS site_pilier_educatif (
   id_pilier INT AUTO_INCREMENT PRIMARY KEY,
   titre VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE pilier_educatif (
 -- -----------------------------------------------------
 -- Table : installation
 -- -----------------------------------------------------
-CREATE TABLE installation (
+CREATE TABLE IF NOT EXISTS site_installation (
   id_installation INT AUTO_INCREMENT PRIMARY KEY,
   titre VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
@@ -85,7 +85,7 @@ CREATE TABLE installation (
 -- -----------------------------------------------------
 -- Table : programme_pedagogique
 -- -----------------------------------------------------
-CREATE TABLE programme_pedagogique (
+CREATE TABLE IF NOT EXISTS site_programme_pedagogique (
   id_point INT AUTO_INCREMENT PRIMARY KEY,
   titre VARCHAR(255) NOT NULL,
   contenu VARCHAR(255) NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE programme_pedagogique (
 -- -----------------------------------------------------
 -- Table : activite_prescolaire
 -- -----------------------------------------------------
-CREATE TABLE activite_prescolaire (
+CREATE TABLE IF NOT EXISTS site_activite_prescolaire (
   id_activite INT AUTO_INCREMENT PRIMARY KEY,
   label VARCHAR(255) NOT NULL,
   icone VARCHAR(100),
@@ -106,7 +106,7 @@ CREATE TABLE activite_prescolaire (
 -- -----------------------------------------------------
 -- Table : actualite
 -- -----------------------------------------------------
-CREATE TABLE actualite (
+CREATE TABLE IF NOT EXISTS site_actualite (
   id_actualite INT AUTO_INCREMENT PRIMARY KEY,
   titre VARCHAR(255) NOT NULL,
   contenu TEXT NOT NULL,
@@ -118,7 +118,7 @@ CREATE TABLE actualite (
 -- -----------------------------------------------------
 -- Table : evenement
 -- -----------------------------------------------------
-CREATE TABLE evenement (
+CREATE TABLE IF NOT EXISTS site_evenement (
   id_evenement INT AUTO_INCREMENT PRIMARY KEY,
   titre VARCHAR(255) NOT NULL,
   description TEXT,
@@ -131,7 +131,7 @@ CREATE TABLE evenement (
 -- -----------------------------------------------------
 -- Table : galerie
 -- -----------------------------------------------------
-CREATE TABLE galerie (
+CREATE TABLE IF NOT EXISTS site_galerie (
   id_image INT AUTO_INCREMENT PRIMARY KEY,
   titre VARCHAR(255),
   url VARCHAR(255),
@@ -140,7 +140,7 @@ CREATE TABLE galerie (
   publie BOOLEAN DEFAULT TRUE,
   CONSTRAINT fk_galerie_evenement
     FOREIGN KEY (id_evenement)
-    REFERENCES evenement(id_evenement)
+    REFERENCES site_evenement(id_evenement)
     ON DELETE SET NULL
     ON UPDATE CASCADE
 );
@@ -148,7 +148,7 @@ CREATE TABLE galerie (
 -- -----------------------------------------------------
 -- Table : message_contact
 -- -----------------------------------------------------
-CREATE TABLE message_contact (
+CREATE TABLE IF NOT EXISTS site_message_contact (
   id_message INT AUTO_INCREMENT PRIMARY KEY,
   nom VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,

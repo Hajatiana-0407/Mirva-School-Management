@@ -1002,19 +1002,19 @@ class AppFixtures extends CI_Controller
     {
         // Vider les tables dans le bon ordre
         $this->model->emptyDb([
-            'galerie',
-            'evenement',
-            'actualite',
-            'activite_prescolaire',
-            'programme_pedagogique',
-            'installation',
-            'pilier_educatif',
-            'valeur',
-            'notre_histoire',
-            'slogan',
-            'presentation',
-            'hero_slide',
-            'message_contact'
+            'site_galerie',
+            'site_evenement',
+            'site_actualite',
+            'site_activite_prescolaire',
+            'site_programme_pedagogique',
+            'site_installation',
+            'site_pilier_educatif',
+            'site_valeur',
+            'site_notre_histoire',
+            'site_slogan',
+            'site_presentation',
+            'site_hero_slide',
+            'site_message_contact'
         ]);
 
         if ($clean == true) return;
@@ -1023,7 +1023,7 @@ class AppFixtures extends CI_Controller
 
         // ===================== HERO SLIDES ===================== //
         for ($i = 1; $i <= 3; $i++) {
-            $this->model->insertFixture('hero_slide', [
+            $this->model->insertFixture('site_hero_slide', [
                 'titre' => "Bienvenue au Lycée MIRVA $i",
                 'soustitre' => "Former les leaders de demain grâce à une éducation d’excellence.",
                 'image' => $this->faker->imageUrl(1920, 1080, 'school'),
@@ -1034,7 +1034,7 @@ class AppFixtures extends CI_Controller
         }
 
         // ===================== PRÉSENTATION ===================== //
-        $this->model->insertFixture('presentation', [
+        $this->model->insertFixture('site_presentation', [
             'titre' => 'Présentation de notre école',
             'description' => "Notre établissement se distingue par la qualité de son enseignement, son encadrement pédagogique et ses infrastructures modernes.",
             'image' => $this->faker->imageUrl(800, 600, 'campus'),
@@ -1052,11 +1052,11 @@ class AppFixtures extends CI_Controller
             ['titre' => 'Réussir', 'description' => 'Préparer les élèves à un avenir prometteur.', 'icone' => 'award']
         ];
         foreach ($slogans as $s) {
-            $this->model->insertFixture('slogan', $s);
+            $this->model->insertFixture('site_slogan', $s);
         }
 
         // ===================== NOTRE HISTOIRE ===================== //
-        $this->model->insertFixture('notre_histoire', [
+        $this->model->insertFixture('site_notre_histoire', [
             'titre' => 'Notre Histoire',
             'description' => "Fondée en 1998, notre école s’est imposée comme une référence de l’enseignement privé à Madagascar.",
             'reconnaissance_par' => 'Ministère de l’Éducation Nationale',
@@ -1071,7 +1071,7 @@ class AppFixtures extends CI_Controller
             ['titre' => 'Nos Valeurs', 'description' => 'Respect, excellence, engagement et ouverture.', 'icone' => 'heart']
         ];
         foreach ($valeurs as $v) {
-            $this->model->insertFixture('valeur', $v);
+            $this->model->insertFixture('site_valeur', $v);
         }
 
         // ===================== PILIERS ÉDUCATIFS ===================== //
@@ -1081,7 +1081,7 @@ class AppFixtures extends CI_Controller
             ['titre' => 'Ouverture sur le monde', 'description' => 'Apprentissage des langues et échanges culturels.', 'icone' => 'globe']
         ];
         foreach ($piliers as $p) {
-            $this->model->insertFixture('pilier_educatif', $p);
+            $this->model->insertFixture('site_pilier_educatif', $p);
         }
 
         // ===================== INSTALLATIONS ===================== //
@@ -1091,7 +1091,7 @@ class AppFixtures extends CI_Controller
             ['titre' => 'Terrain multisport', 'description' => 'Favoriser le développement physique et l’esprit d’équipe.', 'image' => $this->faker->imageUrl(800, 600, 'sport')]
         ];
         foreach ($installations as $inst) {
-            $this->model->insertFixture('installation', $inst);
+            $this->model->insertFixture('site_installation', $inst);
         }
 
         // ===================== PROGRAMME PÉDAGOGIQUE ===================== //
@@ -1103,7 +1103,7 @@ class AppFixtures extends CI_Controller
         ];
         $ordre = 1;
         foreach ($points as $p) {
-            $this->model->insertFixture('programme_pedagogique', [
+            $this->model->insertFixture('site_programme_pedagogique', [
                 'titre' => 'Approche Pédagogique',
                 'contenu' => $p,
                 'ordre' => $ordre++,
@@ -1119,12 +1119,12 @@ class AppFixtures extends CI_Controller
             ['label' => 'Lecture et contes', 'icone' => 'book']
         ];
         foreach ($activites as $a) {
-            $this->model->insertFixture('activite_prescolaire', $a);
+            $this->model->insertFixture('site_activite_prescolaire', $a);
         }
 
         // ===================== ACTUALITÉS ===================== //
         for ($i = 0; $i < 5; $i++) {
-            $this->model->insertFixture('actualite', [
+            $this->model->insertFixture('site_actualite', [
                 'titre' => $this->faker->sentence(4),
                 'contenu' => $this->faker->paragraph(4),
                 'date_publication' => $this->faker->date(),
@@ -1135,7 +1135,7 @@ class AppFixtures extends CI_Controller
 
         // ===================== ÉVÉNEMENTS ===================== //
         for ($i = 0; $i < 4; $i++) {
-            $this->model->insertFixture('evenement', [
+            $this->model->insertFixture('site_evenement', [
                 'titre' => 'Événement ' . ($i + 1),
                 'description' => $this->faker->paragraph(),
                 'date_evenement' => $this->faker->date(),
@@ -1145,12 +1145,12 @@ class AppFixtures extends CI_Controller
             ]);
         }
 
-        $evenements = $this->model->getIds('evenement', 'id_evenement');
+        $evenements = $this->model->getIds('site_evenement', 'id_evenement');
 
         // ===================== GALERIE ===================== //
         foreach ($evenements as $id) {
             for ($j = 1; $j <= 3; $j++) {
-                $this->model->insertFixture('galerie', [
+                $this->model->insertFixture('site_galerie', [
                     'titre' => "Photo $j de l’événement",
                     'url' => $this->faker->imageUrl(800, 600, 'gallery'),
                     'categorie' => 'Événement',
@@ -1162,7 +1162,7 @@ class AppFixtures extends CI_Controller
 
         // ===================== MESSAGES CONTACT (démo) ===================== //
         for ($i = 0; $i < 3; $i++) {
-            $this->model->insertFixture('message_contact', [
+            $this->model->insertFixture('site_message_contact', [
                 'nom' => $this->faker->name(),
                 'email' => $this->faker->email(),
                 'message' => $this->faker->sentence(10),
