@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import Home from '../Pages/website/Pages/Home'
+import Home from '../Pages/website/Pages/Home/Home'
 import Header from '../Components/Layout/Website/Header'
 import Footer from '../Components/Layout/Website/Footer'
 import { useDispatch, useSelector } from 'react-redux'
@@ -29,7 +29,7 @@ const Website: React.FC = () => {
   if ( isLoading ) return <div className='h-screen flex items-center '><Loading/></div>
 
   return (
-    <div className='relative bg-white'>
+    <div className='relative'>
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />

@@ -1019,37 +1019,54 @@ class AppFixtures extends CI_Controller
 
         if ($clean == true) return;
 
-
-
         // ===================== HERO SLIDES ===================== //
-        for ($i = 1; $i <= 3; $i++) {
-            $this->model->insertFixture('site_hero_slide', [
-                'titre' => "Bienvenue au Lycée MIRVA $i",
-                'soustitre' => "Former les leaders de demain grâce à une éducation d’excellence.",
-                'image' => $this->faker->imageUrl(1920, 1080, 'school'),
-                'cta' => 'Découvrir notre école',
+        $heroSlides = [
+            [
+                'titre' => 'Bienvenue au Lycée MIRVA',
+                'soustitre' => 'Une éducation d’excellence pour un avenir brillant.',
+                'image' => $this->faker->imageUrl(1920, 1080, 'students,school,campus'),
+                'cta' => 'Découvrir notre établissement',
                 'cta_link' => '/a-propos',
                 'actif' => true
-            ]);
+            ],
+            [
+                'titre' => 'Apprendre, Grandir, Réussir',
+                'soustitre' => 'Encadrés par des professeurs passionnés et expérimentés.',
+                'image' => $this->faker->imageUrl(1920, 1080, 'education,teacher,classroom'),
+                'cta' => 'Voir nos programmes',
+                'cta_link' => '/programme',
+                'actif' => true
+            ],
+            [
+                'titre' => 'Un environnement d’apprentissage moderne',
+                'soustitre' => 'Des infrastructures adaptées au développement de chaque élève.',
+                'image' => $this->faker->imageUrl(1920, 1080, 'school,library,students'),
+                'cta' => 'Visiter le campus',
+                'cta_link' => '/infrastructure',
+                'actif' => true
+            ]
+        ];
+        foreach ($heroSlides as $slide) {
+            $this->model->insertFixture('site_hero_slide', $slide);
         }
 
         // ===================== PRÉSENTATION ===================== //
         $this->model->insertFixture('site_presentation', [
-            'titre' => 'Présentation de notre école',
-            'description' => "Notre établissement se distingue par la qualité de son enseignement, son encadrement pédagogique et ses infrastructures modernes.",
-            'image' => $this->faker->imageUrl(800, 600, 'campus'),
-            'nombre_eleves' => 1200,
-            'nombre_professeurs' => 65,
-            'annees_experience' => 25,
-            'taux_reussite' => 98.5,
+            'titre' => 'Présentation du Lycée MIRVA',
+            'description' => "Le Lycée MIRVA est un établissement d’enseignement privé reconnu pour la qualité de son encadrement, son approche pédagogique innovante et son engagement envers la réussite de chaque élève. Nous formons des jeunes confiants, responsables et ouverts sur le monde.",
+            'image' => $this->faker->imageUrl(800, 600, 'school,campus,education'),
+            'nombre_eleves' => 1350,
+            'nombre_professeurs' => 72,
+            'annees_experience' => 27,
+            'taux_reussite' => 97.8,
             'actif' => true
         ]);
 
         // ===================== SLOGANS ===================== //
         $slogans = [
-            ['titre' => 'Apprendre', 'description' => 'Développer les compétences de chaque élève.', 'icone' => 'book-open'],
-            ['titre' => 'Grandir', 'description' => 'Encourager la curiosité et la créativité.', 'icone' => 'users'],
-            ['titre' => 'Réussir', 'description' => 'Préparer les élèves à un avenir prometteur.', 'icone' => 'award']
+            ['titre' => 'Apprendre', 'description' => 'Acquérir les savoirs et compétences essentielles pour réussir.', 'icone' => 'book-open'],
+            ['titre' => 'S’épanouir', 'description' => 'Encourager la créativité, l’autonomie et la confiance en soi.', 'icone' => 'sparkles'],
+            ['titre' => 'Réussir', 'description' => 'Atteindre l’excellence académique et humaine.', 'icone' => 'award']
         ];
         foreach ($slogans as $s) {
             $this->model->insertFixture('site_slogan', $s);
@@ -1058,17 +1075,17 @@ class AppFixtures extends CI_Controller
         // ===================== NOTRE HISTOIRE ===================== //
         $this->model->insertFixture('site_notre_histoire', [
             'titre' => 'Notre Histoire',
-            'description' => "Fondée en 1998, notre école s’est imposée comme une référence de l’enseignement privé à Madagascar.",
+            'description' => "Créé en 1998, le Lycée MIRVA s’est rapidement imposé comme un acteur majeur de l’enseignement à Madagascar. Avec une pédagogie centrée sur l’élève et une vision moderne de l’éducation, nous accompagnons les générations vers la réussite.",
             'reconnaissance_par' => 'Ministère de l’Éducation Nationale',
-            'image' => $this->faker->imageUrl(900, 600, 'school'),
+            'image' => $this->faker->imageUrl(900, 600, 'school,students,education'),
             'actif' => true
         ]);
 
-        // ===================== VALEURS (Vision / Mission) ===================== //
+        // ===================== VALEURS ===================== //
         $valeurs = [
-            ['titre' => 'Notre Vision', 'description' => 'Former des citoyens responsables et épanouis.', 'icone' => 'eye'],
-            ['titre' => 'Notre Mission', 'description' => 'Offrir une éducation moderne et inclusive.', 'icone' => 'target'],
-            ['titre' => 'Nos Valeurs', 'description' => 'Respect, excellence, engagement et ouverture.', 'icone' => 'heart']
+            ['titre' => 'Notre Vision', 'description' => 'Devenir une école modèle pour la formation d’élèves autonomes, responsables et épanouis.', 'icone' => 'eye'],
+            ['titre' => 'Notre Mission', 'description' => 'Transmettre un savoir de qualité dans un cadre respectueux et stimulant.', 'icone' => 'target'],
+            ['titre' => 'Nos Valeurs', 'description' => 'Excellence, Respect, Intégrité, Ouverture et Collaboration.', 'icone' => 'heart-handshake']
         ];
         foreach ($valeurs as $v) {
             $this->model->insertFixture('site_valeur', $v);
@@ -1076,9 +1093,9 @@ class AppFixtures extends CI_Controller
 
         // ===================== PILIERS ÉDUCATIFS ===================== //
         $piliers = [
-            ['titre' => 'Innovation pédagogique', 'description' => 'Utilisation d’outils numériques et de méthodes actives.', 'icone' => 'lightbulb'],
-            ['titre' => 'Accompagnement', 'description' => 'Suivi personnalisé pour chaque élève.', 'icone' => 'user-check'],
-            ['titre' => 'Ouverture sur le monde', 'description' => 'Apprentissage des langues et échanges culturels.', 'icone' => 'globe']
+            ['titre' => 'Innovation pédagogique', 'description' => 'Intégration des outils numériques et pédagogies actives pour rendre l’apprentissage motivant.', 'icone' => 'lightbulb'],
+            ['titre' => 'Accompagnement individualisé', 'description' => 'Chaque élève bénéficie d’un suivi personnalisé pour développer tout son potentiel.', 'icone' => 'user-check'],
+            ['titre' => 'Ouverture internationale', 'description' => 'Apprentissage des langues étrangères et échanges culturels.', 'icone' => 'globe-2']
         ];
         foreach ($piliers as $p) {
             $this->model->insertFixture('site_pilier_educatif', $p);
@@ -1086,9 +1103,9 @@ class AppFixtures extends CI_Controller
 
         // ===================== INSTALLATIONS ===================== //
         $installations = [
-            ['titre' => 'Salles de classe modernes', 'description' => 'Des espaces lumineux et équipés pour un apprentissage optimal.', 'image' => $this->faker->imageUrl(800, 600, 'classroom')],
-            ['titre' => 'Bibliothèque', 'description' => 'Un lieu propice à la lecture et à la recherche.', 'image' => $this->faker->imageUrl(800, 600, 'library')],
-            ['titre' => 'Terrain multisport', 'description' => 'Favoriser le développement physique et l’esprit d’équipe.', 'image' => $this->faker->imageUrl(800, 600, 'sport')]
+            ['titre' => 'Salles de classe connectées', 'description' => 'Des salles modernes équipées de tableaux interactifs et d’un accès Internet haut débit.', 'image' => $this->faker->imageUrl(800, 600, 'classroom,technology')],
+            ['titre' => 'Bibliothèque numérique', 'description' => 'Un espace de lecture et de recherche enrichi par des ressources en ligne.', 'image' => $this->faker->imageUrl(800, 600, 'library,books')],
+            ['titre' => 'Terrain multisport', 'description' => 'Basket, foot, volley et plus pour un esprit sain dans un corps sain.', 'image' => $this->faker->imageUrl(800, 600, 'sport,students')]
         ];
         foreach ($installations as $inst) {
             $this->model->insertFixture('site_installation', $inst);
@@ -1096,15 +1113,15 @@ class AppFixtures extends CI_Controller
 
         // ===================== PROGRAMME PÉDAGOGIQUE ===================== //
         $points = [
-            'Méthodes d’enseignement interactives et participatives',
-            'Suivi personnalisé de chaque élève',
-            'Évaluation continue et formative',
-            'Préparation aux examens nationaux'
+            'Méthodes d’enseignement interactives et orientées sur la pratique.',
+            'Suivi continu et accompagnement individualisé des élèves.',
+            'Développement de l’esprit critique et de la créativité.',
+            'Préparation rigoureuse aux examens officiels et concours nationaux.'
         ];
         $ordre = 1;
         foreach ($points as $p) {
             $this->model->insertFixture('site_programme_pedagogique', [
-                'titre' => 'Approche Pédagogique',
+                'titre' => 'Notre Approche Pédagogique',
                 'contenu' => $p,
                 'ordre' => $ordre++,
                 'actif' => true
@@ -1113,10 +1130,10 @@ class AppFixtures extends CI_Controller
 
         // ===================== ACTIVITÉS PRÉSCOLAIRES ===================== //
         $activites = [
-            ['label' => 'Jeux éducatifs', 'icone' => 'gamepad'],
-            ['label' => 'Chants et danses', 'icone' => 'music'],
-            ['label' => 'Ateliers créatifs', 'icone' => 'paint-brush'],
-            ['label' => 'Lecture et contes', 'icone' => 'book']
+            ['label' => 'Jeux éducatifs et ludiques', 'icone' => 'puzzle'],
+            ['label' => 'Chants et danses traditionnelles', 'icone' => 'music-2'],
+            ['label' => 'Ateliers d’arts plastiques', 'icone' => 'palette'],
+            ['label' => 'Lecture d’histoires et contes', 'icone' => 'book-open-text']
         ];
         foreach ($activites as $a) {
             $this->model->insertFixture('site_activite_prescolaire', $a);
@@ -1125,24 +1142,33 @@ class AppFixtures extends CI_Controller
         // ===================== ACTUALITÉS ===================== //
         for ($i = 0; $i < 5; $i++) {
             $this->model->insertFixture('site_actualite', [
-                'titre' => $this->faker->sentence(4),
+                'titre' => $this->faker->randomElement([
+                    'Journée portes ouvertes du Lycée MIRVA',
+                    'Remise des diplômes 2025',
+                    'Nouvelle bibliothèque numérique inaugurée',
+                    'Participation à la semaine de la science',
+                    'Atelier d’orientation universitaire'
+                ]),
                 'contenu' => $this->faker->paragraph(4),
                 'date_publication' => $this->faker->date(),
-                'image' => $this->faker->imageUrl(800, 600, 'news'),
+                'image' => $this->faker->imageUrl(800, 600, 'students,event,education'),
                 'publie' => true
             ]);
         }
 
         // ===================== ÉVÉNEMENTS ===================== //
-        for ($i = 0; $i < 4; $i++) {
-            $this->model->insertFixture('site_evenement', [
-                'titre' => 'Événement ' . ($i + 1),
-                'description' => $this->faker->paragraph(),
+        $evenementData = [
+            ['titre' => 'Fête de fin d’année scolaire', 'description' => 'Un moment convivial pour célébrer la réussite de nos élèves.', 'lieu' => 'Salle polyvalente MIRVA'],
+            ['titre' => 'Compétition interscolaire', 'description' => 'Nos élèves participent à des défis sportifs et intellectuels.', 'lieu' => 'Gymnase municipal d’Antananarivo'],
+            ['titre' => 'Forum des métiers', 'description' => 'Rencontre entre élèves et professionnels pour inspirer les futurs parcours.', 'lieu' => 'Campus MIRVA'],
+            ['titre' => 'Journée de reboisement', 'description' => 'Les élèves s’engagent pour l’environnement.', 'lieu' => 'Bois de Tanjombato']
+        ];
+        foreach ($evenementData as $ev) {
+            $this->model->insertFixture('site_evenement', array_merge($ev, [
                 'date_evenement' => $this->faker->date(),
-                'lieu' => $this->faker->city(),
-                'image' => $this->faker->imageUrl(800, 600, 'event'),
+                'image' => $this->faker->imageUrl(800, 600, 'event,students'),
                 'publie' => true
-            ]);
+            ]));
         }
 
         $evenements = $this->model->getIds('site_evenement', 'id_evenement');
@@ -1152,7 +1178,7 @@ class AppFixtures extends CI_Controller
             for ($j = 1; $j <= 3; $j++) {
                 $this->model->insertFixture('site_galerie', [
                     'titre' => "Photo $j de l’événement",
-                    'url' => $this->faker->imageUrl(800, 600, 'gallery'),
+                    'url' => $this->faker->imageUrl(800, 600, 'school,event,students'),
                     'categorie' => 'Événement',
                     'id_evenement' => $id,
                     'publie' => true
@@ -1160,20 +1186,24 @@ class AppFixtures extends CI_Controller
             }
         }
 
-        // ===================== MESSAGES CONTACT (démo) ===================== //
+        // ===================== MESSAGES CONTACT ===================== //
         for ($i = 0; $i < 3; $i++) {
             $this->model->insertFixture('site_message_contact', [
                 'nom' => $this->faker->name(),
-                'email' => $this->faker->email(),
-                'message' => $this->faker->sentence(10),
+                'email' => $this->faker->safeEmail(),
+                'message' => $this->faker->randomElement([
+                    'Je souhaite inscrire mon enfant en classe de 5e.',
+                    'Pouvez-vous m’envoyer la liste des fournitures scolaires ?',
+                    'Quand auront lieu les inscriptions pour la rentrée prochaine ?'
+                ]),
                 'date_message' => $this->faker->date(),
                 'lu' => $this->faker->boolean()
             ]);
         }
 
-
-        echo "✅ Fausse  données générée avec succès ( SITE WEB ) !" . PHP_EOL;
+        echo "✅ Données réalistes générées avec succès pour le site web du Lycée MIRVA !" . PHP_EOL;
     }
+
 
 
 

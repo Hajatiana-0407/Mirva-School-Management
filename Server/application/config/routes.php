@@ -66,6 +66,22 @@ $route['api/admin/download'] = 'DownloadContrller/download';
 // ===================== **************** ===================== //
 
 
+//! *********************  ROUTE POUR LE SITE WEB **********************************************************************
+
+// ******************* ROUTE HERO ********************** //
+$route['api/site/hero'] = 'HeroController';
+$route['api/site/hero/update'] = 'HeroController/update';
+$route['api/site/hero/create'] = 'HeroController/create';
+$route['api/site/hero/delete'] = 'HeroController/delete';
+
+// ******************* ROUTE PRESENTATION ********************** //
+$route['api/site/presentation'] = 'SitePresentationController';
+$route['api/site/presentation/update'] = 'SitePresentationController/update';
+$route['api/site/presentation/create'] = 'SitePresentationController/create';
+$route['api/site/presentation/delete'] = 'SitePresentationController/delete';
+
+
+//! *********************  ROUTE POUR LE SITE WEB **********************************************************************
 
 
 // ===================== Authentification  ===================== //
@@ -168,6 +184,7 @@ $route['api/admin/role/delete'] = 'RoleController/delete';
 
 // ******************* ROUTE ROLES ********************** //
 $route['api/admin/module'] = 'ModuleController';
+
 
 
 

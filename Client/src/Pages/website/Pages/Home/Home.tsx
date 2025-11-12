@@ -1,40 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Award, Users, BookOpen, Heart, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import { heroSlides, siteContent } from '../data/mockData';
+import { heroSlides, siteContent } from '../../data/mockData';
+import Hero from './Hero';
 
 const Home: React.FC = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [textKey, setTextKey] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => {
-        const nextSlide = (prev + 1) % heroSlides.length;
-        // Déclencher l'animation du texte quand l'image change
-        setTextKey(prevKey => prevKey + 1);
-        return nextSlide;
-      });
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => {
-      const nextSlide = (prev + 1) % heroSlides.length;
-      setTextKey(prevKey => prevKey + 1);
-      return nextSlide;
-    });
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => {
-      const nextSlide = (prev - 1 + heroSlides.length) % heroSlides.length;
-      setTextKey(prevKey => prevKey + 1);
-      return nextSlide;
-    });
-  };
-
   const stats = [
     { icon: Users, value: '500+', label: 'Élèves' },
     { icon: BookOpen, value: '25+', label: 'Enseignants' },
@@ -42,86 +12,12 @@ const Home: React.FC = () => {
     { icon: Heart, value: '100%', label: 'Réussite' },
   ];
 
-  const currentSlideData = heroSlides[currentSlide];
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-primary-600 to-primary-800 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-30 backdrop-blur-[2px]"></div>
-        
-        {/* Slider - Images seulement */}
-        <div className="relative h-screen">
-          {heroSlides.map((slide, index) => (
-            <div
-              key={slide.id}
-              className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
-                index === currentSlide ? 'opacity-100' : 'opacity-0'
-              }`}
-            >
-              <div 
-                className="absolute inset-0 bg-cover bg-center bg-blend-overlay"
-                style={{ backgroundImage: `url(${slide.image})` }}
-              />
-            </div>
-          ))}
-          
-          {/* Texte fixe avec effet d'écriture */}
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 h-full flex items-center">
-            <div className="max-w-3xl">
-              <h1 
-                key={`title-${textKey}`}
-                className="text-4xl lg:text-6xl font-bold mb-6 leading-tight typewriter"
-              >
-                {currentSlideData.title}
-              </h1>
-              <p 
-                key={`subtitle-${textKey}`}
-                className="text-xl lg:text-2xl mb-8 text-blue-100 typewriter-subtitle"
-              >
-                {currentSlideData.subtitle}
-              </p>
-              <Link
-                to="/about"
-                className="inline-flex items-center space-x-2 bg-primary-500 hover:bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg animate-fade-in-up animation-delay-400"
-              >
-                <span>{currentSlideData.cta}</span>
-                <ArrowRight className="h-5 w-5" />
-              </Link>
-            </div>
-          </div>
-          
-          {/* Navigation Arrows */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-3 rounded-full transition-all duration-200"
-          >
-            <ChevronLeft className="h-6 w-6" />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-3 rounded-full transition-all duration-200"
-          >
-            <ChevronRight className="h-6 w-6" />
-          </button>
-          
-          {/* Dots Indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-2">
-            {heroSlides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  setCurrentSlide(index);
-                  setTextKey(prevKey => prevKey + 1);
-                }}
-                className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                  index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+      <Hero/>
+      
 
       {/* Welcome Section */}
       <section className="py-16 bg-white">
