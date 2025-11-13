@@ -5,22 +5,25 @@ import { useNavigate } from "react-router-dom";
 type TitleProps = PropsWithChildren & {
     title: string;
     description?: string;
+    backButton?: boolean
 };
 
-const Title: React.FC<TitleProps> = ({ children, title, description }) => {
+const Title: React.FC<TitleProps> = ({ children, title, description, backButton = true }) => {
     const navigate = useNavigate();
 
     return (
         <div className="mb-6 md:mb-6 ">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div className="flex items-start gap-1">
-                    <button
-                        type="button"
-                        onClick={() => navigate(-1)}
-                        className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-                    >
-                        <ArrowLeft className="h-5 w-5 text-gray-700" />
-                    </button>
+                    {backButton &&
+                        <button
+                            type="button"
+                            onClick={() => navigate(-1)}
+                            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                        >
+                            <ArrowLeft className="h-5 w-5 text-gray-700" />
+                        </button>
+                    }
 
                     <div>
                         <h1 className="text-xl md:text-2xl font-semibold text-gray-900">
