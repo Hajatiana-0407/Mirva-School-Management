@@ -6,7 +6,7 @@ export type HeroSlideType = {
     image?: string;
     cta?: string;
     cta_link?: string;
-    actif: boolean;
+    actif: string;
 };
 
 export const HeroSlideInitialValue = {
@@ -15,7 +15,7 @@ export const HeroSlideInitialValue = {
     image: '',
     cta: '',
     cta_link: '',
-    actif: true,
+    actif: '',
 };
 
 // === presentation ===

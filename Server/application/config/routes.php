@@ -73,6 +73,7 @@ $route['api/site/hero'] = 'HeroController';
 $route['api/site/hero/update'] = 'HeroController/update';
 $route['api/site/hero/create'] = 'HeroController/create';
 $route['api/site/hero/delete'] = 'HeroController/delete';
+$route['api/site/hero/publish'] = 'HeroController/publish';
 
 // ******************* ROUTE PRESENTATION ********************** //
 $route['api/site/presentation'] = 'SitePresentationController';

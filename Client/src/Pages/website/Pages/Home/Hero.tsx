@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, PenBox } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getHeroState } from '../../Redux/Slice/Home/HeroSlice';
 import { AppDispatch } from '../../../../Redux/store';
@@ -8,76 +8,98 @@ import { getAllHero } from '../../Redux/AsyncThunk/HomeAsyncThunk';
 import { HeroSlideType, HeroSlideInitialValue } from '../../Type';
 import Loading from '../../../../Components/ui/Loading';
 import { baseUrl } from '../../../../Utils/Utils';
+import { useHashPermission } from '../../../../Hooks/useHashPermission';
 
 const Hero: React.FC = () => {
     const [currentSlide, setCurrentSlide] = useState<number>(0);
-    const { datas: sliders } = useSelector(getHeroState);
+    const { datas, action } = useSelector(getHeroState);
+    const [sliders, setSliders] = useState<HeroSlideType[]>()
+    const adminPermission = useHashPermission({ id: "homepage-settings" })
+
     const dispatch: AppDispatch = useDispatch();
 
-    const currentSlideData: HeroSlideType = sliders[currentSlide] || HeroSlideInitialValue;
+    const currentSlideData: HeroSlideType = sliders?.[currentSlide] || HeroSlideInitialValue;
+
+    useEffect(() => {
+        datas && setSliders(datas.filter(data => data.actif == '1'));
+        return () => { }
+    }, [datas])
 
     /**
      * Récupération des données
      */
     useEffect(() => {
-        if (!sliders.length) {
+        if (!sliders?.length) {
             dispatch(getAllHero());
         }
-    }, [dispatch, sliders.length]);
+    }, [dispatch, sliders?.length]);
 
     /**
      * Navigation entre les slides
      */
     const nextSlide = () => {
-        if (!sliders.length) return;
-        setCurrentSlide(prev => (prev + 1) % sliders.length);
+        if (!sliders?.length) return;
+        setCurrentSlide(prev => (prev + 1) % sliders?.length);
     };
 
     const prevSlide = () => {
-        if (!sliders.length) return;
-        setCurrentSlide(prev => (prev - 1 + sliders.length) % sliders.length);
+        if (!sliders?.length) return;
+        setCurrentSlide(prev => (prev - 1 + sliders?.length) % sliders?.length);
     };
 
     /**
      * Auto-slide toutes les 8 secondes
      */
     useEffect(() => {
-        if (sliders.length === 0) return;
-
+        if (sliders?.length === 0) return;
         const timer = setInterval(() => {
-            setCurrentSlide(prev => (prev + 1) % sliders.length);
+            const len = sliders?.length || 0;
+            setCurrentSlide(prev => (prev + 1) % len);
         }, 8000);
 
         return () => clearInterval(timer);
-    }, [sliders.length]);
+    }, [sliders?.length]);
 
     /**
      * Si les données ne sont pas encore chargées
      */
-    if (sliders.length === 0) {
-        return <Loading />;
-    }
+    if (action.isLoading) return <Loading />;
+
+    if (sliders?.length === 0) return ''
 
     return (
-        <section className="relative text-white bg-linear-to-r from-blue-500 via-blue-600 to-blue overflow-hidden">
+        <section className="relative text-white overflow-hidden bg-gradient-to-r from-teal-800 to-teal-900">
+
             {/* Slider - Images */}
             <div className="relative h-screen">
-                {sliders.map((slide, index) => (
+
+                {sliders?.map((slide, index) => (
                     <div
                         key={slide.id_slide}
-                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'
+                        className={`absolute bg-right inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'
                             }`}
                     >
                         <div
                             className="absolute inset-0 bg-cover bg-center bg-blend-overlay"
                             style={{ backgroundImage: `url(${baseUrl(slide.image)})` }}
                         />
-                        <div className="absolute inset-0 bg-black bg-opacity-40" />
                     </div>
                 ))}
 
                 {/* Texte affiché directement */}
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 h-full flex items-center">
+
+                    {/* Bouton vers le dashbord pour modifier si l'utilisateur a le droit */}
+                    {adminPermission.read &&
+                        <Link 
+                        to={'/back-office/homepage-settings?section=hero'}
+                            className="bg-lime-600 text-white px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-lime-700 transition-colors absolute top-5 right-4 sm:right-6 lg:right-8 z-40"
+                        >
+                            <PenBox className="w-5 h-5" />
+                            <span>Modifier cette section</span>
+                        </Link>
+                    }
+
                     <div className="max-w-3xl">
                         <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight min-h-[1.2em]">
                             {currentSlideData.titre}
@@ -114,7 +136,7 @@ const Hero: React.FC = () => {
 
                 {/* Indicateurs (dots) */}
                 <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-2">
-                    {sliders.map((_, index) => (
+                    {sliders?.map((_, index) => (
                         <button
                             key={index}
                             onClick={() => setCurrentSlide(index)}
