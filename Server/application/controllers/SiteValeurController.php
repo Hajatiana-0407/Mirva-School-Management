@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class SiteValeurController extends CI_Controller
 {
-    protected $pk = 'id_valeur ';
+    protected $pk = 'id_valeur';
     public function __construct()
     {
         parent::__construct();
@@ -16,37 +16,56 @@ class SiteValeurController extends CI_Controller
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode([
-                'error' => false  , 
-                'data' => $data 
+                'error' => false,
+                'data' => $data
             ]));
     }
-
     public function create()
-    {}
+    {
+        $data = [
+            'titre' => $this->input->post('titre'),
+            'description' => $this->input->post('description'),
+            'icone' => $this->input->post('icone'),
+            'actif' => $this->input->post('actif'),
+        ];
+
+
+        if ($this->SiteValeurModel->isExist(
+            ["titre" => $data['titre']],
+        )) {
+            echo json_encode(['error' => true, 'message' => 'Le titre existe déjà.']);
+        } else {
+            $data =  $this->SiteValeurModel->insert($data);
+            if ($data) {
+                echo json_encode(['error' => false, 'data' => $data]);
+            } else {
+                echo json_encode(['error' => true, 'message' => 'Une erreur c\'est produite.']);
+            }
+        }
+    }
     public function update()
     {
-
-        // $id_niveau = $this->input->post('id_niveau');
-        // $data = [
-        //     'niveau' => $this->input->post('niveau'),
-        //     'cycle' => $this->input->post('cycle'),
-        //     'description' => $this->input->post('description'),
-        // ];
-
-        // if ($this->HeroModel->isExist(
-        //     ["niveau" => $data['niveau']],
-        //     'and',
-        //     [$this->pk => $id_niveau]
-        // )) {
-        //     echo json_encode(['error' => true, 'message' => 'Le niveau existe déjà.']);
-        // } else {
-        //     $data =  $this->HeroModel->update($id_niveau, $data);
-        //     if ($data) {
-        //         echo json_encode(['error' => false, 'data' => $data]);
-        //     } else {
-        //         echo json_encode(['error' => true, 'message' => 'Une erreur c\'est produite.']);
-        //     }
-        // }
+        $id = $this->input->post($this->pk);
+        $data = [
+            'titre' => $this->input->post('titre'),
+            'description' => $this->input->post('description'),
+            'icone' => $this->input->post('icone'),
+            'actif' => $this->input->post('actif'),
+        ];
+        if ($this->SiteValeurModel->isExist(
+            ["titre" => $data['titre']],
+            'and',
+            ['id_valeur'=> $id]
+        )) {
+            echo json_encode(['error' => true, 'message' => 'Le titre existe déjà.']);
+        } else {
+            $data =  $this->SiteValeurModel->update($id, $data);
+            if ($data) {
+                echo json_encode(['error' => false, 'data' => $data]);
+            } else {
+                echo json_encode(['error' => true, 'message' => 'Une erreur c\'est produite.']);
+            }
+        }
     }
 
     public function delete()
@@ -56,8 +75,8 @@ class SiteValeurController extends CI_Controller
 
             $input = json_decode(file_get_contents('php://input'), true);
 
-            if (!empty($input['id_niveau'])) {
-                $id = $input['id_niveau'];
+            if (!empty($input[$this->pk])) {
+                $id = $input[$this->pk];
 
                 $data = $this->SiteValeurModel->delete($id);
 
@@ -71,6 +90,37 @@ class SiteValeurController extends CI_Controller
             }
         } else {
             echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+        }
+    }
+
+    public function publish()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $this->input->post($this->pk);
+            if ($id == null) {
+                echo json_encode([
+                    'error' => true,
+                    'message' => 'Impossible de changer l\'état du valeur.',
+                    'details' => 'L\'identifiant est null.'
+                ]);
+                return;
+            }
+            $data = [
+                'actif' => $this->input->post('actif'),
+            ];
+            $data =  $this->SiteValeurModel->update($id, $data);
+            if ($data) {
+                echo json_encode(['error' => false, 'data' => $data]);
+            } else {
+                echo json_encode(['error' => true, 'message' => 'Une erreur c\'est produite.']);
+            }
+        } else {
+            echo json_encode([
+                'error' => true,
+                'message' => 'Impossible de changer l\'état du valeur.',
+                'details' => 'Methode non autorisé.'
+            ]);
+            return;
         }
     }
 }

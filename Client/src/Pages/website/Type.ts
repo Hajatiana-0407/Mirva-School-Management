@@ -82,14 +82,14 @@ export type ValueType = {
     titre: string;
     description: string;
     icone?: string;
-    actif: boolean;
+    actif: string;
 };
 
 export const ValueInitialValue = {
     titre: '',
     description: '',
     icone: '',
-    actif: true,
+    actif: '',
 };
 
 // === pilier_educatif ===

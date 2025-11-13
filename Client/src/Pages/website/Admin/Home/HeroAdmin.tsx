@@ -160,8 +160,9 @@ const HeroAdmin: React.FC = () => {
     return (
         <div className="space-y-4 md:space-y-6">
             <Title
+                backButton={false}
                 title="Hero - Section Accueil"
-                description="Gérez les slides du carrousel d’accueil : image, titre, sous-titre et lien."
+                description="Gérez la section présentation sur la page d’accueil."
             >
                 <button
                     onClick={() => navigate('/#hero')}

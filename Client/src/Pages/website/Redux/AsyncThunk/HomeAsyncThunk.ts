@@ -50,7 +50,7 @@ export const updateSlide = createAsyncThunk('slide/modification', async ({ dataT
             dispatch(setHiddeModalValue(true));
         }
     }).catch(error => {
-        console.error('Erreur lors de la modification :', error.getMessage());
+        console.error('( Hero ) Erreur lors de la modification :', error.getMessage());
     });
     return data;
 })
@@ -75,12 +75,12 @@ export const deleteSlide = createAsyncThunk('slide/suppression', async (id_slide
     return data;
 })
 
-export const publishSlide = createAsyncThunk('slide/publish', async ( data_to_publish : any): Promise<ApiReturnType> => {
+export const publishSlide = createAsyncThunk('slide/publish', async (data_to_publish: any): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
-    if ( data_to_publish ) {
+    if (data_to_publish) {
         await api.post('site/hero/publish', data_to_publish, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    }).then(response => {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => {
             data = response.data;
         }).catch(error => {
             console.error('( Hero ) Erreur lors de la publication :', error.getMessage());
@@ -91,8 +91,7 @@ export const publishSlide = createAsyncThunk('slide/publish', async ( data_to_pu
 
 // ? <<<<<<<-------------------------------- HERO SLIDE SECTION ---------------------------------
 
-
-// Welcome 
+// ? -------------------------------- PRESENTATION SECTION ---------------------------------
 export const getAllPresentation = createAsyncThunk('presentation/getAll', async (): Promise<ApiReturnType> => {
     let datas: ApiReturnType = ApiReturnInitial;
     await api.get('site/presentation')
@@ -105,7 +104,28 @@ export const getAllPresentation = createAsyncThunk('presentation/getAll', async 
     return datas;
 })
 
-// Value
+export const updatePresentation = createAsyncThunk('presentation/modification', async ({ dataToUpdate, id }: { dataToUpdate: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
+    let data: ApiReturnType = ApiReturnInitial;
+
+    dataToUpdate.append('id_presentation', id.toString());
+
+    await api.post('site/presentation/update', dataToUpdate, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(response => {
+        data = response.data;
+        if (!data.error) {
+            toast('Modification éffectué')
+            dispatch(setHiddeModalValue(true));
+        }
+    }).catch(error => {
+        console.error('( Presentation ) Erreur lors de la modification :', error.getMessage());
+    });
+    return data;
+})
+// ?<<<<<<<<< -------------------------------- PRESENTATION SECTION ---------------------------------
+
+// ? -------------------------------- VALEUR SECTION ---------------------------------
+
 export const getAllValue = createAsyncThunk('valeur/getAll', async (): Promise<ApiReturnType> => {
     let datas: ApiReturnType = ApiReturnInitial;
     await api.get('site/valeur')
@@ -117,6 +137,76 @@ export const getAllValue = createAsyncThunk('valeur/getAll', async (): Promise<A
         });
     return datas;
 })
+
+export const createValue = createAsyncThunk('valeur/ajout', async (dataToAdd: any, { dispatch }): Promise<ApiReturnType> => {
+    let data: ApiReturnType = ApiReturnInitial;
+    await api.post('site/valeur/create',
+        dataToAdd
+    ).then(response => {
+        data = response.data;
+        if (!data.error) {
+            toast('Valeur ajoutée !');
+            dispatch(setHiddeModalValue(true));
+        }
+    }).catch(error => {
+        console.error('( VALEUR ) Erreur lors de la récupération des données:', error.getMessage());
+    });
+    return data;
+})
+
+export const updateValue = createAsyncThunk('valeur/modification', async ({ dataToUpdate, id }: { dataToUpdate: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
+    let data: ApiReturnType = ApiReturnInitial;
+
+    dataToUpdate.append('id_valeur', id.toString());
+
+    await api.post('site/valeur/update', dataToUpdate, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(response => {
+        data = response.data;
+        if (!data.error) {
+            toast('Modification éffectué')
+            dispatch(setHiddeModalValue(true));
+        }
+    }).catch(error => {
+        console.error('( VALEUR ) Erreur lors de la modification :', error.getMessage());
+    });
+    return data;
+})
+
+
+export const deleteValue = createAsyncThunk('valeur/suppression', async (id_valeur: number, { dispatch }): Promise<ApiReturnType> => {
+    let data: ApiReturnType = ApiReturnInitial;
+    if (id_valeur) {
+        await api.delete('site/valeur/delete', {
+            data: { id_valeur },
+            headers: { 'Content-Type': 'application/json' }
+        }).then(response => {
+            data = response.data;
+            if (!data.error) {
+                toast('Suppression effectuée');
+                dispatch(setHiddeModalValue(true));
+            }
+        }).catch(error => {
+            console.error('( VALEUR ) Erreur lors de la suppresion:', error.getMessage());
+        });
+    }
+    return data;
+})
+
+export const publishValue = createAsyncThunk('valeur/publish', async (data_to_publish: any): Promise<ApiReturnType> => {
+    let data: ApiReturnType = ApiReturnInitial;
+    if (data_to_publish) {
+        await api.post('site/valeur/publish', data_to_publish, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => {
+            data = response.data;
+        }).catch(error => {
+            console.error('( Hero ) Erreur lors de la publication :', error.getMessage());
+        });
+    }
+    return data;
+})
+// ?<<<<<<<<< -------------------------------- VALEUR SECTION ---------------------------------
 
 
 

@@ -61,7 +61,6 @@ const Hero: React.FC = () => {
     }, [sliders?.length]);
 
 
-    console.log(action);
 
 
     /**

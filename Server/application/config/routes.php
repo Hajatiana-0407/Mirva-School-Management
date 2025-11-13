@@ -87,6 +87,7 @@ $route['api/site/valeur'] = 'SiteValeurController';
 $route['api/site/valeur/update'] = 'SiteValeurController/update';
 $route['api/site/valeur/create'] = 'SiteValeurController/create';
 $route['api/site/valeur/delete'] = 'SiteValeurController/delete';
+$route['api/site/valeur/publish'] = 'SiteValeurController/publish';
 
 
 //! *********************  ROUTE POUR LE SITE WEB **********************************************************************

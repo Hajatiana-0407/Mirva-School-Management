@@ -1,21 +1,31 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getValueState } from '../../Redux/Slice/Home/ValueSlice';
 import { AppDispatch } from '../../../../Redux/store';
 import { getAllValue } from '../../Redux/AsyncThunk/HomeAsyncThunk';
 import Loading from '../../../../Components/ui/Loading';
 import DynamicLucideIcon from '../../Components/DynamicLucideIcon';
+import { ValueType } from '../../Type';
 
 const Value: React.FC = () => {
-  const { datas: values, action } = useSelector(getValueState);
+  const { datas, action } = useSelector(getValueState);
+  const [values, setValues] = useState<ValueType[]>([])
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
-    if (values?.length == 0) {
+    if (datas?.length == 0) {
       dispatch(getAllValue())
     }
     return () => { }
   }, [dispatch])
+
+  useEffect(() => {
+    if (datas) {
+      const valueActive = datas.filter(data => data.actif == '1');
+      setValues(valueActive);
+    }
+    return () => { }
+  }, [datas])
 
   if (action.isLoading) return <Loading />
   if (values?.length == 0) return '';
