@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootStateType } from "../../../../../Redux/store";
 import { ActionIntialValue, ActionType, ApiReturnType } from "../../../../../Utils/Types";
 import { PresentationInitialValue, PresentationType } from "../../../Type";
-import { getAllPresentation } from "../../AsyncThunk/HomeAsyncThunk";
+import { getAllPresentation, updatePresentation } from "../../AsyncThunk/HomeAsyncThunk";
 
 type initialStateType = {
     action: ActionType,
@@ -41,6 +41,32 @@ const HeroSlice = createSlice({
             })
             .addCase(getAllPresentation.rejected, (state) => {
                 state.action.isLoading = false
+                state.error = 'Erreur de connexion au server';
+            })
+
+
+        // ? Modification 
+        builder
+            .addCase(updatePresentation.pending, (state) => {
+                state.action.isUpdating = true;
+                state.error = '';
+            })
+            .addCase(updatePresentation.fulfilled, (state, action: {
+                payload: ApiReturnType
+            }) => {
+                state.action.isUpdating = false;
+                const { error, data, message } = action.payload;
+                if (error) {
+                    state.error = message as string;
+                } else {
+                    state.error = '';
+                    if ( data?.id_presentation  ){ 
+                        state.datas = data
+                    }
+                }
+            })
+            .addCase(updatePresentation.rejected, (state) => {
+                state.action.isUpdating = false
                 state.error = 'Erreur de connexion au server';
             })
     }

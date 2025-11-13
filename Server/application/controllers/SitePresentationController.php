@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class SitePresentationController extends CI_Controller
 {
-    protected $pk = 'id_slide';
+    protected $pk = 'id_presentation';
     public function __construct()
     {
         parent::__construct();
@@ -16,37 +16,41 @@ class SitePresentationController extends CI_Controller
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode([
-                'error' => false  , 
-                'data' => $data 
+                'error' => false,
+                'data' => $data
             ]));
     }
 
-    public function create()
-    {}
+    public function create() {}
     public function update()
     {
+        $id = $this->input->post($this->pk);
+        $data = [
+            'titre' => $this->input->post('titre'),
+            'description' => $this->input->post('description'),
+            'nombre_eleves' => $this->input->post('nombre_eleves'),
+            'nombre_professeurs' => $this->input->post('nombre_professeurs'),
+            'annees_experience' => $this->input->post('annees_experience'),
+            'taux_reussite' => $this->input->post('taux_reussite'),
+        ];
 
-        // $id_niveau = $this->input->post('id_niveau');
-        // $data = [
-        //     'niveau' => $this->input->post('niveau'),
-        //     'cycle' => $this->input->post('cycle'),
-        //     'description' => $this->input->post('description'),
-        // ];
+        // ? Image
+        if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+            $imageIndetityUpload = upload_file('image', HERO_UPLOAD_DIR);
+            if ($imageIndetityUpload['success']) {
+                $data['image'] = $imageIndetityUpload['file_name'];
+            } else {
+                echo json_encode(['error' => true, 'message' => "Erreur lors de l'upload de l'image de présentation : " . $imageIndetityUpload['error']]);
+                return;
+            }
+        }
 
-        // if ($this->SitePresentationModel->isExist(
-        //     ["niveau" => $data['niveau']],
-        //     'and',
-        //     [$this->pk => $id_niveau]
-        // )) {
-        //     echo json_encode(['error' => true, 'message' => 'Le niveau existe déjà.']);
-        // } else {
-        //     $data =  $this->SitePresentationModel->update($id_niveau, $data);
-        //     if ($data) {
-        //         echo json_encode(['error' => false, 'data' => $data]);
-        //     } else {
-        //         echo json_encode(['error' => true, 'message' => 'Une erreur c\'est produite.']);
-        //     }
-        // }
+        $data =  $this->SitePresentationModel->update($id, $data);
+        if ($data) {
+            echo json_encode(['error' => false, 'data' => $data]);
+        } else {
+            echo json_encode(['error' => true, 'message' => 'Une erreur c\'est produite.']);
+        }
     }
 
     public function delete()
