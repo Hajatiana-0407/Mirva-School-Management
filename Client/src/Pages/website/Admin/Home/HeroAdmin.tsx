@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive, ChevronLeft, ChevronRight, Trash2, ArrowRight } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Archive, ChevronLeft, ChevronRight, Trash2, ArrowRight, X, Eye, EyeOff } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getHeroState } from '../../Redux/Slice/Home/HeroSlice';
 import { getAppState } from '../../../../Redux/AppSlice';
 import { HeroSlideType } from '../../Type';
 import { AppDispatch } from '../../../../Redux/store';
 import { useHashPermission } from '../../../../Hooks/useHashPermission';
-import { deleteSlide, getAllHero } from '../../Redux/AsyncThunk/HomeAsyncThunk';
+import { deleteSlide, getAllHero, publishSlide } from '../../Redux/AsyncThunk/HomeAsyncThunk';
 import Table from '../../../Table';
 import Modal from '../../../Modal';
 import ConfirmDialog from '../../../ConfirmDialog';
@@ -14,8 +14,12 @@ import Title from '../../../../Components/ui/Title';
 import { baseUrl } from '../../../../Utils/Utils';
 import Loading from '../../../../Components/ui/Loading';
 import HeroSlideFrom from '../../Components/Form/HeroSlideFrom';
+import CheckInput from '../../../../Components/ui/CheckInput';
+import useForm from '../../../../Hooks/useForm';
+import { object } from 'yup';
+import { navigate } from '../../../../Utils/navigate';
 
-const HomeSetting: React.FC = () => {
+const HeroAdmin: React.FC = () => {
     const { datas: heroSlices, action } = useSelector(getHeroState);
     const { hiddeTheModalActive } = useSelector(getAppState);
     const [searchTerm, setSearchTerm] = useState('');
@@ -26,6 +30,9 @@ const HomeSetting: React.FC = () => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const dispatch: AppDispatch = useDispatch();
     const permission = useHashPermission({ redirect: true });
+    const [activeImage, setactiveImage] = useState<string | null>(null)
+    // Pour le toggle Active 
+    const { onSubmite } = useForm(object({}), {})
 
     useEffect(() => {
         if (!heroSlices.length) dispatch(getAllHero());
@@ -64,6 +71,16 @@ const HomeSetting: React.FC = () => {
         setEditingSlide(null);
     };
 
+    /**
+     * 
+     * @param e Publication 
+     */
+    const toggleActive = (e: React.FormEvent<HTMLFormElement>) => {
+        onSubmite((validateData) => {
+            dispatch(publishSlide(validateData))
+        }, e)
+    }
+
     const handleSelect = (index: number) => setSelectedIndex(index);
     const handlePrev = () => setSelectedIndex(i => (i <= 0 ? Math.max(0, heroSlices.length - 1) : i - 1));
     const handleNext = () => setSelectedIndex(i => (i >= heroSlices.length - 1 ? 0 : i + 1));
@@ -76,8 +93,35 @@ const HomeSetting: React.FC = () => {
             key: 'image',
             label: 'Image',
             render: (value: string) => (
-                <div className="w-28 h-16 overflow-hidden rounded">
-                    <img src={baseUrl(value || '')} alt="slide" className="object-cover w-full h-full" />
+                <div>
+                    <div className="w-28 h-16 overflow-hidden rounded">
+                        {value ?
+                            <img
+                                src={baseUrl(value || '')}
+                                alt="slide"
+                                className="object-cover w-full h-full"
+                                onClick={() => setactiveImage(value)}
+                            /> :
+                            <span className='text-gray-500 italic'>Aucune image</span>
+                        }
+                    </div>
+                    {activeImage && activeImage == value &&
+                        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+                            <div className="relative max-w-4xl max-h-full">
+                                <img
+                                    src={baseUrl(value)}
+                                    alt="Selected"
+                                    className="max-w-full max-h-full object-contain"
+                                />
+                                <button
+                                    onClick={() => setactiveImage(null)}
+                                    className="absolute top-4 right-4 bg-white text-black p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                                >
+                                    <X className="h-6 w-6" />
+                                </button>
+                            </div>
+                        </div>
+                    }
                 </div>
             )
         },
@@ -87,10 +131,25 @@ const HomeSetting: React.FC = () => {
             render: (value: string, item: HeroSlideType) => (
                 <div className="w-28 h-16 overflow-hidden rounded flex flex-col">
                     <span className='text-md'>{value} </span>
-                    <span className='text-sm italic text-gray-500'>{item.cta_link}</span>
+                    <span className='text-sm italic text-blue-500'>{item.cta_link}</span>
                 </div>
             )
         },
+        {
+            key: 'actif', label: 'Status', render: (value: string, item: HeroSlideType) => (
+                <form onSubmit={toggleActive}>
+                    <input type="hidden" name='id_slide' value={item.id_slide} onChange={() => { }} />
+                    <button type='submit'>
+                        <CheckInput
+                            name='actif'
+                            defaultValue={value === '1'}
+                            color='green'
+                            dependOn={value === '1'}
+                        />
+                    </button>
+                </form>
+            )
+        }
 
     ];
     const actions = [
@@ -104,6 +163,14 @@ const HomeSetting: React.FC = () => {
                 title="Hero - Section Accueil"
                 description="Gérez les slides du carrousel d’accueil : image, titre, sous-titre et lien."
             >
+                <button
+                    onClick={() => navigate('/#hero')}
+                    className="bg-orange-600 text-white px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-orange-700 transition-colors"
+                >
+                    <Eye className="w-5 h-5" />
+                    <span>Voire le site</span>
+                </button>
+
                 {permission.create &&
                     <button
                         onClick={() => setShowModal(true)}
@@ -116,9 +183,9 @@ const HomeSetting: React.FC = () => {
             </Title>
 
             <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
-                <div className="flex flex-col lg:flex-row gap-4">
+                <div className="flex flex-wrap gap-4">
                     {/* left: list & controls */}
-                    <div className="flex-1">
+                    <div className="flex-1 max-w-full">
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center space-x-3">
                                 <div className="relative">
@@ -138,7 +205,7 @@ const HomeSetting: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="overflow-x-auto">
+                        <div className="overflow-x-auto max-full">
                             <Table
                                 data={heroSlices}
                                 columns={columns}
@@ -151,7 +218,7 @@ const HomeSetting: React.FC = () => {
                     </div>
 
                     {/* right: preview */}
-                    <div className="w-full lg:w-1/3 bg-gray-50 rounded-lg p-3 flex flex-col items-center justify-center border">
+                    <div className="flex-1 bg-gray-50 rounded-lg p-3 flex flex-col items-center justify-center border">
                         {action?.isLoading ? (
                             <Loading />
                         ) : heroSlices.length === 0 ? (
@@ -177,8 +244,22 @@ const HomeSetting: React.FC = () => {
                                             </div>
                                         )}
                                     </div>
+
+                                    <form onSubmit={toggleActive} className='absolute top-2 right-2'>
+                                        <input type="hidden" name='id_slide' value={heroSlices[selectedIndex].id_slide} onChange={() => { }} />
+                                        <input type="hidden" name='actif' value={heroSlices[selectedIndex].actif == '1' ? '0' : '1'} onChange={() => { }} />
+
+                                        <button
+                                            type='submit'
+                                            className="text-white"
+                                        >
+                                            {heroSlices[selectedIndex].actif != '1' ? <EyeOff className="w-7 h-7" /> : <Eye className="w-7 h-7" />
+                                            }
+                                        </button>
+                                    </form>
                                 </div>
 
+                                {/* Slide */}
                                 <div className="w-full flex items-center justify-between mt-3">
                                     <button onClick={handlePrev} className="p-2 rounded-md hover:bg-white/40">
                                         <ChevronLeft />
@@ -204,6 +285,7 @@ const HomeSetting: React.FC = () => {
                                     </button>
                                 </div>
 
+                                {/* Boutons  d'action  */}
                                 <div className="w-full flex gap-2 mt-3">
                                     <button
                                         onClick={() => handleEdit(heroSlices[selectedIndex])}
@@ -244,4 +326,4 @@ const HomeSetting: React.FC = () => {
     );
 };
 
-export default HomeSetting;
+export default HeroAdmin;

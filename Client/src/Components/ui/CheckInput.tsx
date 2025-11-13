@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 type CheckInputPropsType = {
     label?: string;
@@ -6,6 +6,7 @@ type CheckInputPropsType = {
     name: string;
     defaultValue?: boolean;
     color?: 'blue' | 'red' | 'green' | 'yellow' | 'purple';
+    dependOn?: any
 };
 
 const colorClasses = {
@@ -42,9 +43,15 @@ const CheckInput: React.FC<CheckInputPropsType> = ({
     name,
     description,
     color = 'blue',
+    dependOn
 }) => {
     const [isCheck, setIsCheck] = useState(defaultValue);
     const c = colorClasses[color] || colorClasses.blue;
+
+    useEffect(() => {
+        setIsCheck(dependOn);
+    }, [dependOn])
+
 
     return (
         <label
@@ -64,6 +71,7 @@ const CheckInput: React.FC<CheckInputPropsType> = ({
                     defaultChecked={isCheck}
                     value={isCheck ? '1' : '0'}
                     name={name}
+                    checked={isCheck}
                 />
                 <div
                     className={`w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full

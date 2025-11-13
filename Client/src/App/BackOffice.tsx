@@ -38,7 +38,7 @@ import { getAllModule } from '../Redux/Other/asyncThunk/ModuleAsyncThunk';
 import ExerciceSingle from '../Pages/Exercices/ExerciceSingle';
 import LevelDetails from '../Pages/Levels/LevelDetails';
 import ClasseDetails from '../Pages/Classes/ClasseDetails';
-import HomeSetting from '../Pages/website/Admin/Home/HomeSetting';
+import HomeSetting from '../Pages/website/Admin/Home/HomeAdmin';
 
 function BackOffice() {
     const dispatch: AppDispatch = useDispatch();

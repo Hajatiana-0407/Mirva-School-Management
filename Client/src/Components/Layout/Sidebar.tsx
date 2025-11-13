@@ -22,7 +22,8 @@ import {
   NotebookPen,
   UserRound,
   Computer,
-  Home
+  Home,
+  Undo2,
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
@@ -35,6 +36,7 @@ import ConfirmDialog from '../../Pages/ConfirmDialog';
 import { AppDispatch } from '../../Redux/store';
 import { logoutUser } from '../../Pages/Auth/redux/AuthAsyncThunk';
 import CollapsedMenuItem from '../CollapsedMenuItem';
+import { navigate } from '../../Utils/navigate';
 
 interface MenuItemType {
   id: string;
@@ -273,7 +275,20 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
       </nav>
 
       {/* Bouton Déconnexion */}
-      <div className="h-max  py-2">
+      <div className="h-max  py-2 space-y-0.5">
+        <button
+          className={clsx(
+            {
+              'justify-center': collapsed,
+              'px-3 md:px-6': !collapsed,
+            },
+            'text-gray-700 hover:bg-slate-300 bg-slate-200 w-full gap-3 flex items-center  py-3 text-left transition-colors group relative'
+          )}
+          onClick={()=>navigate('/')}
+        >
+          <Undo2 className="w-5 h-5 text-gray-600" />
+          {!collapsed && <span>Revenir dans le site</span>}
+        </button>
         <button
           className={clsx(
             {

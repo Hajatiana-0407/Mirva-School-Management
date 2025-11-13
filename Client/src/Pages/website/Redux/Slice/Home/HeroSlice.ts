@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootStateType } from "../../../../../Redux/store";
 import { ActionIntialValue, ActionType, ApiReturnType } from "../../../../../Utils/Types";
 import { HeroSlideType } from "../../../Type";
-import { createSlide, deleteSlide, getAllHero, updateSlide } from "../../AsyncThunk/HomeAsyncThunk";
+import { createSlide, deleteSlide, getAllHero, publishSlide, updateSlide } from "../../AsyncThunk/HomeAsyncThunk";
 import { toast } from "react-toastify";
 
 type initialStateType = {
@@ -37,7 +37,9 @@ const HeroSlice = createSlice({
                 if (error) {
                     state.error = message as string;
                 } else {
-                    state.datas = data
+                    if (data?.length) {
+                        state.datas = data
+                    }
                 }
             })
             .addCase(getAllHero.rejected, (state) => {
@@ -120,6 +122,38 @@ const HeroSlice = createSlice({
             })
             .addCase(deleteSlide.rejected, (state) => {
                 state.action.isDeleting = false;
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
+            })
+
+        // ? Publication ( afficher ou cache dans page d'accueil ) 
+        builder
+            .addCase(publishSlide.pending, (state) => {
+                state.action.isUpdating = true;
+                state.error = '';
+            })
+            .addCase(publishSlide.fulfilled, (state, action: {
+                payload: ApiReturnType
+            }) => {
+                state.action.isUpdating = false;
+                const { error, data, message } = action.payload;
+                if (error) {
+                    state.error = message as string;
+                } else {
+                    state.error = '';
+                    state.datas = state.datas.map(slide => {
+                        if (slide.id_slide === data?.id_slide) {
+                            return {
+                                ...data,
+                                id_slide: slide.id_slide
+                            }
+                        }
+                        return slide
+                    })
+                }
+            })
+            .addCase(publishSlide.rejected, (state) => {
+                state.action.isUpdating = false
                 state.error = 'Erreur de connexion au server';
                 toast.error("Erreur de connexion au server");
             })

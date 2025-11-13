@@ -83,9 +83,6 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
         { label: 'Femme', value: 'Femme' },
     ];
 
-
-    console.log('Form erreur : ', formErrors);
-
     // ! Level input options
     const levelOptions = levelDatas.map((level) => ({ value: level.id_niveau as number, label: level.niveau }));
     // ! Année scolaire 

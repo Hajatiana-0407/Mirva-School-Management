@@ -5,7 +5,7 @@ import { setHiddeModalValue } from "../../../../Redux/AppSlice";
 import { toast } from "react-toastify";
 
 
-// Hero 
+// ? --------------------------------- HERO SLIDE SECTION ---------------------------------
 export const getAllHero = createAsyncThunk('hero/getAll', async (): Promise<ApiReturnType> => {
     let datas: ApiReturnType = ApiReturnInitial;
     await api.get('site/hero')
@@ -21,7 +21,7 @@ export const getAllHero = createAsyncThunk('hero/getAll', async (): Promise<ApiR
 
 export const createSlide = createAsyncThunk('slide/ajout', async (subject: any, { dispatch }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
-    await api.post('site/hero/create', 
+    await api.post('site/hero/create',
         subject
     ).then(response => {
         data = response.data;
@@ -50,7 +50,7 @@ export const updateSlide = createAsyncThunk('slide/modification', async ({ dataT
             dispatch(setHiddeModalValue(true));
         }
     }).catch(error => {
-        console.error('Erreur lors de la récupération des données:', error.getMessage());
+        console.error('Erreur lors de la modification :', error.getMessage());
     });
     return data;
 })
@@ -65,15 +65,32 @@ export const deleteSlide = createAsyncThunk('slide/suppression', async (id_slide
         }).then(response => {
             data = response.data;
             if (!data.error) {
-                 toast('Suppression effectuée');
+                toast('Suppression effectuée');
                 dispatch(setHiddeModalValue(true));
             }
         }).catch(error => {
-            console.error('( Hero ) Erreur lors de la récupération des données:', error.getMessage());
+            console.error('( Hero ) Erreur lors de la suppresion:', error.getMessage());
         });
     }
     return data;
 })
+
+export const publishSlide = createAsyncThunk('slide/publish', async ( data_to_publish : any): Promise<ApiReturnType> => {
+    let data: ApiReturnType = ApiReturnInitial;
+    if ( data_to_publish ) {
+        await api.post('site/hero/publish', data_to_publish, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(response => {
+            data = response.data;
+        }).catch(error => {
+            console.error('( Hero ) Erreur lors de la publication :', error.getMessage());
+        });
+    }
+    return data;
+})
+
+// ? <<<<<<<-------------------------------- HERO SLIDE SECTION ---------------------------------
+
 
 // Welcome 
 export const getAllPresentation = createAsyncThunk('presentation/getAll', async (): Promise<ApiReturnType> => {
@@ -100,3 +117,6 @@ export const getAllValue = createAsyncThunk('valeur/getAll', async (): Promise<A
         });
     return datas;
 })
+
+
+

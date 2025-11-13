@@ -11,6 +11,7 @@ import VideoOrFileInput from '../../../../Components/ui/VideoOrFileInput';
 import { baseUrl } from '../../../../Utils/Utils';
 import Input from '../../../../Components/ui/Input';
 import { createSlide, updateSlide } from '../../Redux/AsyncThunk/HomeAsyncThunk';
+import CheckInput from '../../../../Components/ui/CheckInput';
 
 // Validation de donnée avec yup 
 const slideSchema = object({
@@ -92,6 +93,13 @@ const HeroSlideFrom: React.FC<HeroSlideFromPropsType> = ({ slide, handleClose })
                     errorMessage={formErrors?.cta_link}
                     type='select'
                     options={cta_link_options}
+                />
+
+                <CheckInput
+                    name='actif'
+                    defaultValue={ slide?.actif ? slide.actif == '1' : true }
+                    label='Publié cette slide'
+                    description="Si oui le slide seras visible dans la page d'acuueil du site."
                 />
             </div>
 
