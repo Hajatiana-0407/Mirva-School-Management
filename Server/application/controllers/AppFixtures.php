@@ -25,7 +25,7 @@ class AppFixtures extends CI_Controller
      *
      * @return void
      */
-    private function loadConfigurations($clean = false)
+    public function loadConfigurations($clean = false)
     {
 
         // Vider les tables (dans l’ordre inverse des dépendances)
@@ -237,7 +237,7 @@ class AppFixtures extends CI_Controller
      *
      * @return void
      */
-    private function LoadEleveParent($clean = false)
+    public function LoadEleveParent($clean = false)
     {
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
@@ -329,7 +329,7 @@ class AppFixtures extends CI_Controller
      *
      * @return void
      */
-    private function loadPersonnel($clean = false)
+    public function loadPersonnel($clean = false)
     {
 
         // Vider les tables (dans l’ordre inverse des dépendances)
@@ -441,7 +441,7 @@ class AppFixtures extends CI_Controller
      * @param boolean $clean
      * @return void
      */
-    private function loadRoles($clean = false)
+    public function loadRoles($clean = false)
     {
         $this->model->emptyDb([
             'modules',
@@ -653,7 +653,7 @@ class AppFixtures extends CI_Controller
      * @param boolean $clean
      * @return void
      */
-    private function loadLeconExercice($clean = false)
+    public function loadLeconExercice($clean = false)
     {
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
@@ -722,7 +722,7 @@ class AppFixtures extends CI_Controller
     }
 
 
-    private function registration($clean = false)
+    public function registration($clean = false)
     {
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
