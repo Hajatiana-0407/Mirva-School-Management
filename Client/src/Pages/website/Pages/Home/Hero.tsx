@@ -75,13 +75,13 @@ const Hero: React.FC = () => {
 
                 {sliders?.map((slide, index) => (
                     <div
-                        key={slide.id_slide}
+                        key={`${slide?.id_slide}-slide`}
                         className={`absolute bg-right inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'
                             }`}
                     >
                         <div
                             className="absolute inset-0 bg-cover bg-center bg-blend-overlay"
-                            style={{ backgroundImage: `url(${baseUrl(slide.image)})` }}
+                            style={{ backgroundImage: `url(${baseUrl(slide?.image)})` }}
                         />
                     </div>
                 ))}
@@ -91,8 +91,8 @@ const Hero: React.FC = () => {
 
                     {/* Bouton vers le dashbord pour modifier si l'utilisateur a le droit */}
                     {adminPermission.read &&
-                        <Link 
-                        to={'/back-office/homepage-settings?section=hero'}
+                        <Link
+                            to={'/back-office/homepage-settings?section=hero'}
                             className="bg-lime-600 text-white px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-lime-700 transition-colors absolute top-5 right-4 sm:right-6 lg:right-8 z-40"
                         >
                             <PenBox className="w-5 h-5" />
@@ -138,7 +138,7 @@ const Hero: React.FC = () => {
                 <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-2">
                     {sliders?.map((_, index) => (
                         <button
-                            key={index}
+                            key={`${_.id_slide}-dot`}
                             onClick={() => setCurrentSlide(index)}
                             className={`w-3 h-3 rounded-full transition-all duration-200 ${index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
                                 }`}

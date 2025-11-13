@@ -13,7 +13,7 @@ const Presentaion: React.FC = () => {
     const dispatch: AppDispatch = useDispatch();
 
     useEffect(() => {
-        if (!presentations.id_presentation) {
+        if (!presentations?.id_presentation) {
             dispatch(getAllPresentation());
         }
         return () => { }
@@ -22,10 +22,10 @@ const Presentaion: React.FC = () => {
 
     // Statistique de l'etat de l'ecole 
     const stats = [
-        { icon: Users, value: `${presentations.nombre_eleves}+`, label: 'Élèves' },
-        { icon: BookOpen, value: `${presentations.nombre_professeurs}+`, label: 'Enseignants' },
-        { icon: Award, value: `${presentations.annees_experience}+`, label: 'Années d\'expérience' },
-        { icon: Heart, value: `${presentations.taux_reussite}%`, label: 'Réussite' },
+        { icon: Users, value: `${presentations?.nombre_eleves}+`, label: 'Élèves' },
+        { icon: BookOpen, value: `${presentations?.nombre_professeurs}+`, label: 'Enseignants' },
+        { icon: Award, value: `${presentations?.annees_experience}+`, label: 'Années d\'expérience' },
+        { icon: Heart, value: `${presentations?.taux_reussite}%`, label: 'Réussite' },
     ];
 
     // Loading 
@@ -41,14 +41,14 @@ const Presentaion: React.FC = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     <div>
                         <h2 className="text-3xl lg:text-4xl font-bold text-primary-800 mb-6">
-                            {presentations.titre}
+                            {presentations?.titre}
                         </h2>
                         <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                            {presentations.description}
+                            {presentations?.description}
                         </p>
                         <div className="grid grid-cols-2 gap-6">
-                            {stats.map((stat, index) => (
-                                <div key={index} className="text-center p-4 bg-primary-50 rounded-lg">
+                            {stats.map((stat) => (
+                                <div key={`${ stat.label}-state`} className="text-center p-4 bg-primary-50 rounded-lg">
                                     <stat.icon className="h-8 w-8 text-primary-600 mx-auto mb-2" />
                                     <div className="text-2xl font-bold text-primary-800">{stat.value}</div>
                                     <div className="text-sm text-primary-600">{stat.label}</div>
@@ -58,7 +58,7 @@ const Presentaion: React.FC = () => {
                     </div>
                     <div className="relative">
                         <img
-                            src={baseUrl(presentations.image)}
+                            src={baseUrl(presentations?.image)}
                             alt="Students learning"
                             className="rounded-lg shadow-xl w-full h-96 object-cover"
                         />
