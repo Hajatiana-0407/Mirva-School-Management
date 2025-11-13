@@ -29,7 +29,7 @@ const Hero: React.FC = () => {
      * Récupération des données
      */
     useEffect(() => {
-        if (!sliders?.length) {
+        if (sliders?.length == 0 ) {
             dispatch(getAllHero());
         }
     }, [dispatch, sliders?.length]);
@@ -59,6 +59,10 @@ const Hero: React.FC = () => {
 
         return () => clearInterval(timer);
     }, [sliders?.length]);
+
+
+    console.log(action);
+
 
     /**
      * Si les données ne sont pas encore chargées

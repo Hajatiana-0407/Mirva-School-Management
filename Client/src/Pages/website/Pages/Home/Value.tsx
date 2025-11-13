@@ -4,20 +4,21 @@ import { getValueState } from '../../Redux/Slice/Home/ValueSlice';
 import { AppDispatch } from '../../../../Redux/store';
 import { getAllValue } from '../../Redux/AsyncThunk/HomeAsyncThunk';
 import Loading from '../../../../Components/ui/Loading';
+import DynamicLucideIcon from '../../Components/DynamicLucideIcon';
 
 const Value: React.FC = () => {
-  const { datas: values , action } = useSelector(getValueState);
+  const { datas: values, action } = useSelector(getValueState);
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
-    if (!values?.length) {
+    if (values?.length == 0) {
       dispatch(getAllValue())
     }
     return () => { }
   }, [dispatch])
 
-  if (action.isLoading )return <Loading/>
-  if ( values?.length == 0 ) return '' ; 
+  if (action.isLoading) return <Loading />
+  if (values?.length == 0) return '';
   return (
     <section className="py-16 bg-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,7 +34,7 @@ const Value: React.FC = () => {
               className="text-center bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
               <div className="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                {/* <Award className="h-8 w-8 text-primary-600" /> */}
+                <DynamicLucideIcon iconName={value.icone as string} color='blue' size='7' />
               </div>
               <h3 className="text-xl font-semibold text-primary-800 mb-3">
                 {value?.titre}
