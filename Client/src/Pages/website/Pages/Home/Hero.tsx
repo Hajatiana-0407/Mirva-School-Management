@@ -15,9 +15,7 @@ const Hero: React.FC = () => {
     const { datas, action } = useSelector(getHeroState);
     const [sliders, setSliders] = useState<HeroSlideType[]>()
     const adminPermission = useHashPermission({ id: "homepage-settings" })
-
     const dispatch: AppDispatch = useDispatch();
-
     const currentSlideData: HeroSlideType = sliders?.[currentSlide] || HeroSlideInitialValue;
 
     useEffect(() => {
@@ -75,7 +73,7 @@ const Hero: React.FC = () => {
 
             {/* Slider - Images */}
             <div className="relative h-screen">
-
+                <div className='bg-gradient-to-r from-black via-black/50 to-primary-300/20 absolute inset-0 z-10'></div>
                 {sliders?.map((slide, index) => (
                     <div
                         key={`${slide?.id_slide}-slide`}
@@ -83,7 +81,7 @@ const Hero: React.FC = () => {
                             }`}
                     >
                         <div
-                            className="absolute inset-0 bg-cover bg-center bg-blend-overlay"
+                            className="absolute inset-0 bg-cover bg-right-top bg-blend-overlay"
                             style={{ backgroundImage: `url(${baseUrl(slide?.image)})` }}
                         />
                     </div>

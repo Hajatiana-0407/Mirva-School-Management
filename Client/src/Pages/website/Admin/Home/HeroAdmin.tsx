@@ -232,7 +232,8 @@ const HeroAdmin: React.FC = () => {
                                         alt="hero preview"
                                         className="object-cover w-full h-full opacity-90"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                                    <div className="absolute inset-0 bg-gradient-to-r from-black via-black/50 to-primary-300/20 pointer-events-none" />
+
                                     <div className="absolute bottom-4 left-4 right-4 text-white space-y-2">
                                         <div className="text-lg font-bold truncate">{heroSlices[selectedIndex]?.titre}</div>
                                         <div className="text-sm opacity-90 truncate">{heroSlices[selectedIndex]?.soustitre}</div>
