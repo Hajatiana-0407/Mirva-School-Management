@@ -22,15 +22,15 @@ const Presentaion: React.FC = () => {
 
     // Statistique de l'etat de l'ecole 
     const stats = [
-        { icon: Users, value: `${presentations?.nombre_eleves}+`, label: 'Élèves' },
-        { icon: BookOpen, value: `${presentations?.nombre_professeurs}+`, label: 'Enseignants' },
-        { icon: Award, value: `${presentations?.annees_experience}+`, label: 'Années d\'expérience' },
-        { icon: Heart, value: `${presentations?.taux_reussite}%`, label: 'Réussite' },
+        { icon: Users, value: `${presentations?.nombre_eleves || '0'}+`, label: 'Élèves' },
+        { icon: BookOpen, value: `${presentations?.nombre_professeurs || '0'}+`, label: 'Enseignants' },
+        { icon: Award, value: `${presentations?.annees_experience || '0'}+`, label: 'Années d\'expérience' },
+        { icon: Heart, value: `${presentations?.taux_reussite || '0'}%`, label: 'Réussite' },
     ];
 
     // Loading 
     if (action.isLoading) return <Loading />
-
+    if ( !presentations.id_presentation) return ''
     return (
         <section className="py-16 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
