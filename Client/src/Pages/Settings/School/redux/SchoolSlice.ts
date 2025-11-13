@@ -35,7 +35,9 @@ const SchoolSlice = createSlice({
                 payload: ShoolInfoType
             }) => {
                 state.action.isLoading = false;
-                state.datas = action.payload;
+                if (!!action.payload) {
+                    state.datas = action.payload;
+                }
             })
             .addCase(getSchoolInfo.rejected, (state) => {
                 state.action.isLoading = false;
@@ -51,8 +53,8 @@ const SchoolSlice = createSlice({
                 payload: ApiReturnType
             }) => {
                 state.action.isUpdating = false;
-                const {  data } = action.payload;
-                state.datas = data as ShoolInfoType ;
+                const { data } = action.payload;
+                state.datas = data as ShoolInfoType;
             })
             .addCase(updateSchoolInfo.rejected, (state) => {
                 state.action.isUpdating = false

@@ -239,7 +239,7 @@ const Lesson = () => {
                 <div className="mt-auto flex items-center justify-between space-x-2">
                   <div>
                     <Link
-                      to={`/lessons/${lesson.slug}`}
+                      to={`/back-office/lessons/${lesson.slug}`}
                       className="bg-blue-600 border border-blue-700 rounded-lg px-4 py-1 text-white hover:bg-blue-700 transition flex items-center">
                       <span className='max-md:hidden-susp'>Voir plus</span>
                       <Eye className=' ms-2' />

@@ -28,6 +28,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
   const [itemsPerPage] = useState(10);
   const permission = useHashPermission(  { redirect : true  });
 
+
   // RECHERCHE
   const filteredData = data.filter((item) =>
     Object.values(item).some((value) =>

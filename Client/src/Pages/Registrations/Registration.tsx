@@ -76,7 +76,7 @@ const Registration: React.FC = () => {
           fullName={`${value} ${item.prenom}`}
           identification={item.matricule_etudiant}
           photo={item.photo as string}
-          link={`/students/${item.matricule_etudiant}`}
+          link={`/back-office/students/${item.matricule_etudiant}`}
         />
       )
     },

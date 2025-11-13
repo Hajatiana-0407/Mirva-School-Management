@@ -98,6 +98,7 @@ defined('STUDENT_PRIFIX') or define('STUDENT_PRIFIX', 'ST-');
 defined('PERSONNEL_UPLOAD_DIR') or define('PERSONNEL_UPLOAD_DIR', 'public/uploads/personnel/');
 defined('STUDENT_UPLOAD_DIR') or define('STUDENT_UPLOAD_DIR',  'public/uploads/etudiant/');
 defined('PARENT_UPLOAD_DIR') or define('PARENT_UPLOAD_DIR',  'public/uploads/parents/');
+defined('HERO_UPLOAD_DIR') or define('HERO_UPLOAD_DIR',  'public/uploads/site/hero');
 defined('MAX_UPLOAD_FILE') or define('MAX_UPLOAD_FILE',  524288000);
 
 // ************************************************* //

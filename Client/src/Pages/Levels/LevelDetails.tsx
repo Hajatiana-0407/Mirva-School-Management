@@ -160,7 +160,7 @@ const LevelDetails: React.FC = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
                                 {classes.map((c) => (
                                     <Link
-                                        to={`/classes/${c.id_classe}`}
+                                        to={`/back-office/classes/${c.id_classe}`}
                                         key={c.id_classe}
                                         className="bg-white border rounded-lg p-3 flex items-center justify-between hover:bg-gray-100 transition-all duration-150"
                                     >
@@ -208,7 +208,7 @@ const LevelDetails: React.FC = () => {
                                         photo={teacher.photo as string}
                                         copy={false}
                                         identification={teacher.matricule_personnel}
-                                        link={`/employees/${teacher.matricule_personnel}`}
+                                        link={`/back-office/employees/${teacher.matricule_personnel}`}
                                     />
                                 ))}
                             </div>

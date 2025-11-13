@@ -2,7 +2,7 @@
 class MatiereClasseProfModel extends CI_Model
 {
     protected $table = 'classe_proffesseur_matiere';
-    protected $pk = 'classe_id_classe';
+    protected $primaryKey = 'classe_id_classe';
 
     public function __construct()
     {

@@ -20,7 +20,10 @@ import {
   BookOpenText,
   Power,
   NotebookPen,
-  UserRound
+  UserRound,
+  Computer,
+  Home,
+  Undo2,
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
@@ -33,6 +36,7 @@ import ConfirmDialog from '../../Pages/ConfirmDialog';
 import { AppDispatch } from '../../Redux/store';
 import { logoutUser } from '../../Pages/Auth/redux/AuthAsyncThunk';
 import CollapsedMenuItem from '../CollapsedMenuItem';
+import { navigate } from '../../Utils/navigate';
 
 interface MenuItemType {
   id: string;
@@ -49,19 +53,19 @@ interface SidebarPropsType {
 
 // Liste des menues
 const menuItems: MenuItemType[] = [
-  { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard, path: '/dashboard' },
-  { id: 'registration', label: 'Inscriptions', icon: UserPlus, path: '/registration' },
-  { id: 'students', label: 'Élèves', icon: Users, path: '/students' },
-  { id: 'schedule', label: 'Emploi du temps', icon: Calendar, path: '/schedule' },
-  { id: 'attendance', label: 'Présences', icon: UserCog, path: '/attendance' },
-  { id: 'exams', label: 'Examens et Notes', icon: FileText, path: '/exams' },
+  { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard, path: '/back-office/dashboard' },
+  { id: 'registration', label: 'Inscriptions', icon: UserPlus, path: '/back-office/registration' },
+  { id: 'students', label: 'Élèves', icon: Users, path: '/back-office/students' },
+  { id: 'schedule', label: 'Emploi du temps', icon: Calendar, path: '/back-office/schedule' },
+  { id: 'attendance', label: 'Présences', icon: UserCog, path: '/back-office/attendance' },
+  { id: 'exams', label: 'Examens et Notes', icon: FileText, path: '/back-office/exams' },
   {
     id: 'course',
     label: 'Leçons et exercices',
     icon: Notebook,
     children: [
-      { id: 'lessons', label: 'Leçons', icon: BookOpenText, path: '/lessons' },
-      { id: 'exercices', label: 'Exercices', icon: NotebookPen, path: '/exercices' },
+      { id: 'lessons', label: 'Leçons', icon: BookOpenText, path: '/back-office/lessons' },
+      { id: 'exercices', label: 'Exercices', icon: NotebookPen, path: '/back-office/exercices' },
     ],
   },
   {
@@ -69,11 +73,11 @@ const menuItems: MenuItemType[] = [
     label: 'Administration',
     icon: UserCheck,
     children: [
-      { id: 'employees', label: 'Employés', icon: UserRound, path: '/employees' },
-      { id: 'teachers', label: 'Enseignants', icon: UserCheck, path: '/teachers' },
-      { id: 'parents', label: 'Parents', icon: Users, path: '/parents' },
-      { id: 'payments', label: 'Paiements', icon: CreditCard, path: '/payments' },
-      { id: 'messages', label: 'Messagerie', icon: MessageSquare, path: '/messages' },
+      { id: 'employees', label: 'Employés', icon: UserRound, path: '/back-office/employees' },
+      { id: 'teachers', label: 'Enseignants', icon: UserCheck, path: '/back-office/teachers' },
+      { id: 'parents', label: 'Parents', icon: Users, path: '/back-office/parents' },
+      { id: 'payments', label: 'Paiements', icon: CreditCard, path: '/back-office/payments' },
+      { id: 'messages', label: 'Messagerie', icon: MessageSquare, path: '/back-office/messages' },
     ],
   },
   {
@@ -81,11 +85,19 @@ const menuItems: MenuItemType[] = [
     label: 'Configuration',
     icon: Settings,
     children: [
-      { id: 'school-year', label: 'Année scolaire', icon: Backpack, path: '/school-year' },
-      { id: 'levels', label: 'Niveaux', icon: GraduationCap, path: '/levels?o=list-level' },
-      { id: 'classes', label: 'Classes', icon: School, path: '/classes' },
-      { id: 'subjects', label: 'Matières', icon: BookOpen, path: '/subjects' },
-      { id: 'settings', label: 'Paramètres', icon: Settings, path: '/settings' },
+      { id: 'school-year', label: 'Année scolaire', icon: Backpack, path: '/back-office/school-year' },
+      { id: 'levels', label: 'Niveaux', icon: GraduationCap, path: '/back-office/levels?o=list-level' },
+      { id: 'classes', label: 'Classes', icon: School, path: '/back-office/classes' },
+      { id: 'subjects', label: 'Matières', icon: BookOpen, path: '/back-office/subjects' },
+      { id: 'settings', label: 'Paramètres', icon: Settings, path: '/back-office/settings' },
+    ],
+  },
+  {
+    id: 'website-settings',
+    label: 'Paramètres du site',
+    icon: Computer,
+    children: [
+      { id: 'homepage-settings', label: "Page d'accueil", icon: Home, path: '/back-office/homepage-settings' },
     ],
   },
 ];
@@ -263,7 +275,20 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
       </nav>
 
       {/* Bouton Déconnexion */}
-      <div className="h-max  py-2">
+      <div className="h-max  py-2 space-y-0.5">
+        <button
+          className={clsx(
+            {
+              'justify-center': collapsed,
+              'px-3 md:px-6': !collapsed,
+            },
+            'text-gray-700 hover:bg-slate-300 bg-slate-200 w-full gap-3 flex items-center  py-3 text-left transition-colors group relative'
+          )}
+          onClick={()=>navigate('/')}
+        >
+          <Undo2 className="w-5 h-5 text-gray-600" />
+          {!collapsed && <span>Revenir dans le site</span>}
+        </button>
         <button
           className={clsx(
             {
