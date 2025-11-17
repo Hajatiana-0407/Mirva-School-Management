@@ -91,11 +91,11 @@ const TabFilter: React.FC<TabFilterPropsType> = ({ filters, order }) => {
                         }
                     })}
                     <div className='flex flex-1 gap-2 justify-end'>
-                        <button className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe     rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-color">
+                        <button className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe     rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-color">
                             <Filter className="w-4 h-4" />
                             <span>Filtres</span>
                         </button>
-                        <button className="bg-slate-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-slate-700 transition-color">
+                        <button className="bg-slate-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-slate-700 transition-color">
                             <X className="w-4 h-4" />
                         </button>
                     </div>

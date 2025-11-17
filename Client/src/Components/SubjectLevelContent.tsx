@@ -17,7 +17,7 @@ const SubjectLevelContent = ({ value, item }: SubjectLevelContentProps) => {
         <div>
             {value.length > 0 &&
                 item.classes?.slice(0, (!isShowAll ? 3 : item.classes.length + 1)).map((classe, index) => (
-                    <div key={index} className="border-b border-gray-300 last:border-0 text-sm flex">
+                    <div key={index} className="border-b border-secondary-300 last:border-0 text-sm flex">
                         <div className="font-semibold border-r pe-2 py-2 min-w-24">{classe.denomination}</div>
                         <div className="ml-2 py-2 flex gap-1 items-center min-w-40  max-w-52 flex-wrap">
                             {classe.matieres?.map((subject) => (
@@ -35,11 +35,11 @@ const SubjectLevelContent = ({ value, item }: SubjectLevelContentProps) => {
 
             {item.classes && item.classes.length > 3 && (
                 <div className="flex justify-between mt-2">
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-secondary-500">
                         {!isShowAll && <>et {item.classes.length - 3} autre{item.classes.length - 3 > 1 ? 's' : ''}...</>}
                     </div>
                     <div
-                        className="text-sm px-2 py-0.5 text-white flex items-center gap-1 cursor-pointer bg-cyan-500 rounded"
+                        className="text-sm px-2 py-0.5 text-light flex items-center gap-1 cursor-pointer bg-cyan-500 rounded"
                         onClick={() => setIsShowAll((v) => !v)}
                     >
                         {!isShowAll ? "Tout afficher" : "Masquer"}
@@ -50,7 +50,7 @@ const SubjectLevelContent = ({ value, item }: SubjectLevelContentProps) => {
 
             {!value.length && (
                 <div
-                    className="p-2 rounded text-xs text-gray-400 hover:bg-gray-50 cursor-pointer"
+                    className="p-2 rounded text-xs text-secondary-400 hover:bg-secondary-50 cursor-pointer"
                     onClick={() => navigate("/back-office/teachers/" + item.matricule_personnel)}
                 >
                     + Ajouter

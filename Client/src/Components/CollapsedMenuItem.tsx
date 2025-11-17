@@ -27,8 +27,8 @@ const CollapsedMenuItem: React.FC<CollapsedMenuItemProps> = ({
                     clsx(
                         "justify-center w-full flex items-center py-3 text-left transition-colors group relative",
                         isActive
-                            ? "bg-blue-50 text-blue-700 border-r-2 border-blue-700"
-                            : "text-gray-700 hover:bg-gray-50"
+                            ? "bg-primary-50 text-primary-700 border-r-2 border-primary-700"
+                            : "text-secondary-700 hover:bg-secondary-50"
                     )
                 }
             >

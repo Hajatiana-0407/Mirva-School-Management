@@ -29,7 +29,7 @@ const Layout = () => {
   }, []);
 
   return (
-    <div className="bg-gray-50 relative h-screen max-h-screen">
+    <div className="bg-secondary-50 relative h-screen max-h-screen">
       
       {/* Loading pour la déconexion */}
       {isLoginOut &&

@@ -69,7 +69,7 @@ const Hero: React.FC = () => {
     if (sliders?.length === 0) return ''
 
     return (
-        <section className="relative text-white overflow-hidden bg-gradient-to-r from-teal-800 to-teal-900">
+        <section className="relative text-light overflow-hidden bg-gradient-to-r from-teal-800 to-teal-900">
 
             {/* Slider - Images */}
             <div className="relative h-screen">
@@ -94,7 +94,7 @@ const Hero: React.FC = () => {
                     {adminPermission.read &&
                         <Link
                             to={'/back-office/homepage-settings?section=admin-hero'}
-                            className="bg-lime-600 text-white px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-lime-700 transition-colors absolute top-5 right-4 sm:right-6 lg:right-8 z-40"
+                            className="bg-lime-600 text-light px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-lime-700 transition-colors absolute top-5 right-4 sm:right-6 lg:right-8 z-40"
                         >
                             <PenBox className="w-5 h-5" />
                             <span>Modifier cette section</span>
@@ -105,14 +105,14 @@ const Hero: React.FC = () => {
                         <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight min-h-[1.2em]">
                             {currentSlideData.titre}
                         </h1>
-                        <p className="text-xl lg:text-2xl mb-8 text-blue-100 min-h-[1.2em]">
+                        <p className="text-xl lg:text-2xl mb-8 text-primary-100 min-h-[1.2em]">
                             {currentSlideData.soustitre}
                         </p>
 
                         {currentSlideData.cta && (
                             <Link
                                 to={currentSlideData.cta_link || '/about'}
-                                className="inline-flex items-center space-x-2 bg-primary-500 hover:bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                                className="inline-flex items-center space-x-2 bg-primary-500 hover:bg-primary-600 text-light px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
                             >
                                 <span>{currentSlideData.cta}</span>
                                 <ArrowRight className="h-5 w-5" />
@@ -124,13 +124,13 @@ const Hero: React.FC = () => {
                 {/* Flèches de navigation */}
                 <button
                     onClick={prevSlide}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-3 rounded-full transition-all duration-200"
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-light bg-opacity-20 hover:bg-opacity-30 text-light p-3 rounded-full transition-all duration-200"
                 >
                     <ChevronLeft className="h-6 w-6" />
                 </button>
                 <button
                     onClick={nextSlide}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-3 rounded-full transition-all duration-200"
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-light bg-opacity-20 hover:bg-opacity-30 text-light p-3 rounded-full transition-all duration-200"
                 >
                     <ChevronRight className="h-6 w-6" />
                 </button>
@@ -141,7 +141,7 @@ const Hero: React.FC = () => {
                         <button
                             key={`${_.id_slide}-dot`}
                             onClick={() => setCurrentSlide(index)}
-                            className={`w-3 h-3 rounded-full transition-all duration-200 ${index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
+                            className={`w-3 h-3 rounded-full transition-all duration-200 ${index === currentSlide ? 'bg-light' : 'bg-light bg-opacity-50'
                                 }`}
                         />
                     ))}

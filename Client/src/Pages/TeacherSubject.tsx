@@ -221,10 +221,10 @@ const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) =
                             min={1}
                             value={editHour}
                             onChange={handleEditHourChange}
-                            className="w-16 border border-gray-300 rounded px-2 py-1 text-center"
+                            className="w-16 border border-secondary-300 rounded px-2 py-1 text-center"
                         />
                         <button
-                            className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                            className="bg-primary-500 text-light px-2 py-1 rounded hover:bg-primary-600"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 e.preventDefault();
@@ -239,7 +239,7 @@ const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) =
                     <div className="flex items-center gap-2">
                         {value}
                         <button
-                            className="text-blue-500 hover:text-blue-700"
+                            className="text-primary-500 hover:text-primary-700"
                             onClick={() => handleEditHour(item.index, value)}
                             title="Modifier"
                         >
@@ -257,8 +257,8 @@ const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) =
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
                 {/* Colonne 1 */}
                 <div className="col-span-2 rounded p-1">
-                    <h2 className='text-sm col-span-2 text-gray-500 italic mb-4'>Attribution matière(s) et classe(s) a cette enseigant </h2>
-                    <div className="col-span-2 rounded  bg-white flex flex-col gap-4">
+                    <h2 className='text-sm col-span-2 text-secondary-500 italic mb-4'>Attribution matière(s) et classe(s) a cette enseigant </h2>
+                    <div className="col-span-2 rounded  bg-light flex flex-col gap-4">
                         {/* Choix matière */}
                         <div>
                             <Input
@@ -273,7 +273,7 @@ const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) =
 
                         {/* Sélection classes toujours affichée */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Classes :</label>
+                            <label className="block text-sm font-medium text-secondary-700 mb-1">Classes :</label>
                             <div className="rounded mb-2">
                                 <div className="flex px-2 py-1 sm:px-4 sm:py-2 _classe border-b text-base font-semibold mb-2 rounded-t-2xl">
                                     <div className="w-10"></div>
@@ -290,14 +290,14 @@ const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) =
                                         return (
                                             <label
                                                 key={classe.id_classe || idx}
-                                                className={`flex items-center px-2 py-1 sm:px-4 sm:py-2 _classe bg-white rounded border border-gray-200 hover:shadow-sm transition mb-1 cursor-pointer ${disabled ? "opacity-50 pointer-events-none" : ""}`}
+                                                className={`flex items-center px-2 py-1 sm:px-4 sm:py-2 _classe bg-light rounded border border-secondary-200 hover:shadow-sm transition mb-1 cursor-pointer ${disabled ? "opacity-50 pointer-events-none" : ""}`}
                                                 htmlFor={`__classe_input_${classe.id_classe}`}
                                             >
                                                 {/* Checkbox */}
                                                 <div className="w-10 flex items-center justify-center">
                                                     <input
                                                         type="checkbox"
-                                                        className="peer appearance-none w-6 h-6 border-2 border-blue-300 rounded-md bg-blue-50 checked:bg-blue-500 checked:border-blue-500 transition cursor-pointer"
+                                                        className="peer appearance-none w-6 h-6 border-2 border-primary-300 rounded-md bg-primary-50 checked:bg-primary-500 checked:border-primary-500 transition cursor-pointer"
                                                         id={`__classe_input_${classe.id_classe}`}
                                                         checked={checked}
                                                         disabled={disabled}
@@ -305,7 +305,7 @@ const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) =
                                                     />
                                                 </div>
                                                 {/* Nom de la classe */}
-                                                <div className="flex-1 flex items-center font-semibold text-gray-800 pl-2">
+                                                <div className="flex-1 flex items-center font-semibold text-secondary-800 pl-2">
                                                     {classe.denomination}
                                                 </div>
                                                 {/* Input heure/semaine avec icône */}
@@ -314,38 +314,38 @@ const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) =
                                                         type="number"
                                                         min={1}
                                                         className={clsx({
-                                                            'border border-gray-500': checked,
-                                                            'border border-gray-200': !checked,
-                                                        }, "w-full  px-3 py-1 bg-gray-50 focus:ring-2 focus:ring-blue-200 font-medium")}
+                                                            'border border-secondary-500': checked,
+                                                            'border border-secondary-200': !checked,
+                                                        }, "w-full  px-3 py-1 bg-secondary-50 focus:ring-2 focus:ring-primary-200 font-medium")}
                                                         placeholder="1"
                                                         value={hoursByClass[classe.id_classe as number] || ""}
                                                         onChange={e => handleHoursChange(classe.id_classe as number, Number(e.target.value))}
                                                         disabled={!checked}
                                                     />
-                                                    <Clock className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-400 w-5 h-5 pointer-events-none bg-white" />
+                                                    <Clock className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-400 w-5 h-5 pointer-events-none bg-light" />
                                                 </div>
                                             </label>
                                         );
                                     })}
 
                                     {!classes.length && <>
-                                        <div className="text-gray-500 bg-blue-100 text-center p-5 border rounded shadow-inner">
+                                        <div className="text-secondary-500 bg-primary-100 text-center p-5 border rounded shadow-inner">
                                             <h6>Aucune classe trouver pour ce matière</h6>
-                                            <Link to={'/back-office/levels/level-subject'} className="text-blue-500 underline">Click ici pour ajouter</Link>
+                                            <Link to={'/back-office/levels/level-subject'} className="text-primary-500 underline">Click ici pour ajouter</Link>
                                         </div>
                                     </>}
                                 </div>
                                 {/* Boutons */}
                                 <div className="flex gap-2 justify-end mt-3">
                                     <button
-                                        className="bg-gray-200 text-gray-700 font-semibold px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-gray-300 transition-colors"
+                                        className="bg-secondary-200 text-secondary-700 font-semibold px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-secondary-300 transition-colors"
                                         onClick={handleCancel}
                                         disabled={isValidateDisabled && !selectedSubject && !Object.values(selectedClasses).some(Boolean)}
                                     >
                                         <X className="w-4 h-4" />
                                     </button>
                                     <button
-                                        className={`bg-blue-600 text-white font-semibold px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 transition-colors ${isValidateDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"}`}
+                                        className={`bg-primary-600 text-light font-semibold px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 transition-colors ${isValidateDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-primary-700"}`}
                                         onClick={handleValidate}
                                         disabled={isValidateDisabled}
                                     >
@@ -375,7 +375,7 @@ const TeacherSubject = ({ assignationsInitialValue }: TeacherSubjectPropsType) =
                     />
                     <div className="flex justify-end py-3">
                         <button
-                            className="bg-red-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg space-x-2 hover:bg-red-700 transition-colors flex items-center disabled:bg-red-300"
+                            className="bg-red-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg space-x-2 hover:bg-red-700 transition-colors flex items-center disabled:bg-red-300"
                             onClick={handleDeleteAll}
                             disabled={assignations.length === 0}
                             type="button"

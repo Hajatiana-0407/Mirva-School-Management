@@ -68,9 +68,9 @@ const ActionMenu = ({ actions }: Props) => {
       <button
         ref={buttonRef}
         onClick={toggleMenu}
-        className="p-2 rounded  bg-white 
-                   border border-gray-200 hover:border-indigo-400 
-                   text-gray-500 hover:text-indigo-600 
+        className="p-2 rounded  bg-light 
+                   border border-secondary-200 hover:border-indigo-400 
+                   text-secondary-500 hover:text-indigo-600 
                    transition-all duration-200"
       >
         <MoreVertical className="w-5 h-5" />
@@ -86,7 +86,7 @@ const ActionMenu = ({ actions }: Props) => {
               left: position.left,
               zIndex: 9999,
             }}
-            className=" bg-white border border-blue-300/60 rounded rounded-tr-none
+            className=" bg-light border border-primary-300/60 rounded rounded-tr-none
                         animate-fade-in"
             ref={menuRef}
           >
@@ -105,7 +105,7 @@ const ActionMenu = ({ actions }: Props) => {
                         setOpen(false);
                       }}
                       type="button"
-                      className={`w-full border border-gray-100 rounded text-left px-2 py-1 sm:px-4 sm:py-2 _classe text-md hover:bg-gray-100 flex items-center gap-2 text-ellipsis overflow-hidden whitespace-nowrap  text-gray-600`}
+                      className={`w-full border border-secondary-100 rounded text-left px-2 py-1 sm:px-4 sm:py-2 _classe text-md hover:bg-secondary-100 flex items-center gap-2 text-ellipsis overflow-hidden lightspace-nowrap  text-secondary-600`}
                     >
                       {action.icon && <action.icon className={`w-5 h-5 ${action.color}`} />}
                       {action.label}
@@ -116,7 +116,7 @@ const ActionMenu = ({ actions }: Props) => {
             </ul>
 
 
-            <div className="absolute -top-[2px] left-full w-0 h-0 border-t-[15px] border-t-transparent border-b-[15px] border-b-transparent border-l-[15px] border-l-blue-200"></div>
+            <div className="absolute -top-[2px] left-full w-0 h-0 border-t-[15px] border-t-transparent border-b-[15px] border-b-transparent border-l-[15px] border-l-primary-200"></div>
           </div>,
           document.body
         )}

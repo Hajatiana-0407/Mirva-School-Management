@@ -210,7 +210,7 @@ const LessonForm: React.FC<LessonFormPropsType> = ({ lesson, handleCloseModal })
                         <textarea
                             id="message"
                             rows={4}
-                            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                            className="block p-2.5 w-full text-sm text-secondary-900 bg-secondary-50 rounded-lg border border-secondary-300 focus:ring-primary-500 focus:border-primary-500"
                             placeholder="Écrivez ici une description pour cette leçon..."
                             name="description"
                             defaultValue={lesson?.lecon_description}
@@ -240,7 +240,7 @@ const LessonForm: React.FC<LessonFormPropsType> = ({ lesson, handleCloseModal })
                         <button
                             type="button"
                             onClick={handleCloseModal}
-                            className="px-2 py-1 sm:px-4 sm:py-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                            className="px-2 py-1 sm:px-4 sm:py-2 _classe text-secondary-600 border border-secondary-300 rounded-lg hover:bg-secondary-50"
                         >
                             <X className='inline-block w-5 h-5 me-1' />
                             Annuler
@@ -249,10 +249,10 @@ const LessonForm: React.FC<LessonFormPropsType> = ({ lesson, handleCloseModal })
                     <button
                         type="submit"
                         disabled={isStudent}
-                        className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center disabled:bg-blue-400"
+                        className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-primary-600 text-light rounded-lg hover:bg-primary-700 flex items-center disabled:bg-primary-400"
                     >
                         {action.isLoading || action.isUpdating ?
-                            <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+                            <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div> :
                             <>
                                 {lesson ?
                                     <PenBox className='inline-block w-5 h-5 me-1' /> :

@@ -63,31 +63,31 @@ const School = () => {
                 </div>
                 <div className="flex-1 space-y-5 w-full">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Nom de l'établissement</label>
+                        <label className="block text-sm font-medium text-secondary-700 mb-1">Nom de l'établissement</label>
                         <input
                             type="text"
                             defaultValue={schoolInfo?.nom || ""}
                             name="nom"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                         />
                         <InputError message={formErrors?.nom} />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Code établissement</label>
+                        <label className="block text-sm font-medium text-secondary-700 mb-1">Code établissement</label>
                         <input
                             type="text"
                             defaultValue={schoolInfo?.code || ""}
                             name="code"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Slogan</label>
+                        <label className="block text-sm font-medium text-secondary-700 mb-1">Slogan</label>
                         <input
                             type="text"
                             name="slogan"
                             defaultValue={schoolInfo?.slogan || ""}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                         />
                         <InputError message={formErrors?.slogan} />
                     </div>
@@ -95,63 +95,63 @@ const School = () => {
             </div>
             <div>
                 <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+                    <label className="block text-sm font-medium text-secondary-700 mb-1">Adresse</label>
                     <textarea
                         rows={3}
                         name="adresse"
                         defaultValue={schoolInfo?.adresse || ""}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                     />
                     <InputError message={formErrors?.adresse} />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                        <label className="block text-sm font-medium text-secondary-700 mb-1">Téléphone</label>
                         <input
                             type="tel"
                             name="telephone"
                             defaultValue={schoolInfo?.telephone || ""}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                         />
                         <InputError message={formErrors?.telephone} />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <label className="block text-sm font-medium text-secondary-700 mb-1">Email</label>
                         <input
                             type="email"
                             name="email"
                             defaultValue={schoolInfo?.email || ""}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                         />
                     </div>
                 </div>
                 <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Déscription</label>
+                    <label className="block text-sm font-medium text-secondary-700 mb-1">Déscription</label>
                     <textarea
                         rows={3}
                         name="description"
                         defaultValue={schoolInfo?.description || ""}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                     />
                 </div>
                 <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Préfix ( pour les matricules ) </label>
+                    <label className="block text-sm font-medium text-secondary-700 mb-1">Préfix ( pour les matricules ) </label>
                     <input
                         type="text"
                         defaultValue={schoolInfo?.prefix || ""}
                         name="prefix"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                     />
                 </div>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Informations sur les réseaux sociaux</h3>
+            <h3 className="text-lg font-medium text-secondary-900 mb-4">Informations sur les réseaux sociaux</h3>
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Site web</label>
+                <label className="block text-sm font-medium text-secondary-700 mb-1">Site web</label>
                 <input
                     type="text"
                     name="site_web"
                     defaultValue={schoolInfo?.site_web || ""}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4">
@@ -160,14 +160,14 @@ const School = () => {
                     name="facebook"
                     defaultValue={schoolInfo?.facebook || ""}
                     icon={Facebook}
-                    iconColor="text-blue-600"
+                    iconColor="text-primary-600"
                 />
                 <Input
                     label="twitter"
                     name="twitter"
                     defaultValue={schoolInfo?.twitter || ""}
                     icon={Twitter}
-                    iconColor="text-blue-400"
+                    iconColor="text-primary-400"
                 />
                 <Input
                     label="instagram"
@@ -181,7 +181,7 @@ const School = () => {
                     name="linkedin"
                     defaultValue={schoolInfo?.linkedin || ""}
                     icon={Linkedin}
-                    iconColor="text-blue-700"
+                    iconColor="text-primary-700"
                 />
                 <Input
                     label="youtube"
@@ -195,10 +195,10 @@ const School = () => {
             <div className="flex justify-end">
                 {permission.update &&
                     <button
-                        className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center"
+                        className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg space-x-2 hover:bg-primary-700 transition-colors flex items-center"
                     >
                         {action.isUpdating
-                            ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+                            ? <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div> :
                             <Save className="w-4 h-4" />
                         }
                         <span>Enregistrer</span>

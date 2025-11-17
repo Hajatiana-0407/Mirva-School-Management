@@ -57,7 +57,7 @@ const StudentSinglePage = () => {
                         onClick={() => {
                             setShowModal(true);
                         }}
-                        className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+                        className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors"
                     >
                         <PenBox className="w-4 h-4" />
                         <span className="max-md:hidden-susp">Modifié</span>
@@ -75,10 +75,10 @@ const StudentSinglePage = () => {
                     {/* Identité + infos importantes */}
                     <div className="flex-1 grid grid-cols-1 gap-3 w-full">
                         <InfoBlock
-                            icon={<User className="w-6 h-6 text-blue-500" />}
+                            icon={<User className="w-6 h-6 text-primary-500" />}
                             label="Nom & Prénom"
                             value={
-                                <span className="text-blue-700 font-semibold">
+                                <span className="text-primary-700 font-semibold">
                                     {student?.nom} {student?.prenom}
                                 </span>
                             }
@@ -89,7 +89,7 @@ const StudentSinglePage = () => {
                             value={`${student?.date_naissance} - ${student?.lieu_naissance}`}
                         />
                         <InfoBlock
-                            icon={<Globe className="w-6 h-6 text-blue-400" />}
+                            icon={<Globe className="w-6 h-6 text-primary-400" />}
                             label="Nationalité"
                             value={student?.nationalite}
                         />
@@ -99,7 +99,7 @@ const StudentSinglePage = () => {
                             icon={<GraduationCap className="w-6 h-6 text-green-600" />}
                             label="Niveau & Classe"
                             value={
-                                <span className="text-blue-700 font-semibold">
+                                <span className="text-primary-700 font-semibold">
                                     {student?.niveau && student.denomination ? `${student.niveau} • ${student.denomination}` : '--'}
                                 </span>
                             }
@@ -113,7 +113,7 @@ const StudentSinglePage = () => {
                         icon={<Tag className="w-6 h-6 text-green-600" />}
                         label="Matricule"
                         value={
-                            <span className="text-blue-700 font-semibold">
+                            <span className="text-primary-700 font-semibold">
                                 {student?.matricule_etudiant}
                             </span>
                         }
@@ -136,7 +136,7 @@ const StudentSinglePage = () => {
                             icon={<Phone className="w-6 h-6 text-teal-500" />}
                             label="Téléphone & Email"
                             value={
-                                <span className="text-blue-700 font-semibold">
+                                <span className="text-primary-700 font-semibold">
                                     {student?.telephone} • {student?.email}
                                 </span>
                             }
@@ -181,7 +181,7 @@ const StudentSinglePage = () => {
                                         </span>
                                     }
                                     value={
-                                        <span className="text-blue-700 font-semibold">
+                                        <span className="text-primary-700 font-semibold">
                                             {student.mere.telephone} • {student?.mere.email}
                                         </span>
                                     }
@@ -220,7 +220,7 @@ const StudentSinglePage = () => {
                                         </span>
                                     }
                                     value={
-                                        <span className="text-blue-700 font-semibold">
+                                        <span className="text-primary-700 font-semibold">
                                             {student.pere.telephone} • {student?.pere.email}
                                         </span>
                                     }
@@ -259,7 +259,7 @@ const StudentSinglePage = () => {
                                         </span>
                                     }
                                     value={
-                                        <span className="text-blue-700 font-semibold">
+                                        <span className="text-primary-700 font-semibold">
                                             {student.tuteur.telephone} • {student?.tuteur.email}
                                         </span>
                                     }

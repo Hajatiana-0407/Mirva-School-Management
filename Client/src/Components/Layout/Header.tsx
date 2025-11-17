@@ -25,25 +25,25 @@ const Header = () => {
   }
 
   return (
-    <header className="bg-white shadow-sm border-b px-3 md:px-6 py-4">
+    <header className="bg-light shadow-sm border-b px-3 md:px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="relative">
-            <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
             <input
               type="text"
               placeholder="Rechercher..."
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
         </div>
 
         <div className="flex items-center space-x-4">
-          <Link to={'/back-office/settings'} className="relative p-2 text-gray-500 hover:text-gray-700 transition-colors">
+          <Link to={'/back-office/settings'} className="relative p-2 text-secondary-500 hover:text-secondary-700 transition-colors">
             <Settings className="w-5 h-5" />
           </Link>
 
-          <button className="relative p-2 text-gray-500 hover:text-gray-700 transition-colors">
+          <button className="relative p-2 text-secondary-500 hover:text-secondary-700 transition-colors">
             <Bell className="w-5 h-5" />
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
           </button>
@@ -55,12 +55,12 @@ const Header = () => {
               to={'/back-office/settings?o=account'}
               className='flex items-center space-x-3'>
               <div className="text-right">
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-secondary-700">
                   {auth.user?.role_id == 'admin' ? auth.user?.identifiant
                     : auth.info?.prenom ? auth.info?.prenom : auth.user?.identifiant
                   }
                 </p>
-                <p className="text-xs text-gray-500 flex items-center justify-end">
+                <p className="text-xs text-secondary-500 flex items-center justify-end">
                   <span className='inline-block w-3 h-3 me-2 bg-green-500 rounded-full'></span>
                   {auth.user?.role || 'Role'}
                 </p>
@@ -71,15 +71,15 @@ const Header = () => {
                 <div className="w-8 h-8  rounded-full flex items-center justify-center overflow-hidden">
                   <img src={baseUrl(auth.info?.photo )} alt="" className="w-full h-full object-cover" />
                 </div>
-                : <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                  <User className="w-4 h-4 text-white" />
+                : <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center">
+                  <User className="w-4 h-4 text-light" />
                 </div>
               }
 
             </Link>
             <button
               onClick={handleLogoutclick}
-              className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+              className="p-2 text-secondary-500 hover:text-secondary-700 transition-colors"
             >
               <LogOut className="w-4 h-4" />
             </button>

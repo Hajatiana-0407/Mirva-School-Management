@@ -23,11 +23,11 @@ const Onglet: React.FC<OngletPropsType> = ({ onlgets, type = 'hidden' }) => {
     }, [searchParams])
     return (
         <div className="space-y-4 md:space-y-6">
-            <div className="bg-white rounded-md shadow-sm border py-3 px-3 md:px-6">
+            <div className="bg-light rounded-md shadow-sm border py-3 px-3 md:px-6">
                 <nav className="flex space-x-2 overflow-x-auto">
                     {onlgets.map((tab, idx) => {
                         const Icon = tab.Icon;
-                        const color = tab?.color ? tab.color as string : 'blue';
+                        const color = tab?.color ? tab.color as string : 'primary';
                         return (
                             <Link
                                 to={`${location.pathname}?o=${tab.key}`}
@@ -36,9 +36,9 @@ const Onglet: React.FC<OngletPropsType> = ({ onlgets, type = 'hidden' }) => {
                                 onClick={() => {
                                     setActiveTab(idx + 1);
                                 }}
-                                className={`flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 whitespace-nowrap ${activeTab === (idx + 1)
+                                className={`flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 lightspace-nowrap ${activeTab === (idx + 1)
                                     ? `bg-${color}-50 text-${color}-700 shadow-sm`
-                                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                                    : 'text-secondary-600 hover:text-secondary-900 hover:bg-secondary-50'
                                     }`}
                             >
                                 {Icon && < Icon className="w-5 h-5" />}

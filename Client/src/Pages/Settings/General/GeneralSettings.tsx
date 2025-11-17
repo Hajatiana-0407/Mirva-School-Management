@@ -81,7 +81,7 @@ const GeneralSettings = () => {
                     <button
                         type="button"
                         onClick={() => setShowModalSchoolYear(true)}
-                        className="flex items-center gap-1 text-blue-600 underline"
+                        className="flex items-center gap-1 text-primary-600 underline"
                     >
                         <Plus className="w-4 h-4" />
                         <span>Nouvelle année scolaire</span>
@@ -89,7 +89,7 @@ const GeneralSettings = () => {
                 }
             </Title>
             <form onSubmit={handleSchoolYearChangeSubmit} className="space-y-4">
-                <div className="flex items-center text-lg space-x-2 text-gray-900 font-medium">
+                <div className="flex items-center text-lg space-x-2 text-secondary-900 font-medium">
                     <div className="bg-green-500 w-4 h-4 rounded-full"></div>
                     <h3 className="">Année scolaire actif</h3>
                 </div>
@@ -143,16 +143,16 @@ const GeneralSettings = () => {
                         readOnly
                         value={theActiveSchoolYear?.description || ""}
                         placeholder='Accune déscription'
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                     />
                 </div>
                 <div className="flex justify-end">
                     {schoolYearPermission.create &&
                         <button
-                            className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center"
+                            className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg space-x-2 hover:bg-primary-700 transition-colors flex items-center"
                         >
                             {schoolYearAction.isLoading || schoolYearAction.isUpdating
-                                ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+                                ? <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div> :
                                 <Save className="w-4 h-4" />
                             }
                             <span>Enregistrer</span>
@@ -170,13 +170,13 @@ const GeneralSettings = () => {
 
 
             {/* <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Sauvegarde et restauration</h3>
+                <h3 className="text-lg font-medium text-secondary-900 mb-4">Sauvegarde et restauration</h3>
                 <div className="flex space-x-4">
-                    <button className="bg-green-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-green-700 transition-colors">
+                    <button className="bg-green-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-green-700 transition-colors">
                         <Download className="w-4 h-4" />
                         <span>Exporter les données</span>
                     </button>
-                    <button className="bg-orange-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-orange-700 transition-colors">
+                    <button className="bg-orange-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-orange-700 transition-colors">
                         <Upload className="w-4 h-4" />
                         <span>Importer les données</span>
                     </button>

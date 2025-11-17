@@ -80,18 +80,18 @@ const ExerciceSingle = () => {
 
 
     if (action.isLoading) return <Loading />;
-    if (!exercice) return <div className="text-center py-10 text-gray-500">Leçon introuvable.</div>;
+    if (!exercice) return <div className="text-center py-10 text-secondary-500">Leçon introuvable.</div>;
 
     return (
         <div className="space-y-4 md:space-y-6">
             <div className="flex items-center justify-between max-md:flex-wrap max-md:justify-center">
-                <h1 className="text-2xl font-bold text-gray-900 w-96 truncate inline-block">
+                <h1 className="text-2xl font-bold text-secondary-900 w-96 truncate inline-block">
                     <ArrowLeft className="h-6 w-6 inline-block me-1 cursor-pointer" onClick={() => navigate(-1)} />
                     {exercice.titre}
                 </h1>
                 <div className="flex space-x-2">
                     <button
-                        className="bg-green-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe gap-2 transition-colors rounded-lg hover:bg-green-700 flex items-center"
+                        className="bg-green-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe gap-2 transition-colors rounded-lg hover:bg-green-700 flex items-center"
                         onClick={handleDownload}
                     >
                         <Download className="w-4 h-4 " />
@@ -101,7 +101,7 @@ const ExerciceSingle = () => {
                     </button>
                     {permission.update &&
                         <button
-                            className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe gap-2 transition-colors rounded-lg hover:bg-blue-700 flex items-center"
+                            className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe gap-2 transition-colors rounded-lg hover:bg-primary-700 flex items-center"
                             onClick={handleEdit}
                         >
                             <PenBox className="w-4 h-4 " />
@@ -112,7 +112,7 @@ const ExerciceSingle = () => {
                     }
                     {permission.delete &&
                         <button
-                            className="bg-red-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe gap-2 transition-colors rounded-lg hover:bg-red-700 flex items-center"
+                            className="bg-red-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe gap-2 transition-colors rounded-lg hover:bg-red-700 flex items-center"
                             onClick={handleDelete}
                         >
                             <Trash className="w-4 h-4 " />
@@ -123,7 +123,7 @@ const ExerciceSingle = () => {
                     }
                     { exercice.published == 0 &&
                         <button
-                            className="bg-orange-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe gap-2 transition-colors rounded-lg hover:bg-orange-700 flex items-center"
+                            className="bg-orange-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe gap-2 transition-colors rounded-lg hover:bg-orange-700 flex items-center"
                             onClick={handlePublish}
                         >
                             <Share2 className="w-4 h-4 " />
@@ -135,7 +135,7 @@ const ExerciceSingle = () => {
                 </div>
             </div>
 
-            <div className="p-3 md:p-6 space-y-4 md:space-y-6 bg-gradient-to-b from-white to-gray-50 shadow-md border border-gray-200 rounded-2xl transition hover:shadow-lg duration-200">
+            <div className="p-3 md:p-6 space-y-4 md:space-y-6 bg-gradient-to-b from-light to-secondary-50 shadow-md border border-secondary-200 rounded-2xl transition hover:shadow-lg duration-200">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row items-center sm:justify-between gap-4 border-b-2 pb-4">
                     <div className="">
@@ -149,7 +149,7 @@ const ExerciceSingle = () => {
                     <div className='flex items-center gap-3 '>
                         <div className="flex items-center gap-2 text-sm">
                             <span
-                                className="px-3 py-1 rounded-full font-medium text-gray-800"
+                                className="px-3 py-1 rounded-full font-medium text-secondary-800"
                                 style={{
                                     backgroundColor: hexToRgba(exercice.couleur, 0.15),
                                     border: '1px solid ' + hexToRgba(exercice.couleur, 0.6),
@@ -158,13 +158,13 @@ const ExerciceSingle = () => {
                                 {exercice.denomination || 'Matière'}
                             </span>
                             {exercice.niveau && (
-                                <span className="bg-gray-100 border border-gray-200 px-2.5 py-1 rounded-full text-gray-700 font-medium">
+                                <span className="bg-secondary-100 border border-secondary-200 px-2.5 py-1 rounded-full text-secondary-700 font-medium">
                                     {exercice.niveau}
                                 </span>
                             )}
                         </div>
                         {exercice.created_at && (
-                            <div className="text-xs text-gray-500 italic">
+                            <div className="text-xs text-secondary-500 italic">
                                 Ajouté le {new Date(exercice.created_at).toLocaleDateString('fr-FR')}
                             </div>
                         )}
@@ -172,28 +172,28 @@ const ExerciceSingle = () => {
                 </div>
                 {/* Titre */}
                 <section className="space-y-2">
-                    <h2 className="font-semibold text-lg text-gray-900 flex items-center gap-2">
+                    <h2 className="font-semibold text-lg text-secondary-900 flex items-center gap-2">
                         <span className="w-1.5 h-5 bg-red-500 rounded-full"></span>
                         Titre
                     </h2>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-secondary-700 leading-relaxed">
                         {exercice.titre || 'Aucune titre.'}
                     </p>
                 </section>
                 {/* Description */}
                 <section className="space-y-2">
-                    <h2 className="font-semibold text-lg text-gray-900 flex items-center gap-2">
-                        <span className="w-1.5 h-5 bg-blue-500 rounded-full"></span>
+                    <h2 className="font-semibold text-lg text-secondary-900 flex items-center gap-2">
+                        <span className="w-1.5 h-5 bg-primary-500 rounded-full"></span>
                         Description
                     </h2>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-secondary-700 leading-relaxed">
                         {exercice.exercice_description || 'Aucune description disponible.'}
                     </p>
                 </section>
 
                 {/* Fichier principal */}
                 <section className="space-y-3">
-                    <h2 className="font-semibold text-lg text-gray-900 flex items-center gap-2">
+                    <h2 className="font-semibold text-lg text-secondary-900 flex items-center gap-2">
                         <span className="w-1.5 h-5 bg-green-500 rounded-full"></span>
                         Fichier principal
                     </h2>
@@ -205,7 +205,7 @@ const ExerciceSingle = () => {
                 {/* Fichier support (optionnel) */}
                 {exercice.fichier_support && (
                     <section className="space-y-3">
-                        <h2 className="font-semibold text-lg text-gray-900 flex items-center gap-2">
+                        <h2 className="font-semibold text-lg text-secondary-900 flex items-center gap-2">
                             <span className="w-1.5 h-5 bg-amber-500 rounded-full"></span>
                             Fichier support
                         </h2>

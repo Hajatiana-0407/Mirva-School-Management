@@ -35,13 +35,13 @@ const Presentaion: React.FC = () => {
     if (action.isLoading) return <Loading />
     if (!presentations?.id_presentation) return ''
     return (
-        <section className="py-16 bg-white">
+        <section className="py-16 bg-light">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
                 {/* Bouton vers le dashbord pour modifier si l'utilisateur a le droit */}
                 {adminPermission.read &&
                     <Link
                         to={'/back-office/homepage-settings?section=admin-presentation'}
-                        className="bg-lime-600 text-white px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-lime-700 transition-colors absolute top-0 right-4 sm:right-6 lg:right-8 z-40"
+                        className="bg-lime-600 text-light px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-lime-700 transition-colors absolute top-0 right-4 sm:right-6 lg:right-8 z-40"
                     >
                         <PenBox className="w-5 h-5" />
                         <span>Modifier cette section</span>
@@ -55,7 +55,7 @@ const Presentaion: React.FC = () => {
                         <h2 className="text-3xl lg:text-4xl font-bold text-primary-800 mb-6">
                             {presentations?.titre}
                         </h2>
-                        <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                        <p className="text-lg text-secondary-600 mb-8 leading-relaxed">
                             {presentations?.description}
                         </p>
                         <div className="grid grid-cols-2 gap-6">
@@ -74,7 +74,7 @@ const Presentaion: React.FC = () => {
                             alt="Students learning"
                             className="rounded-lg shadow-xl w-full h-96 object-cover"
                         />
-                        <div className="absolute -bottom-6 -left-6 bg-primary-500 text-white p-4 rounded-lg shadow-lg">
+                        <div className="absolute -bottom-6 -left-6 bg-primary-500 text-light p-4 rounded-lg shadow-lg">
                             {/* TODO */}
                             <p className="font-semibold">Excellence depuis 3</p>
                         </div>

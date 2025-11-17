@@ -149,7 +149,7 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
             );
           }
           if (idx < flatMenus.length - 1) {
-            return <hr key={`hr-${idx}`} className="border-t border-blue-200 mx-2" />;
+            return <hr key={`hr-${idx}`} className="border-t border-primary-200 mx-2" />;
           }
           return null;
         })}
@@ -179,8 +179,8 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
                     {
                       'px-4 justify-center': collapsed,
                       'px-3 md:px-6': !collapsed,
-                      'bg-blue-50 text-blue-700 border-r-2 border-blue-700': isActive,
-                      'text-gray-700 hover:bg-gray-50': !isActive,
+                      'bg-primary-50 text-primary-700 border-r-2 border-primary-700': isActive,
+                      'text-secondary-700 hover:bg-secondary-50': !isActive,
                     },
                     'w-full flex items-center py-3 text-left transition-colors group relative',
                     level > 0 ? 'pl-8' : ''
@@ -194,7 +194,7 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
                       <>
                         <span className="font-medium">{menu.label}</span>
                         {isActive && (
-                          <div className='w-1.5 h-5 bg-blue-500 ml-auto rounded-full'></div>
+                          <div className='w-1.5 h-5 bg-primary-500 ml-auto rounded-full'></div>
                         )}
                       </>
                     )}
@@ -205,7 +205,7 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
               <button
                 type="button"
                 className={clsx(
-                  'w-full flex items-center py-3 px-3 md:px-6 text-left transition-colors font-medium text-gray-800 hover:bg-gray-400/60 bg-gray-300/50',
+                  'w-full flex items-center py-3 px-3 md:px-6 text-left transition-colors font-medium text-secondary-800 hover:bg-secondary-400/60 bg-secondary-300/50',
                   collapsed ? 'justify-center px-4' : '',
                   level > 0 ? 'pl-8' : ''
                 )}
@@ -228,7 +228,7 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
               </button>
             )}
             {hasChildren && isOpen && !collapsed && (
-              <div className="mx-1 mb-1 rounded mt-0.5 shadow-inner border-2 border-gray-300">
+              <div className="mx-1 mb-1 rounded mt-0.5 shadow-inner border-2 border-secondary-300">
                 {renderMenuItems(menu.children!, level + 1)}
               </div>
             )}
@@ -240,30 +240,30 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
 
   return (
     <div
-      className={`${collapsed ? 'w-10 sm:w-16' : 'w-64'} bg-white shadow-lg transition-all duration-300 ease-in-out flex flex-col h-screen`}
+      className={`${collapsed ? 'w-10 sm:w-16' : 'w-64'} bg-light shadow-lg transition-all duration-300 ease-in-out flex flex-col h-screen`}
     >
       <div className="py-6 border-b border-r">
         <div className="flex items-center justify-center">
           {!collapsed && (
             <div className='text-center'>
-              <h1 className="text-xl font-bold text-gray-800">
+              <h1 className="text-xl font-bold text-secondary-800">
                 {shoolInfo?.nom || "Nom de l'école"}
               </h1>
-              <p className="text-sm text-gray-600">{shoolInfo?.slogan || 'Votre slogan'}</p>
-              <p className="text-xs text-left font-semibold text-blue-600">
+              <p className="text-sm text-secondary-600">{shoolInfo?.slogan || 'Votre slogan'}</p>
+              <p className="text-xs text-left font-semibold text-primary-600">
                 {activeSchoolYear?.nom}
               </p>
             </div>
           )}
           <button
             onClick={onToggleCollapse}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            className="p-2 rounded-lg hover:bg-secondary-100 transition-colors"
             title={collapsed ? 'Développer le menu' : 'Réduire le menu'}
           >
             {collapsed ? (
-              <Menu className="w-5 h-5 text-gray-600" />
+              <Menu className="w-5 h-5 text-secondary-600" />
             ) : (
-              <ChevronLeft className="w-5 h-5 text-gray-600" />
+              <ChevronLeft className="w-5 h-5 text-secondary-600" />
             )}
           </button>
         </div>
@@ -282,11 +282,11 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
               'justify-center': collapsed,
               'px-3 md:px-6': !collapsed,
             },
-            'text-gray-700 hover:bg-slate-300 bg-slate-200 w-full gap-3 flex items-center  py-3 text-left transition-colors group relative'
+            'text-secondary-700 hover:bg-slate-300 bg-slate-200 w-full gap-3 flex items-center  py-3 text-left transition-colors group relative'
           )}
           onClick={()=>navigate('/')}
         >
-          <Undo2 className="w-5 h-5 text-gray-600" />
+          <Undo2 className="w-5 h-5 text-secondary-600" />
           {!collapsed && <span>Revenir dans le site</span>}
         </button>
         <button
@@ -295,11 +295,11 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
               'justify-center': collapsed,
               'px-3 md:px-6': !collapsed,
             },
-            'text-gray-700 hover:bg-slate-300 bg-slate-200 w-full gap-3 flex items-center  py-3 text-left transition-colors group relative'
+            'text-secondary-700 hover:bg-slate-300 bg-slate-200 w-full gap-3 flex items-center  py-3 text-left transition-colors group relative'
           )}
           onClick={() => setIsOpentDialog(true)}
         >
-          <Power className="w-5 h-5 text-gray-600" />
+          <Power className="w-5 h-5 text-secondary-600" />
           {!collapsed && <span>Déconnexion</span>}
         </button>
       </div>

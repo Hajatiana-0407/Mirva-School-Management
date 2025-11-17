@@ -26,24 +26,24 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
                 ></div>
 
                 {/* Dialog */}
-                <div className="bg-white mx-auto space-y-3 rounded px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full sm:p-4">
+                <div className="bg-light mx-auto space-y-3 rounded px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full sm:p-4">
                     <div className="flex items-center  space-x-3 border-b-2">
                         <div className="">
                             <MessageCircleWarning className="w-20 h-20 text-orange-500" />
                         </div>
                         <div className='flex flex-col justify-center  '>
                             <div>
-                                <h3 className="text-md font-semibold text-gray-900">{title}</h3>
+                                <h3 className="text-md font-semibold text-secondary-900">{title}</h3>
                             </div>
                             <div className="">
-                                <p className="text-sm text-gray-600">{message}</p>
+                                <p className="text-sm text-secondary-600">{message}</p>
                             </div>
                         </div>
                     </div>
                     <div className="flex justify-end space-x-3">
                         <button
                             onClick={onClose}
-                            className="px-3 py-1 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+                            className="px-3 py-1 text-light bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors"
                         >
                             <Check className='w-5 h-5 inline-block me-1' />
                             D'accord

@@ -83,7 +83,7 @@ const PresentationAdmin = () => {
             >
                 <button
                     onClick={() => navigate('/?section=presentation')}
-                    className="bg-orange-600 text-white px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-orange-700 transition-colors"
+                    className="bg-orange-600 text-light px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-orange-700 transition-colors"
                 >
                     <Eye className="w-5 h-5" />
                     <span>Voire le site</span>
@@ -112,7 +112,7 @@ const PresentationAdmin = () => {
                         <textarea
                             id="message"
                             rows={4}
-                            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                            className="block p-2.5 w-full text-sm text-secondary-900 bg-secondary-50 rounded-lg border border-secondary-300 focus:ring-primary-500 focus:border-primary-500"
                             placeholder="Écrivez ici une description pour cette slider..."
                             name="description"
                             defaultValue={presentation?.description}
@@ -163,10 +163,10 @@ const PresentationAdmin = () => {
                     {permission.update &&
                         <button
                             type="submit"
-                            className="px-2 py-1 sm:px-4 sm:py-2 _slide bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+                            className="px-2 py-1 sm:px-4 sm:py-2 _slide bg-primary-600 text-light rounded-lg hover:bg-primary-700 flex items-center"
                         >
                             {action.isLoading || action.isUpdating ?
-                                <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+                                <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div> :
                                 <>
                                     {presentation ?
                                         <PenBox className='inline-block w-5 h-5 me-1' /> :

@@ -57,12 +57,12 @@ const Assignments = () => {
             >
                 {permission.update && permission.create &&
                     <button
-                        className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center disabled:bg-blue-300"
+                        className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg space-x-2 hover:bg-primary-700 transition-colors flex items-center disabled:bg-primary-300"
                         type='submit'
                         disabled={action.isLoadingAssignation}
                     >
                         {action.isLoadingAssignation
-                            ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+                            ? <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div> :
                             <Save className="w-4 h-4" />
                         }
                         <span className='max-md:hidden-susp'>Enregistrer</span>
@@ -71,7 +71,7 @@ const Assignments = () => {
             </Title>
             <input type="hidden" name='id_personnel' value={teacher?.id_personnel} onChange={() => { }} />
             {teacher &&
-                <div className='w-full py-5 mb-5 flex justify-center bg-blue-50 border border-blue-100 rounded'>
+                <div className='w-full py-5 mb-5 flex justify-center bg-primary-50 border border-primary-100 rounded'>
                     <Profile
                         fullName={teacher?.nom ? `${teacher?.nom} ${teacher?.prenom}` : ''}
                         photo={teacher?.photo as string}
@@ -94,7 +94,7 @@ const Assignments = () => {
 
             {action.isLoading && <Loading />}
             {!action.isLoading &&
-                <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+                <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
                     <TeacherSubject assignationsInitialValue={teacher?.assignations} />
                 </div>
             }

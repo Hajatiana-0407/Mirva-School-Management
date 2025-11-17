@@ -49,7 +49,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
 
   const getActionColor = (color: string) => {
     const colors = {
-      blue: 'text-blue-600 hover:text-blue-800',
+      primary: 'text-primary-600 hover:text-primary-800',
       green: 'text-green-600 hover:text-green-800',
       red: 'text-red-600 hover:text-red-800',
       yellow: 'text-yellow-600 hover:text-yellow-800',
@@ -58,9 +58,9 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
       indigo: 'text-indigo-600 hover:text-indigo-800',
       teal: 'text-teal-600 hover:text-teal-800',
       orange: 'text-orange-600 hover:text-orange-800',
-      gray: 'text-gray-600 hover:text-gray-800',
+      secondary: 'text-secondary-600 hover:text-secondary-800',
     };
-    return colors[color as keyof typeof colors] || 'text-gray-600 hover:text-gray-800';
+    return colors[color as keyof typeof colors] || 'text-secondary-600 hover:text-secondary-800';
   };
 
   return (
@@ -70,17 +70,17 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
         <div className="w-full overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="border-b w-max rounded shadow shadow-blue-50">
+              <tr className="border-b w-max rounded shadow shadow-primary-50">
                 {columns.map((column) => (
                   <th
                     key={column.key}
-                    className="text-left text-sm md:text-md py-3 px-4 font-semibold text-gray-700 uppercase whitespace-nowrap"
+                    className="text-left text-sm md:text-md py-3 px-4 font-semibold text-secondary-700 uppercase lightspace-nowrap"
                   >
                     {column.label}
                   </th>
                 ))}
                 {actions && actions.length > 0 && (
-                  <th className="text-center text-sm md:text-md  py-3 px-4 font-semibold text-gray-700 uppercase">
+                  <th className="text-center text-sm md:text-md  py-3 px-4 font-semibold text-secondary-700 uppercase">
                     Actions
                   </th>
                 )}
@@ -100,7 +100,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                 : (!isLoading && !currentItems.length) ? (
                   <tr>
                     <td colSpan={columns.length + 1} className=''>
-                      <div className='text-gray-400 text-sm md:text-md text-center pt-6'>
+                      <div className='text-secondary-400 text-sm md:text-md text-center pt-6'>
                       Nous n’avons trouvé aucun élément.
                       </div>
                     </td>
@@ -109,11 +109,11 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                   // ? AFFICHAGE 
                   : (
                     currentItems.map((item, index) => (
-                      <tr key={index} className="border-b hover:bg-gray-50 w-max">
+                      <tr key={index} className="border-b hover:bg-secondary-50 w-max">
                         {columns.map((column) => (
                           <td
                             key={column.key}
-                            className="py-3 px-4 text-gray-900 truncate max-w-80 text-sm md:text-md "
+                            className="py-3 px-4 text-secondary-900 truncate max-w-80 text-sm md:text-md "
                           >
                             {column.render
                               ? column.render(item[column.key], item)
@@ -137,7 +137,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                                     <button
                                       key={actionIndex}
                                       onClick={() => action.onClick(item)}
-                                      className={`p-1 rounded hover:bg-gray-100 ${getActionColor(action.color)}`}
+                                      className={`p-1 rounded hover:bg-secondary-100 ${getActionColor(action.color)}`}
                                       title={action.label}
                                       type='button'
                                     >
@@ -170,7 +170,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-secondary-600">
             Affichage de {indexOfFirstItem + 1} à{" "}
             {Math.min(indexOfLastItem, filteredData.length)} sur{" "}
             {filteredData.length} éléments
@@ -180,7 +180,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
               type="button"
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="p-2 rounded border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              className="p-2 rounded border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-secondary-50"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -189,8 +189,8 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                 key={page}
                 onClick={() => handlePageChange(page)}
                 className={`px-3 py-1 rounded ${currentPage === page
-                  ? "bg-blue-600 text-white"
-                  : "border hover:bg-gray-50"
+                  ? "bg-primary-600 text-light"
+                  : "border hover:bg-secondary-50"
                   }`}
                 type="button"
               >
@@ -201,7 +201,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
               type="button"
-              className="p-2 rounded border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              className="p-2 rounded border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-secondary-50"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
