@@ -93,7 +93,7 @@ const Hero: React.FC = () => {
                     {/* Bouton vers le dashbord pour modifier si l'utilisateur a le droit */}
                     {adminPermission.read &&
                         <Link
-                            to={'/back-office/homepage-settings?section=hero'}
+                            to={'/back-office/homepage-settings?section=admin-hero'}
                             className="bg-lime-600 text-white px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-lime-700 transition-colors absolute top-5 right-4 sm:right-6 lg:right-8 z-40"
                         >
                             <PenBox className="w-5 h-5" />

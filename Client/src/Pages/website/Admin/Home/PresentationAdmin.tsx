@@ -82,7 +82,7 @@ const PresentationAdmin = () => {
                 description="Gérez les slides du carrousel d’accueil : image, titre, sous-titre et lien."
             >
                 <button
-                    onClick={() => navigate('/#presentation')}
+                    onClick={() => navigate('/?section=presentation')}
                     className="bg-orange-600 text-white px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-orange-700 transition-colors"
                 >
                     <Eye className="w-5 h-5" />

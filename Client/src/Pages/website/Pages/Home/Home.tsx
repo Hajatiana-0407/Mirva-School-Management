@@ -9,9 +9,16 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      <Hero/>
-      <Presentaion/>
-      <Value/>
+      <section data-section='hero'>
+        <Hero />
+      </section>
+      <section data-section='presentation'>
+        <Presentaion />
+      </section>
+      <section data-section='value'>
+        <Value />
+      </section>
+
       {/* CTA Section */}
       <section className="py-16 bg-primary-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

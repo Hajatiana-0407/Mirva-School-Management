@@ -81,7 +81,7 @@ const ValueAdmin: React.FC = () => {
                 description="Gérez les valeurs affichées sur la page d’accueil."
             >
                 <button
-                    onClick={() => navigate('/#value')}
+                    onClick={() => navigate('/?section=value')}
                     className="bg-orange-600 text-white px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-orange-700 transition-colors"
                 >
                     <Eye className="w-5 h-5" />

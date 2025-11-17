@@ -6,11 +6,16 @@ import { getAllValue } from '../../Redux/AsyncThunk/HomeAsyncThunk';
 import Loading from '../../../../Components/ui/Loading';
 import DynamicLucideIcon from '../../Components/DynamicLucideIcon';
 import { ValueType } from '../../Type';
+import { Link } from 'react-router-dom';
+import { PenBox } from 'lucide-react';
+import { useHashPermission } from '../../../../Hooks/useHashPermission';
 
 const Value: React.FC = () => {
   const { datas, action } = useSelector(getValueState);
   const [values, setValues] = useState<ValueType[]>([])
   const dispatch: AppDispatch = useDispatch();
+  const adminPermission = useHashPermission({ id: "homepage-settings" });
+
 
   useEffect(() => {
     if (datas?.length == 0) {
@@ -31,7 +36,17 @@ const Value: React.FC = () => {
   if (values?.length == 0) return '';
   return (
     <section className="py-16 bg-blue-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Bouton vers le dashbord pour modifier si l'utilisateur a le droit */}
+        {adminPermission.read &&
+          <Link
+            to={'/back-office/homepage-settings?section=admin-value'}
+            className="bg-lime-600 text-white px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-lime-700 transition-colors absolute top-5 right-4 sm:right-6 lg:right-8 z-40"
+          >
+            <PenBox className="w-5 h-5" />
+            <span>Modifier cette section</span>
+          </Link>
+        }
         <div className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-bold text-primary-800 mb-4">
             Nos Valeurs
