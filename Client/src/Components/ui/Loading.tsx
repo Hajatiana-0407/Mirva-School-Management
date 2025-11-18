@@ -16,11 +16,11 @@ const Loading: React.FC<LoadingPropsType> = ({ size = 'md', title = '' }) => {
                     "h-12 w-12": size === 'md',
                     "h-9 w-9": size === 'sm',
                 },
-                "animate-spin rounded-full  border-b-2 border-blue-600")}
+                "animate-spin rounded-full  border-b-2 border-primary-600")}
             >
             </div>
             {title &&
-                <div className="text-gray-700">{title}...</div>
+                <div className="text-secondary-700">{title}...</div>
             }
         </div>
 

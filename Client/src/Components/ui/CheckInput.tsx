@@ -5,15 +5,15 @@ type CheckInputPropsType = {
     description?: string;
     name: string;
     defaultValue?: boolean;
-    color?: 'blue' | 'red' | 'green' | 'yellow' | 'purple';
+    color?: 'primary' | 'red' | 'green' | 'yellow' | 'purple';
     dependOn?: boolean;
 };
 
 const colorClasses = {
-    blue: {
-        container: 'bg-blue-50/50',
-        ring: 'peer-focus:ring-blue-300',
-        active: 'peer-checked:bg-blue-600',
+    primary: {
+        container: 'bg-primary-50/50',
+        ring: 'peer-focus:ring-primary-300',
+        active: 'peer-checked:bg-primary-600',
     },
     red: {
         container: 'bg-red-50/50',
@@ -42,11 +42,11 @@ const CheckInput: React.FC<CheckInputPropsType> = ({
     label,
     name,
     description,
-    color = 'blue',
+    color = 'primary',
     dependOn,
 }) => {
     const [isCheck, setIsCheck] = useState<boolean>(defaultValue);
-    const c = colorClasses[color] || colorClasses.blue;
+    const c = colorClasses[color] || colorClasses.primary;
 
     useEffect(() => {
         if (dependOn !== undefined) {
@@ -60,9 +60,9 @@ const CheckInput: React.FC<CheckInputPropsType> = ({
         >
             {label && (
                 <div>
-                    <h4 className="font-medium text-gray-900">{label}</h4>
+                    <h4 className="font-medium text-secondary-900">{label}</h4>
                     {description && (
-                        <p className="text-sm text-gray-600">{description}</p>
+                        <p className="text-sm text-secondary-600">{description}</p>
                     )}
                 </div>
             )}
@@ -77,11 +77,11 @@ const CheckInput: React.FC<CheckInputPropsType> = ({
                     value={isCheck ? '1' : '0'}
                 />
                 <div
-                    className={`w-11 h-6 bg-gray-200 rounded-full transition-all duration-300 ease-in-out
+                    className={`w-11 h-6 bg-secondary-200 rounded-full transition-all duration-300 ease-in-out
                         after:content-[''] after:absolute after:top-[2px] after:left-[2px]
-                        after:bg-white after:border-gray-300 after:border after:rounded-full
+                        after:bg-light after:border-secondary-300 after:border after:rounded-full
                         after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full
-                        peer-checked:after:border-white ${c.ring} ${c.active}`}
+                        peer-checked:after:border-light ${c.ring} ${c.active}`}
                 ></div>
             </div>
         </label>

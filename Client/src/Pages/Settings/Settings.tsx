@@ -12,17 +12,17 @@ const Settings: React.FC = () => {
   const etablissementPermission = useHashPermission( { id : 'school-settings'  , redirect : false } );
   const rolePermission = useHashPermission( { id : 'roles-settings'  , redirect : false } );
   let tabs = [
-    { key: 'account', label: 'Paramètre du compte', Icon: UserCog, component: <div className='bg-white p-3 md:p-6 shadow-sm border rounded-md'><AccountSettings /></div> }
+    { key: 'account', label: 'Paramètre du compte', Icon: UserCog, component: <div className='bg-light p-3 md:p-6 shadow-sm border rounded-md'><AccountSettings /></div> }
   ];
 
   rolePermission.read && tabs.unshift(
-    { key: 'user-role', label: 'Utilisateurs & Rôles', Icon: Users, component: <div className='bg-white p-3 md:p-6 shadow-sm border rounded-md'><UserRole /></div> },
+    { key: 'user-role', label: 'Utilisateurs & Rôles', Icon: Users, component: <div className='bg-light p-3 md:p-6 shadow-sm border rounded-md'><UserRole /></div> },
   );
   etablissementPermission.read && tabs.unshift(
-    { key: 'school-info', label: 'Établissement', Icon: Calendar, component: <div className='bg-white p-3 md:p-6 shadow-sm border rounded-md'><School /></div> },
+    { key: 'school-info', label: 'Établissement', Icon: Calendar, component: <div className='bg-light p-3 md:p-6 shadow-sm border rounded-md'><School /></div> },
   );
   generalPermission.read && tabs.unshift(
-    { key: 'general', label: 'Général', Icon: Shield, component: <div className='bg-white p-3 md:p-6 shadow-sm border rounded-md'> <GeneralSettings /></div> },
+    { key: 'general', label: 'Général', Icon: Shield, component: <div className='bg-light p-3 md:p-6 shadow-sm border rounded-md'> <GeneralSettings /></div> },
   );
 
   return (

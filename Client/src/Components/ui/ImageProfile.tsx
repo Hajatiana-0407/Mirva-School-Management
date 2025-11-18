@@ -28,7 +28,7 @@ const ImageProfile: React.FC<ImageProfilePropsType> = ({ name = 'photo', isInput
         <div className="relative flex flex-col items-center justify-center h-full">
             <label
                 htmlFor="photo-upload"
-                className={`cursor-pointer flex flex-col items-center justify-center w-full h-full rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 transition-all`}>
+                className={`cursor-pointer flex flex-col items-center justify-center w-full h-full rounded-md bg-secondary-100 border-2 border-dashed border-secondary-300 hover:bg-secondary-200 transition-all`}>
                 {photoPreview ? (
                     <img
                         src={photoPreview}
@@ -37,8 +37,8 @@ const ImageProfile: React.FC<ImageProfilePropsType> = ({ name = 'photo', isInput
                     />
                 ) : (
                     <div className="flex flex-col justify-center items-center">
-                        <Focus className="w-20 h-20 text-gray-400 mb-1" />
-                        <span className="text-gray-400 text-sm">Aucune photo trouvé</span>
+                        <Focus className="w-20 h-20 text-secondary-400 mb-1" />
+                        <span className="text-secondary-400 text-sm">Aucune photo trouvé</span>
                     </div>
                 )}
 

@@ -58,7 +58,7 @@ const EmployeesSinglePage = () => {
                         onClick={() => {
                             setShowModal(true);
                         }}
-                        className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+                        className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors"
                     >
                         <PenBox className="w-4 h-4" />
                         <span className="max-md:hidden-susp">Modifié</span>
@@ -78,10 +78,10 @@ const EmployeesSinglePage = () => {
                     {/* Identité + infos importantes */}
                     <div className="flex-1 grid grid-cols-1 gap-3">
                         <InfoBlock
-                            icon={<User className="w-6 h-6 text-blue-500" />}
+                            icon={<User className="w-6 h-6 text-primary-500" />}
                             label="Nom & Prénom"
                             value={
-                                <span className="text-blue-700 font-semibold">
+                                <span className="text-primary-700 font-semibold">
                                     {employee?.nom} {employee?.prenom}
                                 </span>
                             }
@@ -92,12 +92,12 @@ const EmployeesSinglePage = () => {
                             value={`${employee?.date_naissance} - ${employee?.lieu_naissance}`}
                         />
                         <InfoBlock
-                            icon={<Globe className="w-6 h-6 text-blue-400" />}
+                            icon={<Globe className="w-6 h-6 text-primary-400" />}
                             label="CIN / Numéro passeport"
                             value={employee?.numero_cin}
                         />
                         <InfoBlock
-                            icon={<BadgeInfo className="w-6 h-6 text-blue-400" />}
+                            icon={<BadgeInfo className="w-6 h-6 text-primary-400" />}
                             label="État civil"
                             value={
                                 <div>
@@ -114,7 +114,7 @@ const EmployeesSinglePage = () => {
                         icon={<Tag className="w-6 h-6 text-green-600" />}
                         label="Matricule"
                         value={
-                            <span className="text-blue-700 font-semibold">
+                            <span className="text-primary-700 font-semibold">
                                 {employee?.matricule_personnel}
                             </span>
                         }
@@ -135,7 +135,7 @@ const EmployeesSinglePage = () => {
                             icon={<Phone className="w-6 h-6 text-teal-500" />}
                             label="Téléphone & Email"
                             value={
-                                <span className="text-blue-700 font-semibold">
+                                <span className="text-primary-700 font-semibold">
                                     {employee?.telephone} • {employee?.email}
                                 </span>
                             }
@@ -173,7 +173,7 @@ const EmployeesSinglePage = () => {
                                 value={
                                     <span className="font-semibold flex gap-1">
                                         {getAge(employee?.date_embauche as string)} Ans de Service •
-                                        <span className="text-blue-500 text-sm font-normal">
+                                        <span className="text-primary-500 text-sm font-normal">
                                             {getShortDate(employee?.date_embauche as string)}
                                         </span>
                                     </span>
@@ -205,9 +205,9 @@ const EmployeesSinglePage = () => {
                             </span>
                         }
                         value={
-                            <span className="text-blue-700 font-semibold flex flex-col">
+                            <span className="text-primary-700 font-semibold flex flex-col">
                                 {employee?.urgence_nom} • {employee?.urgence_tel}
-                                <span className="text-sm text-blue-500">
+                                <span className="text-sm text-primary-500">
                                     {employee?.urgence_email}
                                 </span>
                             </span>

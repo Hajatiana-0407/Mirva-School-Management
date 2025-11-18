@@ -41,45 +41,45 @@ const SchoolYearForm: React.FC<SchoolYearFormPropsType> = ({ schoolYear, handleC
     <form className="space-y-4" onSubmit={handleSubmit}>
       <InputError message={error} />
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Nom de l'année scolaire</label>
+        <label className="block text-sm font-medium text-secondary-700 mb-1">Nom de l'année scolaire</label>
         <input
           name='nom'
           type="text"
           defaultValue={schoolYear?.nom || ''}
           placeholder='2023-2024'
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
         <InputError message={formErrors?.nom} />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <label className="block text-sm font-medium text-secondary-700 mb-1">Description</label>
         <textarea
           rows={3}
           name="description"
           defaultValue={schoolYear?.description || ""}
           placeholder='Décrivez brièvement cette année scolaire'
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
         <InputError message={formErrors?.description} />
       </div>
       <div>
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Date de début</label>
+            <label className="block text-sm font-medium text-secondary-700 mb-1">Date de début</label>
             <input
               name='date_debut'
               type="date"
               defaultValue={schoolYear?.date_debut || ''}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Date de fin</label>
+            <label className="block text-sm font-medium text-secondary-700 mb-1">Date de fin</label>
             <input
               name='date_fin'
               type="date"
               defaultValue={schoolYear?.date_fin || ''}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
         </div>
@@ -89,17 +89,17 @@ const SchoolYearForm: React.FC<SchoolYearFormPropsType> = ({ schoolYear, handleC
         <button
           type="button"
           onClick={handleClose}
-          className="px-2 py-1 sm:px-4 sm:py-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+          className="px-2 py-1 sm:px-4 sm:py-2 _classe text-secondary-600 border border-secondary-300 rounded-lg hover:bg-secondary-50"
         >
           <X className='inline-block w-5 h-5 me-1' />
           Annuler
         </button>
         <button
           type="submit"
-          className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+          className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-primary-600 text-light rounded-lg hover:bg-primary-700 flex items-center"
         >
           {action.isLoading || action.isUpdating ?
-            <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+            <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div> :
             <>
               {schoolYear ?
                 <PenBox className='inline-block w-5 h-5 me-1' /> :

@@ -45,14 +45,14 @@ const SubjectComponent = ({ subject, levelSubject, nameKey, onDelete, type = "up
         <div key={`${nameKey}`} className="w-100 min-h-10 gap-1 grid grid-cols-12 my-2 border-r">
             <div
                 className={clsx(
-                    { 'border-blue-200': type !== "update" },
+                    { 'border-primary-200': type !== "update" },
                     "col-span-4 flex items-center justify-center border relative"
                 )}
                 style={{ backgroundColor: hexToRgba(subject.couleur, 0.1) }}
             >
                 <span className='absolute top-0 right-0 text-xl'>
                     {type !== "update" &&
-                        <Plus size={20} className='text-blue-500' />
+                        <Plus size={20} className='text-primary-500' />
                     }
                 </span>
                 {subject.denomination}
@@ -60,7 +60,7 @@ const SubjectComponent = ({ subject, levelSubject, nameKey, onDelete, type = "up
             <input
                 type="number"
                 min={1}
-                className="px-3 py-2 border col-span-7 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-2 border col-span-7 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="Coefficient..."
                 value={value}
                 onChange={(e) => setValue(parseInt(e.target.value))}

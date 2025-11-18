@@ -67,7 +67,7 @@ const ValueForm: React.FC<ValueFormProps> = ({ value, handleClose }) => {
                         rows={3}
                         name="description"
                         defaultValue={value?.description}
-                        className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                        className="block p-2.5 w-full text-sm text-secondary-900 bg-secondary-50 rounded-lg border border-secondary-300 focus:ring-primary-500 focus:border-primary-500"
                         placeholder="Décrivez la valeur..."
                     />
                     <InputError message={formErrors?.description} />
@@ -93,7 +93,7 @@ const ValueForm: React.FC<ValueFormProps> = ({ value, handleClose }) => {
                     <button
                         type="button"
                         onClick={handleClose}
-                        className="px-2 py-1 sm:px-4 sm:py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                        className="px-2 py-1 sm:px-4 sm:py-2 text-secondary-600 border border-secondary-300 rounded-lg hover:bg-secondary-50"
                     >
                         <X className='inline-block w-5 h-5 me-1' />
                         Annuler
@@ -101,10 +101,10 @@ const ValueForm: React.FC<ValueFormProps> = ({ value, handleClose }) => {
                 }
                 <button
                     type="submit"
-                    className="px-2 py-1 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+                    className="px-2 py-1 sm:px-4 sm:py-2 bg-primary-600 text-light rounded-lg hover:bg-primary-700 flex items-center"
                 >
                     {action.isLoading || action.isUpdating ?
-                        <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+                        <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div> :
                         <>
                             {value ?
                                 <PenBox className='inline-block w-5 h-5 me-1' /> :

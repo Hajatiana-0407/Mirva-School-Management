@@ -33,7 +33,7 @@ export const getFileIcon = (fileName: string, size = 12) => {
         return <FileImage className={`w-${size} h-${size} text-green-400`} />;
 
     if (videoExt.includes(ext))
-        return <FileVideo className={`w-${size} h-${size} text-blue-400`} />;
+        return <FileVideo className={`w-${size} h-${size} text-primary-400`} />;
 
     if (audioExt.includes(ext))
         return <FileAudio className={`w-${size} h-${size} text-purple-500`} />;
@@ -63,10 +63,10 @@ export const getFileIcon = (fileName: string, size = 12) => {
         return <FileCode className={`w-${size} h-${size} text-indigo-500`} />;
 
     if (textExt.includes(ext))
-        return <FileText className={`w-${size} h-${size} text-gray-500`} />;
+        return <FileText className={`w-${size} h-${size} text-secondary-500`} />;
 
     // Fichier inconnu
-    return <File className={`w-${size} h-${size} text-gray-400`} />;
+    return <File className={`w-${size} h-${size} text-secondary-400`} />;
 };
 
 const isImage = (fileName: string) =>
@@ -114,14 +114,14 @@ const VideoOrFileInput: React.FC<VideoOrFileInputProps> = ({
     return (
         <div>
             {label && (
-                <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+                <label className="block text-sm font-medium text-secondary-700 mb-1">{label}</label>
             )}
             <div
-                className="flex items-center justify-center border-2 border-dashed rounded-lg h-52 bg-gray-50 border-gray-400 cursor-pointer relative"
+                className="flex items-center justify-center border-2 border-dashed rounded-lg h-52 bg-secondary-50 border-secondary-400 cursor-pointer relative"
                 onClick={() => inputRef.current?.click()}
             >
                 {!file ? (
-                    <div className="flex flex-col items-center text-gray-600">
+                    <div className="flex flex-col items-center text-secondary-600">
                         <FileText className="w-28 h-28 mb-2" />
                         <span className="text-md">
                             Cliquez pour ajouter un fichier, une image ou une vidéo
@@ -141,7 +141,7 @@ const VideoOrFileInput: React.FC<VideoOrFileInputProps> = ({
                         )}
                         <button
                             type="button"
-                            className="absolute right-3 top-2 text-sm text-red-400 bg-gray-50 rounded cursor-pointer border"
+                            className="absolute right-3 top-2 text-sm text-red-400 bg-secondary-50 rounded cursor-pointer border"
                             onClick={handleRemoveFile}
                         >
                             <X />
@@ -158,7 +158,7 @@ const VideoOrFileInput: React.FC<VideoOrFileInputProps> = ({
                 />
             </div>
             {file && !defaultValue && (
-                <div className="text-md text-gray-700 underline mt-2 text-center truncate">{file.split('/').pop()}</div>
+                <div className="text-md text-secondary-700 underline mt-2 text-center truncate">{file.split('/').pop()}</div>
             )}
             {errorMessage && (
                 <InputError message={errorMessage} />

@@ -49,7 +49,7 @@ const Payments: React.FC = () => {
   };
 
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
+    { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'primary' },
     { icon: Edit, type:'update', label: 'Modifier', onClick: (item: any) => console.log('Modifier', item), color: 'green' },
     { icon: Archive,type:'delete', label: 'Archiver', onClick: (item: any) => console.log('Archiver', item), color: 'red' },
   ];
@@ -57,10 +57,10 @@ const Payments: React.FC = () => {
   return (
     <div className="space-y-4 md:space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Gestion des paiements</h1>
+        <h1 className="text-2xl font-bold text-secondary-900">Gestion des paiements</h1>
         <button
           onClick={() => setShowModal(true)}
-          className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+          className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
           <span>Nouveau paiement</span>
@@ -69,37 +69,37 @@ const Payments: React.FC = () => {
 
       {/* Statistiques des paiements */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-lg shadow-sm border">
+        <div className="bg-light p-4 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Total facturé</p>
-              <p className="text-2xl font-bold text-gray-900">{paymentStats.total} €</p>
+              <p className="text-sm font-medium text-secondary-600">Total facturé</p>
+              <p className="text-2xl font-bold text-secondary-900">{paymentStats.total} €</p>
             </div>
-            <CreditCard className="w-8 h-8 text-gray-400" />
+            <CreditCard className="w-8 h-8 text-secondary-400" />
           </div>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-sm border">
+        <div className="bg-light p-4 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Payé</p>
+              <p className="text-sm font-medium text-secondary-600">Payé</p>
               <p className="text-2xl font-bold text-green-600">{paymentStats.paye} €</p>
             </div>
             <CheckCircle className="w-8 h-8 text-green-400" />
           </div>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-sm border">
+        <div className="bg-light p-4 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">En attente</p>
+              <p className="text-sm font-medium text-secondary-600">En attente</p>
               <p className="text-2xl font-bold text-yellow-600">{paymentStats.enAttente} €</p>
             </div>
             <Clock className="w-8 h-8 text-yellow-400" />
           </div>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-sm border">
+        <div className="bg-light p-4 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">En retard</p>
+              <p className="text-sm font-medium text-secondary-600">En retard</p>
               <p className="text-2xl font-bold text-red-600">{paymentStats.enRetard} €</p>
             </div>
             <XCircle className="w-8 h-8 text-red-400" />
@@ -114,8 +114,8 @@ const Payments: React.FC = () => {
             onClick={() => setActiveTab('payments')}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
               activeTab === 'payments'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                ? 'border-primary-500 text-primary-600'
+                : 'border-transparent text-secondary-500 hover:text-secondary-700 hover:border-secondary-300'
             }`}
           >
             Paiements
@@ -124,8 +124,8 @@ const Payments: React.FC = () => {
             onClick={() => setActiveTab('invoices')}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
               activeTab === 'invoices'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                ? 'border-primary-500 text-primary-600'
+                : 'border-transparent text-secondary-500 hover:text-secondary-700 hover:border-secondary-300'
             }`}
           >
             Factures
@@ -134,8 +134,8 @@ const Payments: React.FC = () => {
             onClick={() => setActiveTab('reminders')}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
               activeTab === 'reminders'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                ? 'border-primary-500 text-primary-600'
+                : 'border-transparent text-secondary-500 hover:text-secondary-700 hover:border-secondary-300'
             }`}
           >
             Rappels
@@ -143,20 +143,20 @@ const Payments: React.FC = () => {
         </nav>
       </div>
 
-      <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+      <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6 md:mb-6">
           <div className="flex items-center space-x-4">
             <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
               <input
                 type="text"
                 placeholder="Rechercher un paiement..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
-            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-300 rounded-lg hover:bg-gray-50">
+            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg hover:bg-secondary-50">
               <Filter className="w-4 h-4" />
               <span>Filtres</span>
             </button>
@@ -179,8 +179,8 @@ const Payments: React.FC = () => {
       >
         <form className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Élève</label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <label className="block text-sm font-medium text-secondary-700 mb-1">Élève</label>
+            <select className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
               <option value="">Sélectionner un élève</option>
               <option value="Martin Pierre">Martin Pierre</option>
               <option value="Dubois Sophie">Dubois Sophie</option>
@@ -189,8 +189,8 @@ const Payments: React.FC = () => {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <label className="block text-sm font-medium text-secondary-700 mb-1">Type</label>
+              <select className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
                 <option value="">Sélectionner un type</option>
                 <option value="Scolarité">Scolarité</option>
                 <option value="Cantine">Cantine</option>
@@ -199,26 +199,26 @@ const Payments: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Montant (€)</label>
+              <label className="block text-sm font-medium text-secondary-700 mb-1">Montant (€)</label>
               <input
                 type="number"
                 min="0"
                 step="0.01"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date d'échéance</label>
+              <label className="block text-sm font-medium text-secondary-700 mb-1">Date d'échéance</label>
               <input
                 type="date"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <label className="block text-sm font-medium text-secondary-700 mb-1">Statut</label>
+              <select className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
                 <option value="En attente">En attente</option>
                 <option value="Payé">Payé</option>
                 <option value="En retard">En retard</option>
@@ -226,10 +226,10 @@ const Payments: React.FC = () => {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <label className="block text-sm font-medium text-secondary-700 mb-1">Description</label>
             <textarea
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               placeholder="Description du paiement"
             />
           </div>
@@ -237,13 +237,13 @@ const Payments: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowModal(false)}
-              className="px-2 py-1 sm:px-4 sm:py-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="px-2 py-1 sm:px-4 sm:py-2 _classe text-secondary-600 border border-secondary-300 rounded-lg hover:bg-secondary-50"
             >
               Annuler
             </button>
             <button
               type="submit"
-              className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-primary-600 text-light rounded-lg hover:bg-primary-700"
             >
               Créer
             </button>

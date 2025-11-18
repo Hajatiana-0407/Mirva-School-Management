@@ -37,18 +37,18 @@ const DownloadProgression: React.FC<DownloadProgressionType> = ({ percent = 0, s
                 ></div>
 
                 {/* Dialog */}
-                <div className="bg-white mx-auto space-y-3 rounded px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full sm:p-4">
+                <div className="bg-light mx-auto space-y-3 rounded px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full sm:p-4">
                     <div className="flex items-center space-x-3">
                         <div className="">
                             <Icon className={`w-10 h-10 text-${color}-600`} />
                         </div>
                         <div className='flex flex-col justify-center flex-1'>
                             <div>
-                                <h3 className="text-md italic font-semibold text-gray-600">Préparation du téléchargement...</h3>
+                                <h3 className="text-md italic font-semibold text-secondary-600">Préparation du téléchargement...</h3>
                             </div>
-                            <div className="w-full bg-gray-200 rounded-full">
+                            <div className="w-full bg-secondary-200 rounded-full">
                                 <div
-                                    className={`bg-${color}-500 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full transition-all`}
+                                    className={`bg-${color}-500 text-xs font-medium text-primary-100 text-center p-0.5 leading-none rounded-full transition-all`}
                                     style={{
                                         width: `${percent}%`
                                     }}
@@ -57,7 +57,7 @@ const DownloadProgression: React.FC<DownloadProgressionType> = ({ percent = 0, s
                         </div>
                         <div>
                             <span
-                                className="absolute right-1 top-1 text-sm text-red-400 bg-gray-50 rounded cursor-pointer border"
+                                className="absolute right-1 top-1 text-sm text-red-400 bg-secondary-50 rounded cursor-pointer border"
                                 onClick={() => {
                                     setIsShow(false)
                                     handleClose()

@@ -93,7 +93,7 @@ const Lesson = () => {
           <button
             onClick={() => setShowModal(true)}
             disabled={isStudent}
-            className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors disabled:bg-blue-400"
+            className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors disabled:bg-primary-400"
           >
             <Plus className="w-4 h-4" />
             <span className='max-md:hidden-susp'>Nouvelle leçon</span>
@@ -101,20 +101,20 @@ const Lesson = () => {
         }
       </Title>
 
-      <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+      <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
               <input
                 type="text"
                 placeholder="Rechercher une année scolaire..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
-            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-300 rounded-lg hover:bg-gray-50">
+            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg hover:bg-secondary-50">
               <Filter className="w-4 h-4" />
               <span>Filtres</span>
             </button>
@@ -129,7 +129,7 @@ const Lesson = () => {
           </div>
         }
         {!action.isLoading && !datas.length && (
-          <div className='text-gray-400 text-md text-center pt-6'>
+          <div className='text-secondary-400 text-md text-center pt-6'>
             Nous n’avons trouvé aucun élément.
           </div>
         )}
@@ -164,7 +164,7 @@ const Lesson = () => {
               },
               {
                 label: 'Télécharger',
-                color: 'text-blue-500',
+                color: 'text-primary-500',
                 onClick: () => handleDownload(lesson),
                 icon: Download
               },
@@ -180,7 +180,7 @@ const Lesson = () => {
               })
             }
             return (
-              <div key={`${lesson.id_lecon}_${idx}`} className="bg-white rounded-lg shadow p-4 border flex flex-col">
+              <div key={`${lesson.id_lecon}_${idx}`} className="bg-light rounded-lg shadow p-4 border flex flex-col">
                 <div className="flex items-center justify-between mb-2">
                   <span
                     className="px-3 py-1 flex items-center gap-1 relative rounded-full text-xs font-semibold border"
@@ -190,7 +190,7 @@ const Lesson = () => {
                     {lesson.denomination || 'Matière'}
                   </span>
                   <div className='flex items-center'>
-                    <span className="bg-gray-100  flex items-center gap-1 px-2 py-1 rounded-full text-xs text-gray-900">
+                    <span className="bg-secondary-100  flex items-center gap-1 px-2 py-1 rounded-full text-xs text-secondary-900">
                       <GraduationCap className='w-4 h-4' />
                       {lesson.niveau || ''}
 
@@ -211,12 +211,12 @@ const Lesson = () => {
                 </div>
 
                 {/* Date d'ajout */}
-                <span className="text-xs text-gray-400 mb-2">
+                <span className="text-xs text-secondary-400 mb-2">
                   {createdAt ? `Ajouté le ${createdAt.toLocaleDateString()}` : ''}
                 </span>
 
                 {/* Aperçu vidéo ou icône fichier */}
-                <div className="mb-4 flex justify-center items-center h-32 bg-gray-50 rounded">
+                <div className="mb-4 flex justify-center items-center h-32 bg-secondary-50 rounded">
                   {isVideo ? (
                     <video src={fileUrl} controls className="rounded shadow h-32 max-w-full" />
                   ) :
@@ -230,7 +230,7 @@ const Lesson = () => {
 
                 {/* Description du leçcon */}
                 <div className="max-w-full">
-                  <p className="text-gray-500 text-sm mb-4 line-clamp-3 text-justify">
+                  <p className="text-secondary-500 text-sm mb-4 line-clamp-3 text-justify">
                     {lesson.lecon_description}
                   </p>
                 </div>
@@ -240,7 +240,7 @@ const Lesson = () => {
                   <div>
                     <Link
                       to={`/back-office/lessons/${lesson.slug}`}
-                      className="bg-blue-600 border border-blue-700 rounded-lg px-4 py-1 text-white hover:bg-blue-700 transition flex items-center">
+                      className="bg-primary-600 border border-primary-700 rounded-lg px-4 py-1 text-light hover:bg-primary-700 transition flex items-center">
                       <span className='max-md:hidden-susp'>Voir plus</span>
                       <Eye className=' ms-2' />
                     </Link>
@@ -248,23 +248,23 @@ const Lesson = () => {
                   <div className='space-x-2 flex '>
                     {lesson.published == 0 && !isStudent &&
                       <button
-                        className="bg-orange-600 relative rounded-lg p-2 text-white hover:bg-orange-700 transition group"
+                        className="bg-orange-600 relative rounded-lg p-2 text-light hover:bg-orange-700 transition group"
                         title="Publié"
                         onClick={() => { handlePublish(lesson) }}
                       >
                         <Share2 className='w-5 h-5' />
-                        <div className="hidden group-hover:block absolute z-20 left-full bottom-full mt-1 px-2 py-1 bg-orange-500 text-white rounded-full rounded-bl-none text-sm shadow">
+                        <div className="hidden group-hover:block absolute z-20 left-full bottom-full mt-1 px-2 py-1 bg-orange-500 text-light rounded-full rounded-bl-none text-sm shadow">
                           Publié
                         </div>
                       </button>
                     }
                     <button
-                      className="bg-green-600 relative rounded-lg p-2 text-white hover:bg-green-700 transition group"
+                      className="bg-green-600 relative rounded-lg p-2 text-light hover:bg-green-700 transition group"
                       title="Télécharger"
                       onClick={() => { handleDownload(lesson) }}
                     >
                       <Download className='w-5 h-5' />
-                      <div className="hidden group-hover:block absolute z-20 left-full bottom-full mt-1 px-2 py-1 bg-green-500 text-white rounded-full rounded-bl-none text-sm shadow">
+                      <div className="hidden group-hover:block absolute z-20 left-full bottom-full mt-1 px-2 py-1 bg-green-500 text-light rounded-full rounded-bl-none text-sm shadow">
                         Télécharger
                       </div>
                     </button>

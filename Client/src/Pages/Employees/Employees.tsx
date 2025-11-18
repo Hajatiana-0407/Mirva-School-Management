@@ -19,7 +19,7 @@ import Title from '../../Components/ui/Title';
 
 // Mapping des types à des couleurs de fond
 export const typeBgColors: Record<string, string> = {
-  'Enseignant': 'bg-blue-100 text-blue-800',
+  'Enseignant': 'bg-primary-100 text-primary-800',
   'Secrétaire': 'bg-green-100 text-green-800',
   'Gardin': 'bg-yellow-100 text-yellow-800',
   'Surveillant': 'bg-purple-100 text-purple-800',
@@ -83,7 +83,7 @@ const Employees: React.FC = () => {
 
   // TABLEAUX 
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: (item: EmployeeType) => navigate("/back-office/employees/" + item.matricule_personnel), color: 'blue' },
+    { icon: Eye, label: 'Voir', onClick: (item: EmployeeType) => navigate("/back-office/employees/" + item.matricule_personnel), color: 'primary' },
     { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
     { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
   ];
@@ -107,7 +107,7 @@ const Employees: React.FC = () => {
     {
       key: 'type', label: 'Fonction', render: (employeType: string) => {
         const type = employeType || 'Autre';
-        const color = typeBgColors[type] || 'bg-gray-200 text-gray-800';
+        const color = typeBgColors[type] || 'bg-secondary-200 text-secondary-800';
         const Icon = typeIcons[type];
         return (
           <span className={`px-2 py-1 rounded-full text-sm flex items-center gap-1 ${color}`}>
@@ -129,7 +129,7 @@ const Employees: React.FC = () => {
       key: 'telephone', label: 'Contact', render: (value: string, item: EmployeeType) => (
         <div>
           {value}
-          <span className='block text-sm text-blue-500'>{item.email} </span>
+          <span className='block text-sm text-primary-500'>{item.email} </span>
         </div>
       )
     },
@@ -192,7 +192,7 @@ const Employees: React.FC = () => {
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+            className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
             <span className='max-md:hidden-susp' >Nouveau employés</span>
@@ -201,22 +201,22 @@ const Employees: React.FC = () => {
       </Title>
 
       {/* Filtrage  */}
-      <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+      <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6 md:mb-6">
           <div className="flex items-center space-x-4">
             <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
               <input
                 type="text"
                 placeholder="Rechercher un enseignant..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
             <select
               id="countries"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 cursor-pointer"
+              className="bg-secondary-50 border border-secondary-300 text-secondary-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-3 cursor-pointer"
               onChange={(e) => {
                 setSearchTerm(e.target.value)
               }}
@@ -230,7 +230,7 @@ const Employees: React.FC = () => {
             </select>
             <select
               id="countries"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 cursor-pointer"
+              className="bg-secondary-50 border border-secondary-300 text-secondary-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-3 cursor-pointer"
               onChange={(e) => {
                 setSearchTerm(e.target.value)
               }}
@@ -241,7 +241,7 @@ const Employees: React.FC = () => {
               <option value="Démissionnaire">Démissionnaire</option>
 
             </select>
-            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-300 rounded-lg hover:bg-gray-50">
+            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg hover:bg-secondary-50">
               <Filter className="w-4 h-4" />
               <span>Filtres</span>
             </button>

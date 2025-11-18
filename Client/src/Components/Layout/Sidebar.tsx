@@ -1,33 +1,7 @@
-import {
-  LayoutDashboard,
-  Users,
-  UserCheck,
-  School,
-  GraduationCap,
-  BookOpen,
-  Calendar,
-  UserCog,
-  FileText,
-  MessageSquare,
-  CreditCard,
-  Settings,
-  ChevronDown,
-  Menu,
-  ChevronLeft,
-  Backpack,
-  UserPlus,
-  Notebook,
-  BookOpenText,
-  Power,
-  NotebookPen,
-  UserRound,
-  Computer,
-  Home,
-  Undo2,
-} from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { ChevronDown, Menu, Power, Home, X } from 'lucide-react';
+import { NavLink, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSchoolState } from '../../Pages/Settings/School/redux/SchoolSlice';
 import { getSchoolYearState } from '../../Pages/School-Year/redux/SchoolYearSlice';
@@ -37,70 +11,15 @@ import { AppDispatch } from '../../Redux/store';
 import { logoutUser } from '../../Pages/Auth/redux/AuthAsyncThunk';
 import CollapsedMenuItem from '../CollapsedMenuItem';
 import { navigate } from '../../Utils/navigate';
+import { baseUrl } from '../../Utils/Utils';
+import { MenuItemType } from '../../Utils/Types';
+import { menuItems } from '../../Utils/dataUtils';
 
-interface MenuItemType {
-  id: string;
-  label: string;
-  icon: React.ComponentType<{ className?: string }>;
-  path?: string;
-  children?: MenuItemType[];
-}
 interface SidebarPropsType {
   collapsed: boolean;
   onToggleCollapse: () => void;
   widowWidth: number;
 }
-
-// Liste des menues
-const menuItems: MenuItemType[] = [
-  { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard, path: '/back-office/dashboard' },
-  { id: 'registration', label: 'Inscriptions', icon: UserPlus, path: '/back-office/registration' },
-  { id: 'students', label: 'Élèves', icon: Users, path: '/back-office/students' },
-  { id: 'schedule', label: 'Emploi du temps', icon: Calendar, path: '/back-office/schedule' },
-  { id: 'attendance', label: 'Présences', icon: UserCog, path: '/back-office/attendance' },
-  { id: 'exams', label: 'Examens et Notes', icon: FileText, path: '/back-office/exams' },
-  {
-    id: 'course',
-    label: 'Leçons et exercices',
-    icon: Notebook,
-    children: [
-      { id: 'lessons', label: 'Leçons', icon: BookOpenText, path: '/back-office/lessons' },
-      { id: 'exercices', label: 'Exercices', icon: NotebookPen, path: '/back-office/exercices' },
-    ],
-  },
-  {
-    id: 'management',
-    label: 'Administration',
-    icon: UserCheck,
-    children: [
-      { id: 'employees', label: 'Employés', icon: UserRound, path: '/back-office/employees' },
-      { id: 'teachers', label: 'Enseignants', icon: UserCheck, path: '/back-office/teachers' },
-      { id: 'parents', label: 'Parents', icon: Users, path: '/back-office/parents' },
-      { id: 'payments', label: 'Paiements', icon: CreditCard, path: '/back-office/payments' },
-      { id: 'messages', label: 'Messagerie', icon: MessageSquare, path: '/back-office/messages' },
-    ],
-  },
-  {
-    id: 'settingsSection',
-    label: 'Configuration',
-    icon: Settings,
-    children: [
-      { id: 'school-year', label: 'Année scolaire', icon: Backpack, path: '/back-office/school-year' },
-      { id: 'levels', label: 'Niveaux', icon: GraduationCap, path: '/back-office/levels?o=list-level' },
-      { id: 'classes', label: 'Classes', icon: School, path: '/back-office/classes' },
-      { id: 'subjects', label: 'Matières', icon: BookOpen, path: '/back-office/subjects' },
-      { id: 'settings', label: 'Paramètres', icon: Settings, path: '/back-office/settings' },
-    ],
-  },
-  {
-    id: 'website-settings',
-    label: 'Paramètres du site',
-    icon: Computer,
-    children: [
-      { id: 'homepage-settings', label: "Page d'accueil", icon: Home, path: '/back-office/homepage-settings' },
-    ],
-  },
-];
 
 const flattenMenuItems = (items: MenuItemType[]): MenuItemType[] => {
   let flat: MenuItemType[] = [];
@@ -120,7 +39,58 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
   const { datas: { permissions, user } } = useSelector(getAuthState);
   const [isOpentDialog, setIsOpentDialog] = useState(false);
   const dispatch: AppDispatch = useDispatch();
+  const location = useLocation();
 
+  // Fonction CORRIGÉE pour vérifier si un menu parent a un enfant actif
+  const isParentActive = useMemo(() => {
+    const activePaths: { [key: string]: boolean } = {};
+
+    const checkChildrenActive = (items: MenuItemType[], parentId?: string): boolean => {
+      return items.some(item => {
+        let isActive = false;
+
+        // Vérifier si cet item est actif
+        if (item.path) {
+          // Comparaison plus robuste des URLs
+          const currentPath = location.pathname + location.search;
+          const itemPath = item.path;
+
+          // Vérifier si le chemin actuel correspond au chemin de l'item
+          // ou si c'est un sous-chemin (pour les routes imbriquées)
+          isActive = currentPath === itemPath ||
+            currentPath.startsWith(itemPath + '/') ||
+            (itemPath.includes('?') && currentPath.split('?')[0] === itemPath.split('?')[0]);
+        }
+
+        // Vérifier les enfants récursivement
+        if (item.children) {
+          const childActive = checkChildrenActive(item.children, item.id);
+          if (childActive) {
+            isActive = true;
+            // Marquer le parent comme actif si un enfant est actif
+            if (parentId) {
+              activePaths[parentId] = true;
+            }
+          }
+        }
+
+        // Si cet item est actif, marquer son parent comme actif
+        if (isActive && parentId) {
+          activePaths[parentId] = true;
+        }
+
+        // Marquer l'item lui-même comme actif si nécessaire
+        if (isActive && item.id) {
+          activePaths[item.id] = true;
+        }
+
+        return isActive;
+      });
+    };
+
+    checkChildrenActive(menuItems);
+    return activePaths;
+  }, [location.pathname, location.search]);
 
   const onConfirmLogout = () => {
     setIsOpentDialog(false);
@@ -134,7 +104,7 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
   const renderCollapsedMenuItems = () => {
     const flatMenus = flattenMenuItems(menuItems);
     return (
-      <ul>
+      <ul className="space-y-2">
         {flatMenus.map((menu, idx) => {
           if (!permissions?.[menu.id]?.read) return null;
           if (menu.path) {
@@ -145,11 +115,12 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
                 label={menu.label}
                 icon={menu.icon}
                 path={menu.path}
+                color={menu.color}
               />
             );
           }
           if (idx < flatMenus.length - 1) {
-            return <hr key={`hr-${idx}`} className="border-t border-blue-200 mx-2" />;
+            return <hr key={`hr-${idx}`} className="border-t border-gray-200 mx-1 my-3" />;
           }
           return null;
         })}
@@ -157,13 +128,22 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
     );
   };
 
-  const renderMenuItems = (items: MenuItemType[], level = 0) => (
-    <ul className="space-y-0.5">
+  const renderMenuItems = (items: (MenuItemType & { color?: string; childColor?: string })[], level = 0, parentColor?: string) => (
+    <ul className={clsx(
+      "space-y-2",
+      level === 0 ? "p-3" : "py-2"
+    )}>
       {items.map(menu => {
         const Icon = menu.icon;
         const hasChildren = !!menu.children?.length;
         const isOpen = openMenus[menu.id];
+        const isParentActiveItem = isParentActive[menu.id];
         if (!permissions?.[menu.id]?.read) return null;
+
+        // Déterminer la couleur de l'icône
+        const iconColor = level > 0
+          ? (menu.color || parentColor || 'text-gray-500')
+          : (menu.color || 'text-gray-600');
 
         return (
           <li key={menu.id}>
@@ -177,24 +157,43 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
                 className={({ isActive }: { isActive: boolean }) =>
                   clsx(
                     {
-                      'px-4 justify-center': collapsed,
-                      'px-3 md:px-6': !collapsed,
-                      'bg-blue-50 text-blue-700 border-r-2 border-blue-700': isActive,
-                      'text-gray-700 hover:bg-gray-50': !isActive,
+                      'px-3 justify-center': collapsed,
+                      'px-4': !collapsed,
+                      // Style différent pour les parents (level 0) vs sous-menus (level > 0)
+                      'bg-gradient-to-r from-primary-500 to-green-300 text-white shadow-lg': (isActive || isParentActiveItem) && level === 0,
+                      'bg-primary-50 text-primary-700 border border-primary-200': isActive && level > 0,
+                      'text-gray-700 hover:bg-gray-100 hover:text-gray-900 border border-transparent hover:border-gray-200': !isActive && !isParentActiveItem,
                     },
-                    'w-full flex items-center py-3 text-left transition-colors group relative',
-                    level > 0 ? 'pl-8' : ''
+                    'w-full flex items-center py-3 text-left transition-all duration-200 rounded-xl group relative',
+                    level > 0 ? '' : ''
                   )
                 }
               >
                 {({ isActive }: { isActive: boolean }) => (
                   <>
-                    <Icon className={`w-5 h-5 ${collapsed ? '' : 'mr-3'}`} />
+                    <div className={clsx(
+                      'relative z-10 flex-shrink-0',
+                      collapsed ? '' : 'mr-3'
+                    )}>
+                      <Icon className={clsx(
+                        'w-5 h-5 transition-colors duration-200',
+                        (isActive || isParentActiveItem)
+                          ? (level === 0 ? 'text-white' : 'text-primary-600')
+                          : iconColor
+                      )} />
+                    </div>
                     {!collapsed && (
                       <>
-                        <span className="font-medium">{menu.label}</span>
-                        {isActive && (
-                          <div className='w-1.5 h-5 bg-blue-500 ml-auto rounded-full'></div>
+                        <span className={clsx(
+                          'font-medium transition-colors duration-200 flex-grow',
+                          (isActive || isParentActiveItem)
+                            ? (level === 0 ? 'text-white' : 'text-primary-700')
+                            : 'text-gray-800'
+                        )}>
+                          {menu.label}
+                        </span>
+                        {(isActive || isParentActiveItem) && level === 0 && (
+                          <div className="ml-2 w-2 h-2 bg-white rounded-full animate-pulse flex-shrink-0"></div>
                         )}
                       </>
                     )}
@@ -205,20 +204,34 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
               <button
                 type="button"
                 className={clsx(
-                  'w-full flex items-center py-3 px-3 md:px-6 text-left transition-colors font-medium text-gray-800 hover:bg-gray-400/60 bg-gray-300/50',
-                  collapsed ? 'justify-center px-4' : '',
-                  level > 0 ? 'pl-8' : ''
+                  'w-full flex items-center py-3 text-left transition-all duration-200 rounded-xl font-medium',
+                  {
+                    'bg-gradient-to-r from-primary-500 to-green-300 text-white shadow-lg': isParentActiveItem && level === 0,
+                    'bg-primary-50 text-primary-700 border border-primary-200': isParentActiveItem && level > 0,
+                    'text-gray-800 hover:bg-gray-100 hover:text-gray-900 border border-transparent hover:border-gray-200': !isParentActiveItem,
+                  },
+                  collapsed ? 'justify-center px-3' : 'px-3',
+                  level > 0 ? 'ml-2' : ''
                 )}
                 onClick={() => handleToggleMenu(menu.id)}
               >
-                <Icon className={`w-5 h-5 ${collapsed ? '' : 'mr-3'}`} />
+                <Icon className={clsx(
+                  'w-5 h-5 transition-colors duration-200 flex-shrink-0',
+                  isParentActiveItem
+                    ? (level === 0 ? 'text-white' : 'text-primary-600')
+                    : iconColor,
+                  collapsed ? '' : 'mr-3'
+                )} />
                 {!collapsed && (
                   <>
-                    <span>{menu.label}</span>
-                    <span className="ml-auto">
+                    <span className="flex-grow text-left">{menu.label}</span>
+                    <span className="ml-2 flex-shrink-0">
                       <ChevronDown
                         className={clsx(
-                          'w-4 h-4 transition-transform',
+                          'w-5 h-5 transition-transform duration-200',
+                          isParentActiveItem
+                            ? (level === 0 ? 'text-white' : 'text-primary-500')
+                            : 'text-gray-500',
                           isOpen ? 'rotate-180' : ''
                         )}
                       />
@@ -228,8 +241,11 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
               </button>
             )}
             {hasChildren && isOpen && !collapsed && (
-              <div className="mx-1 mb-1 rounded mt-0.5 shadow-inner border-2 border-gray-300">
-                {renderMenuItems(menu.children!, level + 1)}
+              <div className={clsx(
+                "mt-2 rounded-xl bg-gray-50/80 border border-gray-200/60 px-1",
+                level === 0 ? "" : "ml-3"
+              )}>
+                {renderMenuItems(menu.children!, level + 1, menu.childColor || menu.color)}
               </div>
             )}
           </li>
@@ -240,67 +256,82 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
 
   return (
     <div
-      className={`${collapsed ? 'w-10 sm:w-16' : 'w-64'} bg-white shadow-lg transition-all duration-300 ease-in-out flex flex-col h-screen`}
+      className={clsx(
+        'bg-white shadow-xl border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col h-screen',
+        collapsed ? ' w-[2.8rem] sm:w-16' : 'w-64'
+      )}
     >
-      <div className="py-6 border-b border-r">
+      {/* Header sobre */}
+      <div className="relative py-4 bg-white border-b border-gray-200">
+
+        {/* Logo | slogan | Année scolaire actif */}
         <div className="flex items-center justify-center">
           {!collapsed && (
-            <div className='text-center'>
-              <h1 className="text-xl font-bold text-gray-800">
-                {shoolInfo?.nom || "Nom de l'école"}
-              </h1>
-              <p className="text-sm text-gray-600">{shoolInfo?.slogan || 'Votre slogan'}</p>
-              <p className="text-xs text-left font-semibold text-blue-600">
+            <div className='text-center flex-1 mr-3'>
+              <div className="text-xl font-bold text-gray-800 font-halfre truncate flex justify-center">
+                <img src={baseUrl(shoolInfo.logo)} alt={shoolInfo.nom} className='max-h-20' />
+              </div>
+              <p className="text-sm text-gray-600 truncate mt-1">{shoolInfo?.slogan || 'Votre slogan'}</p>
+              <p className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-1 rounded-full mt-2 inline-block">
                 {activeSchoolYear?.nom}
               </p>
             </div>
           )}
-          <button
-            onClick={onToggleCollapse}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            title={collapsed ? 'Développer le menu' : 'Réduire le menu'}
-          >
-            {collapsed ? (
-              <Menu className="w-5 h-5 text-gray-600" />
-            ) : (
-              <ChevronLeft className="w-5 h-5 text-gray-600" />
-            )}
-          </button>
+
+          {/* Boutons pour reduire et afficher le menu */}
+          {collapsed ?
+            <button
+              onClick={onToggleCollapse}
+              className=" rounded-lg transition-all duration-200 flex-shrink-0"
+              title={'Développer le menu'}
+            >
+              <Menu className="w-6 h-6 text-gray-600" />
+            </button>
+            :
+            <button
+              onClick={onToggleCollapse}
+              className='top-2 right-2 absolute border p-1 rounded hover:bg-red-50 transition-all duration-150'
+              title='Réduire le menu'
+            >
+              <X className="w-5 h-5 text-gray-600" />
+            </button>
+          }
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="mt-2 flex-1  overflow-y-auto scroll">
+      <nav className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 py-2">
         {collapsed ? renderCollapsedMenuItems() : renderMenuItems(menuItems)}
       </nav>
 
-      {/* Bouton Déconnexion */}
-      <div className="h-max  py-2 space-y-0.5">
+      {/* Footer avec couleurs discrètes */}
+      <div className="p-3 space-y-3 bg-white border-t border-gray-200">
         <button
           className={clsx(
-            {
-              'justify-center': collapsed,
-              'px-3 md:px-6': !collapsed,
-            },
-            'text-gray-700 hover:bg-slate-300 bg-slate-200 w-full gap-3 flex items-center  py-3 text-left transition-colors group relative'
+            'w-full flex items-center transition-all duration-200 rounded-xl',
+            'bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 hover:from-blue-100 hover:to-blue-200',
+            'border border-blue-200 hover:border-blue-300 hover:shadow-md ',
+            'group',
+            collapsed ? 'justify-center px-3 py-3' : 'px-4 py-3 justify-start'
           )}
-          onClick={()=>navigate('/')}
+          onClick={() => navigate('/')}
         >
-          <Undo2 className="w-5 h-5 text-gray-600" />
-          {!collapsed && <span>Revenir dans le site</span>}
+          <Home className="w-5 h-5 flex-shrink-0  transition-transform" />
+          {!collapsed && <span className="ml-3 font-medium">Aller sur le site</span>}
         </button>
+
         <button
           className={clsx(
-            {
-              'justify-center': collapsed,
-              'px-3 md:px-6': !collapsed,
-            },
-            'text-gray-700 hover:bg-slate-300 bg-slate-200 w-full gap-3 flex items-center  py-3 text-left transition-colors group relative'
+            'w-full flex items-center transition-all duration-200 rounded-xl',
+            'bg-gradient-to-r from-red-50 to-red-100 text-red-700 hover:from-red-100 hover:to-red-200',
+            'border border-red-200 hover:border-red-300 hover:shadow-md ',
+            'group',
+            collapsed ? 'justify-center px-3 py-3' : 'px-4 py-3 justify-start'
           )}
           onClick={() => setIsOpentDialog(true)}
         >
-          <Power className="w-5 h-5 text-gray-600" />
-          {!collapsed && <span>Déconnexion</span>}
+          <Power className="w-5 h-5 flex-shrink-0 transition-transform" />
+          {!collapsed && <span className="ml-3 font-medium">Se déconnecter</span>}
         </button>
       </div>
 

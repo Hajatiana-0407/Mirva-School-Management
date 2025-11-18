@@ -52,7 +52,7 @@ const AnimatedBackground: React.FC = () => {
             {objects.map((obj) => (
                 <div
                     key={obj.id}
-                    className="absolute bg-blue-200 rounded-full"
+                    className="absolute bg-primary-200 rounded-full"
                     style={{
                         width: obj.size,
                         height: obj.size,

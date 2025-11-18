@@ -96,7 +96,7 @@ const ParentModifForm: React.FC<ParentModifFormPropsType> = ({ parent, handleClo
                         <button
                             type="button"
                             onClick={handleCloseModal}
-                            className="px-2 py-1 sm:px-4 sm:py-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                            className="px-2 py-1 sm:px-4 sm:py-2 _classe text-secondary-600 border border-secondary-300 rounded-lg hover:bg-secondary-50"
                         >
                             <X className='h-5 w-5 me-1 inline-block' />
                             Annuler
@@ -104,10 +104,10 @@ const ParentModifForm: React.FC<ParentModifFormPropsType> = ({ parent, handleClo
                     }
                     <button
                         type="submit"
-                        className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center "
+                        className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-primary-600 text-light rounded-lg hover:bg-primary-700 flex items-center "
                     >
                         {isUpdating ?
-                            <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+                            <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div> :
                             <PenBox className='h-5 w-5 me-1 inline-block' />
                         }
                         <span>Modifier</span>

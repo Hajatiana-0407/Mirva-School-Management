@@ -47,47 +47,47 @@ const RoleForm: React.FC<RoleFormPropsType> = ({ handleClose, role, copy }) => {
             <InputError message={error} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Nom du rôle</label>
+                    <label className="block text-sm font-medium text-secondary-700 mb-2">Nom du rôle</label>
                     <input
                         name='nom'
                         type="text"
                         defaultValue={role?.nom || ''}
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full px-4 py-3 border border-secondary-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
                         placeholder="Ex: Professeur principal"
                     />
                     <InputError message={formErrors?.nom} />
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Couleur</label>
+                    <label className="block text-sm font-medium text-secondary-700 mb-2">Couleur</label>
                     <input
                         name='couleur'
                         type="color"
                         defaultValue={role?.couleur || '#7C3AED'}
-                        className="w-full h-12 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full h-12 border border-secondary-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                     <InputError message={formErrors?.couleur} />
                 </div>
             </div>
 
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Déscription</label>
+                <label className="block text-sm font-medium text-secondary-700 mb-2">Déscription</label>
                 <textarea
                     name='description'
                     rows={3}
                     defaultValue={role?.description || ''}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-4 py-3 border border-secondary-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
                     placeholder="Décrivez les responsabilités de ce rôle..."
                 />
                 <InputError message={formErrors?.description} />
             </div>
 
             <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                <h3 className="text-xl font-semibold text-secondary-900 mb-4 flex items-center">
                     <Lock className='w-5 inline-block me-2' />
                     Permissions
                 </h3>
-                <div className="space-y-4 max-h-80 overflow-auto p-2 border bg-gray-50 relative">
-                    <div className="sticky top-0 min-w-[800px]  h-14 bg-white border-orange-200 shadow-orange-200 text-gray-800 text-md shadow-sm font-semibold border rounded-xl z-10 grid grid-cols-5 gap-4 items-center p-4">
+                <div className="space-y-4 max-h-80 overflow-auto p-2 border bg-secondary-50 relative">
+                    <div className="sticky top-0 min-w-[800px]  h-14 bg-light border-orange-200 shadow-orange-200 text-secondary-800 text-md shadow-sm font-semibold border rounded-xl z-10 grid grid-cols-5 gap-4 items-center p-4">
                         <div className='flex items-center gap-2'>
                             <Component className='w-5 h-5 text-orange-500' />
                             <span>Module</span>
@@ -97,7 +97,7 @@ const RoleForm: React.FC<RoleFormPropsType> = ({ handleClose, role, copy }) => {
                             <span>Lécture</span>
                         </div>
                         <div className='flex items-center gap-2'>
-                            <FilePlus className='w-5 h-5 text-blue-500' />
+                            <FilePlus className='w-5 h-5 text-primary-500' />
                             <span>Création</span>
                         </div>
                         <div className='flex items-center gap-2'>
@@ -114,11 +114,11 @@ const RoleForm: React.FC<RoleFormPropsType> = ({ handleClose, role, copy }) => {
                             <div key={module.id_module} className={
                                 clsx({
                                     'shadow shadow-orange-300': module.is_section,
-                                },'bg-white border rounded-xl p-4 min-w-[800px]')
+                                },'bg-light border rounded-xl p-4 min-w-[800px]')
                             } >
                                 <div className={clsx({
                                     'text-orange-600': module.is_section,
-                                    'text-gray-600': !module.is_section,
+                                    'text-secondary-600': !module.is_section,
                                 }, 'grid grid-cols-5 gap-4 items-center')} >
                                     <h4 className={clsx({
                                         'capitalize' : !module.is_section , 
@@ -133,7 +133,7 @@ const RoleForm: React.FC<RoleFormPropsType> = ({ handleClose, role, copy }) => {
                                         <>
                                             <CheckInput
                                                 name={`rolePermissions[${module.id_module}][create]`}
-                                                color='blue'
+                                                color='primary'
                                                 defaultValue={role?.permissions[module.id_module as number]?.create || copy?.permissions[module.id_module as number]?.create}
                                             />
                                             <CheckInput
@@ -160,7 +160,7 @@ const RoleForm: React.FC<RoleFormPropsType> = ({ handleClose, role, copy }) => {
                     <button
                         type="button"
                         onClick={handleClose}
-                        className="px-2 py-1 sm:px-4 sm:py-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                        className="px-2 py-1 sm:px-4 sm:py-2 _classe text-secondary-600 border border-secondary-300 rounded-lg hover:bg-secondary-50"
                     >
                         <X className='inline-block w-5 h-5 me-1' />
                         Annuler
@@ -168,10 +168,10 @@ const RoleForm: React.FC<RoleFormPropsType> = ({ handleClose, role, copy }) => {
                 }
                 <button
                     type="submit"
-                    className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+                    className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-primary-600 text-light rounded-lg hover:bg-primary-700 flex items-center"
                 >
                     {action.isUpdating || action.isLoading ?
-                        <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+                        <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div> :
                         <>
                             {role ?
                                 <PenBox className='inline-block w-5 h-5 me-1' /> :

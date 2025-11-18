@@ -102,7 +102,7 @@ const HeroAdmin: React.FC = () => {
                                 className="object-cover w-full h-full"
                                 onClick={() => setactiveImage(value)}
                             /> :
-                            <span className='text-gray-500 italic'>Aucune image</span>
+                            <span className='text-secondary-500 italic'>Aucune image</span>
                         }
                     </div>
                     {activeImage && activeImage == value &&
@@ -115,7 +115,7 @@ const HeroAdmin: React.FC = () => {
                                 />
                                 <button
                                     onClick={() => setactiveImage(null)}
-                                    className="absolute top-4 right-4 bg-white text-black p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                                    className="absolute top-4 right-4 bg-light text-black p-2 rounded-full hover:bg-secondary-100 transition-colors duration-200"
                                 >
                                     <X className="h-6 w-6" />
                                 </button>
@@ -131,7 +131,7 @@ const HeroAdmin: React.FC = () => {
             render: (value: string, item: HeroSlideType) => (
                 <div className="w-28 h-16 overflow-hidden rounded flex flex-col">
                     <span className='text-md'>{value} </span>
-                    <span className='text-sm italic text-blue-500'>{item.cta_link}</span>
+                    <span className='text-sm italic text-primary-500'>{item.cta_link}</span>
                 </div>
             )
         },
@@ -165,8 +165,8 @@ const HeroAdmin: React.FC = () => {
                 description="Gérez la section présentation sur la page d’accueil."
             >
                 <button
-                    onClick={() => navigate('/#hero')}
-                    className="bg-orange-600 text-white px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-orange-700 transition-colors"
+                    onClick={() => navigate('/?section=hero')}
+                    className="bg-orange-600 text-light px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-orange-700 transition-colors"
                 >
                     <Eye className="w-5 h-5" />
                     <span>Voire le site</span>
@@ -175,7 +175,7 @@ const HeroAdmin: React.FC = () => {
                 {permission.create &&
                     <button
                         onClick={() => setShowModal(true)}
-                        className="bg-blue-600 text-white px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+                        className="bg-primary-600 text-light px-3 py-2 rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors"
                     >
                         <Plus className="w-4 h-4" />
                         <span>Nouvelle slide</span>
@@ -183,23 +183,23 @@ const HeroAdmin: React.FC = () => {
                 }
             </Title>
 
-            <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+            <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
                 <div className="flex flex-wrap gap-4">
                     {/* left: list & controls */}
                     <div className="flex-1 max-w-full">
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center space-x-3">
                                 <div className="relative">
-                                    <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                    <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
                                     <input
                                         type="text"
                                         placeholder="Rechercher un slide..."
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                                     />
                                 </div>
-                                <button className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                                <button className="flex items-center space-x-2 px-3 py-2 border border-secondary-300 rounded-lg hover:bg-secondary-50">
                                     <Filter className="w-4 h-4" />
                                     <span>Filtres</span>
                                 </button>
@@ -219,11 +219,11 @@ const HeroAdmin: React.FC = () => {
                     </div>
 
                     {/* right: preview */}
-                    <div className="flex-1 bg-gray-50 rounded-lg p-3 flex flex-col items-center justify-center border">
+                    <div className="flex-1 bg-secondary-50 rounded-lg p-3 flex flex-col items-center justify-center border">
                         {action?.isLoading ? (
                             <Loading />
                         ) : heroSlices.length === 0 ? (
-                            <div className="text-sm text-gray-500">Aucun slide disponible.</div>
+                            <div className="text-sm text-secondary-500">Aucun slide disponible.</div>
                         ) : (
                             <>
                                 <div className="relative w-full h-48 rounded overflow-hidden shadow-md bg-black">
@@ -234,12 +234,12 @@ const HeroAdmin: React.FC = () => {
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-r from-black via-black/50 to-primary-300/20 pointer-events-none" />
 
-                                    <div className="absolute bottom-4 left-4 right-4 text-white space-y-2">
+                                    <div className="absolute bottom-4 left-4 right-4 text-light space-y-2">
                                         <div className="text-lg font-bold truncate">{heroSlices[selectedIndex]?.titre}</div>
                                         <div className="text-sm opacity-90 truncate">{heroSlices[selectedIndex]?.soustitre}</div>
                                         {heroSlices[selectedIndex]?.cta && (
                                             <div
-                                                className="inline-flex items-center space-x-2 bg-primary-500 hover:bg-primary-600 text-xs    text-white px-2 py-1 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                                                className="inline-flex items-center space-x-2 bg-primary-500 hover:bg-primary-600 text-xs    text-light px-2 py-1 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
                                             >
                                                 <span>{heroSlices[selectedIndex].cta}</span>
                                                 <ArrowRight className="h-5 w-5" />
@@ -253,7 +253,7 @@ const HeroAdmin: React.FC = () => {
 
                                         <button
                                             type='submit'
-                                            className="text-white"
+                                            className="text-light"
                                         >
                                             {heroSlices[selectedIndex].actif != '1' ? <EyeOff className="w-7 h-7" /> : <Eye className="w-7 h-7" />
                                             }
@@ -263,18 +263,18 @@ const HeroAdmin: React.FC = () => {
 
                                 {/* Slide */}
                                 <div className="w-full flex items-center justify-between mt-3">
-                                    <button onClick={handlePrev} className="p-2 rounded-md hover:bg-white/40">
+                                    <button onClick={handlePrev} className="p-2 rounded-md hover:bg-light/40">
                                         <ChevronLeft />
                                     </button>
 
                                     <div className="flex-1 px-3">
-                                        <div className="text-xs text-gray-500 mb-1">Slide {selectedIndex + 1} / {heroSlices.length}</div>
+                                        <div className="text-xs text-secondary-500 mb-1">Slide {selectedIndex + 1} / {heroSlices.length}</div>
                                         <div className="flex items-center gap-2 overflow-auto">
                                             {heroSlices.map((s: HeroSlideType, i: number) => (
                                                 <button
                                                     key={s.id_slide || i}
                                                     onClick={() => handleSelect(i)}
-                                                    className={`w-16 h-10 rounded overflow-hidden border ${i === selectedIndex ? 'ring-2 ring-blue-500' : 'border-transparent'}`}
+                                                    className={`w-16 h-10 rounded overflow-hidden border ${i === selectedIndex ? 'ring-2 ring-primary-500' : 'border-transparent'}`}
                                                 >
                                                     <img src={baseUrl(s.image || '')} alt="thumb" className="object-cover w-full h-full" />
                                                 </button>
@@ -282,7 +282,7 @@ const HeroAdmin: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    <button onClick={handleNext} className="p-2 rounded-md hover:bg-white/40">
+                                    <button onClick={handleNext} className="p-2 rounded-md hover:bg-light/40">
                                         <ChevronRight />
                                     </button>
                                 </div>
@@ -291,13 +291,13 @@ const HeroAdmin: React.FC = () => {
                                 <div className="w-full flex gap-2 mt-3">
                                     <button
                                         onClick={() => handleEdit(heroSlices[selectedIndex])}
-                                        className="flex-1 bg-green-600 text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-green-700"
+                                        className="flex-1 bg-green-600 text-light px-3 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-green-700"
                                     >
                                         <Edit className="w-4 h-4" /> Modifier
                                     </button>
                                     <button
                                         onClick={() => handleArchive(heroSlices[selectedIndex])}
-                                        className="bg-red-600 text-white px-3 py-2 rounded-lg flex items-center gap-2 hover:bg-red-700"
+                                        className="bg-red-600 text-light px-3 py-2 rounded-lg flex items-center gap-2 hover:bg-red-700"
                                     >
                                         <Trash2 className="w-4 h-4" /> Supprimer
                                     </button>

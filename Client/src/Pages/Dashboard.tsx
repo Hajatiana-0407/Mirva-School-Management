@@ -4,7 +4,7 @@ import Title from '../Components/ui/Title';
 
 const Dashboard: React.FC = () => {
   const stats = [
-    { label: 'Élèves', value: '1,247', icon: Users, color: 'blue', trend: '+5.2%' },
+    { label: 'Élèves', value: '1,247', icon: Users, color: 'primary', trend: '+5.2%' },
     { label: 'Enseignants', value: '89', icon: UserCheck, color: 'green', trend: '+2.1%' },
     { label: 'Classes', value: '42', icon: School, color: 'purple', trend: '+8.3%' },
     { label: 'Événements', value: '15', icon: Calendar, color: 'orange', trend: '-1.2%' },
@@ -23,7 +23,7 @@ const Dashboard: React.FC = () => {
         title='Tableau de bord'
         description='Visualisez les statistiques et informations clés de votre établissement.'
       >
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-secondary-500">
           Dernière mise à jour: {new Date().toLocaleDateString('fr-FR')}
         </div>
       </Title>
@@ -35,11 +35,11 @@ const Dashboard: React.FC = () => {
           const isPositive = stat.trend.startsWith('+');
 
           return (
-            <div key={stat.label} className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+            <div key={stat.label} className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">{stat.label}</p>
-                  <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                  <p className="text-sm font-medium text-secondary-600">{stat.label}</p>
+                  <p className="text-2xl font-bold text-secondary-900">{stat.value}</p>
                 </div>
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center bg-${stat.color}-100`}>
                   <Icon className={`w-6 h-6 text-${stat.color}-600`} />
@@ -54,7 +54,7 @@ const Dashboard: React.FC = () => {
                 <span className={`text-sm ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
                   {stat.trend}
                 </span>
-                <span className="text-sm text-gray-500 ml-2">ce mois</span>
+                <span className="text-sm text-secondary-500 ml-2">ce mois</span>
               </div>
             </div>
           );
@@ -64,15 +64,15 @@ const Dashboard: React.FC = () => {
       {/* Contenu principal */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Activités récentes */}
-        <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Activités récentes</h2>
+        <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
+          <h2 className="text-lg font-semibold text-secondary-900 mb-4">Activités récentes</h2>
           <div className="space-y-4">
             {recentActivities.map((activity, index) => (
               <div key={index} className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-primary-500 rounded-full"></div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">{activity.action}</p>
-                  <p className="text-xs text-gray-500">{activity.user} • {activity.time}</p>
+                  <p className="text-sm font-medium text-secondary-900">{activity.action}</p>
+                  <p className="text-xs text-secondary-500">{activity.user} • {activity.time}</p>
                 </div>
               </div>
             ))}
@@ -80,27 +80,27 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Événements à venir */}
-        <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Événements à venir</h2>
+        <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
+          <h2 className="text-lg font-semibold text-secondary-900 mb-4">Événements à venir</h2>
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-primary-50 rounded-lg">
               <div>
-                <p className="text-sm font-medium text-gray-900">Réunion parents-professeurs</p>
-                <p className="text-xs text-gray-500">25 janvier 2025</p>
+                <p className="text-sm font-medium text-secondary-900">Réunion parents-professeurs</p>
+                <p className="text-xs text-secondary-500">25 janvier 2025</p>
               </div>
-              <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Important</span>
+              <span className="text-xs bg-primary-100 text-primary-800 px-2 py-1 rounded">Important</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
               <div>
-                <p className="text-sm font-medium text-gray-900">Examens trimestriels</p>
-                <p className="text-xs text-gray-500">2-6 février 2025</p>
+                <p className="text-sm font-medium text-secondary-900">Examens trimestriels</p>
+                <p className="text-xs text-secondary-500">2-6 février 2025</p>
               </div>
               <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Examen</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
               <div>
-                <p className="text-sm font-medium text-gray-900">Sortie scolaire</p>
-                <p className="text-xs text-gray-500">12 février 2025</p>
+                <p className="text-sm font-medium text-secondary-900">Sortie scolaire</p>
+                <p className="text-xs text-secondary-500">12 février 2025</p>
               </div>
               <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">Sortie</span>
             </div>

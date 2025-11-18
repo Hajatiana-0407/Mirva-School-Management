@@ -19,18 +19,18 @@ const Title: React.FC<TitleProps> = ({ children, title, description, backButton 
                         <button
                             type="button"
                             onClick={() => navigate(-1)}
-                            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                            className="p-2 rounded-full hover:bg-secondary-100 transition-colors"
                         >
-                            <ArrowLeft className="h-5 w-5 text-gray-700" />
+                            <ArrowLeft className="h-5 w-5 text-secondary-700" />
                         </button>
                     }
 
                     <div>
-                        <h1 className="text-xl md:text-2xl font-semibold text-gray-900">
+                        <h1 className="text-xl md:text-2xl font-semibold text-secondary-900">
                             {title}
                         </h1>
                         {description && (
-                            <p className="text-gray-600 mt-1 text-sm md:text-base">
+                            <p className="text-secondary-600 mt-1 text-sm md:text-base">
                                 {description}
                             </p>
                         )}
@@ -43,7 +43,7 @@ const Title: React.FC<TitleProps> = ({ children, title, description, backButton 
             </div>
 
             {/* Ligne décorative */}
-            <div className="mt-4 border-b border-gray-200" />
+            <div className="mt-4 border-b border-secondary-200" />
         </div>
     );
 };
