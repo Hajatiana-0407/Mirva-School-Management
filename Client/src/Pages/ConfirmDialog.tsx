@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Check, X } from 'lucide-react';
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -7,6 +7,13 @@ interface ConfirmDialogProps {
   onConfirm: () => void;
   title: string;
   message: string;
+  confirmButtonColor?: 'red' | 'blue' | 'green' | 'orange' | 'purple';
+  cancelButtonColor?: 'red' | 'blue' | 'green' | 'orange' | 'purple' | 'gray';
+  confirmButtonIcon?: React.ComponentType<{ className?: string }>;
+  confirmButtonLabel?: string;
+  cancelButtonLabel?: string;
+  showIcon?: boolean;
+  icon?: React.ComponentType<{ className?: string }>;
 }
 
 const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
@@ -14,9 +21,37 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   onClose,
   onConfirm,
   title,
-  message
+  message,
+  confirmButtonColor = 'red',
+  cancelButtonColor = 'gray',
+  confirmButtonIcon = Check,
+  confirmButtonLabel = 'Confirmer',
+  cancelButtonLabel = 'Annuler',
+  showIcon = true,
+  icon = AlertTriangle
 }) => {
   if (!isOpen) return null;
+
+  const IconComponent = icon;
+  const ConfirmIcon = confirmButtonIcon;
+
+  // Couleurs personnalisées pour les boutons de confirmation
+  const confirmButtonColors = {
+    red: 'text-light bg-red-600 hover:bg-red-700',
+    blue: 'text-light bg-blue-600 hover:bg-blue-700',
+    green: 'text-light bg-green-600 hover:bg-green-700',
+    orange: 'text-light bg-orange-600 hover:bg-orange-700',
+    purple: 'text-light bg-purple-600 hover:bg-purple-700',
+    gray: 'text-gray-500 bg-gray-50 hover:bg-gray-300 border'
+  };
+
+  const iconColors = {
+    red: 'text-red-600',
+    blue: 'text-blue-600',
+    green: 'text-green-600',
+    orange: 'text-orange-600',
+    purple: 'text-purple-600'
+  };
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -30,10 +65,12 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         {/* Dialog */}
         <div className="bg-light mx-auto space-y-3 rounded px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full sm:p-4">
           <div className="flex items-center space-x-3 border-b-2">
-            <div className="">
-              <AlertTriangle className="w-20 h-20 text-red-600" />
-            </div>
-            <div className='flex flex-col justify-center  '>
+            {showIcon && (
+              <div className="">
+                <IconComponent className={`w-20 h-20 ${iconColors[confirmButtonColor]}`} />
+              </div>
+            )}
+            <div className='flex flex-col justify-center'>
               <div>
                 <h3 className="text-md font-semibold text-secondary-900">{title}</h3>
               </div>
@@ -45,15 +82,17 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           <div className="flex justify-end space-x-3">
             <button
               onClick={onClose}
-              className="px-3 py-1 text-secondary-600 border border-secondary-300 rounded-lg hover:bg-secondary-50 transition-colors"
+              className={`px-3 py-1  rounded-lg transition-colors flex items-center gap-2 ${confirmButtonColors[cancelButtonColor]}`}
             >
-              Annuler
+              <X className="w-5 h-5" />
+              {cancelButtonLabel}
             </button>
             <button
               onClick={onConfirm}
-              className="px-3 py-1 bg-red-600 text-light rounded-lg hover:bg-red-700 transition-colors"
+              className={`px-3 py-1  rounded-lg transition-colors flex items-center gap-2 ${confirmButtonColors[confirmButtonColor]}`}
             >
-              Confirmer
+              <ConfirmIcon className="w-5 h-5" />
+              {confirmButtonLabel}
             </button>
           </div>
         </div>

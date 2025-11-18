@@ -5,11 +5,29 @@ import { useNavigate } from "react-router-dom";
 type TitleProps = PropsWithChildren & {
     title: string;
     description?: string;
-    backButton?: boolean
+    backButton?: boolean;
+    onBackClick?: () => void;
 };
 
-const Title: React.FC<TitleProps> = ({ children, title, description, backButton = true }) => {
+const Title: React.FC<TitleProps> = ({
+    children,
+    title,
+    description,
+    backButton = true,
+    onBackClick
+}) => {
     const navigate = useNavigate();
+
+    const handleBackClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+        if (onBackClick) {
+            // Utiliser la fonction personnalisée si fournie
+            onBackClick();
+        } else {
+            // Comportement par défaut
+            navigate(-1);
+        }
+    };
 
     return (
         <div className="mb-6 md:mb-6 ">
@@ -18,7 +36,7 @@ const Title: React.FC<TitleProps> = ({ children, title, description, backButton 
                     {backButton &&
                         <button
                             type="button"
-                            onClick={() => navigate(-1)}
+                            onClick={handleBackClick}
                             className="p-2 rounded-full hover:bg-secondary-100 transition-colors"
                         >
                             <ArrowLeft className="h-5 w-5 text-secondary-700" />
@@ -38,7 +56,7 @@ const Title: React.FC<TitleProps> = ({ children, title, description, backButton 
                 </div>
 
                 {children && (
-                    <div className="flex-shrink-0 flex items-center gap-2">{children}</div>
+                    <div className="flex-shrink-0 flex items-center justify-end gap-2">{children}</div>
                 )}
             </div>
 

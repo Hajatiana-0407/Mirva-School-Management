@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Loading from '../Components/ui/Loading';
 import ActionMenu from '../Components/ActionMenu';
@@ -26,7 +26,7 @@ interface TableProps {
 const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, actionType = 'button' }: TableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-  const permission = useHashPermission(  { redirect : true  });
+  const permission = useHashPermission({ redirect: true });
 
 
   // RECHERCHE
@@ -35,6 +35,14 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
       value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
+
+  // Remetre la page a 1 si le data est vide 
+  useEffect(() => {
+    if (data.length == 0) {
+      setCurrentPage(1);
+    }
+  }, [data.length])
+
 
   // Calculer les éléments à afficher pour la page actuelle
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -101,7 +109,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                   <tr>
                     <td colSpan={columns.length + 1} className=''>
                       <div className='text-secondary-400 text-sm md:text-md text-center pt-6'>
-                      Nous n’avons trouvé aucun élément.
+                        Nous n’avons trouvé aucun élément.
                       </div>
                     </td>
                   </tr>

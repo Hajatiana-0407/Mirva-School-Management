@@ -8,7 +8,7 @@ interface CollapsedMenuItemProps {
     label: string;
     icon: React.ComponentType<{ className?: string }>;
     path: string;
-    color?: string 
+    color?: string
 }
 
 const CollapsedMenuItem: React.FC<CollapsedMenuItemProps> = ({
@@ -18,8 +18,6 @@ const CollapsedMenuItem: React.FC<CollapsedMenuItemProps> = ({
     color
 }) => {
     const ref = useRef<HTMLAnchorElement | null>(null);
-    console.log('couleur : ' , color );
-    
 
     return (
         <li className="relative">
@@ -36,7 +34,7 @@ const CollapsedMenuItem: React.FC<CollapsedMenuItemProps> = ({
                     )
                 }
             >
-                <Icon className={ clsx(`${ color } w-5 h-5`)} />
+                <Icon className={clsx(`${color} w-5 h-5`)} />
             </NavLink>
 
             {/* Tooltip rendu via Portal */}

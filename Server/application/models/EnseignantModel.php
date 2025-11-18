@@ -128,15 +128,20 @@ class EnseignantModel extends CI_Model
     }
 
 
-    public function findOneDetailsByMatricule($matricule)
+    public function findOneDetailsByMatriculeOrId($matricule = null, $id = null)
     {
-        $enseignant = $this->db->select('*')
+        $this->db->select('*')
             ->from($this->table)
             ->join('type_personnel', "{$this->table}.id_type_personnel = type_personnel.id_type_personnel", 'left')
-            ->where('type_personnel.type', 'Enseignant')
-            ->where("{$this->table}.matricule_personnel", $matricule)
-            ->get()
-            ->row_array();
+            ->where('type_personnel.type', 'Enseignant');
+
+            if ( $matricule ){
+                $this->db->where("{$this->table}.matricule_personnel", $matricule) ; 
+            }else {
+                $this->db->where("{$this->table}.id_personnel", $id) ; 
+            }
+
+        $enseignant = $this->db->get()->row_array();
 
         if (!$enseignant) return null;
 
@@ -180,7 +185,7 @@ class EnseignantModel extends CI_Model
 
         $enseignant['assignations']  = $assignations;
 
-    
+
         return $enseignant;
     }
 }
