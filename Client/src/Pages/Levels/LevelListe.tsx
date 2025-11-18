@@ -187,6 +187,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
                     actions={actions}
                     searchTerm={searchTerm}
                     isLoading={action.isLoading as boolean}
+                    onRowClick={( item: levelType) => navigate('/back-office/level-details/' + item.id_niveau)}
                 />
             </div>
             {/* CONFIRAMTION DE SUPPRESSION */}

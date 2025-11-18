@@ -120,6 +120,7 @@ const Classes: React.FC = () => {
           actions={actions}
           searchTerm={searchTerm}
           isLoading={action.isLoading as boolean}
+          onRowClick={( item: ClasseType ) => navigate(`/back-office/classes/${ item.id_classe}`)}
         />
       </div>
 
