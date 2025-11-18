@@ -3,6 +3,10 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        // Définir vos fonts personnalisées
+        'halfre': ['halfre', 'sans-serif'],
+      },
       keyframes: {
         bell: {
           '0%, 100%': { transform: 'rotate(0deg)' },
@@ -42,8 +46,8 @@ export default {
           700: '#334155',
           800: '#1e293b',
           900: '#0f172a',
-        } , 
-        light : '#ffffff'
+        },
+        light: '#ffffff'
       }
     },
   },

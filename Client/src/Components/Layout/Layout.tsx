@@ -30,7 +30,7 @@ const Layout = () => {
 
   return (
     <div className="bg-secondary-50 relative h-screen max-h-screen">
-      
+
       {/* Loading pour la déconexion */}
       {isLoginOut &&
         <div className='fixed inset-0 z-[60] bg-black/10 backdrop-blur-[2px]  transition-opacity flex items-center'>
@@ -50,7 +50,7 @@ const Layout = () => {
         , "flex-1 flex flex-col overflow-hidden  transition-all duration-300 max-h-screen w-screen"
       )} >
         <Header />
-        <main className="flex-1 overflow-y-auto p-3 md:p-3 md:p-6 relative">
+        <main className="flex-1 overflow-y-auto p-3 md:p-6 relative">
           <Outlet />
         </main>
       </div>
