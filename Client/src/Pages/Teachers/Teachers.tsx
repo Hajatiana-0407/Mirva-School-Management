@@ -24,7 +24,7 @@ const Teachers: React.FC = () => {
   const [editingEmployees, setEditingEmployees] = useState<TeacherType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [teacherToArchive, setTeacherToArchive] = useState<TeacherType | null>(null);
-  const permission = useHashPermission(  { redirect : true  });
+  const permission = useHashPermission({ redirect: true });
 
   const { hiddeTheModalActive } = useSelector(getAppState);
   // *** //
@@ -82,7 +82,6 @@ const Teachers: React.FC = () => {
         />
       )
     },
-    { key: 'addresse', label: 'Addrèsse' },
     {
       key: 'telephone', label: 'Contact', render: (value: string, item: TeacherType) => (
         <div>
@@ -192,6 +191,7 @@ const Teachers: React.FC = () => {
           actions={actions}
           searchTerm={searchTerm}
           actionType='pop-up'
+          onRowClick={(item: TeacherType) => navigate(`/back-office/employees/${item.matricule_personnel}`)}
         />
       </div>
 

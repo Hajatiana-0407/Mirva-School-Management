@@ -120,7 +120,7 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
             );
           }
           if (idx < flatMenus.length - 1) {
-            return <hr key={`hr-${idx}`} className="border-t border-gray-200 mx-1 my-3" />;
+            return <hr key={`hr-${idx}`} className="border-t border-secondary-200 mx-1 my-3" />;
           }
           return null;
         })}
@@ -142,8 +142,8 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
 
         // Déterminer la couleur de l'icône
         const iconColor = level > 0
-          ? (menu.color || parentColor || 'text-gray-500')
-          : (menu.color || 'text-gray-600');
+          ? (menu.color || parentColor || 'text-secondary-500')
+          : (menu.color || 'text-secondary-600');
 
         return (
           <li key={menu.id}>
@@ -156,13 +156,13 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
                 }}
                 className={({ isActive }: { isActive: boolean }) =>
                   clsx(
-                    {
+                    { 
                       'px-3 justify-center': collapsed,
                       'px-4': !collapsed,
                       // Style différent pour les parents (level 0) vs sous-menus (level > 0)
-                      'bg-gradient-to-r from-primary-500 to-green-300 text-white shadow-lg': (isActive || isParentActiveItem) && level === 0,
+                      'bg-primary-500  text-white shadow-lg': (isActive || isParentActiveItem) && level === 0,
                       'bg-primary-50 text-primary-700 border border-primary-200': isActive && level > 0,
-                      'text-gray-700 hover:bg-gray-100 hover:text-gray-900 border border-transparent hover:border-gray-200': !isActive && !isParentActiveItem,
+                      'text-secondary-700 hover:bg-secondary-100 hover:text-secondary-900 border border-transparent hover:border-secondary-200': !isActive && !isParentActiveItem,
                     },
                     'w-full flex items-center py-3 text-left transition-all duration-200 rounded-xl group relative',
                     level > 0 ? '' : ''
@@ -188,7 +188,7 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
                           'font-medium transition-colors duration-200 flex-grow',
                           (isActive || isParentActiveItem)
                             ? (level === 0 ? 'text-white' : 'text-primary-700')
-                            : 'text-gray-800'
+                            : 'text-secondary-800'
                         )}>
                           {menu.label}
                         </span>
@@ -206,9 +206,9 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
                 className={clsx(
                   'w-full flex items-center py-3 text-left transition-all duration-200 rounded-xl font-medium',
                   {
-                    'bg-gradient-to-r from-primary-500 to-green-300 text-white shadow-lg': isParentActiveItem && level === 0,
+                    'bg-primary-500  text-white shadow-lg': isParentActiveItem && level === 0,
                     'bg-primary-50 text-primary-700 border border-primary-200': isParentActiveItem && level > 0,
-                    'text-gray-800 hover:bg-gray-100 hover:text-gray-900 border border-transparent hover:border-gray-200': !isParentActiveItem,
+                    'text-secondary-800 hover:bg-secondary-100 hover:text-secondary-900 border border-transparent hover:border-secondary-200': !isParentActiveItem,
                   },
                   collapsed ? 'justify-center px-3' : 'px-3',
                   level > 0 ? 'ml-2' : ''
@@ -231,7 +231,7 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
                           'w-5 h-5 transition-transform duration-200',
                           isParentActiveItem
                             ? (level === 0 ? 'text-white' : 'text-primary-500')
-                            : 'text-gray-500',
+                            : 'text-secondary-500',
                           isOpen ? 'rotate-180' : ''
                         )}
                       />
@@ -242,7 +242,7 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
             )}
             {hasChildren && isOpen && !collapsed && (
               <div className={clsx(
-                "mt-2 rounded-xl bg-gray-50/80 border border-gray-200/60 px-1",
+                "mt-2 rounded-xl bg-secondary-50/80 border border-secondary-200/60 px-1",
                 level === 0 ? "" : "ml-3"
               )}>
                 {renderMenuItems(menu.children!, level + 1, menu.childColor || menu.color)}
@@ -257,21 +257,21 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
   return (
     <div
       className={clsx(
-        'bg-white shadow-xl border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col h-screen',
+        'bg-white shadow-sm border-r border-secondary-200 transition-all duration-300 ease-in-out flex flex-col h-screen',
         collapsed ? ' w-[2.8rem] sm:w-16' : 'w-64'
       )}
     >
       {/* Header sobre */}
-      <div className="relative py-4 bg-white border-b border-gray-200">
+      <div className="relative py-4 bg-white border-b border-secondary-200">
 
         {/* Logo | slogan | Année scolaire actif */}
         <div className="flex items-center justify-center">
           {!collapsed && (
             <div className='text-center flex-1 mr-3'>
-              <div className="text-xl font-bold text-gray-800 font-halfre truncate flex justify-center">
+              <div className="text-xl font-bold text-secondary-800 font-halfre truncate flex justify-center">
                 <img src={baseUrl(shoolInfo.logo)} alt={shoolInfo.nom} className='max-h-20' />
               </div>
-              <p className="text-sm text-gray-600 truncate mt-1">{shoolInfo?.slogan || 'Votre slogan'}</p>
+              <p className="text-sm text-secondary-600 truncate mt-1">{shoolInfo?.slogan || 'Votre slogan'}</p>
               <p className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-1 rounded-full mt-2 inline-block">
                 {activeSchoolYear?.nom}
               </p>
@@ -285,32 +285,32 @@ const Sidebar = ({ collapsed, onToggleCollapse, widowWidth }: SidebarPropsType) 
               className=" rounded-lg transition-all duration-200 flex-shrink-0"
               title={'Développer le menu'}
             >
-              <Menu className="w-6 h-6 text-gray-600" />
+              <Menu className="w-6 h-6 text-secondary-600" />
             </button>
             :
             <button
               onClick={onToggleCollapse}
-              className='top-2 right-2 absolute border p-1 rounded hover:bg-red-50 transition-all duration-150'
+              className='top-2 right-2 absolute border p-1 rounded hover:bg-secondary-50 transition-all duration-150'
               title='Réduire le menu'
             >
-              <X className="w-5 h-5 text-gray-600" />
+              <X className="w-5 h-5 text-secondary-600" />
             </button>
           }
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 py-2">
+      <nav className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-secondary-300 scrollbar-track-secondary-100 py-2">
         {collapsed ? renderCollapsedMenuItems() : renderMenuItems(menuItems)}
       </nav>
 
       {/* Footer avec couleurs discrètes */}
-      <div className="p-3 space-y-3 bg-white border-t border-gray-200">
+      <div className="p-3 space-y-3 bg-white border-t border-secondary-200">
         <button
           className={clsx(
             'w-full flex items-center transition-all duration-200 rounded-xl',
-            'bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 hover:from-blue-100 hover:to-blue-200',
-            'border border-blue-200 hover:border-blue-300 hover:shadow-md ',
+            'bg-gradient-to-r from-primary-50 to-primary-100 text-primary-700 hover:from-primary-100 hover:to-primary-200',
+            'border border-primary-200 hover:border-primary-300 hover:shadow-md ',
             'group',
             collapsed ? 'justify-center px-3 py-3' : 'px-4 py-3 justify-start'
           )}

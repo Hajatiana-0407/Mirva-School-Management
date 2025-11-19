@@ -7,6 +7,7 @@ type TitleProps = PropsWithChildren & {
     description?: string;
     backButton?: boolean;
     onBackClick?: () => void;
+    fixed?: boolean; // Nouvelle prop pour la fixation
 };
 
 const Title: React.FC<TitleProps> = ({
@@ -14,7 +15,8 @@ const Title: React.FC<TitleProps> = ({
     title,
     description,
     backButton = true,
-    onBackClick
+    onBackClick,
+    fixed = false // Valeur par défaut false
 }) => {
     const navigate = useNavigate();
 
@@ -30,7 +32,11 @@ const Title: React.FC<TitleProps> = ({
     };
 
     return (
-        <div className="mb-6 md:mb-6 ">
+        <div className={`${fixed ? 'sticky top-0 z-40 bg-secondary-50' : 'mb-6 md:mb-6'}`}>
+            {/* Div pour cacher le petite apercu en haut du titre  */}
+            {fixed &&
+                <div className="bg-gray-50 absolute bottom-full left-0 right-0 h-3 md:h-6"></div>
+            }
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div className="flex items-start gap-1">
                     {backButton &&
@@ -48,7 +54,7 @@ const Title: React.FC<TitleProps> = ({
                             {title}
                         </h1>
                         {description && (
-                            <p className="text-secondary-600 mt-1 text-sm md:text-base">
+                            <p className="text-secondary-600 max-sm:hidden mt-1 text-sm md:text-base">
                                 {description}
                             </p>
                         )}
@@ -60,7 +66,7 @@ const Title: React.FC<TitleProps> = ({
                 )}
             </div>
 
-            {/* Ligne décorative */}
+            {/* Ligne décorative - Toujours présente */}
             <div className="mt-4 border-b border-secondary-200" />
         </div>
     );

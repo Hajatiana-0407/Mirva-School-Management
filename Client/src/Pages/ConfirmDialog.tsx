@@ -38,23 +38,23 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   // Couleurs personnalisées pour les boutons de confirmation
   const confirmButtonColors = {
     red: 'text-light bg-red-600 hover:bg-red-700',
-    blue: 'text-light bg-blue-600 hover:bg-blue-700',
+    blue: 'text-light bg-primary-600 hover:bg-primary-700',
     green: 'text-light bg-green-600 hover:bg-green-700',
     orange: 'text-light bg-orange-600 hover:bg-orange-700',
     purple: 'text-light bg-purple-600 hover:bg-purple-700',
-    gray: 'text-gray-500 bg-gray-50 hover:bg-gray-300 border'
+    gray: 'text-secondary-500 bg-secondary-50 hover:bg-secondary-300 border'
   };
 
   const iconColors = {
     red: 'text-red-600',
-    blue: 'text-blue-600',
+    blue: 'text-primary-600',
     green: 'text-green-600',
     orange: 'text-orange-600',
     purple: 'text-purple-600'
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className="fixed inset-0 z-[60] overflow-y-auto">
       <div className="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         {/* Overlay */}
         <div

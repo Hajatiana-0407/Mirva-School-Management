@@ -267,7 +267,7 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
                             min={1}
                             value={editHour}
                             onChange={(e) => setEditHour(Number(e.target.value))}
-                            className="w-20 border border-gray-300 rounded-lg px-3 py-1.5 text-center focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                            className="w-20 border border-secondary-300 rounded-lg px-3 py-1.5 text-center focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         />
                         <button
                             className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition-colors"
@@ -279,11 +279,11 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
                     </div>
                 ) : (
                     <div className="flex items-center gap-3">
-                        <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                        <span className="bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm font-medium">
                             {value}h
                         </span>
                         <button
-                            className="text-gray-500 hover:text-primary-600 transition-colors p-1.5 hover:bg-primary-50 rounded-lg"
+                            className="text-secondary-500 hover:text-primary-600 transition-colors p-1.5 hover:bg-primary-50 rounded-lg"
                             onClick={() => handleEditHour(item.index, value)}
                             title="Modifier les heures"
                         >
@@ -299,8 +299,8 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
             <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
                 {/* Panneau de sélection */}
                 <div className="xl:col-span-2">
-                    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-6">
+                    <div className="bg-white rounded-xl border border-secondary-200 p-6 shadow-sm">
+                        <h2 className="text-lg font-semibold text-secondary-800 mb-6">
                             Attribution des matières et classes
                         </h2>
 
@@ -318,16 +318,16 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
 
                         {/* Sélection des classes */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-3">
+                            <label className="block text-sm font-medium text-secondary-700 mb-3">
                                 Classes disponibles ({selectedClasses.size} sélectionnée(s))
                             </label>
 
-                            <div className="border border-gray-200 rounded-lg overflow-hidden">
+                            <div className="border border-secondary-200 rounded-lg overflow-hidden">
                                 {/* En-tête */}
-                                <div className="grid grid-cols-[auto_1fr_100px] gap-4 px-4 py-3 bg-gray-50 border-b border-gray-200">
+                                <div className="grid grid-cols-[auto_1fr_100px] gap-4 px-4 py-3 bg-secondary-50 border-b border-secondary-200">
                                     <div className="w-8"></div>
-                                    <div className="font-medium text-gray-700">Classe</div>
-                                    <div className="font-medium text-gray-700 text-center">Heures</div>
+                                    <div className="font-medium text-secondary-700">Classe</div>
+                                    <div className="font-medium text-secondary-700 text-center">Heures</div>
                                 </div>
 
                                 {/* Liste des classes */}
@@ -342,9 +342,9 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
                                             <label
                                                 key={classeId}
                                                 className={clsx(
-                                                    "grid grid-cols-[auto_1fr_100px] gap-4 px-4 py-3 border-b border-gray-100 last:border-b-0 transition-colors ",
+                                                    "grid grid-cols-[auto_1fr_100px] gap-4 px-4 py-3 border-b border-secondary-100 last:border-b-0 transition-colors ",
                                                     checked && "bg-primary-50",
-                                                    !disabled && "hover:bg-gray-50 cursor-pointer",
+                                                    !disabled && "hover:bg-secondary-50 cursor-pointer",
                                                     disabled && "opacity-60"
                                                 )}
                                             >
@@ -356,7 +356,7 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
                                                             "w-4 h-4 rounded border-2 transition-colors",
                                                             checked
                                                                 ? "bg-primary-500 border-primary-500"
-                                                                : "border-gray-300",
+                                                                : "border-secondary-300",
                                                             disabled && "cursor-not-allowed"
                                                         )}
                                                         checked={checked}
@@ -369,7 +369,7 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
                                                 <div className="flex items-center gap-2">
                                                     <span className={clsx(
                                                         "font-medium",
-                                                        checked ? "text-primary-700" : "text-gray-700"
+                                                        checked ? "text-primary-700" : "text-secondary-700"
                                                     )}>
                                                         {classe.denomination}
                                                     </span>
@@ -391,14 +391,14 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
                                                                 "w-20 text-center border rounded-lg px-3 py-1.5 transition-all font-medium",
                                                                 checked
                                                                     ? "border-primary-300 bg-white text-primary-700 focus:ring-2 focus:ring-primary-500"
-                                                                    : "border-gray-300 bg-gray-100 text-gray-500",
+                                                                    : "border-secondary-300 bg-secondary-100 text-secondary-500",
                                                                 !checked && "cursor-not-allowed"
                                                             )}
                                                             value={hours}
                                                             onChange={(e) => handleHoursChange(classeId, Number(e.target.value))}
                                                             disabled={!checked}
                                                         />
-                                                        <Clock className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
+                                                        <Clock className="absolute right-2 top-1/2 -translate-y-1/2 text-secondary-400 w-4 h-4 pointer-events-none" />
                                                     </div>
                                                 </div>
                                             </label>
@@ -407,8 +407,8 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
 
                                     {classes?.length === 0 && (
                                         <div className="text-center py-8 px-4">
-                                            <BookOpen className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                                            <p className="text-gray-500 mb-2">Aucune classe disponible</p>
+                                            <BookOpen className="w-12 h-12 text-secondary-300 mx-auto mb-3" />
+                                            <p className="text-secondary-500 mb-2">Aucune classe disponible</p>
                                             <Link
                                                 to="/back-office/levels/level-subject"
                                                 className="text-primary-600 hover:text-primary-700 font-medium underline"
@@ -420,13 +420,13 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
                                 </div>
 
                                 {/* Boutons d'action */}
-                                <div className="flex gap-3 justify-end p-4 bg-gray-50 border-t">
+                                <div className="flex gap-3 justify-end p-4 bg-secondary-50 border-t">
                                     <button
                                         className={clsx(
                                             "px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 border",
                                             isValidateDisabled && !selectedSubject
-                                                ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
-                                                : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                                                ? "bg-secondary-100 text-secondary-400 border-secondary-200 cursor-not-allowed"
+                                                : "bg-white text-secondary-700 border-secondary-300 hover:bg-secondary-50"
                                         )}
                                         onClick={handleCancel}
                                         disabled={isValidateDisabled && !selectedSubject}
@@ -438,7 +438,7 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
                                         className={clsx(
                                             "px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2",
                                             isValidateDisabled
-                                                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                                ? "bg-secondary-300 text-secondary-500 cursor-not-allowed"
                                                 : "bg-primary-600 text-white hover:bg-primary-700 shadow-sm"
                                         )}
                                         onClick={handleValidate}
@@ -455,18 +455,18 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
 
                 {/* Tableau des assignations */}
                 <div className="xl:col-span-3">
-                    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm h-full flex flex-col">
+                    <div className="bg-white rounded-xl border border-secondary-200 p-6 shadow-sm h-full flex flex-col">
                         <div className="flex items-center justify-between mb-6">
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-800">Assignations en cours</h3>
-                                <p className="text-sm text-gray-600">{assignations.length} assignation(s)</p>
+                                <h3 className="text-lg font-semibold text-secondary-800">Assignations en cours</h3>
+                                <p className="text-sm text-secondary-600">{assignations.length} assignation(s)</p>
                             </div>
                             <button
                                 type="button"
                                 className={clsx(
                                     "px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2",
                                     assignations.length === 0
-                                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                        ? "bg-secondary-100 text-secondary-400 cursor-not-allowed"
                                         : "bg-red-500 text-white hover:bg-red-600"
                                 )}
                                 onClick={handleDeleteAll}
@@ -495,9 +495,9 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
 
                         {assignations.length === 0 && (
                             <div className="text-center py-12">
-                                <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                                <p className="text-gray-500 text-lg">Aucune assignation</p>
-                                <p className="text-gray-400 text-sm">Ajoutez des matières et classes à gauche</p>
+                                <BookOpen className="w-16 h-16 text-secondary-300 mx-auto mb-4" />
+                                <p className="text-secondary-500 text-lg">Aucune assignation</p>
+                                <p className="text-secondary-400 text-sm">Ajoutez des matières et classes à gauche</p>
                             </div>
                         )}
                     </div>

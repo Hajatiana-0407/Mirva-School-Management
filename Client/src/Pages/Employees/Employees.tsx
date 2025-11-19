@@ -83,9 +83,9 @@ const Employees: React.FC = () => {
 
   // TABLEAUX 
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: (item: EmployeeType) => navigate("/back-office/employees/" + item.matricule_personnel), color: 'primary' },
+    { icon: Eye, label: "Voir les détails", onClick: (item: EmployeeType) => navigate("/back-office/employees/" + item.matricule_personnel), color: 'primary' },
     { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
-    { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
+    { icon: Archive, type: 'delete', label: "Supprimer", onClick: handleArchive, color: 'red' },
   ];
 
   const columns = [
@@ -124,7 +124,6 @@ const Employees: React.FC = () => {
         </div>
       )
     },
-    { key: 'addresse', label: 'Addrèsse' },
     {
       key: 'telephone', label: 'Contact', render: (value: string, item: EmployeeType) => (
         <div>
@@ -165,7 +164,6 @@ const Employees: React.FC = () => {
         );
       }
     },
-    { key: 'sexe', label: 'Sex' },
   ];
 
 
@@ -255,6 +253,7 @@ const Employees: React.FC = () => {
           columns={columns}
           actions={actions}
           searchTerm={searchTerm}
+          onRowClick={( item: EmployeeType ) => navigate(`/back-office/employees/${item.matricule_personnel}`) }
         />
       </div>
 

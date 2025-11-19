@@ -38,23 +38,25 @@ const SubjectLevelContent = ({ value, item }: SubjectLevelContentProps) => {
                     <div className="text-sm text-secondary-500">
                         {!isShowAll && <>et {item.classes.length - 3} autre{item.classes.length - 3 > 1 ? 's' : ''}...</>}
                     </div>
-                    <div
+                    <button
+                        type="button"
                         className="text-sm px-2 py-0.5 text-light flex items-center gap-1 cursor-pointer bg-cyan-500 rounded"
                         onClick={() => setIsShowAll((v) => !v)}
                     >
                         {!isShowAll ? "Tout afficher" : "Masquer"}
                         {!isShowAll ? <ChevronDown size={19} /> : <ChevronUp size={19} />}
-                    </div>
+                    </button>
                 </div>
             )}
 
             {!value.length && (
-                <div
+                <button
+                    type="button"
                     className="p-2 rounded text-xs text-secondary-400 hover:bg-secondary-50 cursor-pointer"
                     onClick={() => navigate("/back-office/teachers/" + item.matricule_personnel)}
                 >
                     + Ajouter
-                </div>
+                </button>
             )}
         </div>
     );

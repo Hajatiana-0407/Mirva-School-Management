@@ -154,7 +154,7 @@ const HeroAdmin: React.FC = () => {
     ];
     const actions = [
         { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
-        { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' }
+        { icon: Archive, type: 'delete', label: "Supprimer", onClick: handleArchive, color: 'red' }
     ];
 
     return (

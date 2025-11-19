@@ -154,9 +154,9 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
     ];
 
     const actions = [
-        { icon: Eye, label: 'Voir', onClick: (item: any) => navigate(`/back-office/level-details/${ item.id_niveau }`), color: 'primary' },
+        { icon: Eye, label: "Voir les détails", onClick: (item: any) => navigate(`/back-office/level-details/${ item.id_niveau }`), color: 'primary' },
         { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
-        { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleDelete, color: 'red' },
+        { icon: Archive, type: 'delete', label: "Supprimer", onClick: handleDelete, color: 'red' },
     ];
 
     return (
