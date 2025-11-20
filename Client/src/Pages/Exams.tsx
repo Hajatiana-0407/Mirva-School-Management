@@ -38,9 +38,9 @@ const Exams: React.FC = () => {
   ];
 
   const examActions = [
-    { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'primary' },
+    { icon: Eye, label: "Voir les détails", onClick: (item: any) => console.log("Voir les détails", item), color: 'primary' },
     { icon: Edit, type:'update', label: 'Modifier', onClick: (item: any) => console.log('Modifier', item), color: 'green' },
-    { icon: Archive,type:'delete', label: 'Archiver', onClick: (item: any) => console.log('Archiver', item), color: 'red' },
+    { icon: Archive,type:'delete', label: "Supprimer", onClick: (item: any) => console.log("Supprimer", item), color: 'red' },
   ];
 
   const noteActions = [

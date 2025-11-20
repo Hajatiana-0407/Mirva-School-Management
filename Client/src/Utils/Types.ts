@@ -220,6 +220,7 @@ export type EmployeeType = {
     photo?: string;
     id_type_personnel?: number;
     type_personnel?: string;
+    type?: string;
 
     status?: 'Actif' | 'Suspendu' | 'Démissionnaire';
     numero_cin: string,

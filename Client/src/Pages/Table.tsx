@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Loading from '../Components/ui/Loading';
 import ActionMenu from '../Components/ActionMenu';
+import RightClickMenu from '../Components/RightClickMenu';
 import { useHashPermission } from '../Hooks/useHashPermission';
+import clsx from 'clsx';
 
 interface TableProps {
   data: any[];
@@ -20,14 +22,28 @@ interface TableProps {
   }>;
   searchTerm?: string;
   isLoading?: boolean;
-  actionType?: 'button' | 'pop-up'
+  actionType?: 'button' | 'pop-up';
+  onRowClick?: (item: any) => void;
+  idModule?: string;
 }
 
-const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, actionType = 'button' }: TableProps) => {
+const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, actionType = 'button', onRowClick, idModule }: TableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-  const permission = useHashPermission(  { redirect : true  });
+  const permission = useHashPermission({ redirect: true });
 
+  // État pour le menu contextuel
+  const [rightClickMenu, setRightClickMenu] = useState<{
+    isOpen: boolean;
+    x: number;
+    y: number;
+    item: any | null;
+  }>({
+    isOpen: false,
+    x: 0,
+    y: 0,
+    item: null
+  });
 
   // RECHERCHE
   const filteredData = data.filter((item) =>
@@ -35,6 +51,18 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
       value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
+
+  // Remettre la page a 1 si le data est vide 
+  useEffect(() => {
+    if (data.length == 0) {
+      setCurrentPage(1);
+    }
+  }, [data.length]);
+
+  // Fermer le menu contextuel quand les données changent
+  useEffect(() => {
+    setRightClickMenu(prev => ({ ...prev, isOpen: false }));
+  }, [data, currentPage]);
 
   // Calculer les éléments à afficher pour la page actuelle
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -45,6 +73,38 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  // Gestion du clic droit
+  const handleRightClick = (event: React.MouseEvent, item: any) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    setRightClickMenu({
+      isOpen: true,
+      x: event.clientX,
+      y: event.clientY,
+      item: item
+    });
+  };
+
+  // Fermer le menu contextuel
+  const closeRightClickMenu = () => {
+    setRightClickMenu(prev => ({ ...prev, isOpen: false }));
+  };
+
+  // Préparer les actions pour le menu contextuel
+  const getRightClickActions = () => {
+    if (!actions || !rightClickMenu.item) return [];
+
+    return actions.map((action) => ({
+      ...action,
+      onClick: () => {
+        action.onClick(rightClickMenu.item);
+        closeRightClickMenu();
+      },
+      color: getActionColor(action.color)
+    }));
   };
 
   const getActionColor = (color: string) => {
@@ -101,7 +161,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                   <tr>
                     <td colSpan={columns.length + 1} className=''>
                       <div className='text-secondary-400 text-sm md:text-md text-center pt-6'>
-                      Nous n’avons trouvé aucun élément.
+                        Nous n'avons trouvé aucun élément.
                       </div>
                     </td>
                   </tr>
@@ -109,7 +169,15 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                   // ? AFFICHAGE 
                   : (
                     currentItems.map((item, index) => (
-                      <tr key={index} className="border-b hover:bg-secondary-50 w-max">
+                      <tr
+                        key={index}
+                        className={clsx({ 'cursor-pointer': onRowClick }, `border-b hover:bg-secondary-50 w-max`)}
+                        onDoubleClick={(e) => {
+                          e.stopPropagation();
+                          onRowClick?.(item);
+                        }}
+                        onContextMenu={(e) => handleRightClick(e, item)}
+                      >
                         {columns.map((column) => (
                           <td
                             key={column.key}
@@ -167,6 +235,16 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
         </div>
       </div>
 
+      {/* Menu contextuel */}
+      <RightClickMenu
+        actions={getRightClickActions()}
+        positionX={rightClickMenu.x}
+        positionY={rightClickMenu.y}
+        isOpen={rightClickMenu.isOpen}
+        onClose={closeRightClickMenu}
+        idModule={idModule}
+      />
+
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
@@ -209,7 +287,6 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
         </div>
       )}
     </div>
-
   );
 };
 

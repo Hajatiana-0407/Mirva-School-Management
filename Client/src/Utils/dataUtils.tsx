@@ -137,43 +137,43 @@ export const menuItems: (MenuItemType & { color?: string; childColor?: string })
     id: 'settingsSection',
     label: 'Configuration',
     icon: Settings,
-    color: 'text-gray-600',
-    childColor: 'text-gray-500',
+    color: 'text-secondary-600',
+    childColor: 'text-secondary-500',
     children: [
       {
         id: 'school-year',
         label: 'Année scolaire',
         icon: Backpack,
         path: '/back-office/school-year',
-        color: 'text-gray-500'
+        color: 'text-secondary-500'
       },
       {
         id: 'levels',
         label: 'Niveaux',
         icon: GraduationCap,
         path: '/back-office/levels?o=list-level',
-        color: 'text-gray-600'
+        color: 'text-secondary-600'
       },
       {
         id: 'classes',
         label: 'Classes',
         icon: School,
         path: '/back-office/classes',
-        color: 'text-gray-500'
+        color: 'text-secondary-500'
       },
       {
         id: 'subjects',
         label: 'Matières',
         icon: BookOpen,
         path: '/back-office/subjects',
-        color: 'text-gray-400'
+        color: 'text-secondary-400'
       },
       {
         id: 'settings',
         label: 'Paramètres',
         icon: Settings,
         path: '/back-office/settings',
-        color: 'text-gray-600'
+        color: 'text-secondary-600'
       },
     ],
   },

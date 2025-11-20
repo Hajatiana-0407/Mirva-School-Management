@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Archive, CheckCircle, Clock } from 'lucide-react';
+import { Plus, Search, Archive, CheckCircle, Clock, Eye } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { getRegistrationState } from './redux/registerSlice';
-import { RegistrationType } from '../../Utils/Types'
+import { RegistrationType, StudentType } from '../../Utils/Types'
 import { AppDispatch } from '../../Redux/store';
 import { deleteRegistration, getAllRegistrations } from './redux/registerAsyncThunk';
 import clsx from 'clsx';
@@ -15,6 +15,7 @@ import { getShortDate } from '../../Utils/Utils';
 import RegisterForm from '../../Components/Forms/RegisterForm';
 import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
+import { navigate } from '../../Utils/navigate';
 
 
 const Registration: React.FC = () => {
@@ -27,7 +28,7 @@ const Registration: React.FC = () => {
   const { datas: registrations, action } = useSelector(getRegistrationState);
   const dispatch: AppDispatch = useDispatch();
   const { hiddeTheModalActive } = useSelector(getAppState);
-  const permission = useHashPermission( { redirect : true  });
+  const permission = useHashPermission({ redirect: true });
 
 
   // ? ===================== HANDLERS ===================== //
@@ -66,7 +67,8 @@ const Registration: React.FC = () => {
 
   // ? ===================== TABLEAUX =====================
   const actions = [
-    { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
+     { icon: Eye, label: "Voir les détails", onClick: (item: RegistrationType) => navigate('/back-office/students/' + item.matricule_etudiant), color: 'primary' },
+    { icon: Archive, type: 'delete', label: "Supprimer", onClick: handleArchive, color: 'red' },
   ];
 
   const columns = [
@@ -161,6 +163,7 @@ const Registration: React.FC = () => {
           columns={columns}
           actions={actions}
           searchTerm={searchTerm}
+          onRowClick={(item: StudentType) => navigate(`/back-office/students/${item.matricule_etudiant}`)}
         />
       </div>
       <Modal

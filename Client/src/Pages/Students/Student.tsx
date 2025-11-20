@@ -93,9 +93,9 @@ const Student = () => {
 
   // ===================== TABLEAUX =====================
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: (item: RegistrationType) => navigate('/back-office/students/' + item.matricule_etudiant), color: 'primary' },
+    { icon: Eye, label: "Voir les détails", onClick: (item: RegistrationType) => navigate('/back-office/students/' + item.matricule_etudiant), color: 'primary' },
     { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
-    { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
+    { icon: Archive, type: 'delete', label: "Supprimer", onClick: handleArchive, color: 'red' },
   ];
 
   const columns = [
@@ -253,6 +253,7 @@ const Student = () => {
           actions={actions}
           searchTerm={searchTerm}
           isLoading={action.isLoading as boolean}
+          onRowClick={( item: StudentType ) => navigate(`/back-office/students/${ item.matricule_etudiant }`)}
         />
       </div>
 
