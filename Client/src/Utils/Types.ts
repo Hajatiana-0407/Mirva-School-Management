@@ -17,6 +17,14 @@ export type AppStateType = {
 export const AppInitialValue: AppStateType = {
     hiddeTheModalActive: false
 }
+export type MenuItemType = {
+    id: string;
+    label: string;
+    icon: React.ComponentType<{ className?: string }>;
+    path?: string;
+    color?: string;
+    children?: MenuItemType[];
+}
 
 export type Permission = {
     create: boolean;
@@ -173,7 +181,7 @@ export type ClasseType = {
     denomination: string;
     niveau_id_niveau: number;
     niveau?: string;
-    created_at?: string ; 
+    created_at?: string;
     matiere?: { listes: SubjectType[], id_niveau?: number };
     prof?: { listes: EmployeeType[], id_niveau?: number };
     eleve?: { listes: StudentType[], id_niveau?: number };
@@ -212,6 +220,7 @@ export type EmployeeType = {
     photo?: string;
     id_type_personnel?: number;
     type_personnel?: string;
+    type?: string;
 
     status?: 'Actif' | 'Suspendu' | 'Démissionnaire';
     numero_cin: string,

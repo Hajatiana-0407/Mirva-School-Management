@@ -36,44 +36,44 @@ const SubjectForm: React.FC<SubjectFormPropsType> = ({ handleClose, subject }) =
             <InputError message={error} />
             <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1" >Nom de la matière</label>
+                    <label className="block text-sm font-medium text-secondary-700 mb-1" >Nom de la matière</label>
                     <input
                         name='denomination'
                         type="text"
                         defaultValue={subject?.denomination || ''}
                         placeholder='Ex:Mathématique'
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                     />
                     <InputError message={formErrors?.denomination} />
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Abbreviation</label>
+                    <label className="block text-sm font-medium text-secondary-700 mb-1">Abbreviation</label>
                     <input
                         name='abbreviation'
                         type="text"
                         defaultValue={subject?.abbreviation || ''}
                         placeholder='Ex:MATH'
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                     />
                     <InputError message={formErrors?.abbreviation} />
                 </div>
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Déscription</label>
+                <label className="block text-sm font-medium text-secondary-700 mb-1">Déscription</label>
                 <textarea
                     name='description'
                     defaultValue={subject?.description}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
                 <InputError message={formErrors?.description} />
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Couleur</label>
+                <label className="block text-sm font-medium text-secondary-700 mb-1">Couleur</label>
                 <input
                     type="color"
                     name='couleur'
                     defaultValue={subject?.couleur || '#80aed1'}
-                    className="w-full h-10 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full h-10 px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
                 <InputError message={formErrors?.couleur} />
             </div>
@@ -81,17 +81,17 @@ const SubjectForm: React.FC<SubjectFormPropsType> = ({ handleClose, subject }) =
                 <button
                     type="button"
                     onClick={handleClose}
-                    className="px-2 py-1 sm:px-4 sm:py-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    className="px-2 py-1 sm:px-4 sm:py-2 _classe text-secondary-600 border border-secondary-300 rounded-lg hover:bg-secondary-50"
                 >
                     <X className='inline-block w-5 h-5 me-1' />
                     Annuler
                 </button>
                 <button
                     type="submit"
-                    className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+                    className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-primary-600 text-light rounded-lg hover:bg-primary-700 flex items-center"
                 >
                     {action.isLoading || action.isUpdating ?
-                        <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+                        <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div> :
                         <>
                             {subject ?
                                 <PenBox className='inline-block w-5 h-5 me-1' /> :

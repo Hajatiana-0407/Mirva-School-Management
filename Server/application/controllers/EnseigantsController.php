@@ -35,7 +35,7 @@ class EnseigantsController extends CI_Controller
             return;
         }
 
-        $employe = $this->EnseignantModel->findOneDetailsByMatricule($matricule);
+        $employe = $this->EnseignantModel->findOneDetailsByMatriculeOrId($matricule);
         if (!$employe) {
             echo json_encode([
                 'error' => true,
@@ -74,7 +74,6 @@ class EnseigantsController extends CI_Controller
                 if (
                     $key !== 'type_personnel'
                     &&  $key !== 'assignations'
-                    && $key !== 'user'
                 ) {
                     $data[$key] = $this->input->post($key);
                 }
@@ -196,9 +195,12 @@ class EnseigantsController extends CI_Controller
             // ? Insertions
             $this->MatiereClasseProfModel->insertBatch($assignation_data);
 
+            // ? Recuperer la modification 
+            $details = $this->EnseignantModel->findOneDetailsByMatriculeOrId( null , $id_personnel ) ; 
+
             $data = [
                 'error' => false,
-                'data' => [],
+                'data' => $details,
             ];
         } else {
             $data = [

@@ -43,14 +43,14 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
                             <Link 
                             to={`/back-office/classes/${ classe.id_classe }`}
                                 key={classe.id_classe}
-                                className="px-2 py-1 rounded text-xs font-medium hover:opacity-80 border bg-gray-200"
+                                className="px-2 py-1 rounded text-xs font-medium hover:opacity-80 border bg-secondary-200"
                             >
                                 <span>{classe.denomination}</span>
                             </Link>
                         ))}
                     </div>
                     <div
-                        className="p-2 rounded text-xs text-gray-500 hover:bg-gray-50 cursor-pointer"
+                        className="p-2 rounded text-xs text-secondary-500 hover:bg-secondary-50 cursor-pointer"
                         onClick={() => {
                             setIdLevelToAddClasse(classes.id_niveau)
                             setShowClasseModale(true);
@@ -61,7 +61,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
                 </div>)
         }
         return <div
-            className="p-2 rounded text-xs text-gray-500 hover:bg-gray-50 cursor-pointer"
+            className="p-2 rounded text-xs text-secondary-500 hover:bg-secondary-50 cursor-pointer"
             onClick={() => {
                 setIdLevelToAddClasse(classes.id_niveau)
                 setShowClasseModale(true);
@@ -88,7 +88,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
                         ))}
                     </div>
                     <div
-                        className="p-2 rounded text-xs text-gray-500 hover:bg-gray-50 cursor-pointer"
+                        className="p-2 rounded text-xs text-secondary-500 hover:bg-secondary-50 cursor-pointer"
                         onClick={() => {
                             navigate('/back-office/levels?o=subject-level-coef')
                             setIdLevelToAddSubject(subjects.id_niveau);
@@ -99,7 +99,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
                 </div>)
         }
         return <div
-            className="p-2 rounded text-xs text-gray-400 hover:bg-gray-50 cursor-pointer"
+            className="p-2 rounded text-xs text-secondary-400 hover:bg-secondary-50 cursor-pointer"
             onClick={() => {
                 navigate('/back-office/levels?o=subject-level-coef')
                 setIdLevelToAddSubject(subjects.id_niveau);
@@ -154,27 +154,27 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
     ];
 
     const actions = [
-        { icon: Eye, label: 'Voir', onClick: (item: any) => navigate(`/back-office/level-details/${ item.id_niveau }`), color: 'blue' },
+        { icon: Eye, label: "Voir les détails", onClick: (item: any) => navigate(`/back-office/level-details/${ item.id_niveau }`), color: 'primary' },
         { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
-        { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleDelete, color: 'red' },
+        { icon: Archive, type: 'delete', label: "Supprimer", onClick: handleDelete, color: 'red' },
     ];
 
     return (
         <>
-            <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+            <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
                 <div className="flex items-center justify-between mb-6 md:mb-6">
                     <div className="flex items-center space-x-4">
                         <div className="relative">
-                            <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                            <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
                             <input
                                 type="text"
                                 placeholder="Rechercher un niveau..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             />
                         </div>
-                        <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg hover:bg-secondary-50">
                             <Filter className="w-4 h-4" />
                             <span>Filtres</span>
                         </button>
@@ -187,6 +187,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
                     actions={actions}
                     searchTerm={searchTerm}
                     isLoading={action.isLoading as boolean}
+                    onRowClick={( item: levelType) => navigate('/back-office/level-details/' + item.id_niveau)}
                 />
             </div>
             {/* CONFIRAMTION DE SUPPRESSION */}

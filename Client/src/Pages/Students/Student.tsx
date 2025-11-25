@@ -93,9 +93,9 @@ const Student = () => {
 
   // ===================== TABLEAUX =====================
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: (item: RegistrationType) => navigate('/back-office/students/' + item.matricule_etudiant), color: 'blue' },
+    { icon: Eye, label: "Voir les détails", onClick: (item: RegistrationType) => navigate('/back-office/students/' + item.matricule_etudiant), color: 'primary' },
     { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
-    { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
+    { icon: Archive, type: 'delete', label: "Supprimer", onClick: handleArchive, color: 'red' },
   ];
 
   const columns = [
@@ -114,12 +114,12 @@ const Student = () => {
         <div className="flex flex-col">
           <span className={clsx({
             'hidden': !item.niveau
-          }, 'text-xs italic text-blue-600')}>
+          }, 'text-xs italic text-primary-600')}>
             {item.niveau}
           </span>
           {value}
           {!value && !item.niveau &&
-            <div className='text-gray-400 italic'>non inscrit</div>
+            <div className='text-secondary-400 italic'>non inscrit</div>
           }
         </div>
       )
@@ -152,7 +152,7 @@ const Student = () => {
         {permission.create &&
           <button
             onClick={() => setShowModalRegister(true)}
-            className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+            className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
             <span className='max-md:hidden-susp'>Nouvelle inscription  </span>
@@ -162,11 +162,11 @@ const Student = () => {
 
       {/* Girl statistique */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-        <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+        <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Fille</p>
-              <p className="text-2xl font-bold text-gray-900"> {parseInt(statistique?.girl?.nbr) || 0}</p>
+              <p className="text-sm font-medium text-secondary-600">Fille</p>
+              <p className="text-2xl font-bold text-secondary-900"> {parseInt(statistique?.girl?.nbr) || 0}</p>
             </div>
             <div className={`w-12 h-12 rounded-full flex items-center justify-center bg-rose-100`}>
               <User className={`w-6 h-6 text-rose-500`} />
@@ -185,14 +185,14 @@ const Student = () => {
         </div>
 
         {/* Boy statistique */}
-        <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+        <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Graçon</p>
-              <p className="text-2xl font-bold text-gray-900"> {parseInt(statistique?.boy?.nbr) || 0}</p>
+              <p className="text-sm font-medium text-secondary-600">Graçon</p>
+              <p className="text-2xl font-bold text-secondary-900"> {parseInt(statistique?.boy?.nbr) || 0}</p>
             </div>
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center bg-blue-100`}>
-              <User className={`w-6 h-6 text-blue-500`} />
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center bg-primary-100`}>
+              <User className={`w-6 h-6 text-primary-500`} />
             </div>
           </div>
           <div className="mt-4 flex items-center">
@@ -208,11 +208,11 @@ const Student = () => {
         </div>
 
         {/* Total */}
-        <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+        <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Total</p>
-              <p className="text-2xl font-bold text-gray-900"> {statistique?.all?.nbr || 0}</p>
+              <p className="text-sm font-medium text-secondary-600">Total</p>
+              <p className="text-2xl font-bold text-secondary-900"> {statistique?.all?.nbr || 0}</p>
             </div>
             <div className={`w-12 h-12 rounded-full flex items-center justify-center bg-green-100`}>
               <Users className={`w-6 h-6 text-green-500`} />
@@ -227,20 +227,20 @@ const Student = () => {
         </div>
       </div>
 
-      <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+      <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6 md:mb-6">
           <div className="flex items-center space-x-4">
             <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
               <input
                 type="text"
                 placeholder="Rechercher une matière..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
-            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-300 rounded-lg hover:bg-gray-50">
+            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg hover:bg-secondary-50">
               <Filter className="w-4 h-4" />
               <span>Filtres</span>
             </button>
@@ -253,6 +253,7 @@ const Student = () => {
           actions={actions}
           searchTerm={searchTerm}
           isLoading={action.isLoading as boolean}
+          onRowClick={( item: StudentType ) => navigate(`/back-office/students/${ item.matricule_etudiant }`)}
         />
       </div>
 

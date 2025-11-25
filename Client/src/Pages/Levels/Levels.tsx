@@ -58,7 +58,7 @@ const Levels = () => {
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors disabled:bg-blue-400"
+            className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors disabled:bg-primary-400"
             disabled={ isStudent }
           >
             <Plus className="w-4 h-4" />

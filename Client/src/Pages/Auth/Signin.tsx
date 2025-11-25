@@ -71,32 +71,32 @@ const Signin = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-amber-50 flex items-center justify-center px-4">
-            <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 relative border-ring border">
+            <div className="max-w-md w-full bg-light rounded-xl shadow-lg p-8 relative border-ring border">
                 <div className="text-center mb-8">
                     <div className="w-full">
                         {school.logo ?
                             <img src={baseUrl(school.logo)} alt={school.nom} className="max-h-24 mx-auto" />
-                            : <div className="bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <GraduationCap className="h-8 w-8 text-white" />
+                            : <div className="bg-primary-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <GraduationCap className="h-8 w-8 text-light" />
                             </div>
                         }
 
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-600">Se connecter</h1>
-                    <p className="text-gray-600 mt-2"> {school.nom && school.nom} {school.slogan && "- " + school.slogan}</p>
+                    <h1 className="text-2xl font-bold text-secondary-600">Se connecter</h1>
+                    <p className="text-secondary-600 mt-2"> {school.nom && school.nom} {school.slogan && "- " + school.slogan}</p>
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+                        <label htmlFor="username" className="block text-sm font-medium text-secondary-700 mb-2">
                             Identifiant :
                         </label>
                         <div className="relative">
-                            <User className="h-5 w-5 text-gray-400 absolute left-3 top-3.5" />
+                            <User className="h-5 w-5 text-secondary-400 absolute left-3 top-3.5" />
                             <input
                                 type="text"
                                 id="identifiant"
                                 name="identifiant"
-                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                className="w-full pl-10 pr-4 py-3 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                                 placeholder="Entrez votre nom d'utilisateur"
                             />
                         </div>
@@ -104,16 +104,16 @@ const Signin = () => {
                     </div>
 
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                        <label htmlFor="password" className="block text-sm font-medium text-secondary-700 mb-2">
                             Mot de passe :
                         </label>
                         <div className="relative">
-                            <Lock className="h-5 w-5 text-gray-400 absolute left-3 top-3.5" />
+                            <Lock className="h-5 w-5 text-secondary-400 absolute left-3 top-3.5" />
                             <input
                                 type="password"
                                 id="password"
                                 name="password"
-                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                className="w-full pl-10 pr-4 py-3 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                                 placeholder="Entrez votre mot de passe"
                             />
                         </div>
@@ -121,12 +121,12 @@ const Signin = () => {
                         <InputError message={error} />
                     </div>
 
-                    <button type="submit" className="w-full bg-gradient-to-r from-teal-500 to-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg hover:shadow-lg transition-all flex justify-center items-center space-x-2">
+                    <button type="submit" className="w-full bg-gradient-to-r from-teal-500 to-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg hover:shadow-lg transition-all flex justify-center items-center space-x-2">
                         {!action.isLoading &&
                             <LogIn className="w-4 h-4" />
                         }
                         {action.isLoading &&
-                            <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                            <div className="w-6 h-6 border-4 border-light border-t-transparent rounded-full animate-spin"></div>
                         }
                         <span>Se connecter</span>
                     </button>
@@ -134,7 +134,7 @@ const Signin = () => {
                     <div>
                         <Link
                             to={'/'}
-                            className="text-gray-800 underline hover:text-blue-600 flex items-center"
+                            className="text-secondary-800 underline hover:text-primary-600 flex items-center"
                         >   
                             <span>Retourner sur le site</span>
                         </Link>

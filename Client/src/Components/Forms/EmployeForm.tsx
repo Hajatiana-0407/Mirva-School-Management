@@ -361,7 +361,7 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                         <button
                             type="button"
                             onClick={handleCloseModal}
-                            className="px-2 py-1 sm:px-4 sm:py-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                            className="px-2 py-1 sm:px-4 sm:py-2 _classe text-secondary-600 border border-secondary-300 rounded-lg hover:bg-secondary-50"
                         >
                             <X className='w-5 h-5 inline-block me-1' />
                             Annuler
@@ -370,12 +370,12 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                     }
                     <button
                         type={(isTeacher && !editingEmployees) ? 'button' : 'submit'}
-                        className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-blue-600 text-white flex items-center rounded-lg hover:bg-blue-700 disabled:bg-blue-300"
+                        className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-primary-600 text-light flex items-center rounded-lg hover:bg-primary-700 disabled:bg-primary-300"
                         onClick={handleNext}
                         disabled={employeeAction.isLoading || employeeAction.isUpdating || teacherAction.isLoading || teacherAction.isUpdating}
                     >
                         {employeeAction.isLoading || employeeAction.isUpdating || teacherAction.isLoading || teacherAction.isUpdating ?
-                            <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                            <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div>
                             : <>
                                 {/* Icone si le mot est modifier */}
                                 {editingEmployees && <SquarePen className='w-5 h-5 inline-block me-1' />}
@@ -400,7 +400,7 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                 {/* Boutons de validation et retour dans l'assignation des matieres et classes pour le prof actuel */}
                 <div className='flex items-center justify-between'>
                     <button
-                        className="bg-gray-200 text-gray-700 font-semibold px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center hover:bg-gray-300 transition-colors  gap-01 "
+                        className="bg-secondary-200 text-secondary-700 font-semibold px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center hover:bg-secondary-300 transition-colors  gap-01 "
                         onClick={() => { setPage(v => v - 1) }}
                         type='button'
                     >
@@ -408,12 +408,12 @@ const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleC
                         <span>Percedent</span>
                     </button>
                     <button
-                        className={`bg-blue-600 text-white font-semibold px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center gap-1 transition-colors hover:bg-blue-700 disabled:bg-blue-300`}
+                        className={`bg-primary-600 text-light font-semibold px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center gap-1 transition-colors hover:bg-primary-700 disabled:bg-primary-300`}
                         type='submit'
                         disabled={employeeAction.isLoading || employeeAction.isUpdating || teacherAction.isLoading || teacherAction.isUpdating}
                     >
                         {employeeAction.isLoading || employeeAction.isUpdating || teacherAction.isLoading || teacherAction.isUpdating
-                            ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                            ? <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div>
                             : <Check className='h-5 w-5 inline-block me-1' />
                         }
                         <span>Valider</span>

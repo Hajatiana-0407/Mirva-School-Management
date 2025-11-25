@@ -46,7 +46,7 @@ const TooltipPortal: React.FC<TooltipPortalProps> = ({ targetRef, label }) => {
 
     return ReactDOM.createPortal(
         <div
-            className="fixed bg-gray-800 text-white text-sm rounded px-2 py-1 shadow-lg z-[9999] whitespace-nowrap pointer-events-none transition-opacity duration-200"
+            className="fixed bg-secondary-800 text-light text-sm rounded px-2 py-1 shadow-lg z-[9999] lightspace-nowrap pointer-events-none transition-opacity duration-200"
             style={{
                 top: `${pos.top}px`,
                 left: `${pos.left}px`,

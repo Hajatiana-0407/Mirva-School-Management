@@ -75,8 +75,6 @@ export const assignationTeacher = createAsyncThunk('teacher/assignations', async
         headers: { 'Content-Type': 'multipart/form-data' }
     }).then(response => {
         data = response.data;
-        console.log(data);
-
     }).catch(error => {
         console.error("Erreur lors de l'assignation de classe et matière :", error.getMessage());
     });

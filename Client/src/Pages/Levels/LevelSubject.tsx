@@ -179,7 +179,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
         <div className="space-y-4 md:space-y-6">
             <div className="flex">
                 <button
-                    className="shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 "
+                    className="shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-secondary-500 bg-secondary-100 border border-secondary-300 rounded-s-lg hover:bg-secondary-200 focus:ring-4 focus:outline-none focus:ring-secondary-100 "
                     type="button"
                 >
                     <GraduationCap />
@@ -188,7 +188,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                 <select
                     value={idActiveLevel}
                     onChange={handleLevelChange}
-                    className="bg-gray-50 border border-gray-300 text-black text-sm rounded-e-lg border-s-gray-100 dark:border-s-gray-700 border-s-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    className="bg-secondary-50 border border-secondary-300 text-black text-sm rounded-e-lg border-s-secondary-100 dark:border-s-secondary-700 border-s-2 focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
                 >
                     <option value={0} >Choisissez un niveau</option>
                     {levels.map((value: levelType, key: number) => (
@@ -199,14 +199,14 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
                 {/* LISTE DES MATIERE A AJOUTER  */}
                 <div className="lg:col-span-1">
-                    <div className="bg-white rounded-lg border">
+                    <div className="bg-light rounded-lg border">
                         <div className="p-4 flex justify-between items-center">
                             <HeadingSmall title="Matières disponible." />
                             {permissionSubject.create &&
                                 <button
                                     type="submit"
                                     onClick={() => setShowModalSubject(true)}
-                                    className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+                                    className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors"
                                 >
                                     <Plus className="w-4 h-4" />
                                 </button>
@@ -218,13 +218,13 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                                     !levelSubjects.some((value) => (value.matiere_id_matiere === subject.id_matiere) //* Si le matiere a deja une une coefficient dans  la base  */
                                         && !subjectCoefToDelete.includes(subject.id_matiere)) && !idAllSubjectCoefAdded.includes(subject.id_matiere as number) // si la matiere a ete supprimer de la liste 
                                 ) {
-                                    return <div key={key} className={`w-full p-4 border-b flex justify-between  hover:bg-gray-50`}
+                                    return <div key={key} className={`w-full p-4 border-b flex justify-between  hover:bg-secondary-50`}
                                         style={{ backgroundColor: hexToRgba(subject.couleur, 0.4) }}
                                     >
                                         <span>{subject.denomination}</span>
                                         <button
                                             onClick={() => { handleAddSubjectInLevel(subject) }}
-                                            className="bg-green-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center justify-center space-x-2 hover:bg-green-700 transition-colors"
+                                            className="bg-green-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center justify-center space-x-2 hover:bg-green-700 transition-colors"
                                         >
                                             <ArrowDown className="m-0 h-5 w-5 hidden max-lg:block" />
                                             <ArrowRight className="m-0 h-5 w-5 hidden lg:block" />
@@ -240,17 +240,17 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
 
                 {/* LISTING MATIERE ET COEFFICIENT ( UPDATE , ADD , DELETE ) */}
                 <div className="lg:col-span-2">
-                    <div className="bg-white rounded-lg shadow-sm border">
+                    <div className="bg-light rounded-lg shadow-sm border">
                         <div className="px-2 lg:px-12 py-5 text-center">
                             {levelSubjectAction.isLoading &&
                                 <Loading />
                             }
                             {!levelSubjectAction.isLoading && (subjectSave.length == 0 && allSubjectCoefAdded.length === 0) &&
                                 <>
-                                    <div className="w-16 text-gray-500 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                                        <BookOpen className="w-8 h-8 text-gray-400" />
+                                    <div className="w-16 text-secondary-500 h-16 mx-auto mb-4 bg-secondary-100 rounded-full flex items-center justify-center">
+                                        <BookOpen className="w-8 h-8 text-secondary-400" />
                                     </div>
-                                    <p className="text-gray-500">Cliquer sur une matière pour l’ajouter</p>
+                                    <p className="text-secondary-500">Cliquer sur une matière pour l’ajouter</p>
                                 </>
                             }
                             {!levelSubjectAction.isLoading && (subjectSave.length > 0 || allSubjectCoefAdded.length > 0) &&
@@ -261,7 +261,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                                         />
                                     </div>
                                     <div className="space-y-2 ">
-                                        <div className="w-100 h-10  border-b grid grid-cols-3 uppercase font-semibold text-gray-800">
+                                        <div className="w-100 h-10  border-b grid grid-cols-3 uppercase font-semibold text-secondary-800">
                                             <div className="col-span-1 flex  items-center justify-center" >
                                                 Matière
                                             </div>
@@ -294,10 +294,10 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                                             {permission.create &&
                                                 <button
                                                     type="submit"
-                                                    className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+                                                    className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors"
                                                 >
                                                     {levelSubjectAction.isUpdating ?
-                                                        <div className="w-4 h-4 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                        <div className="w-4 h-4 border-4 border-light border-t-transparent rounded-full animate-spin"></div>
                                                         :
                                                         <Save className="w-4 h-4" />
                                                     }

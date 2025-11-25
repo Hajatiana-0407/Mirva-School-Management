@@ -24,7 +24,7 @@ const Teachers: React.FC = () => {
   const [editingEmployees, setEditingEmployees] = useState<TeacherType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [teacherToArchive, setTeacherToArchive] = useState<TeacherType | null>(null);
-  const permission = useHashPermission(  { redirect : true  });
+  const permission = useHashPermission({ redirect: true });
 
   const { hiddeTheModalActive } = useSelector(getAppState);
   // *** //
@@ -62,7 +62,7 @@ const Teachers: React.FC = () => {
 
   // TABLEAUX 
   const actions = [
-    { icon: Eye, label: 'Voir le détail', onClick: (item: TeacherType) => navigate("/back-office/employees/" + item.matricule_personnel), color: 'blue' },
+    { icon: Eye, label: 'Voir le détail', onClick: (item: TeacherType) => navigate("/back-office/employees/" + item.matricule_personnel), color: 'primary' },
     { icon: Plus, label: 'Classes et Matières', onClick: (item: TeacherType) => navigate("/back-office/teachers/" + item.matricule_personnel), color: 'purple' },
     { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
     { icon: Archive, type: 'delete', label: 'Supprimer', onClick: handleArchive, color: 'red' },
@@ -82,12 +82,11 @@ const Teachers: React.FC = () => {
         />
       )
     },
-    { key: 'addresse', label: 'Addrèsse' },
     {
       key: 'telephone', label: 'Contact', render: (value: string, item: TeacherType) => (
         <div>
           {value}
-          <span className='block text-sm text-blue-500'>{item.email} </span>
+          <span className='block text-sm text-primary-500'>{item.email} </span>
         </div>
       )
     },
@@ -155,7 +154,7 @@ const Teachers: React.FC = () => {
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+            className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
             <span className='max-md:hidden-susp'>Nouveau enseignant</span>
@@ -164,20 +163,20 @@ const Teachers: React.FC = () => {
       </Title>
 
       {/* Filtrage  */}
-      <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+      <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6 md:mb-6">
           <div className="flex items-center space-x-4">
             <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
               <input
                 type="text"
                 placeholder="Rechercher un enseignant..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
-            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-300 rounded-lg hover:bg-gray-50">
+            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg hover:bg-secondary-50">
               <Filter className="w-4 h-4" />
               <span>Filtres</span>
             </button>
@@ -192,6 +191,7 @@ const Teachers: React.FC = () => {
           actions={actions}
           searchTerm={searchTerm}
           actionType='pop-up'
+          onRowClick={(item: TeacherType) => navigate(`/back-office/employees/${item.matricule_personnel}`)}
         />
       </div>
 

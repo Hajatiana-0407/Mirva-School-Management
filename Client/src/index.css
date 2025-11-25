@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'halfre';
+    src: url('./assets/font/halfre.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 
 /* SPINNER */
 @keyframes scaleUp {
@@ -17,5 +25,5 @@
 }
 
 * {
-    scrollbar-width: thin ;
+    scrollbar-width: thin;
 }

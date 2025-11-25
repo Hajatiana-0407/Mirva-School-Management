@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Archive, CheckCircle, Clock } from 'lucide-react';
+import { Plus, Search, Archive, CheckCircle, Clock, Eye } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { getRegistrationState } from './redux/registerSlice';
-import { RegistrationType } from '../../Utils/Types'
+import { RegistrationType, StudentType } from '../../Utils/Types'
 import { AppDispatch } from '../../Redux/store';
 import { deleteRegistration, getAllRegistrations } from './redux/registerAsyncThunk';
 import clsx from 'clsx';
@@ -15,6 +15,7 @@ import { getShortDate } from '../../Utils/Utils';
 import RegisterForm from '../../Components/Forms/RegisterForm';
 import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
+import { navigate } from '../../Utils/navigate';
 
 
 const Registration: React.FC = () => {
@@ -27,7 +28,7 @@ const Registration: React.FC = () => {
   const { datas: registrations, action } = useSelector(getRegistrationState);
   const dispatch: AppDispatch = useDispatch();
   const { hiddeTheModalActive } = useSelector(getAppState);
-  const permission = useHashPermission( { redirect : true  });
+  const permission = useHashPermission({ redirect: true });
 
 
   // ? ===================== HANDLERS ===================== //
@@ -66,7 +67,8 @@ const Registration: React.FC = () => {
 
   // ? ===================== TABLEAUX =====================
   const actions = [
-    { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
+     { icon: Eye, label: "Voir les détails", onClick: (item: RegistrationType) => navigate('/back-office/students/' + item.matricule_etudiant), color: 'primary' },
+    { icon: Archive, type: 'delete', label: "Supprimer", onClick: handleArchive, color: 'red' },
   ];
 
   const columns = [
@@ -87,7 +89,7 @@ const Registration: React.FC = () => {
         <div className="flex flex-col">
           <span className={clsx({
             'hidden': !item.niveau
-          }, 'text-xs italic text-blue-600')}>
+          }, 'text-xs italic text-primary-600')}>
             {item.niveau}
           </span>
           {value}
@@ -133,24 +135,24 @@ const Registration: React.FC = () => {
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+            className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
             <span className='max-md:hidden-susp' >Nouvelle inscription  </span>
           </button>
         }
       </Title>
-      <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+      <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6 md:mb-6">
           <div className="flex items-center space-x-4">
             <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
               <input
                 type="text"
                 placeholder="Rechercher un élève..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -161,6 +163,7 @@ const Registration: React.FC = () => {
           columns={columns}
           actions={actions}
           searchTerm={searchTerm}
+          onRowClick={(item: StudentType) => navigate(`/back-office/students/${item.matricule_etudiant}`)}
         />
       </div>
       <Modal

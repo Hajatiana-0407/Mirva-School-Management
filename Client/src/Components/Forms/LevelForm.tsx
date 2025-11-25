@@ -39,42 +39,42 @@ const LevelForm: React.FC<LevelFormPropsType> = ({ handleClose, level }) => {
         <form className="space-y-4" onSubmit={handleSubmit}>
             <InputError message={error} />
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nom du niveau</label>
+                <label className="block text-sm font-medium text-secondary-700 mb-1">Nom du niveau</label>
                 <input
                     name='niveau'
                     type="text"
                     defaultValue={level?.niveau || ''}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
                 <InputError message={formErrors?.niveau} />
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Cycle</label>
-                <select name='cycle' className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label className="block text-sm font-medium text-secondary-700 mb-1">Cycle</label>
+                <select name='cycle' className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
                     {cycles.map((cycle: string, key: number) => cycle === level?.cycle ? <option key={key} value={cycle}>{cycle}</option> : '')}
                     {cycles.map((cycle: string, key: number) => cycle !== level?.cycle ? <option key={key} value={cycle}>{cycle}</option> : '')}
                 </select>
                 <InputError message={formErrors?.cycle} />
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label className="block text-sm font-medium text-secondary-700 mb-1">Description</label>
                 <textarea
                     name='description'
                     defaultValue={level?.description || ''}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
                 <InputError message={formErrors?.description} />
             </div>
             {!level &&
                 <div className="flex items-center justify-between">
                     <div>
-                        <h4 className="font-medium text-gray-900">Générer des classes automatiquement</h4>
-                        <p className="text-sm text-gray-600">Création des classes automatiquement pour ce niveau.</p>
+                        <h4 className="font-medium text-secondary-900">Générer des classes automatiquement</h4>
+                        <p className="text-sm text-secondary-600">Création des classes automatiquement pour ce niveau.</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" className="sr-only peer" onChange={(e) => setIsActiveAutoGenationClasse(e.target.checked)} defaultChecked={isActiveAutoGenationClasse} />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        <div className="w-11 h-6 bg-secondary-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-light after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-light after:border-secondary-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
                     </label>
                 </div>
             }
@@ -82,16 +82,16 @@ const LevelForm: React.FC<LevelFormPropsType> = ({ handleClose, level }) => {
                 (isActiveAutoGenationClasse && !level) &&
                 <>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Nombre de classe</label>
+                        <label className="block text-sm font-medium text-secondary-700 mb-1">Nombre de classe</label>
                         <input
                             name='classe'
                             type="number"
                             min={0}
                             max={15}
                             defaultValue={0}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                         />
-                        <p className="text-sm text-gray-600">Les classes générées sont nommées par ordre alphabétique.</p>
+                        <p className="text-sm text-secondary-600">Les classes générées sont nommées par ordre alphabétique.</p>
                     </div>
                 </>
             }
@@ -100,7 +100,7 @@ const LevelForm: React.FC<LevelFormPropsType> = ({ handleClose, level }) => {
                     <button
                         type="button"
                         onClick={handleClose}
-                        className="px-2 py-1 sm:px-4 sm:py-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                        className="px-2 py-1 sm:px-4 sm:py-2 _classe text-secondary-600 border border-secondary-300 rounded-lg hover:bg-secondary-50"
                     >
                         <X className='inline-block w-5 h-5 me-1' />
                         Annuler
@@ -108,10 +108,10 @@ const LevelForm: React.FC<LevelFormPropsType> = ({ handleClose, level }) => {
                 }
                 <button
                     type="submit"
-                    className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+                    className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-primary-600 text-light rounded-lg hover:bg-primary-700 flex items-center"
                 >
                     {action.isLoading || action.isUpdating ?
-                        <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+                        <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div> :
                         <>
                             {level ?
                                 <PenBox className='inline-block w-5 h-5 me-1' /> :

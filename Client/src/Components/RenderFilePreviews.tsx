@@ -13,7 +13,7 @@ export const RenderFilePreview = ({ url, className = "" }: RenderFilePreviewProp
     const ext = url.split(".").pop()?.toLowerCase() || "";
     const safeUrl = encodeURI(url);
 
-    const commonClasses = "rounded-xl shadow-md border border-gray-200 " + className;
+    const commonClasses = "rounded-xl shadow-md border border-secondary-200 " + className;
 
     const isVideo = ["mp4", "webm", "ogg", "mov", "avi", "mkv"].includes(ext);
     const isAudio = ["mp3", "wav", "aac", "flac", "ogg"].includes(ext);
@@ -85,7 +85,7 @@ export const RenderFilePreview = ({ url, className = "" }: RenderFilePreviewProp
                     className={`${commonClasses} w-full h-[32rem]`}
                     sandbox="allow-same-origin allow-scripts allow-popups"
                 />
-                <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
+                <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-light px-2 py-1 rounded text-sm">
                     PDF
                 </div>
             </div>
@@ -104,7 +104,7 @@ export const RenderFilePreview = ({ url, className = "" }: RenderFilePreviewProp
                     sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
                     loading="lazy"
                 />
-                <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
+                <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-light px-2 py-1 rounded text-sm">
                     {ext.toUpperCase()}
                 </div>
                 <div className="absolute bottom-2 left-2 bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">
@@ -127,7 +127,7 @@ export const RenderFilePreview = ({ url, className = "" }: RenderFilePreviewProp
 
     if (isText) {
         return (
-            <div className={`${commonClasses} p-4 bg-gray-50`}>
+            <div className={`${commonClasses} p-4 bg-secondary-50`}>
                 <TextFilePreview url={url} />
             </div>
         );
@@ -140,11 +140,11 @@ export const RenderFilePreview = ({ url, className = "" }: RenderFilePreviewProp
                 href={safeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 underline hover:text-blue-800"
+                className="text-primary-600 underline hover:text-primary-800"
             >
                 Télécharger le fichier
             </a>
-            <p className="text-sm text-gray-500 mt-1">Type: {ext || "inconnu"}</p>
+            <p className="text-sm text-secondary-500 mt-1">Type: {ext || "inconnu"}</p>
         </div>
     );
 };
@@ -172,11 +172,11 @@ const TextFilePreview = ({ url }: { url: string }) => {
         fetchTextContent();
     }, [url]);
 
-    if (loading) return <div className="text-gray-500">Chargement...</div>;
+    if (loading) return <div className="text-secondary-500">Chargement...</div>;
     if (error) return <div className="text-red-500">{error}</div>;
 
     return (
-        <pre className="whitespace-pre-wrap break-words text-sm max-h-64 overflow-y-auto">
+        <pre className="lightspace-pre-wrap break-words text-sm max-h-64 overflow-y-auto">
             {content}
         </pre>
     );

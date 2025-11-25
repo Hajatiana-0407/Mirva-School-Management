@@ -102,10 +102,10 @@ const AccountForm: React.FC = () => {
 
             <div className="flex justify-end">
                 <button
-                    className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg space-x-2 hover:bg-blue-700 transition-colors flex items-center"
+                    className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg space-x-2 hover:bg-primary-700 transition-colors flex items-center"
                 >
                     {action.isUpdating
-                        ? <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div> :
+                        ? <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div> :
                         <Save className="w-4 h-4" />
                     }
                     <span>Enregistrer</span>

@@ -166,11 +166,14 @@ const TeacherSlice = createSlice({
             })
             .addCase(assignationTeacher.fulfilled, (state, action: { payload: ApiReturnType }) => {
                 state.single.action.isLoadingAssignation = false;
-                const { error, message } = action.payload;
+                const { error, message, data } = action.payload;
 
                 if (error) {
                     state.error = message as string;
                 } else {
+                    if (data.id_personnel) {
+                        state.single.data = data;
+                    }
                     toast("Assignations mise à jour avec succès")
                 }
             })

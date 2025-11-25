@@ -25,7 +25,7 @@ const Schedule: React.FC = () => {
 
   const getSubjectColor = (subject: string) => {
     const colors: { [key: string]: string } = {
-      'Mathématiques': 'bg-blue-100 text-blue-800',
+      'Mathématiques': 'bg-primary-100 text-primary-800',
       'Français': 'bg-green-100 text-green-800',
       'Anglais': 'bg-yellow-100 text-yellow-800',
       'Histoire': 'bg-red-100 text-red-800',
@@ -35,9 +35,9 @@ const Schedule: React.FC = () => {
       'EPS': 'bg-orange-100 text-orange-800',
       'Arts': 'bg-pink-100 text-pink-800',
       'Musique': 'bg-indigo-100 text-indigo-800',
-      'Étude': 'bg-gray-100 text-gray-800',
+      'Étude': 'bg-secondary-100 text-secondary-800',
     };
-    return colors[subject] || 'bg-gray-100 text-gray-800';
+    return colors[subject] || 'bg-secondary-100 text-secondary-800';
   };
 
   const handleEditSlot = (day: string, time: string, subject: string) => {
@@ -53,9 +53,9 @@ const Schedule: React.FC = () => {
   return (
     <div className="space-y-4 md:space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Emploi du temps</h1>
+        <h1 className="text-2xl font-bold text-secondary-900">Emploi du temps</h1>
         <div className="flex items-center space-x-4">
-          <select className="px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <select className="px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
             <option value="6ème A">6ème A</option>
             <option value="5ème B">5ème B</option>
             <option value="4ème C">4ème C</option>
@@ -64,15 +64,15 @@ const Schedule: React.FC = () => {
             type="week"
             value={selectedWeek}
             onChange={(e) => setSelectedWeek(e.target.value)}
-            className="px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
       </div>
 
-      <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+      <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6 md:mb-6">
-          <h2 className="text-lg font-semibold text-gray-900">Semaine du {selectedWeek}</h2>
-          <button className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors">
+          <h2 className="text-lg font-semibold text-secondary-900">Semaine du {selectedWeek}</h2>
+          <button className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors">
             <Plus className="w-4 h-4" />
             <span>Ajouter un cours</span>
           </button>
@@ -82,9 +82,9 @@ const Schedule: React.FC = () => {
           <table className="w-full border-collapse">
             <thead>
               <tr>
-                <th className="border border-gray-200 p-3 bg-gray-50 text-left font-medium text-gray-700">Heure</th>
+                <th className="border border-secondary-200 p-3 bg-secondary-50 text-left font-medium text-secondary-700">Heure</th>
                 {days.map(day => (
-                  <th key={day} className="border border-gray-200 p-3 bg-gray-50 text-center font-medium text-gray-700 min-w-[150px]">
+                  <th key={day} className="border border-secondary-200 p-3 bg-secondary-50 text-center font-medium text-secondary-700 min-w-[150px]">
                     {day}
                   </th>
                 ))}
@@ -93,13 +93,13 @@ const Schedule: React.FC = () => {
             <tbody>
               {timeSlots.map(time => (
                 <tr key={time} className="h-16">
-                  <td className="border border-gray-200 p-3 font-medium text-gray-700 bg-gray-50">
+                  <td className="border border-secondary-200 p-3 font-medium text-secondary-700 bg-secondary-50">
                     {time}
                   </td>
                   {days.map(day => {
                     const subject = schedule['6ème A'][day]?.[time];
                     return (
-                      <td key={`${day}-${time}`} className="border border-gray-200 p-1">
+                      <td key={`${day}-${time}`} className="border border-secondary-200 p-1">
                         {subject ? (
                           <div
                             className={`p-2 rounded text-xs font-medium cursor-pointer hover:opacity-80 ${getSubjectColor(subject)}`}
@@ -109,7 +109,7 @@ const Schedule: React.FC = () => {
                           </div>
                         ) : (
                           <div
-                            className="p-2 rounded text-xs text-gray-400 hover:bg-gray-50 cursor-pointer"
+                            className="p-2 rounded text-xs text-secondary-400 hover:bg-secondary-50 cursor-pointer"
                             onClick={() => handleEditSlot(day, time, '')}
                           >
                             + Ajouter
@@ -134,27 +134,27 @@ const Schedule: React.FC = () => {
         <form className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Jour</label>
+              <label className="block text-sm font-medium text-secondary-700 mb-1">Jour</label>
               <input
                 type="text"
                 value={editingSlot?.day || ''}
                 readOnly
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50"
+                className="w-full px-3 py-2 border border-secondary-300 rounded-lg bg-secondary-50"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Heure</label>
+              <label className="block text-sm font-medium text-secondary-700 mb-1">Heure</label>
               <input
                 type="text"
                 value={editingSlot?.time || ''}
                 readOnly
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50"
+                className="w-full px-3 py-2 border border-secondary-300 rounded-lg bg-secondary-50"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Matière</label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <label className="block text-sm font-medium text-secondary-700 mb-1">Matière</label>
+            <select className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
               <option value="">Sélectionner une matière</option>
               <option value="Mathématiques">Mathématiques</option>
               <option value="Français">Français</option>
@@ -165,8 +165,8 @@ const Schedule: React.FC = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Enseignant</label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <label className="block text-sm font-medium text-secondary-700 mb-1">Enseignant</label>
+            <select className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
               <option value="">Sélectionner un enseignant</option>
               <option value="Mme Dupont">Mme Dupont</option>
               <option value="M. Leroy">M. Leroy</option>
@@ -174,25 +174,25 @@ const Schedule: React.FC = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Salle</label>
+            <label className="block text-sm font-medium text-secondary-700 mb-1">Salle</label>
             <input
               type="text"
               defaultValue=""
               placeholder="ex: A101"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
           <div className="flex justify-end space-x-3 pt-4">
             <button
               type="button"
               onClick={handleCloseModal}
-              className="px-2 py-1 sm:px-4 sm:py-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="px-2 py-1 sm:px-4 sm:py-2 _classe text-secondary-600 border border-secondary-300 rounded-lg hover:bg-secondary-50"
             >
               Annuler
             </button>
             <button
               type="submit"
-              className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-primary-600 text-light rounded-lg hover:bg-primary-700"
             >
               {editingSlot?.subject ? 'Modifier' : 'Ajouter'}
             </button>

@@ -37,9 +37,9 @@ const getParentRelationColor = (status: string) => {
     case 'père':
       return 'bg-green-100 text-green-800';
     case 'mère':
-      return 'bg-blue-100 text-blue-800';
+      return 'bg-primary-100 text-primary-800';
     default:
-      return 'bg-gray-100 text-gray-800';
+      return 'bg-secondary-100 text-secondary-800';
   }
 };
 
@@ -138,7 +138,7 @@ const Parents = () => {
   // ? ================== TABLEAU ===================== //
   const actions = [
     { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
-    { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
+    { icon: Archive, type: 'delete', label: "Supprimer", onClick: handleArchive, color: 'red' },
   ];
   const columns = [
     {
@@ -155,10 +155,10 @@ const Parents = () => {
           {value !== '' ? <>
             <div>
               <span className=''> {item.nom} {item.prenom} • </span>
-              <span className='italic text-gray-500'>{item.profession}</span>
+              <span className='italic text-secondary-500'>{item.profession}</span>
             </div>
-            <span className='text-sm italic text-blue-600'>{item.telephone}</span>
-          </> : <span className='text-gray-400'>Non défini</span>}
+            <span className='text-sm italic text-primary-600'>{item.telephone}</span>
+          </> : <span className='text-secondary-400'>Non défini</span>}
         </div>
       )
     },
@@ -192,27 +192,27 @@ const Parents = () => {
               setStudentToAddParent(null);
               setShowModal(true);
             }}
-            className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+            className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
             <span className='max-md:hidden-susp' >Ajouter</span>
           </button>
         }
       </Title>
-      <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+      <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6 md:mb-6">
           <div className="flex items-center space-x-4">
             <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
               <input
                 type="text"
                 placeholder="Rechercher une matière..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
-            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-300 rounded-lg hover:bg-gray-50">
+            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg hover:bg-secondary-50">
               <Filter className="w-4 h-4" />
               <span>Filtres</span>
             </button>
@@ -253,7 +253,7 @@ const Parents = () => {
               </div>
               <button
                 type='submit'
-                className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+                className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors"
               >
                 <Search className="w-4 h-4" />
                 <span>Rechercher</span>
@@ -266,7 +266,7 @@ const Parents = () => {
 
           {/* Si il n'y a pas d'etudiant et pas de modification  */}
           {studentToAddParent === null && !isLoading &&
-            <div className='bg-gray-50  p-3 md:p-6 border border-gray-100 rounded flex items-center justify-center text-lg text-gray-400 italic'>
+            <div className='bg-secondary-50  p-3 md:p-6 border border-secondary-100 rounded flex items-center justify-center text-lg text-secondary-400 italic'>
               <div>Acune étudiant trouvé...</div>
             </div>
           }
@@ -275,7 +275,7 @@ const Parents = () => {
           }
 
           {studentToAddParent &&
-            <div className='w-full py-5 mb-5 flex justify-center bg-blue-50 border border-blue-200 rounded'>
+            <div className='w-full py-5 mb-5 flex justify-center bg-primary-50 border border-primary-200 rounded'>
               <Profile
                 fullName={studentToAddParent?.nom ? `${studentToAddParent?.nom} ${studentToAddParent?.prenom}` : ''}
                 photo={studentToAddParent?.photo as string}
@@ -314,16 +314,16 @@ const Parents = () => {
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="px-2 py-1 sm:px-4 sm:py-2 _classe text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="px-2 py-1 sm:px-4 sm:py-2 _classe text-secondary-600 border border-secondary-300 rounded-lg hover:bg-secondary-50"
               >
                 <X className='h-5 w-5 me-1 inline-block' />
                 Annuler
               </button>
               <button
                 type="submit"
-                className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center"
+                className="px-2 py-1 sm:px-4 sm:py-2 _classe bg-primary-600 text-light rounded-lg hover:bg-primary-700 flex items-center"
               >
-                {action.isLoading && <div className="w-5 h-5 me-1 inline-block border-4 border-white border-t-transparent rounded-full animate-spin"></div>}
+                {action.isLoading && <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div>}
                 {studentToAddParent?.pere || studentToAddParent?.mere || studentToAddParent?.tuteur ? <>
                   {!action.isLoading &&
                     <PenBox className='h-5 w-5 me-1 inline-block' />

@@ -32,7 +32,7 @@ const SchoolYear = () => {
     {
       key: 'isActif', label: 'Status', render: (value: string) => (
         value === '1' ? <div className='w-4 h-4 rounded-full bg-green-400'></div>
-          : <div className='w-4 h-4 rounded-full bg-gray-400'></div>
+          : <div className='w-4 h-4 rounded-full bg-secondary-400'></div>
       )
     },
     { key: 'date_debut', label: 'Date de début' },
@@ -78,9 +78,9 @@ const SchoolYear = () => {
   }, [dispatch]);
 
   const actions = [
-    { icon: Eye, label: 'Voir', onClick: (item: any) => console.log('Voir', item), color: 'blue' },
+    { icon: Eye, label: "Voir les détails", onClick: (item: any) => console.log("Voir les détails", item), color: 'primary' },
     { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
-    { icon: Archive, type: 'delete', label: 'Archiver', onClick: handleArchive, color: 'red' },
+    { icon: Archive, type: 'delete', label: "Supprimer", onClick: handleArchive, color: 'red' },
   ];
 
   return (
@@ -92,27 +92,27 @@ const SchoolYear = () => {
         {permission.create &&
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 text-white px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+            className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
             <span className='max-md:hidden-susp'>Nouvelle année scolaire</span>
           </button>
         }
       </Title>
-      <div className="bg-white p-3 md:p-6 rounded-lg shadow-sm border">
+      <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
         <div className="flex items-center justify-between mb-6 md:mb-6">
           <div className="flex items-center space-x-4">
             <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
               <input
                 type="text"
                 placeholder="Rechercher une année scolaire..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
-            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-300 rounded-lg hover:bg-gray-50">
+            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg hover:bg-secondary-50">
               <Filter className="w-4 h-4" />
               <span>Filtres</span>
             </button>

@@ -34,7 +34,7 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
             onChange = () => { },
             errorMessage = "",
             defaultValue = undefined,
-            iconColor = "text-gray-400",
+            iconColor = "text-secondary-400",
             options = [],
             isShowGeneratePassword = false,
         },
@@ -99,7 +99,7 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                                 {
                                     hidden: !isEmpty && type !== "select",
                                 },
-                                "transition-all duration-700 absolute left-3 top-0 -translate-y-1/2 text-sm text-blue-400 pointer-events-none bg-white z-20"
+                                "transition-all duration-700 absolute left-3 top-0 -translate-y-1/2 text-sm text-primary-400 pointer-events-none bg-light z-20"
                             )}
                         >
                             {label}
@@ -118,9 +118,9 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                                     className={clsx(
                                         {
                                             "ps-12": icon,
-                                            "text-gray-400/60": options.length === 0,
+                                            "text-secondary-400/60": options.length === 0,
                                         },
-                                        "bg-white pl-10 pr-10 py-2 border w-full border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
+                                        "bg-light pl-10 pr-10 py-2 border w-full border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none"
                                     )}
                                 >
                                     {options.length ? (
@@ -136,7 +136,7 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
 
                                 {/* Icône Lucide à droite */}
                                 <ChevronDownIcon
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-800 pointer-events-none"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary-800 pointer-events-none"
                                     size={18}
                                 />
                             </div>
@@ -145,13 +145,13 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                             <div className="flex w-full flex-col items-start gap-2 relative">
                                 <label
                                     className={clsx(
-                                        "flex w-full items-center gap-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-gray-400/60 rounded-lg cursor-pointer transition-colors"
+                                        "flex w-full items-center gap-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-400/60 rounded-lg cursor-pointer transition-colors"
                                     )}
                                 >
                                     <div className="w-5 h-5" />
                                     <span
                                         className={clsx(
-                                            { "text-gray-400": !fileInputName, "text-gray-800": fileInputName },
+                                            { "text-secondary-400": !fileInputName, "text-secondary-800": fileInputName },
                                             "text-sm"
                                         )}
                                     >
@@ -172,7 +172,7 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                                 </label>
                                 {fileInputName && (
                                     <span
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-red-400 bg-gray-50 rounded cursor-pointer border"
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-red-400 bg-secondary-50 rounded cursor-pointer border"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             setFileInputName("");
@@ -198,7 +198,7 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                                 readOnly={readonly}
                                 className={clsx(
                                     { "ps-12": icon },
-                                    "pl-10 pr-4 py-2 border w-full border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    "pl-10 pr-4 py-2 border w-full border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                 )}
                             />
                         )}
@@ -213,7 +213,7 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                                 {isShowGeneratePassword && (
                                     <button
                                         type="button"
-                                        className="h-full px-2 flex items-center bg-blue-500 text-white"
+                                        className="h-full px-2 flex items-center bg-primary-500 text-light"
                                         onClick={handleGeneratePassword}
                                     >
                                         <RefreshCcw />

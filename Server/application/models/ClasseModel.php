@@ -118,7 +118,7 @@ class ClasseModel extends CI_Model
             ->join('matiere_niveau', 'matiere_niveau.niveau_id_niveau = niveau.id_niveau', 'left')
             ->where('matiere_niveau.matiere_id_matiere', $id_matiere)
             ->get()
-            ->result_array();
+            ->result();
 
         foreach ($classes as  &$classe) {
             $classe->matiere['listes'] = $this->db->select('m.*')

@@ -20,26 +20,26 @@ const Profile: React.FC<ProfilePropsType> = ({ photo, fullName, link, copy = tru
 
         <div className="flex items-center space-x-3 relative">
             {addPhoto &&
-                <div className="w-10 h-10 rounded-full bg-gray-white flex items-center justify-center overflow-hidden cursor-pointer">
+                <div className="w-10 h-10 rounded-full bg-secondary-light flex items-center justify-center overflow-hidden cursor-pointer">
                     {photo && <img src={baseUrl(photo)} alt="" className="w-full h-full object-cover" />}
                     {!photo && <img src={baseUrl('/public/images/user.png')} alt="" className="w-full h-full object-cover" />}
                 </div>
             }
             <div>
                 <div className={clsx({
-                    'text-blue-500 hover:underline': link
+                    'text-primary-500 hover:underline': link
                 }, '')}>
                     {link ?
                         <Link to={`${link}`}>{fullName}</Link>
                         : fullName
                     }
                 </div>
-                <div className="text-xs text-gray-500 ">
+                <div className="text-xs text-secondary-500 ">
                     {identification}
                     {copy &&
                         <div className='relative w-max inline-block overflow-visible'>
                             <Copy
-                                className='w-5 h-5 inline-block ml-3 cursor-pointer active:text-blue-400 '
+                                className='w-5 h-5 inline-block ml-3 cursor-pointer active:text-primary-400 '
                                 onClick={() => {
                                     if (identification) {
                                         navigator.clipboard.writeText(identification);
@@ -49,7 +49,7 @@ const Profile: React.FC<ProfilePropsType> = ({ photo, fullName, link, copy = tru
                                 }}
                             />
                             {copied && (
-                                <div className="absolute z-20 -right-16 bottom-full mt-1 px-2 py-1 bg-gray-500 text-white rounded-full rounded-bl-none text-sm shadow">
+                                <div className="absolute z-20 -right-16 bottom-full mt-1 px-2 py-1 bg-secondary-500 text-light rounded-full rounded-bl-none text-sm shadow">
                                     Copié !
                                 </div>
                             )}
