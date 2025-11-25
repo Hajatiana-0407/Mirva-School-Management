@@ -18,6 +18,7 @@ const History: React.FC = () => {
         }
         return () => {}
     }, [dispatch])    
+    console.log(history);
     
     // Loading
     if(action.isLoading) return <Loading/>

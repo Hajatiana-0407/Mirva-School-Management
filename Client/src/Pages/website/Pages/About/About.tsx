@@ -1,7 +1,8 @@
 import React from 'react';
 import History from './History';
 import Mission from './Mission';
-import Values from './Values.tsx'
+import Pilier from './Pilier.tsx'
+import Installation from './Installation.tsx'
 const About: React.FC = () => {
 
     return (
@@ -20,7 +21,8 @@ const About: React.FC = () => {
             </section>
             <History />
             <Mission />
-            <Values />
+            <Pilier />
+            <Installation />
 
         </div>
     );

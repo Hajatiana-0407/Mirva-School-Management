@@ -24,6 +24,8 @@ import Presentatioreducer from '../Pages/website/Redux/Slice/Home/PresentationSl
 import ValueReducer from '../Pages/website/Redux/Slice/Home/ValueSlice'
 import HistoryReducer from '../Pages/website/Redux/Slice/About/HistorySlice'
 import MissionReducer from '../Pages/website/Redux/Slice/About/MissionSlice'
+import PilierReducer from '../Pages/website/Redux/Slice/About/PilierSlice'
+import InstallationReducer from '../Pages/website/Redux/Slice/About/InstallationSlice'
 
 export const store = configureStore({
     reducer: {
@@ -51,7 +53,9 @@ export const store = configureStore({
         presentation : Presentatioreducer,
         values : ValueReducer,
         history : HistoryReducer,
-        mission : MissionReducer
+        mission : MissionReducer,
+        pilier : PilierReducer,
+        installation : InstallationReducer 
     }
 });
 

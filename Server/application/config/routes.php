@@ -104,6 +104,22 @@ $route['api/site/mission/delete'] = 'SiteMissionController/delete';
 $route['api/site/mission/publish'] = 'SiteMissionController/publish';
 
 
+// ******************* ROUTE PILIER ********************** //
+$route['api/site/Pilier'] = 'SitePilierEducatifController';
+$route['api/site/Pilier/update'] = 'SitePilierEducatifController/update';
+$route['api/site/Pilier/create'] = 'SitePilierEducatifController/create';
+$route['api/site/Pilier/delete'] = 'SitePilierEducatifController/delete';
+$route['api/site/Pilier/publish'] = 'SitePilierEducatifController/publish';
+
+
+// ******************* ROUTE INSTALLATION ********************** //
+$route['api/site/Installation'] = 'SiteInstallationController';
+$route['api/site/Installation/update'] = 'SiteInstallationController/update';
+$route['api/site/Installation/create'] = 'SiteInstallationController/create';
+$route['api/site/Installation/delete'] = 'SiteInstallationController/delete';
+$route['api/site/Installation/publish'] = 'SiteInstallationController/publish';
+
+
 //! *********************  ROUTE POUR LE SITE WEB **********************************************************************
 
 

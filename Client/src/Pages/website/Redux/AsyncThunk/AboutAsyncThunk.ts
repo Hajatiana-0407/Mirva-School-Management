@@ -45,12 +45,12 @@ export const getAllMission = createAsyncThunk('mission/getAll', async (): Promis
             datas = response.data
         })
         .catch(error => {
-            console.error('( Histoire ) Erreur lors de la récupération des données:', error);
+            console.error('( mission ) Erreur lors de la récupération des données:', error);
         });
         return datas;
     })
 
-export const updateMission = createAsyncThunk('histoire/modification', async ({ dataToUpdate, id }: { dataToUpdate: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
+export const updateMission = createAsyncThunk('mission/modification', async ({ dataToUpdate, id }: { dataToUpdate: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
 
     dataToUpdate.append('id_histoire', id.toString());
@@ -68,25 +68,25 @@ export const updateMission = createAsyncThunk('histoire/modification', async ({ 
     });
     return data;
 })
-// -----------------------------------VALUE SECTION--------------------------------------------- 
-export const getAllValue = createAsyncThunk('mission/getAll', async (): Promise<ApiReturnType> => {
+// -----------------------------------PILIER SECTION--------------------------------------------- 
+export const getAllPilier = createAsyncThunk('Pilier/getAll', async (): Promise<ApiReturnType> => {
     let datas: ApiReturnType = ApiReturnInitial;
-    await api.get('site/Values')
+    await api.get('site/Pilier')
         .then(response => {
             datas = response.data
         })
         .catch(error => {
-            console.error('( Histoire ) Erreur lors de la récupération des données:', error);
+            console.error('( Pilier ) Erreur lors de la récupération des données:', error);
         });
         return datas;
     })
 
-export const updateValues = createAsyncThunk('histoire/modification', async ({ dataToUpdate, id }: { dataToUpdate: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
+export const updatePilier = createAsyncThunk('Pilier/modification', async ({ dataToUpdate, id }: { dataToUpdate: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
 
-    dataToUpdate.append('id_histoire', id.toString());
+    dataToUpdate.append('id_pilier ', id.toString());
     
-    await api.post('site/histoire/update', dataToUpdate, {
+    await api.post('site/Pilier/update', dataToUpdate, {
         headers: { 'Content-Type': 'multipart/form-data' }
     }).then(response => {
         data = response.data;
@@ -95,7 +95,40 @@ export const updateValues = createAsyncThunk('histoire/modification', async ({ d
             dispatch(setHiddeModalValue(true));
         }
     }).catch(error => {
-        console.error('( Histoire ) Erreur lors de la modification :', error.getMessage());
+        console.error('( Pilier ) Erreur lors de la modification :', error.getMessage());
+    });
+    return data;
+})
+
+
+// -----------------------------------INSTALLATION SECTION--------------------------------------------- 
+export const getAllInstallation = createAsyncThunk('Installation/getAll', async (): Promise<ApiReturnType> => {
+    let datas: ApiReturnType = ApiReturnInitial;
+    await api.get('site/Installation')
+        .then(response => {
+            datas = response.data
+        })
+        .catch(error => {
+            console.error('( Installation ) Erreur lors de la récupération des données:', error);
+        });
+        return datas;
+    })
+
+export const updateInstallation = createAsyncThunk('Installation/modification', async ({ dataToUpdate, id }: { dataToUpdate: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
+    let data: ApiReturnType = ApiReturnInitial;
+
+    dataToUpdate.append('id_installation  ', id.toString());
+    
+    await api.post('site/Installation/update', dataToUpdate, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(response => {
+        data = response.data;
+        if (!data.error) {
+            toast('Modification éffectué')
+            dispatch(setHiddeModalValue(true));
+        }
+    }).catch(error => {
+        console.error('( Installation ) Erreur lors de la modification :', error.getMessage());
     });
     return data;
 })

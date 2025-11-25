@@ -1,16 +1,14 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMissionState } from '../../Redux/Slice/About/MissionSlice';
 import { AppDispatch } from '../../../../Redux/store';
 import { getAllMission } from '../../Redux/AsyncThunk/AboutAsyncThunk';
 import Loading from '../../../../Components/ui/Loading';
-import { SloganType } from '../../Type';
 import { Target } from 'lucide-react';
 
 const Mission: React.FC = () => {
     const {datas: slogans, action } = useSelector(getMissionState);
-    const [slogan] = useState<SloganType[]>([])
     const dispatch: AppDispatch = useDispatch();
     
     useEffect(() => {
@@ -19,7 +17,6 @@ const Mission: React.FC = () => {
       }
       return () => { }
     }, [dispatch])
-  console.log(slogans)
 
     if (action.isLoading) return <Loading/>
     if (slogans?.length == 0) return '';
