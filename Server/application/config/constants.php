@@ -26,10 +26,10 @@ defined('SHOW_DEBUG_BACKTRACE') or define('SHOW_DEBUG_BACKTRACE', TRUE);
 | always be used to set the mode correctly.
 |
 */
-defined('FILE_READ_MODE')  or define('FILE_READ_MODE', 0644);
+defined('FILE_READ_MODE') or define('FILE_READ_MODE', 0644);
 defined('FILE_WRITE_MODE') or define('FILE_WRITE_MODE', 0666);
-defined('DIR_READ_MODE')   or define('DIR_READ_MODE', 0755);
-defined('DIR_WRITE_MODE')  or define('DIR_WRITE_MODE', 0755);
+defined('DIR_READ_MODE') or define('DIR_READ_MODE', 0755);
+defined('DIR_WRITE_MODE') or define('DIR_WRITE_MODE', 0755);
 
 /*
 |--------------------------------------------------------------------------
@@ -39,14 +39,14 @@ defined('DIR_WRITE_MODE')  or define('DIR_WRITE_MODE', 0755);
 | These modes are used when working with fopen()/popen()
 |
 */
-defined('FOPEN_READ')                           or define('FOPEN_READ', 'rb');
-defined('FOPEN_READ_WRITE')                     or define('FOPEN_READ_WRITE', 'r+b');
-defined('FOPEN_WRITE_CREATE_DESTRUCTIVE')       or define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
-defined('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE')  or define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE', 'w+b'); // truncates existing file data, use with care
-defined('FOPEN_WRITE_CREATE')                   or define('FOPEN_WRITE_CREATE', 'ab');
-defined('FOPEN_READ_WRITE_CREATE')              or define('FOPEN_READ_WRITE_CREATE', 'a+b');
-defined('FOPEN_WRITE_CREATE_STRICT')            or define('FOPEN_WRITE_CREATE_STRICT', 'xb');
-defined('FOPEN_READ_WRITE_CREATE_STRICT')       or define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
+defined('FOPEN_READ') or define('FOPEN_READ', 'rb');
+defined('FOPEN_READ_WRITE') or define('FOPEN_READ_WRITE', 'r+b');
+defined('FOPEN_WRITE_CREATE_DESTRUCTIVE') or define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
+defined('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE') or define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE', 'w+b'); // truncates existing file data, use with care
+defined('FOPEN_WRITE_CREATE') or define('FOPEN_WRITE_CREATE', 'ab');
+defined('FOPEN_READ_WRITE_CREATE') or define('FOPEN_READ_WRITE_CREATE', 'a+b');
+defined('FOPEN_WRITE_CREATE_STRICT') or define('FOPEN_WRITE_CREATE_STRICT', 'xb');
+defined('FOPEN_READ_WRITE_CREATE_STRICT') or define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
 
 /*
 |--------------------------------------------------------------------------
@@ -75,18 +75,30 @@ defined('FOPEN_READ_WRITE_CREATE_STRICT')       or define('FOPEN_READ_WRITE_CREA
 */
 
 
-defined('EXIT_SUCCESS')        or define('EXIT_SUCCESS', 0); // no errors
-defined('EXIT_ERROR')          or define('EXIT_ERROR', 1); // generic error
-defined('EXIT_CONFIG')         or define('EXIT_CONFIG', 3); // configuration error
-defined('EXIT_UNKNOWN_FILE')   or define('EXIT_UNKNOWN_FILE', 4); // file not found
-defined('EXIT_UNKNOWN_CLASS')  or define('EXIT_UNKNOWN_CLASS', 5); // unknown class
+defined('EXIT_SUCCESS') or define('EXIT_SUCCESS', 0); // no errors
+defined('EXIT_ERROR') or define('EXIT_ERROR', 1); // generic error
+defined('EXIT_CONFIG') or define('EXIT_CONFIG', 3); // configuration error
+defined('EXIT_UNKNOWN_FILE') or define('EXIT_UNKNOWN_FILE', 4); // file not found
+defined('EXIT_UNKNOWN_CLASS') or define('EXIT_UNKNOWN_CLASS', 5); // unknown class
 defined('EXIT_UNKNOWN_METHOD') or define('EXIT_UNKNOWN_METHOD', 6); // unknown class member
-defined('EXIT_USER_INPUT')     or define('EXIT_USER_INPUT', 7); // invalid user input
-defined('EXIT_DATABASE')       or define('EXIT_DATABASE', 8); // database error
-defined('EXIT__AUTO_MIN')      or define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
-defined('EXIT__AUTO_MAX')      or define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+defined('EXIT_USER_INPUT') or define('EXIT_USER_INPUT', 7); // invalid user input
+defined('EXIT_DATABASE') or define('EXIT_DATABASE', 8); // database error
+defined('EXIT__AUTO_MIN') or define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
+defined('EXIT__AUTO_MAX') or define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
-
+// Constante dans le back 
+defined('HEUREINDEX') or define('HEUREINDEX', [
+    1 => '07:00:00',
+    2 => '08:00:00',
+    3 => '09:00:00',
+    4 => '10:00:00',
+    5 => '11:00:00',
+    6 => '12:00:00',
+    7 => '13:00:00',
+    8 => '14:00:00',
+    9 => '15:00:00',
+    10 => '16:00:00',
+]);
 
 /* My constants */
 // ? PREFIX POUR LES MATRICULE EMPLOYE
@@ -96,10 +108,10 @@ defined('STUDENT_PRIFIX') or define('STUDENT_PRIFIX', 'ST-');
 
 // ? DIRECTORY UPLOAD FILE 
 defined('PERSONNEL_UPLOAD_DIR') or define('PERSONNEL_UPLOAD_DIR', 'public/uploads/personnel/');
-defined('STUDENT_UPLOAD_DIR') or define('STUDENT_UPLOAD_DIR',  'public/uploads/etudiant/');
-defined('PARENT_UPLOAD_DIR') or define('PARENT_UPLOAD_DIR',  'public/uploads/parents/');
-defined('HERO_UPLOAD_DIR') or define('HERO_UPLOAD_DIR',  'public/uploads/site/hero');
-defined('MAX_UPLOAD_FILE') or define('MAX_UPLOAD_FILE',  524288000);
+defined('STUDENT_UPLOAD_DIR') or define('STUDENT_UPLOAD_DIR', 'public/uploads/etudiant/');
+defined('PARENT_UPLOAD_DIR') or define('PARENT_UPLOAD_DIR', 'public/uploads/parents/');
+defined('HERO_UPLOAD_DIR') or define('HERO_UPLOAD_DIR', 'public/uploads/site/hero');
+defined('MAX_UPLOAD_FILE') or define('MAX_UPLOAD_FILE', 524288000);
 
 // ************************************************* //
 defined('ETABLISSEMENT_UPLOAD_DIRECTORY') or define('ETABLISSEMENT_UPLOAD_DIRECTORY', 'public/uploads/etablissement/');

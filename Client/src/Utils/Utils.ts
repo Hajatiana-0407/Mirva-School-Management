@@ -289,3 +289,18 @@ export const download = async (
 
 
 
+
+export const timeSlots = [
+  { denomination : '7h - 8h', label   : '07:00', value: 1 },
+  { denomination : '8h - 9h', label   : '08:00', value: 2 },
+  { denomination : '9h - 10h', label   : '09:00', value: 3 },
+  { denomination : '10h - 11h', label   : '10:00', value: 4 },
+  { denomination : '11h - 12h', label   : '11:00', value: 5 },
+  { denomination : '12h - 13h', label   : '12:00', value: 6 },
+  { denomination : '13h - 14h', label   : '13:00', value: 7 },
+  { denomination : '14h - 15h', label   : '14:00', value: 8 },
+  { denomination : '15h - 16h', label   : '15:00', value: 9 },
+  { denomination : '16h - 17h', label   : '16:00', value: 10 },
+];
+
+

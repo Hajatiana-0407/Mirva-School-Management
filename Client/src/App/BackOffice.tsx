@@ -4,7 +4,7 @@ import Dashboard from '../Pages/Dashboard';
 import Classes from '../Pages/Classes/Classes';
 import Levels from '../Pages/Levels/Levels';
 import Subjects from '../Pages/Subjects/Subjects';
-import Schedule from '../Pages/Schedule';
+import Schedule from '../Pages/Shedules/Schedule';
 import Attendance from '../Pages/Attendance';
 import Exams from '../Pages/Exams';
 import Payments from '../Pages/Payments';

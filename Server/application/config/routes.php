@@ -195,6 +195,18 @@ $route['api/admin/role/delete'] = 'RoleController/delete';
 $route['api/admin/module'] = 'ModuleController';
 
 
+// ******************* ROUTE EMPLOI DU TEMPS ********************** //
+$route['api/admin/emploi-du-temps'] = 'EmploiDuTempsController';
+$route['api/admin/emploi-du-temps/update'] = 'EmploiDuTempsController/update';
+$route['api/admin/emploi-du-temps/create'] = 'EmploiDuTempsController/create';
+$route['api/admin/emploi-du-temps/delete'] = 'EmploiDuTempsController/delete';
+$route['api/admin/emploi-du-temps/publish'] = 'EmploiDuTempsController/publish';
+
+// ******************* ROUTE ASSIGNATIONS  ********************** //
+$route['api/admin/assignation-by-classe/(:any)'] = 'AssignationController/getAllByClasseId/$1';
+
+
+
 
 
 // ===================== Sécurisation des routes ===================== //

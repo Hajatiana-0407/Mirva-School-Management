@@ -17,6 +17,7 @@ import LessonReducer from '../Pages/Lessons/redux/LessonSlice'
 import ExerciceReducer from '../Pages/Exercices/redux/ExerciceSlice'
 import RoleReducer from '../Pages/Settings/UserRoles/redux/UserRolesSlice';
 import ModuleReducer from './Other/slices/ModuleSlice'
+import SheduleReducer from '../Pages/Shedules/redux/SheduleSlice'
 
 // ? Import reducer pour le site 
 import HeroReducer from '../Pages/website/Redux/Slice/Home/HeroSlice'
@@ -43,11 +44,12 @@ export const store = configureStore({
         exercice: ExerciceReducer,
         role: RoleReducer,
         module: ModuleReducer,
+        shedule: SheduleReducer,
 
         /**Reducer pour le site  */
-        hero: HeroReducer , 
-        presentation : Presentatioreducer,
-        values : ValueReducer
+        hero: HeroReducer,
+        presentation: Presentatioreducer,
+        values: ValueReducer
     }
 });
 

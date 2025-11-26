@@ -26,7 +26,8 @@ class FixturesModel extends CI_Model
 
     public function getAllTable($table = '')
     {
-        if (!!!$table) return null;
+        if (!!!$table)
+            return null;
         return $this->db->select('*')
             ->from($table)
             ->get()
@@ -38,7 +39,7 @@ class FixturesModel extends CI_Model
     // Enseignats
     public function getAllIdTeacher()
     {
-        $listes =  $this->db->select('p.id_personnel')
+        $listes = $this->db->select('p.id_personnel')
             ->from('personnel p')
             ->join('type_personnel tp', 'tp.id_type_personnel = p.id_type_personnel', 'inner')
             ->where('tp.type', 'Enseignant')
@@ -47,7 +48,7 @@ class FixturesModel extends CI_Model
 
         $teachersId = [];
         if (count($listes)) {
-            foreach ($listes as  $liste) {
+            foreach ($listes as $liste) {
                 $teachersId[] = $liste['id_personnel'];
             }
         }
@@ -58,7 +59,8 @@ class FixturesModel extends CI_Model
     // assignations 
     public function getAssignationByTeacher($id_teacher = null)
     {
-        if (!!!$id_teacher) return null;
+        if (!!!$id_teacher)
+            return null;
         return $this->db->select('cpm.professeur_id_professeur as id_prof, cpm.matiere_id_matiere as id_matiere , c.niveau_id_niveau as id_niveau')
             ->from('classe_proffesseur_matiere cpm')
             ->join('classe c', 'c.id_classe = cpm.classe_id_classe', 'inner')
@@ -88,5 +90,18 @@ class FixturesModel extends CI_Model
         }
 
         return $insertedData;
+    }
+
+    public function findLatest($table = null, $id_table = null)
+    {
+        if ($table == null || $id_table)
+            return null;
+        $query = $this->db->select('*')
+            ->from($table)
+            ->order_by($id_table, 'desc')
+            ->limit(1)
+            ->get()
+            ->row_array();
+        return $query;
     }
 }
