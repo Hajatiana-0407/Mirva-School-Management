@@ -27,6 +27,22 @@ interface TableProps {
   idModule?: string;
 }
 
+export const getActionColor = (color: string) => {
+  const colors = {
+    primary: 'text-primary-600 hover:text-primary-800',
+    green: 'text-green-600 hover:text-green-800',
+    red: 'text-red-600 hover:text-red-800',
+    yellow: 'text-yellow-600 hover:text-yellow-800',
+    purple: 'text-purple-600 hover:text-purple-800',
+    pink: 'text-pink-600 hover:text-pink-800',
+    indigo: 'text-indigo-600 hover:text-indigo-800',
+    teal: 'text-teal-600 hover:text-teal-800',
+    orange: 'text-orange-600 hover:text-orange-800',
+    secondary: 'text-secondary-600 hover:text-secondary-800',
+  };
+  return colors[color as keyof typeof colors] || 'text-secondary-600 hover:text-secondary-800';
+};
+
 const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, actionType = 'button', onRowClick, idModule }: TableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -107,21 +123,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
     }));
   };
 
-  const getActionColor = (color: string) => {
-    const colors = {
-      primary: 'text-primary-600 hover:text-primary-800',
-      green: 'text-green-600 hover:text-green-800',
-      red: 'text-red-600 hover:text-red-800',
-      yellow: 'text-yellow-600 hover:text-yellow-800',
-      purple: 'text-purple-600 hover:text-purple-800',
-      pink: 'text-pink-600 hover:text-pink-800',
-      indigo: 'text-indigo-600 hover:text-indigo-800',
-      teal: 'text-teal-600 hover:text-teal-800',
-      orange: 'text-orange-600 hover:text-orange-800',
-      secondary: 'text-secondary-600 hover:text-secondary-800',
-    };
-    return colors[color as keyof typeof colors] || 'text-secondary-600 hover:text-secondary-800';
-  };
+
 
   return (
     <div className="space-y-4">

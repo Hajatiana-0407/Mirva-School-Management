@@ -50,6 +50,20 @@ class MatiereClasseProfModel extends CI_Model
             ->join('personnel p', 'p.id_personnel = a.professeur_id_professeur', 'inner')
             ->join('matiere m', 'm.id_matiere = a.matiere_id_matiere', 'inner')
             ->where('a.classe_id_classe', $id_Classe)
+            ->group_by('a.id_assignation')
+            ->get()->result_array();
+    }
+    public function getAllByTeacherId($id_personnel = null)
+    {
+        if (!$id_personnel)
+            return [];
+        return $this->db->select('a.id_assignation , c.* , c.denomination as classe , p.nom , p.prenom  , p.id_personnel , m.denomination as matiere , m.abbreviation , m.id_matiere')
+            ->from($this->table . ' a')
+            ->join('classe c', 'c.id_classe = a.classe_id_classe', 'inner')
+            ->join('personnel p', 'p.id_personnel = a.professeur_id_professeur', 'inner')
+            ->join('matiere m', 'm.id_matiere = a.matiere_id_matiere', 'inner')
+            ->where('a.professeur_id_professeur ', $id_personnel)
+            ->group_by('a.id_assignation')
             ->get()->result_array();
     }
 }

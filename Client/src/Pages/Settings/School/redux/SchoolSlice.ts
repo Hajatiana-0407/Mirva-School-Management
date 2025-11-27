@@ -25,7 +25,6 @@ const SchoolSlice = createSlice({
 
     },
     extraReducers(builder) {
-
         //  ************************************* Read ************************************* //
         builder
             .addCase(getSchoolInfo.pending, (state) => {

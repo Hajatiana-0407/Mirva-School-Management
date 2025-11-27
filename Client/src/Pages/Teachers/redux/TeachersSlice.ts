@@ -37,7 +37,6 @@ const TeacherSlice = createSlice({
 
     },
     extraReducers(builder) {
-
         // ? ************************************* Read ************************************* //
         builder
             .addCase(getAllTeachers.pending, (state) => {

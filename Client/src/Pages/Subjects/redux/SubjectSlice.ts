@@ -44,8 +44,8 @@ const SubjectSlice = createSlice({
             .addCase(getAllSubject.rejected, (state) => {
                 state.action.isLoading = false;
                 state.error = 'Erreur de connexion au server'
-                toast.error("Erreur de connexion au server")  ; 
-            }) ; 
+                toast.error("Erreur de connexion au server");
+            });
 
         // ************************************* Create ************************************* //
         builder
@@ -67,8 +67,8 @@ const SubjectSlice = createSlice({
             })
             .addCase(createSubject.rejected, (state) => {
                 state.action.isLoading = false;
-                state.error = 'Erreur de connexion au server'; 
-                toast.error("Erreur de connexion au server") ; 
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
             })
 
         // // ************************************* Update ************************************* //
@@ -99,8 +99,8 @@ const SubjectSlice = createSlice({
             })
             .addCase(updateSubject.rejected, (state) => {
                 state.action.isUpdating = false
-                state.error = 'Erreur de connexion au server'; 
-                toast.error("Erreur de connexion au server") ; 
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
             })
 
         // // ************************************* Delete ************************************* //
@@ -123,8 +123,8 @@ const SubjectSlice = createSlice({
             })
             .addCase(deleteSubject.rejected, (state) => {
                 state.action.isDeleting = false;
-                state.error = 'Erreur de connexion au server'; 
-                toast.error("Erreur de connexion au server") ; 
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
             })
     }
 })

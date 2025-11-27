@@ -3,6 +3,7 @@ import { ActionIntialValue, ActionType, ApiReturnType, levelType } from "../../.
 import { createLevel, deleteLevel, getAllLevel, updateLevel } from "./LevelAsyncThunk";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
+import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 
 
 type initialStateType = {
@@ -29,6 +30,9 @@ const LevelSlice = createSlice({
 
     },
     extraReducers(builder) {
+        builder.addCase(logoutUser.fulfilled, () => {
+            return initialState;
+        });
 
         // // ************************************* Read ************************************* //
         builder
@@ -44,8 +48,8 @@ const LevelSlice = createSlice({
             .addCase(getAllLevel.rejected, (state) => {
                 state.action.isLoading = false;
                 state.error = 'Erreur de connexion au server'
-                toast.error("Erreur de connexion au server")  ; 
-            }) ; 
+                toast.error("Erreur de connexion au server");
+            });
 
         // ************************************* Create ************************************* //
         builder
@@ -67,8 +71,8 @@ const LevelSlice = createSlice({
             })
             .addCase(createLevel.rejected, (state) => {
                 state.action.isLoading = false;
-                state.error = 'Erreur de connexion au server'; 
-                toast.error("Erreur de connexion au server") ; 
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
             })
 
         // // ************************************* Update ************************************* //
@@ -99,8 +103,8 @@ const LevelSlice = createSlice({
             })
             .addCase(updateLevel.rejected, (state) => {
                 state.action.isUpdating = false
-                state.error = 'Erreur de connexion au server'; 
-                toast.error("Erreur de connexion au server") ; 
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
             })
 
         // // ************************************* Delete ************************************* //
@@ -123,8 +127,8 @@ const LevelSlice = createSlice({
             })
             .addCase(deleteLevel.rejected, (state) => {
                 state.action.isDeleting = false;
-                state.error = 'Erreur de connexion au server'; 
-                toast.error("Erreur de connexion au server") ; 
+                state.error = 'Erreur de connexion au server';
+                toast.error("Erreur de connexion au server");
             })
     }
 })

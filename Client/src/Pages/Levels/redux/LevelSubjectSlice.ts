@@ -3,6 +3,7 @@ import { ActionIntialValue, ActionType, LevelSubjectType } from "../../../Utils/
 import { RootStateType } from "../../../Redux/store";
 import { getLelvelSubjectByIdNiveau, registerSubjectLevelCoef } from "./LevelAsyncThunk";
 import { toast } from "react-toastify";
+import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 
 
 
@@ -25,6 +26,10 @@ const LevelSubjectSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers(builder) {
+        builder.addCase(logoutUser.fulfilled, () => {
+            return initialState;
+        });
+
         builder.addCase(getLelvelSubjectByIdNiveau.pending, (state) => {
             state.action.isLoading = true;
         })

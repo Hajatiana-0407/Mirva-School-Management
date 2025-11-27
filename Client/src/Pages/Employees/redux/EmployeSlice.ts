@@ -3,6 +3,7 @@ import { ActionIntialValue, ActionType, ApiReturnType, EmployeeType, TypePersonn
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
 import { createEmployees, deleteEmployees, getAllEmployees, getEmployeByMatricule, updateEmployees } from "./EmployeAsyncThunk";
+import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 
 
 type initialStateType = {
@@ -34,7 +35,9 @@ const EmployeSlice = createSlice({
 
     },
     extraReducers(builder) {
-
+        builder.addCase(logoutUser.fulfilled, () => {
+            return initialState;
+        });
         // ? ************************************* Read ************************************* //
         builder
             .addCase(getAllEmployees.pending, (state) => {

@@ -40,7 +40,7 @@ export const updateAccount = createAsyncThunk('update/account', async (account: 
 })
 
 // Deconnexion 
-export const logoutUser = createAsyncThunk('logout', async (id_user: number): Promise<ApiReturnType> => {
+export const logoutUser = createAsyncThunk('auth/logout', async (id_user: number): Promise<ApiReturnType> => {
     let returnData: ApiReturnType = ApiReturnInitial;
     await api.post('auth/logout', {
         id_user,

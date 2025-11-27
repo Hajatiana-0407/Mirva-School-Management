@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ActionIntialValue, ActionType, ApiReturnType, ExerciceInitialValue, ExerciceType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { createExercice, deleteExercice, getAllExercices, publish, updateexercice } from "./ExerciceAsyncThunk";
+import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 
 // Type SchoolYear à adapter selon votre modèle
 
@@ -44,6 +45,9 @@ const ExerciceSlice = createSlice({
         }
     },
     extraReducers(builder) {
+        builder.addCase(logoutUser.fulfilled, () => {
+            return initialState;
+        });
         // ? ===================== Read  ===================== //
         builder
             .addCase(getAllExercices.pending, (state) => {
@@ -106,7 +110,7 @@ const ExerciceSlice = createSlice({
                         if (state.single.data?.id_exercice === data?.id_exercice) {
                             state.single.data = data;
                         }
-                        
+
                         if (exercice.id_exercice === data?.id_exercice) {
                             return {
                                 ...data,
