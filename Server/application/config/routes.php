@@ -89,6 +89,36 @@ $route['api/site/valeur/create'] = 'SiteValeurController/create';
 $route['api/site/valeur/delete'] = 'SiteValeurController/delete';
 $route['api/site/valeur/publish'] = 'SiteValeurController/publish';
 
+// ******************* ROUTE HISTOIRE ********************** //
+$route['api/site/histoire'] = 'SiteHistoireController';
+$route['api/site/histoire/update'] = 'SiteHistoireController/update';
+$route['api/site/histoire/create'] = 'SiteHistoireController/create';
+$route['api/site/histoire/delete'] = 'SiteHistoireController/delete';
+$route['api/site/histoire/publish'] = 'SiteHistoireController/publish';
+
+// ******************* ROUTE MISSION ********************** //
+$route['api/site/mission'] = 'SiteMissionController';
+$route['api/site/mission/update'] = 'SiteMissionController/update';
+$route['api/site/mission/create'] = 'SiteMissionController/create';
+$route['api/site/mission/delete'] = 'SiteMissionController/delete';
+$route['api/site/mission/publish'] = 'SiteMissionController/publish';
+
+
+// ******************* ROUTE PILIER ********************** //
+$route['api/site/Pilier'] = 'SitePilierEducatifController';
+$route['api/site/Pilier/update'] = 'SitePilierEducatifController/update';
+$route['api/site/Pilier/create'] = 'SitePilierEducatifController/create';
+$route['api/site/Pilier/delete'] = 'SitePilierEducatifController/delete';
+$route['api/site/Pilier/publish'] = 'SitePilierEducatifController/publish';
+
+
+// ******************* ROUTE INSTALLATION ********************** //
+$route['api/site/Installation'] = 'SiteInstallationController';
+$route['api/site/Installation/update'] = 'SiteInstallationController/update';
+$route['api/site/Installation/create'] = 'SiteInstallationController/create';
+$route['api/site/Installation/delete'] = 'SiteInstallationController/delete';
+$route['api/site/Installation/publish'] = 'SiteInstallationController/publish';
+
 
 //! *********************  ROUTE POUR LE SITE WEB **********************************************************************
 

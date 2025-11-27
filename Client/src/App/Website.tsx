@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Home from '../Pages/website/Pages/Home/Home'
+import About from '../Pages/website/Pages/About/About'
 import Header from '../Components/Layout/Website/Header'
 import Footer from '../Components/Layout/Website/Footer'
 import { useDispatch, useSelector } from 'react-redux'
@@ -33,6 +34,7 @@ const Website: React.FC = () => {
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/about' element={<About />} />
       </Routes>
       <Footer />
     </div>

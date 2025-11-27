@@ -109,3 +109,16 @@ npm start
 
 - Client : http://localhost:3000  
 - API / Serveur : http://localhost/NOM_DU_PROJET/Server
+
+
+## Fixtures 
+ cd ./Server 
+ <!-- Pour les données du back office  -->
+ php index.php AppFixtures loadFixtures
+
+ <!-- Pour les donnée du site web  -->
+ php index.php AppFixtures loadSiteFixtures
+
+ <!-- Pour supprimer touts les données ( Back office et Site internet ) -->
+ php index.php AppFixtures cleanUp
+ 

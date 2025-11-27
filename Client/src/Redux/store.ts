@@ -23,6 +23,10 @@ import SheduleReducer from '../Pages/Shedules/redux/SheduleSlice'
 import HeroReducer from '../Pages/website/Redux/Slice/Home/HeroSlice'
 import Presentatioreducer from '../Pages/website/Redux/Slice/Home/PresentationSlice'
 import ValueReducer from '../Pages/website/Redux/Slice/Home/ValueSlice'
+import HistoryReducer from '../Pages/website/Redux/Slice/About/HistorySlice'
+import MissionReducer from '../Pages/website/Redux/Slice/About/MissionSlice'
+import PilierReducer from '../Pages/website/Redux/Slice/About/PilierSlice'
+import InstallationReducer from '../Pages/website/Redux/Slice/About/InstallationSlice'
 
 export const store = configureStore({
     reducer: {
@@ -47,9 +51,13 @@ export const store = configureStore({
         shedule: SheduleReducer,
 
         /**Reducer pour le site  */
-        hero: HeroReducer,
-        presentation: Presentatioreducer,
-        values: ValueReducer
+        hero: HeroReducer , 
+        presentation : Presentatioreducer,
+        values : ValueReducer,
+        history : HistoryReducer,
+        mission : MissionReducer,
+        pilier : PilierReducer,
+        installation : InstallationReducer 
     }
 });
 
