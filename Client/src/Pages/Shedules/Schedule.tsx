@@ -204,7 +204,7 @@ const Schedule: React.FC = () => {
       </Title>
 
 
-      {shedule_action.isLoading && <Loading />}
+      {shedule_action.isLoading && !shedules?.length && <Loading />}
 
 
       <div className="space-y-6">
@@ -216,7 +216,7 @@ const Schedule: React.FC = () => {
 
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-semibold text-gray-800">{classe?.denomination ? classe.denomination : shedule.nom  ? `${shedule.nom} ${shedule.prenom}` : ''}</h3>
+                <h3 className="text-2xl font-semibold text-gray-800">{classe?.denomination ? classe.denomination : shedule.nom ? `${shedule.nom} ${shedule.prenom}` : ''}</h3>
                 {permission.create &&
                   <button
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition disabled:bg-primary-400"
@@ -276,7 +276,7 @@ const Schedule: React.FC = () => {
                               {/* Slot rempli */}
                               {slot ? (
                                 <div
-                                  className="h-full p-3 rounded-lg text-sm cursor-pointer transition hover:shadow-md"
+                                  className="h-full p-3 rounded-lg text-sm cursor-pointer transition hover:shadow-md relative"
                                   onClick={() => {
                                     if (permission.update) {
                                       handleEditSlot(shedule, day.cle, idx + 1, slot.matiere, `${slot.nom} ${slot.prenom}`, slot.salle);
@@ -303,14 +303,15 @@ const Schedule: React.FC = () => {
                                     </div>
                                   }
                                   {shedule.id_personnel &&
-                                    <div className="flex items-center text-xs mb-1">
-                                      <School className="w-3 h-3 mr-1" />
+                                    <div className="flex items-center text-xs mb-1 absolute top-2 right-2 px-1 py-1 rounded-full">
                                       {slot.classe}
                                     </div>
                                   }
 
                                   <div className="flex items-center text-xs">
-                                    <MapPin className="w-3 h-3 mr-1" /> Salle: {slot.salle}
+                                    <MapPin className="w-3 h-3 mr-1" /> Salle: {slot.salle ? slot.salle :
+                                      <span className='italic text-gray-600 ml-2'> non defini</span>
+                                    }
                                   </div>
                                 </div>
                               ) : (<>
