@@ -9,9 +9,12 @@ import { SheduleType, SheduleInitialeValue, ApiReturnType, AssignationType } fro
 import { getSheduleState } from '../../Pages/Shedules/redux/SheduleSlice';
 import { EditingSlotType } from '../../Pages/Shedules/Schedule';
 import { timeSlots } from '../../Utils/Utils';
-import { createShedule, getAssignationByClasseId } from '../../Pages/Shedules/redux/SheduleAsyncThunk';
+import { createShedule, getAssignationByClasseId, getAssignationByTeacherId, updateShedule } from '../../Pages/Shedules/redux/SheduleAsyncThunk';
 import Loading from '../ui/Loading';
 import * as yup from 'yup';
+import { useHashPermission } from '../../Hooks/useHashPermission';
+import { useActiveUser } from '../../Hooks/useActiveUser';
+import { getAuthState } from '../../Pages/Auth/redux/AuthSlice';
 
 const sheduleSchema = yup.object({
     jour_id: yup
@@ -26,14 +29,14 @@ const sheduleSchema = yup.object({
         .typeError("L'heure de début est obligatoire.")
         .required("L'heure de début est obligatoire.")
         .min(1, "L'heure de début doit être entre 1 et 6.")
-        .max(10, "L'heure de début doit être entre 1 et 6."),
+        .max(11, "L'heure de début doit être entre 1 et 11."),
 
     heure_fin: yup
         .number()
         .typeError("L'heure de fin est obligatoire.")
         .required("L'heure de fin est obligatoire.")
         .min(1, "L'heure de fin doit être entre 1 et 6.")
-        .max(10, "L'heure de fin doit être entre 1 et 6."),
+        .max(11, "L'heure de fin doit être entre 1 et 11."),
 
     assignation_id: yup
         .number()
@@ -63,37 +66,87 @@ const SheduleForm: React.FC<SheduleFormPropsType> = ({ shedule, handleClose, edi
     const [isLoading, setIsLoading] = useState(false);
     const [assignationWithThisClasse, setAssignationWithThisClasse] = useState<AssignationType[] | null>(null);
     const [teacher, setTeacher] = useState('');
-    const [assignationId, setassignationId] = useState<number>(0)
+    const [assignationId, setassignationId] = useState<number>(shedule?.assignation_id as number | 0);
+    const [classeId, setClasseId] = useState(0);
+    const permission = useHashPermission({ id: 'schedule' });
+    // Pour savoire si l'utilisateur est une enseignant 
+    const { isTeacher } = useActiveUser();
+    const { datas: { info } } = useSelector(getAuthState);
 
     useEffect(() => {
     }, [dispatch]);
     useEffect(() => {
         if (editingSlot?.classe) {
             setIsLoading(true);
-            dispatch(getAssignationByClasseId(editingSlot?.classe?.id_classe as number)).unwrap()
-                .then((response: ApiReturnType) => {
-                    if (!response.error) {
-                        const assignations: AssignationType[] = response.data;
-                        setAssignationWithThisClasse(assignations);
-                    }
-                })
-                .finally(() => {
-                    setIsLoading(false);
-                });
+            if (isTeacher) {
+                // Si l'utilisateur est une enseignant 
+                dispatch(getAssignationByTeacherId(info?.id_personnel as number)).unwrap()
+                    .then((response: ApiReturnType) => {
+                        if (!response.error) {
+                            const assignations: AssignationType[] = response.data;
+                            setAssignationWithThisClasse(assignations);
+                            setClasseId(shedule?.id_classe as number || assignations?.[0]?.id_classe );
+                            // Si c'est du modification => valeur par defaut pour proffesseur
+                            if (shedule) {
+                                assignations.map(assignation => {
+                                    assignation.id_assignation == shedule?.assignation_id ? setTeacher(`${assignation.nom} ${assignation.prenom}`) : '';
+                                })
+                            }
+                        }
+                    })
+                    .finally(() => {
+                        setIsLoading(false);
+                    });
+
+            } else {
+                // Si l'utilisateur n'est pas une enseignant 
+                dispatch(getAssignationByClasseId(editingSlot?.classe?.id_classe as number)).unwrap()
+                    .then((response: ApiReturnType) => {
+                        if (!response.error) {
+                            const assignations: AssignationType[] = response.data;
+                            setAssignationWithThisClasse(assignations);
+                            // Si c'est du modification => valeur par defaut pour proffesseur
+                            if (shedule) {
+                                assignations.map(assignation => {
+                                    assignation.id_assignation == shedule?.assignation_id ? setTeacher(`${assignation.nom} ${assignation.prenom}`) : '';
+                                })
+                            }
+                        }
+                    })
+                    .finally(() => {
+                        setIsLoading(false);
+                    });
+            }
         }
     }, [dispatch, editingSlot?.classe?.id_classe])
 
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         onSubmite((validateData: any) => {
-            dispatch(createShedule(validateData))
+            if (shedule && permission.update) {
+                dispatch(updateShedule({ Shedule: validateData, id: shedule.assignation_id }))
+            } else if (permission.create) {
+                dispatch(createShedule(validateData))
+            }
         }, e);
     };
 
-
     // Option pour la liste des matiere disponnible 
-    const subjectOptions = assignationWithThisClasse?.map(assignation => ({
-        label: assignation.matiere,
+    const subjectOptions = assignationWithThisClasse?.filter(assignation => {
+        if (isTeacher) {
+            return assignation.id_classe == classeId;
+        }
+        return true;
+    }).map(assignation => {
+        return {
+            label: `${assignation.matiere}`,
+            value: assignation.id_assignation as number
+        }
+    });
+
+
+    const classesOptions = assignationWithThisClasse?.map(assignation => ({
+        label: `${assignation.classe}`,
         value: assignation.id_assignation as number
     }))
     subjectOptions?.unshift({ label: 'Sélectionner une matière', value: 0 })
@@ -124,20 +177,36 @@ const SheduleForm: React.FC<SheduleFormPropsType> = ({ shedule, handleClose, edi
                     name="heure_fin"
                     type="select"
                     icon={Clock}
-                    options={timeSlots}
+                    options={[...timeSlots, { label: '17:00', value: 11 }]}
                     defaultValue={editingSlot?.time ? editingSlot?.time + 1 : ''}
                     errorMessage={formErrors?.heure_fin}
                 />
             </div>
             {isLoading ? <Loading size='sm' /> :
                 <div className='space-y-4'>
+                    {isTeacher &&
+                        <Input
+                            label="Classe"
+                            name=""
+                            type="select"
+                            icon={BookOpen}
+                            options={classesOptions}
+                            defaultValue={shedule?.assignation_id || ''}
+                            errorMessage={formErrors?.matiere}
+                            onChange={(e) => {
+                                const assignation = assignationWithThisClasse?.find((assingation) => assingation.id_assignation == parseInt(e.target.value))
+                                setassignationId(assignation?.id_assignation as number)
+                                setClasseId(assignation?.id_classe as number);
+                            }}
+                        />
+                    }
                     <Input
                         label="Matière"
                         name=""
                         type="select"
                         icon={BookOpen}
                         options={subjectOptions}
-                        defaultValue={shedule?.matiere || ''}
+                        value={assignationId}
                         errorMessage={formErrors?.matiere}
                         onChange={(e) => {
                             const assignation = assignationWithThisClasse?.find((assingation) => assingation.id_assignation == parseInt(e.target.value))
@@ -150,12 +219,15 @@ const SheduleForm: React.FC<SheduleFormPropsType> = ({ shedule, handleClose, edi
                         type='text'
                         name=""
                         icon={Users}
-                        value={teacher}
+                        value={isTeacher ? `${info?.nom} ${info?.prenom}` : teacher}
                         onChange={() => { }}
                         readonly
                     />
                     <input type="hidden" name='assignation_id' value={assignationId} onChange={() => { }} />
                     <input type="hidden" name='id_classe' value={editingSlot?.classe?.id_classe} onChange={() => { }} />
+                    {isTeacher &&
+                        <input type="hidden" name='id_personnel' value={info?.id_personnel} onChange={() => { }} />
+                    }
                 </div>
             }
             <Input
@@ -178,7 +250,8 @@ const SheduleForm: React.FC<SheduleFormPropsType> = ({ shedule, handleClose, edi
                 }
                 <button
                     type="submit"
-                    className="px-2 py-1 sm:px-4 sm:py-2 bg-primary-600 text-light rounded-lg hover:bg-primary-700 flex items-center"
+                    className="px-2 py-1 sm:px-4 sm:py-2 bg-primary-600 text-light rounded-lg hover:bg-primary-700 flex items-center disabled:bg-primary-400"
+                    disabled={!permission.create && !permission.update}
                 >
                     {shedule_action.isLoading || shedule_action.isUpdating ? <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div> : <>
                         {shedule ? <PenBox className='inline-block w-5 h-5 me-1' /> : <Check className='inline-block w-5 h-5 me-1' />}

@@ -750,80 +750,80 @@ class AppFixtures extends CI_Controller
      * @return void
      */
     public function loadLeconExercice($clean = false)
-{
-    // Vider les tables (dans l’ordre inverse des dépendances)
-    $this->model->emptyDb([
-        'lecon',
-        'exercice',
-    ]);
+    {
+        // Vider les tables (dans l’ordre inverse des dépendances)
+        $this->model->emptyDb([
+            'lecon',
+            'exercice',
+        ]);
 
-    if ($clean) {
-        return; // Supprime uniquement les données
-    }
+        if ($clean) {
+            return; // Supprime uniquement les données
+        }
 
-    $teachersId = $this->model->getAllIdTeacher();
+        $teachersId = $this->model->getAllIdTeacher();
 
-    // Helpers
-    $this->load->helper(['url', 'text']);
+        // Helpers
+        $this->load->helper(['url', 'text']);
 
-    // Tableau global pour toutes les leçons
-    $allLecons = [];
-    // Tableau global pour tous les exercices
-    $allExercices = [];
+        // Tableau global pour toutes les leçons
+        $allLecons = [];
+        // Tableau global pour tous les exercices
+        $allExercices = [];
 
-    foreach ($teachersId as $teacherId) {
+        foreach ($teachersId as $teacherId) {
 
-        $assignations = $this->model->getAssignationByTeacher($teacherId);
+            $assignations = $this->model->getAssignationByTeacher($teacherId);
 
-        foreach ($assignations as $assignation) {
+            foreach ($assignations as $assignation) {
 
-            // ----- Génération des leçons -----
-            $titreLecon = $this->faker->sentence(6);
-            $slugLecon = url_title(convert_accented_characters($titreLecon . ' ' . $teacherId), 'dash', TRUE);
+                // ----- Génération des leçons -----
+                $titreLecon = $this->faker->sentence(6);
+                $slugLecon = url_title(convert_accented_characters($titreLecon . ' ' . $teacherId), 'dash', TRUE);
 
-            $allLecons[] = [
-                'titre' => $titreLecon,
-                'slug' => $slugLecon,
-                'description' => $this->faker->paragraph(3),
-                'contenu' => $this->faker->paragraphs(5, true),
-                'fichier_support' => $this->faker->optional()->fileExtension(),
-                'ficher_principale' => $this->faker->url,
-                'created_at' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d H:i:s'),
+                $allLecons[] = [
+                    'titre' => $titreLecon,
+                    'slug' => $slugLecon,
+                    'description' => $this->faker->paragraph(3),
+                    'contenu' => $this->faker->paragraphs(5, true),
+                    'fichier_support' => $this->faker->optional()->fileExtension(),
+                    'ficher_principale' => $this->faker->url,
+                    'created_at' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d H:i:s'),
 
-                'id_prof' => $assignation['id_prof'],
-                'id_matiere' => $assignation['id_matiere'],
-                'id_niveau' => $assignation['id_niveau']
-            ];
+                    'id_prof' => $assignation['id_prof'],
+                    'id_matiere' => $assignation['id_matiere'],
+                    'id_niveau' => $assignation['id_niveau']
+                ];
 
-            // ----- Génération des exercices -----
-            $titreEx = $this->faker->sentence(6);
-            $slugEx = url_title(convert_accented_characters($titreEx . ' ' . $teacherId), 'dash', TRUE);
+                // ----- Génération des exercices -----
+                $titreEx = $this->faker->sentence(6);
+                $slugEx = url_title(convert_accented_characters($titreEx . ' ' . $teacherId), 'dash', TRUE);
 
-            $allExercices[] = [
-                'titre' => $titreEx,
-                'slug' => $slugEx,
-                'description' => $this->faker->paragraph(3),
-                'contenu' => $this->faker->paragraphs(5, true),
-                'fichier_support' => $this->faker->optional()->fileExtension(),
-                'ficher_principale' => $this->faker->url,
-                'created_at' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d H:i:s'),
+                $allExercices[] = [
+                    'titre' => $titreEx,
+                    'slug' => $slugEx,
+                    'description' => $this->faker->paragraph(3),
+                    'contenu' => $this->faker->paragraphs(5, true),
+                    'fichier_support' => $this->faker->optional()->fileExtension(),
+                    'ficher_principale' => $this->faker->url,
+                    'created_at' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d H:i:s'),
 
-                'id_prof' => $assignation['id_prof'],
-                'id_matiere' => $assignation['id_matiere'],
-                'id_niveau' => $assignation['id_niveau']
-            ];
+                    'id_prof' => $assignation['id_prof'],
+                    'id_matiere' => $assignation['id_matiere'],
+                    'id_niveau' => $assignation['id_niveau']
+                ];
+            }
+        }
+
+        // Insertions en batch
+        if (!empty($allLecons)) {
+            $this->model->insertBatchFixtures($allLecons, 'lecon');
+        }
+
+        if (!empty($allExercices)) {
+            $this->model->insertBatchFixtures($allExercices, 'exercice');
         }
     }
-
-    // Insertions en batch
-    if (!empty($allLecons)) {
-        $this->model->insertBatchFixtures($allLecons, 'lecon');
-    }
-
-    if (!empty($allExercices)) {
-        $this->model->insertBatchFixtures($allExercices, 'exercice');
-    }
-}
 
 
     public function loadEmploiDuTemps($clean = false)

@@ -27,6 +27,7 @@ class EmploiDuTempsController extends CI_Controller
             $jour_id = $this->input->post('jour_id');
             $salle = $this->input->post('salle');
             $id_classe = $this->input->post('id_classe');
+            $id_personnel = $this->input->post('id_personnel');
             $datas = [];
             for ($i = (int) $heure_debut; $i < (int) $heure_fin; $i++) {
                 $datas[] = [
@@ -38,7 +39,7 @@ class EmploiDuTempsController extends CI_Controller
                 ];
             }
             if (count($datas) > 0) {
-                $datas = $this->EmploiDuTempsModel->inserteEdt($datas, $id_classe);
+                $datas = $this->EmploiDuTempsModel->inserteEdt($datas, $id_classe, $id_personnel);
                 echo json_encode(['error' => false, 'data' => $datas]);
             }
         } else {
@@ -51,66 +52,69 @@ class EmploiDuTempsController extends CI_Controller
 
     }
 
-    // public function update()
-    // {
+    public function update()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $assignation_id = $this->input->post('assignation_id');
+            $heure_debut = $this->input->post('heure_debut');
+            $heure_fin = $this->input->post('heure_fin');
+            $jour_id = $this->input->post('jour_id');
+            $salle = $this->input->post('salle');
+            $id_classe = $this->input->post('id_classe');
+            $id_personnel = $this->input->post('id_personnel');
+            $datas = [];
+            for ($i = (int) $heure_debut; $i < (int) $heure_fin; $i++) {
+                $datas[] = [
+                    'assignation_id' => $assignation_id,
+                    'heure_debut' => HEUREINDEX[$i],
+                    'jour_id' => $jour_id,
+                    'salle' => $salle,
+                    'heure_index' => $i,
+                ];
+            }
+            if (count($datas) > 0) {
+                $datas = $this->EmploiDuTempsModel->inserteEdt($datas, $id_classe, $id_personnel);
+                echo json_encode(['error' => false, 'data' => $datas]);
+            }
+        } else {
+            echo json_encode([
+                'error' => true,
+                'message' => 'Aucun classe trouvé',
+                'details' => 'La requette n\'est pas autorisé.'
+            ]);
+        }
+    }
 
-    //     $id = $this->input->post($this->pk);
-    //     $data = [
-    //         'denomination' => $this->input->post('denomination'),
-    //         'niveau_id_niveau' => (int)$this->input->post('niveau_id_niveau'),
-    //     ];
+    public function delete()
+    {
 
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
-    //     if ($this->EmploiDuTempsModel->isExist(
-    //         ['denomination' => $data['denomination']],
-    //         'and',
-    //         [$this->pk => $id]
-    //     )) {
-    //         echo json_encode(['error' => true, 'message' => "La classe \''{$data['denomination']}'\' existe déjà."]);
-    //     } else {
-    //         $data =  $this->EmploiDuTempsModel->update($id, $data);
-    //         if ($data) {
-    //             echo json_encode(['error' => false, 'data' => $data]);
-    //         } else {
-    //             echo json_encode(['error' => true, 'message' => 'Une erreur c\'est produite.']);
-    //         }
-    //     }
-    // }
+            $input = json_decode(file_get_contents('php://input'), true);
+            if (!empty($input[$this->pk])) {
+                $id = $input[$this->pk];
+                $id_classe = isset(  $input['id_classe'] ) ? $input['id_classe'] : null  ;
+                $id_personnel = isset(  $input['id_personnel'] ) ? $input['id_personnel'] : null ;
 
-    // public function delete()
-    // {
+                $data = $this->EmploiDuTempsModel->delete($id);
 
-    //     if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                if ($data) {
+                    $responses = null;
+                    if ($id_personnel) {
+                        $responses = $this->EmploiDuTempsModel->findOneById(null, $id_personnel);
+                    } else {
+                        $responses = $this->EmploiDuTempsModel->findOneById($id_classe);
+                    }
+                    echo json_encode(['error' => false, 'data' => $responses]);
+                } else {
+                    echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
+                }
+            } else {
+                echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
+            }
+        } else {
+            echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
+        }
+    }
 
-    //         $input = json_decode(file_get_contents('php://input'), true);
-
-    //         if (!empty($input[$this->pk])) {
-    //             $id = $input[$this->pk];
-
-    //             $data = $this->EmploiDuTempsModel->delete($id);
-
-    //             if ($data) {
-    //                 echo json_encode(['error' => false, 'data' => $data]);
-    //             } else {
-    //                 echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
-    //             }
-    //         } else {
-    //             echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
-    //         }
-    //     } else {
-    //         echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
-    //     }
-    // }
-
-
-
-    // // Selection des classes par id_matiere
-    // public function getAllClasseByIdMatiere($id = 0)
-    // {
-    //     $datas = [];
-    //     if ($id > 0) {
-    //         $datas =  $this->EmploiDuTempsModel->getAllClasseByIdMatiere($id);
-    //     }
-    //     echo json_encode($datas);
-    // }
 }

@@ -27,9 +27,10 @@ export const updateShedule = createAsyncThunk('shedule/modification', async ({ S
         data = response.data;
         if (!data.error) {
             dispatch(setHiddeModalValue(true));
+            toast('Modification effectuée !');
         }
     }).catch(error => {
-        console.error('Erreur lors de la récupération des données:', error.getMessage());
+        console.error('( Shedule ) Erreur lors de la récupération des données:', error.getMessage());
     });
     return data;
 })
@@ -50,16 +51,16 @@ export const createShedule = createAsyncThunk('shedule/ajout', async (Shedule: a
 })
 
 // DELETE 
-export const deleteShedule = createAsyncThunk('shedule/suppression', async (id_adt: number, { dispatch }): Promise<ApiReturnType> => {
+export const deleteShedule = createAsyncThunk('shedule/suppression', async ({ id_edt, id_classe, id_personnel }: { id_edt: number; id_classe?: number, id_personnel?: number }): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
-    if (id_adt) {
+    if (id_edt) {
         await api.delete('admin/emploi-du-temps/delete', {
-            data: { id_adt },
+            data: { id_edt, id_classe, id_personnel },
             headers: { 'Content-Type': 'application/json' }
         }).then(response => {
             data = response.data;
             if (!data.error) {
-                dispatch(setHiddeModalValue(true));
+                toast('Suppression effectuée.');
             }
         }).catch(error => {
             console.error('Erreur lors de la récupération des données:', error.getMessage());
@@ -74,6 +75,16 @@ export const deleteShedule = createAsyncThunk('shedule/suppression', async (id_a
 export const getAssignationByClasseId = createAsyncThunk('shedule/get-assignation-by-classe', async (id_classe: number): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;
     await api.get('admin/assignation-by-classe/' + id_classe).then(response => {
+        data = response.data;
+    }).catch(error => {
+        console.error('( Shedule ) Erreur lors de la récupération des données:', error.getMessage());
+    });
+    return data;
+})
+// Get All assignation by classe 
+export const getAssignationByTeacherId = createAsyncThunk('shedule/get-assignation-by-classe', async (id_teacher: number): Promise<ApiReturnType> => {
+    let data: ApiReturnType = ApiReturnInitial;
+    await api.get('admin/assignation-by-teacher/' + id_teacher).then(response => {
         data = response.data;
     }).catch(error => {
         console.error('( Shedule ) Erreur lors de la récupération des données:', error.getMessage());

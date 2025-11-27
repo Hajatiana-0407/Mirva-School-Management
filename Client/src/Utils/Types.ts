@@ -701,8 +701,8 @@ export const SheduleInitialeValue: SheduleType = {
     created_at: "",
 };
 
-export type SheduleByClasseType = ClasseType & { edt: SheduleType[] };
-export const SheduleClasseIntialeValue: SheduleByClasseType = { ...classeInitialState, edt: [] }
+export type SheduleByClasseType = ClasseType & EmployeeType & { edt: SheduleType[] } ;
+export const SheduleClasseIntialeValue: SheduleByClasseType = { ...classeInitialState , ...employeeInitialValue , edt: [] }
 
 export type AssignationType = {
     // colonnes de la table 'classe'

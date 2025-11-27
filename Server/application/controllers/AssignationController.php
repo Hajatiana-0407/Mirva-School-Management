@@ -14,11 +14,32 @@ class AssignationController extends CI_Controller
     {
     }
 
-    public function getAllByClasseId(int $id  )
+    public function getAllByClasseId(int $id)
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            if ( $id ) {
+            if ($id) {
                 $datas = $this->assignation->getAllByClasseId($id);
+                if ($datas) {
+                    echo json_encode(['error' => false, 'data' => $datas]);
+                } else {
+                    echo json_encode(['error' => true, 'message' => 'Aucun classe trouvé.']);
+                }
+            } else {
+                echo json_encode(['error' => true, 'message' => 'Aucun classe trouvé.']);
+            }
+        } else {
+            echo json_encode([
+                'error' => true,
+                'message' => 'Aucun classe trouvé',
+                'details' => 'La requette n\'est pas autorisé.'
+            ]);
+        }
+    }
+    public function getAllByTeacherId(int $id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            if ($id) {
+                $datas = $this->assignation->getAllByTeacherId($id);
                 if ($datas) {
                     echo json_encode(['error' => false, 'data' => $datas]);
                 } else {

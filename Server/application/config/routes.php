@@ -204,6 +204,7 @@ $route['api/admin/emploi-du-temps/publish'] = 'EmploiDuTempsController/publish';
 
 // ******************* ROUTE ASSIGNATIONS  ********************** //
 $route['api/admin/assignation-by-classe/(:any)'] = 'AssignationController/getAllByClasseId/$1';
+$route['api/admin/assignation-by-teacher/(:any)'] = 'AssignationController/getAllByTeacherId/$1';
 
 
 
