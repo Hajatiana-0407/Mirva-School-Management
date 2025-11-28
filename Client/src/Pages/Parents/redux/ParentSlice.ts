@@ -3,6 +3,7 @@ import { ActionIntialValue, ActionType, ApiReturnType, ParentType } from "../../
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
 import { upsertParent, deleteParent, getAllParent, updateParent } from "./ParentAsyncThunk";
+import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 
 
 type initialStateType = {
@@ -29,6 +30,9 @@ const ParentSlice = createSlice({
 
     },
     extraReducers(builder) {
+        builder.addCase(logoutUser.fulfilled, () => {
+            return initialState;
+        });
 
         // ? ************************************* Read ************************************* //
         builder

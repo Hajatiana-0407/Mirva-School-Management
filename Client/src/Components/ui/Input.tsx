@@ -109,30 +109,56 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                         {type === "select" ? (
                             <div className="relative w-full">
                                 {/* Le select */}
-                                <select
-                                    id={name}
-                                    name={name}
-                                    required={required}
-                                    onChange={handleChange}
-                                    defaultValue={defaultValue}
-                                    className={clsx(
-                                        {
-                                            "ps-12": icon,
-                                            "text-secondary-400/60": options.length === 0,
-                                        },
-                                        "bg-light pl-10 pr-10 py-2 border w-full border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none"
-                                    )}
-                                >
-                                    {options.length ? (
-                                        options.map((opt, idx) => (
-                                            <option key={idx} value={opt.value}>
-                                                {opt.label}
-                                            </option>
-                                        ))
-                                    ) : (
-                                        <option value="">Aucun élément trouvé ...</option>
-                                    )}
-                                </select>
+                                {value ?
+                                    <select
+                                        id={name}
+                                        name={name}
+                                        required={required}
+                                        onChange={handleChange}
+                                        value={value}
+                                        className={clsx(
+                                            {
+                                                "ps-12": icon,
+                                                "text-secondary-400/60": options.length === 0,
+                                            },
+                                            "bg-light pl-10 pr-10 py-2 border w-full border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none"
+                                        )}
+                                    >
+                                        {options.length ? (
+                                            options.map((opt, idx) => (
+                                                <option key={idx} value={opt.value}>
+                                                    {opt.label}
+                                                </option>
+                                            ))
+                                        ) : (
+                                            <option value="">Aucun élément trouvé ...</option>
+                                        )}
+                                    </select>
+                                    : <select
+                                        id={name}
+                                        name={name}
+                                        required={required}
+                                        onChange={handleChange}
+                                        defaultValue={defaultValue}
+                                        className={clsx(
+                                            {
+                                                "ps-12": icon,
+                                                "text-secondary-400/60": options.length === 0,
+                                            },
+                                            "bg-light pl-10 pr-10 py-2 border w-full border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none"
+                                        )}
+                                    >
+                                        {options.length ? (
+                                            options.map((opt, idx) => (
+                                                <option key={idx} value={opt.value}>
+                                                    {opt.label}
+                                                </option>
+                                            ))
+                                        ) : (
+                                            <option value="">Aucun élément trouvé ...</option>
+                                        )}
+                                    </select>
+                                }
 
                                 {/* Icône Lucide à droite */}
                                 <ChevronDownIcon

@@ -21,6 +21,7 @@ const Presentaion: React.FC = () => {
         }
         return () => { }
     }, [dispatch])
+    
 
 
     // Statistique de l'etat de l'ecole 

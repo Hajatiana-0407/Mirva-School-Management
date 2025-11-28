@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useHashPermission } from '../Hooks/useHashPermission';
 
-interface Action {
+export interface Action {
     label: string;
     onClick: () => void;
     danger?: boolean;
@@ -54,7 +54,7 @@ const RightClickMenu = ({ actions, positionX, positionY, idModule, isOpen, onClo
             style={{
                 position: "fixed",
                 top: positionY ? positionY - 10 : 0,
-                left: positionX  ? positionX + 10 : 0,
+                left: positionX ? positionX + 10 : 0,
                 zIndex: 9999,
             }}
             onContextMenu={handleMenuContextMenu}
@@ -74,10 +74,10 @@ const RightClickMenu = ({ actions, positionX, positionY, idModule, isOpen, onClo
                                     onClose();
                                 }}
                                 type="button"
-                                className="w-full border border-secondary-100 rounded text-left px-2 py-1 sm:px-4 sm:py-2 text-md hover:bg-secondary-100 flex items-center gap-2 text-ellipsis overflow-hidden whitespace-nowrap text-secondary-600 transition-colors duration-150"
+                                className={`w-full border border-secondary-100 rounded text-left px-2 py-1 sm:px-4 sm:py-2 _classe text-md hover:bg-secondary-100 flex items-center gap-2 text-ellipsis overflow-hidden lightspace-nowrap  text-secondary-600`}
                             >
                                 {action.icon && <action.icon className={`w-5 h-5 ${action.color}`} />}
-                                <span className="font-medium">{action.label}</span>
+                                {action.label}
                             </button>
                         </li>
                     );

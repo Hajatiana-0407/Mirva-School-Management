@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ActionIntialValue, ActionType, ApiReturnType, LessonInitialValue, LessonType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { createLesson, deleteLesson, getAllLessons, publish, updatelesson } from "./LessonAsyncThunk";
+import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 
 // Type SchoolYear à adapter selon votre modèle
 
@@ -44,6 +45,9 @@ const LessonSlice = createSlice({
         }
     },
     extraReducers(builder) {
+        builder.addCase(logoutUser.fulfilled, () => {
+            return initialState;
+        });
         // ? ===================== Read  ===================== //
         builder
             .addCase(getAllLessons.pending, (state) => {
@@ -106,7 +110,7 @@ const LessonSlice = createSlice({
                         if (state.single.data?.id_lecon === data?.id_lecon) {
                             state.single.data = data;
                         }
-                        
+
                         if (lesson.id_lecon === data?.id_lecon) {
                             return {
                                 ...data,

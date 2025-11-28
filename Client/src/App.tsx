@@ -10,7 +10,7 @@ function App() {
   // Gerer le scroll automatique dans une section spécifique 
   useSectionScroll()
   return (
-    <div className='' >
+    <div className='text-base' >
       <AnimatedBackground />
       <ToastContainer
         position="top-right"

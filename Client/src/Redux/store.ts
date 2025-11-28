@@ -17,11 +17,16 @@ import LessonReducer from '../Pages/Lessons/redux/LessonSlice'
 import ExerciceReducer from '../Pages/Exercices/redux/ExerciceSlice'
 import RoleReducer from '../Pages/Settings/UserRoles/redux/UserRolesSlice';
 import ModuleReducer from './Other/slices/ModuleSlice'
+import SheduleReducer from '../Pages/Shedules/redux/SheduleSlice'
 
 // ? Import reducer pour le site 
 import HeroReducer from '../Pages/website/Redux/Slice/Home/HeroSlice'
 import Presentatioreducer from '../Pages/website/Redux/Slice/Home/PresentationSlice'
 import ValueReducer from '../Pages/website/Redux/Slice/Home/ValueSlice'
+import HistoryReducer from '../Pages/website/Redux/Slice/About/HistorySlice'
+import MissionReducer from '../Pages/website/Redux/Slice/About/MissionSlice'
+import PilierReducer from '../Pages/website/Redux/Slice/About/PilierSlice'
+import InstallationReducer from '../Pages/website/Redux/Slice/About/InstallationSlice'
 
 export const store = configureStore({
     reducer: {
@@ -43,11 +48,16 @@ export const store = configureStore({
         exercice: ExerciceReducer,
         role: RoleReducer,
         module: ModuleReducer,
+        shedule: SheduleReducer,
 
         /**Reducer pour le site  */
         hero: HeroReducer , 
         presentation : Presentatioreducer,
-        values : ValueReducer
+        values : ValueReducer,
+        history : HistoryReducer,
+        mission : MissionReducer,
+        pilier : PilierReducer,
+        installation : InstallationReducer 
     }
 });
 

@@ -14,6 +14,7 @@ class AppFixtures extends CI_Controller
         $this->load->model('FixturesModel', 'model');
         $this->load->model('PersonnelModel', 'personnelModel');
         $this->load->model('EtudiantModel');
+        $this->load->model('MatiereClasseProfModel', 'assignation');
         $this->load->helper('matricule');
 
         $this->faker = \Faker\Factory::create('fr_FR');
@@ -57,8 +58,7 @@ class AppFixtures extends CI_Controller
             'logo' => '',
             'created_at' => date('Y-m-d H:i:s'),
             'site_web' => 'www.lyceemirva35.com',
-            'description' => 'Lycée MIRVA Alarobia Amboniloha
-        Présco Primaires Secondaires',
+            'description' => 'Lycée MIRVA Alarobia Amboniloha Présco Primaires Secondaires',
             "prefix" => '',
             'facebook' => 'https://www.facebook.com/profile.php?id=61575911525721',
             'twitter' => '',
@@ -69,16 +69,17 @@ class AppFixtures extends CI_Controller
 
 
         // ? ===================== Annee scolaire  ===================== //
+        $annee_scolaires = [];
         for ($i = 0; $i < 2; $i++) {
-            $this->model->insertFixture('annee_scolaire', [
+            $annee_scolaires[] = [
                 'nom' => 'Année Scolaire ' . ($i + 1),
                 'date_debut' => $this->faker->date(),
                 'date_fin' => $this->faker->date(),
                 'description' => $this->faker->sentence(6),
                 'created_at' => date('Y-m-d')
-            ]);
+            ];
         }
-
+        $this->model->insertBatchFixtures($annee_scolaires, 'annee_scolaire');
 
         // ? ===================== Matières  ===================== //
         $matieresListe = [
@@ -133,14 +134,10 @@ class AppFixtures extends CI_Controller
                 'description' => 'Apprentissage de la langue anglaise, écrite et orale.'
             ]
         ];
-        foreach ($matieresListe as  $mat) {
-            $this->model->insertFixture('matiere', [
-                'denomination' => $mat['denomination'],
-                'abbreviation' => strtoupper($mat['abbreviation']),
-                'description' => $mat['description'],
-                'couleur' => $this->faker->hexColor,
-            ]);
+        foreach ($matieresListe as &$mat) {
+            $mat['couleur'] = $this->faker->hexColor;
         }
+        $this->model->insertBatchFixtures($matieresListe, 'matiere');
 
 
         // ? ===================== Niveau ===================== // 
@@ -164,29 +161,36 @@ class AppFixtures extends CI_Controller
                 'Terminale'
             ]
         ];
+        $niveauFixtures = [];
         foreach ($niveaux as $cycle => $classes) {
             foreach ($classes as $classe) {
-                $this->model->insertFixture('niveau', [
+                $niveauFixtures[] = [
                     'niveau' => $classe,
                     'cycle' => $cycle,
                     'description' => "Classe de $classe du cycle $cycle",
                     'created_at' => date('Y-m-d H:i:s')
-                ]);
+                ];
             }
         }
+        $this->model->insertBatchFixtures($niveauFixtures, 'niveau');
 
         // ? ===================== Matieres et Niveau ===================== //
         $niveaux = $this->model->getIds('niveau', 'id_niveau');
         $matieres = $this->model->getIds('matiere', 'id_matiere');
+
+        // Matiere et niveau 
+        $matiere_niveaux = [];
         foreach ($matieres as $matiere) {
-            foreach ($this->faker->randomElements($niveaux, rand(1, 2)) as $niveau) {
-                $this->model->insertFixture('matiere_niveau', [
+            // Assigner la matière à TOUS les niveaux
+            foreach ($niveaux as $niveau) {
+                $matiere_niveaux[] = [
                     'matiere_id_matiere' => $matiere,
                     'niveau_id_niveau' => $niveau,
                     'coefficient' => $this->faker->numberBetween(1, 5),
-                ]);
+                ];
             }
         }
+        $this->model->insertBatchFixtures($matiere_niveaux, 'matiere_niveau');
 
         // ? ===================== Classes ===================== //
         $sections = ['A', 'B', 'C', 'D', 'E', 'F'];
@@ -196,6 +200,7 @@ class AppFixtures extends CI_Controller
             ->get()
             ->result_array();
 
+        $classes = [];
         foreach ($niveauxData as $niveau) {
             $niveauId = $niveau['id_niveau'];
             $nomNiveau = $niveau['niveau'];
@@ -203,32 +208,37 @@ class AppFixtures extends CI_Controller
 
             for ($i = 0; $i < $nbClasses; $i++) {
                 $section = $sections[$i] ?? $this->faker->randomElement($sections);
-
-                $this->model->insertFixture('classe', [
-                    'denomination'     => $nomNiveau . ' ' . $section, // ex: "5ème A"
+                $classes[] = [
+                    'denomination' => $nomNiveau . ' ' . $section,
                     'niveau_id_niveau' => $niveauId,
-                    'created_at'       => date('Y-m-d H:i:s')
-                ]);
+                    'created_at' => date('Y-m-d H:i:s')
+                ];
             }
         }
+        $this->model->insertBatchFixtures($classes, 'classe');
 
 
         // ? ===================== Frais de scolarité  ===================== //
+        $frais = [];
         foreach ($niveaux as $niveau) {
-            $this->model->insertFixture('droit_inscription', [
+            $frais[] = [
                 'montant' => $this->faker->numberBetween(50000, 100000),
                 'niveau_id_niveau' => $niveau,
                 'created_at' => date('Y-m-d H:i:s')
-            ]);
+            ];
         }
+        $this->model->insertBatchFixtures($frais, 'droit_inscription');
 
+        $ecolages = [];
         foreach ($niveaux as $niveau) {
-            $this->model->insertFixture('ecolage', [
+            $ecolages[] = [
                 'montant' => $this->faker->numberBetween(25000, 80000),
                 'niveau_id_niveau' => $niveau,
                 'created_at' => date('Y-m-d H:i:s')
-            ]);
+            ];
         }
+        $this->model->insertBatchFixtures($ecolages, 'ecolage');
+
     }
 
 
@@ -239,28 +249,27 @@ class AppFixtures extends CI_Controller
      */
     public function LoadEleveParent($clean = false)
     {
-        // Vider les tables (dans l’ordre inverse des dépendances)
+        // Vider les tables
         $this->model->emptyDb([
             'eleve',
             'parents',
+            'parents_eleves',
             'inscription',
         ]);
 
         if ($clean) {
-            // On efface seulement la base de données
             return;
         }
 
         // ? ===================== Eleves  ===================== //
         $lastStudent = $this->EtudiantModel->findLatest();
-        $lastStudentMatricule = '';
-        if (isset($lastStudent) && isset($lastStudent->matricule_etudiant)) {
-            $lastStudentMatricule = $lastStudent->matricule_etudiant;
-        }
+        $lastStudentMatricule = $lastStudent->matricule_etudiant ?? '';
 
+        $elevesToInsert = [];
         for ($i = 0; $i < 10; $i++) {
             $matriculeStudent = generateMatricule(STUDENT_PRIFIX, $lastStudentMatricule);
-            $this->model->insertFixture('eleve', [
+
+            $elevesToInsert[] = [
                 'matricule_etudiant' => $matriculeStudent,
                 'nom' => $this->faker->lastName,
                 'prenom' => $this->faker->firstName,
@@ -272,20 +281,32 @@ class AppFixtures extends CI_Controller
                 'maladies' => $this->faker->word,
                 'created_at' => date('Y-m-d H:i:s'),
                 'nationalite' => 'Malagasy',
-                'email' => $this->faker->email()
-            ]);
+                'email' => $this->faker->email(),
+            ];
+
             $lastStudentMatricule = $matriculeStudent;
         }
 
-        //? ===================== Parents ===================== //
+        // Insert tous les élèves d'un coup
+        $this->model->insertBatchFixtures($elevesToInsert, 'eleve');
+
+
+        // Récupérer les IDs réellement créés
         $eleves = $this->model->getIds('eleve', 'id_eleve');
+
+
+        // ? ===================== Parents ===================== //
+
+        $parentsToInsert = [];
+        $parentsElevesToInsert = [];
+
         foreach ($eleves as $eleve) {
-            // Génère entre 1 et 3 parents/tuteurs par élève
             $nbParents = rand(1, 3);
 
             for ($i = 0; $i < $nbParents; $i++) {
-                // Créer un parent dans la table parents
-                $parentId = $this->model->insertFixture('parents', [
+
+                // Préparer un parent
+                $parentsToInsert[] = [
                     'prenom' => $this->faker->firstName,
                     'nom' => $this->faker->lastName,
                     'telephone' => $this->faker->phoneNumber,
@@ -295,34 +316,60 @@ class AppFixtures extends CI_Controller
                     'employeur' => $this->faker->company,
                     'telephone_travail' => $this->faker->phoneNumber,
                     'contact_urgence' => $this->faker->boolean(30)
-                ]);
+                ];
 
-                // Lier ce parent à l'élève dans la table parents_eleves
-                $this->model->insertFixture('parents_eleves', [
-                    'eleve_id_eleve' => $eleve,
-                    'parent_id_parent' => $parentId,
-                    'type' => $this->faker->randomElement(['père', 'mère', 'tuteur'])
-                ]);
+                // Le lien sera rempli après avoir les IDs réels
             }
         }
 
+        // Insert batch parents
+        $this->model->insertBatchFixtures($parentsToInsert, 'parents');
 
-        //? ===================== Inscription eleves ===================== //
+        // Récupérer les IDs parents créés
+        $parents = $this->model->getIds('parents', 'id_parent');
+
+
+        // Maintenant on crée les liens élèves ↔ parents
+        $index = 0;
+        foreach ($eleves as $eleve) {
+            $nbParents = rand(1, 3);
+
+            for ($i = 0; $i < $nbParents; $i++) {
+                $parentsElevesToInsert[] = [
+                    'eleve_id_eleve' => $eleve,
+                    'parent_id_parent' => $parents[$index],
+                    'type' => $this->faker->randomElement(['père', 'mère', 'tuteur'])
+                ];
+                $index++;
+            }
+        }
+
+        // Insert batch parents_eleves
+        $this->model->insertBatchFixtures($parentsElevesToInsert, 'parents_eleves');
+
+
+        // ? ===================== Inscription ===================== //
+
         $classes = $this->model->getIds('classe', 'id_classe');
         $annees = $this->model->getIds('annee_scolaire', 'id_annee_scolaire');
+
+        $inscriptionsToInsert = [];
+
         for ($i = 0; $i < 5; $i++) {
-            $eleve = $this->faker->randomElement($eleves);
-            $this->model->insertFixture('inscription', [
+            $inscriptionsToInsert[] = [
                 'date_inscription' => $this->faker->date(),
                 'classe_id_classe' => $this->faker->randomElement($classes),
                 'annee_scolaire_id_annee_scolaire' => $this->faker->randomElement($annees),
-                'eleve_id_eleve' => $eleve,
+                'eleve_id_eleve' => $this->faker->randomElement($eleves),
                 'ancienne_ecole' => $this->faker->company(),
                 'is_droit_payed' => $this->faker->randomElement(['oui', 'non']),
-                'created_at' => date('Y-m-d H:i:s')
-            ]);
+                'created_at' => date('Y-m-d H:i:s'),
+            ];
         }
+
+        $this->model->insertBatchFixtures($inscriptionsToInsert, 'inscription');
     }
+
 
     /**
      * Fixtures pour les personnels 
@@ -331,7 +378,6 @@ class AppFixtures extends CI_Controller
      */
     public function loadPersonnel($clean = false)
     {
-
         // Vider les tables (dans l’ordre inverse des dépendances)
         $this->model->emptyDb([
             'type_personnel',
@@ -339,11 +385,10 @@ class AppFixtures extends CI_Controller
             'personnel',
         ]);
 
-        if ($clean) {
-            // On efface seulement la base de données
+        if ($clean)
             return;
-        }
-        // ? ===================== Type du personnel ===================== //
+
+        // ===================== Type du personnel ===================== //
         $type_personnels = [
             'Enseignant',
             'Secrétaire',
@@ -355,26 +400,34 @@ class AppFixtures extends CI_Controller
             'Chauffeur'
         ];
 
+        // Préparation batch type_personnel
+        $batchTypes = [];
         foreach ($type_personnels as $type) {
-            $this->model->insertFixture('type_personnel', [
+            $batchTypes[] = [
                 'type' => $type,
                 'description' => $this->faker->sentence(6),
-            ]);
+            ];
         }
 
-        //? ===================== Personnel ===================== //
+        // ✨ Insert en batch
+        $this->model->insertBatchFixtures($batchTypes, 'type_personnel');
+
+
+        // ===================== Personnel ===================== //
         $types = $this->model->getIds('type_personnel', 'id_type_personnel');
+
         $lasted = $this->personnelModel->findLatest();
-        $lasteMatricule = '';
-        if ($lasted && !empty($lasted->matricule_personnel)) {
-            $lasteMatricule = $lasted->matricule_personnel;
-        }
+        $lastMatricule = $lasted && $lasted->matricule_personnel
+            ? $lasted->matricule_personnel
+            : '';
 
-        // Générer 20 nouveaux employés
+        $employes = [];
+
+        // ---- 20 employés aléatoires ----
         for ($i = 0; $i < 20; $i++) {
-            $matricule = generateMatricule(EMPLOYEE_PREFIX, $lasteMatricule);
+            $matricule = generateMatricule(EMPLOYEE_PREFIX, $lastMatricule);
 
-            $this->model->insertFixture('personnel', [
+            $employes[] = [
                 'matricule_personnel' => $matricule,
                 'nom' => $this->faker->lastName,
                 'prenom' => $this->faker->firstName,
@@ -387,7 +440,7 @@ class AppFixtures extends CI_Controller
                 'email' => $this->faker->email,
                 'id_type_personnel' => $this->faker->randomElement($types),
                 'salaire_base' => $this->faker->numberBetween(200000, 800000),
-                "status" => $this->faker->randomElement(['Actif', 'Suspendu', "Démissionnaire"]),
+                'status' => $this->faker->randomElement(['Actif', 'Suspendu', 'Démissionnaire']),
                 'numero_cin' => $this->faker->randomNumber(),
                 'nationalite' => $this->faker->country(),
                 'type_contrat' => $this->faker->randomElement(['CDD', 'CDI', 'Stagiaire']),
@@ -396,43 +449,94 @@ class AppFixtures extends CI_Controller
                 'date_embauche' => $this->faker->date(),
                 'created_at' => date('Y-m-d H:i:s'),
 
-                // Urgence 
-                'urgence_nom' => $this->faker->firstName() . ' ' . $this->faker->lastName(),
+                'urgence_nom' => $this->faker->name(),
                 'urgence_lien' => $this->faker->word(),
                 'urgence_tel' => $this->faker->phoneNumber(),
                 'urgence_email' => $this->faker->email()
-            ]);
+            ];
 
-            $lasteMatricule = $matricule;
+            $lastMatricule = $matricule;
         }
 
+        // ---- 10 enseignants ----
+        for ($i = 0; $i < 10; $i++) {
 
-        $professeurs =  $this->model->getAllIdTeacher();
+            $matricule = generateMatricule(EMPLOYEE_PREFIX, $lastMatricule);
 
-        // ? ===================== Cours ===================== //
+            $employes[] = [
+                'matricule_personnel' => $matricule,
+                'nom' => $this->faker->lastName,
+                'prenom' => $this->faker->firstName,
+                'addresse' => $this->faker->address,
+                'telephone' => $this->faker->phoneNumber,
+                'date_naissance' => $this->faker->date(),
+                'lieu_naissance' => $this->faker->city(),
+                'sexe' => $this->faker->randomElement(['Homme', 'Femme']),
+                'engagement' => 'Permanent',
+                'email' => $this->faker->email,
+                'id_type_personnel' => $types[0], // Enseignant
+                'salaire_base' => $this->faker->numberBetween(200000, 800000),
+                'status' => $this->faker->randomElement(['Actif', 'Suspendu', 'Démissionnaire']),
+                'numero_cin' => $this->faker->randomNumber(),
+                'nationalite' => $this->faker->country(),
+                'type_contrat' => $this->faker->randomElement(['CDD', 'CDI', 'Stagiaire']),
+                'specialisation' => $this->faker->jobTitle(),
+                'certification' => $this->faker->sentence(),
+                'date_embauche' => $this->faker->date(),
+                'created_at' => date('Y-m-d H:i:s'),
+
+                'urgence_nom' => $this->faker->name(),
+                'urgence_lien' => $this->faker->word(),
+                'urgence_tel' => $this->faker->phoneNumber(),
+                'urgence_email' => $this->faker->email()
+            ];
+
+            $lastMatricule = $matricule;
+        }
+
+        // ✨ INSERT BATCH
+        $this->model->insertBatchFixtures($employes, 'personnel');
+
+
+        // ===================== Cours ===================== //
+        $professeurs = $this->model->getAllIdTeacher();
         $matieres = $this->model->getIds('matiere', 'id_matiere');
         $classes = $this->model->getIds('classe', 'id_classe');
-        foreach ($classes as $classe) {
-            foreach ($this->faker->randomElements($matieres, 2) as $matiere) {
-                $professeur = $this->faker->randomElement($professeurs);
 
-                // Vérifie si la combinaison existe déjà dans la BDD
+        $batchCours = [];
+
+        foreach ($classes as $classe) {
+
+            $selectedMatieres = $this->faker->randomElements($matieres, 10);
+
+            foreach ($selectedMatieres as $matiere) {
+
+                $prof = $this->faker->randomElement($professeurs);
+
+                // éviter les doublons
                 $exists = $this->db->where('classe_id_classe', $classe)
-                    ->where('professeur_id_professeur', $professeur)
+                    ->where('professeur_id_professeur', $prof)
+                    ->where('matiere_id_matiere', $matiere)
                     ->get('classe_proffesseur_matiere')
                     ->num_rows() > 0;
 
                 if (!$exists) {
-                    $this->model->insertFixture('classe_proffesseur_matiere', [
+                    $batchCours[] = [
                         'classe_id_classe' => $classe,
-                        'professeur_id_professeur' => $professeur,
+                        'professeur_id_professeur' => $prof,
                         'matiere_id_matiere' => $matiere,
                         'heure_semaine' => $this->faker->numberBetween(1, 10)
-                    ]);
+                    ];
                 }
             }
         }
+
+        // ✨ Insert batch cours
+        if (!empty($batchCours)) {
+            $this->model->insertBatchFixtures($batchCours, 'classe_proffesseur_matiere');
+        }
     }
+
 
 
     /**
@@ -443,6 +547,7 @@ class AppFixtures extends CI_Controller
      */
     public function loadRoles($clean = false)
     {
+        // On vide les tables dans le bon ordre
         $this->model->emptyDb([
             'modules',
             'roles',
@@ -450,10 +555,10 @@ class AppFixtures extends CI_Controller
         ]);
 
         if ($clean) {
-            // On efface seulement la base de données
-            return;
+            return; // juste nettoyage
         }
-        //?  ===================== ROLES ===================== //
+
+        // ===================== ROLES ===================== //
         $roles = [
             [
                 'nom' => 'Administrateur',
@@ -484,10 +589,11 @@ class AppFixtures extends CI_Controller
                 'couleur' => $this->faker->hexColor,
             ],
         ];
+
         $this->model->insertBatchFixtures($roles, "roles");
 
 
-        //?  ===================== MODULE ===================== //
+        // ===================== MODULES ===================== //
         $modules = [
             ['nom' => 'dashboard', 'label' => 'Tableau de bord', 'description' => 'Tableau de bord général de la plateforme', 'is_for_all' => false, 'is_section' => false],
             ['nom' => 'registration', 'label' => 'Inscriptions', 'description' => 'Gestion des inscriptions des nouveaux élèves', 'is_for_all' => false, 'is_section' => false],
@@ -496,12 +602,12 @@ class AppFixtures extends CI_Controller
             ['nom' => 'attendance', 'label' => 'Présences', 'description' => 'Suivi des présences et absences des élèves', 'is_for_all' => false, 'is_section' => false],
             ['nom' => 'exams', 'label' => 'Examens', 'description' => 'Gestion des examens, notes et bulletins', 'is_for_all' => false, 'is_section' => false],
 
-            // Section Leçons et Exercices
+            // Leçons / Exercices
             ['nom' => 'course', 'label' => 'Cours', 'description' => 'Module principal pour la gestion des leçons et exercices', 'is_for_all' => false, 'is_section' => true],
             ['nom' => 'lessons', 'label' => 'Leçons', 'description' => 'Création et consultation des leçons', 'is_for_all' => false, 'is_section' => false],
             ['nom' => 'exercices', 'label' => 'Exercices', 'description' => 'Création et gestion des exercices pour les élèves', 'is_for_all' => false, 'is_section' => false],
 
-            // Section Administration
+            // Administration
             ['nom' => 'management', 'label' => 'Administration', 'description' => 'Espace d’administration et gestion du personnel', 'is_for_all' => false, 'is_section' => true],
             ['nom' => 'employees', 'label' => 'Employés', 'description' => 'Gestion des employés de l’établissement', 'is_for_all' => false, 'is_section' => false],
             ['nom' => 'teachers', 'label' => 'Enseignants', 'description' => 'Gestion des enseignants et de leurs matières', 'is_for_all' => false, 'is_section' => false],
@@ -517,41 +623,28 @@ class AppFixtures extends CI_Controller
             ['nom' => 'subjects', 'label' => 'Matières', 'description' => 'Gestion des matières enseignées', 'is_for_all' => false, 'is_section' => false],
             ['nom' => 'settings', 'label' => 'Paramètres', 'description' => 'Paramètres et configuration du système', 'is_for_all' => true, 'is_section' => false],
 
-            // Paramettre 
-            ['nom' => 'general-settings', 'label' => 'Paramètres généraux', 'description' => 'Configuration générale du système et des préférences globales', 'is_for_all' => false, 'is_section' => true],
-            ['nom' => 'school-settings', 'label' => 'Paramètres de l’établissement', 'description' => 'Informations et configuration propres à l’établissement scolaire', 'is_for_all' => false, 'is_section' => false],
-            [
-                'nom' => 'roles-settings',
-                'label' => 'Paramètres des rôles et utilisateurs',
-                'description' => 'Gestion des rôles, permissions et utilisateurs du système',
-                'is_for_all' => false,
-                'is_section' => false
-            ],
-            [
-                'nom' => 'website-settings',
-                'label' => 'Paramètres du site',
-                'description' => 'Configuration des informations principales du site, telles que le nom, le logo et les coordonnées de contact',
-                'is_for_all' => false,
-                'is_section' => true,
-            ],
-            [
-                'nom' => 'homepage-settings',
-                'label' => 'Page d’accueil',
-                'description' => 'Personnalisation du contenu et de la mise en page de la page d’accueil du site',
-                'is_for_all' => false,
-                'is_section' => false,
-            ],
-
-
+            // Paramètre
+            ['nom' => 'general-settings', 'label' => 'Paramètres généraux', 'description' => 'Configuration générale du système', 'is_for_all' => false, 'is_section' => true],
+            ['nom' => 'school-settings', 'label' => 'Paramètres de l’établissement', 'description' => 'Informations et configuration de l’établissement', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'roles-settings', 'label' => 'Rôles et utilisateurs', 'description' => 'Gestion des rôles et permissions', 'is_for_all' => false, 'is_section' => false],
+            ['nom' => 'website-settings', 'label' => 'Paramètres du site', 'description' => 'Configuration du site (nom, logo, contacts)', 'is_for_all' => false, 'is_section' => true],
+            ['nom' => 'homepage-settings', 'label' => 'Page d’accueil', 'description' => 'Personnalisation de la page d’accueil', 'is_for_all' => false, 'is_section' => false],
         ];
+
         $this->model->insertBatchFixtures($modules, 'modules');
 
+
+        // ===================== ROLES PERMISSIONS ===================== //
         $modules_id = $this->model->getIds('modules', 'id_module');
         $roles = $this->model->getAllTable('roles');
-        $roles_permmissions = [];
+
+        $roles_permissions = [];
+
         foreach ($roles as $role) {
-            foreach ($modules_id as  $module) {
-                $temps = [
+            foreach ($modules_id as $module) {
+
+                // valeurs random
+                $permission = [
                     'id_role' => $role['id_role'],
                     'id_module' => $module,
                     'can_read' => (bool) random_int(0, 1),
@@ -560,19 +653,22 @@ class AppFixtures extends CI_Controller
                     'can_delete' => (bool) random_int(0, 1),
                 ];
 
+                // Administrateur = full access
                 if ($role['nom'] === 'Administrateur') {
-                    $temps['can_create'] = true;
-                    $temps['can_update'] = true;
-                    $temps['can_delete'] = true;
-                    $temps['can_read'] = true;
+                    $permission['can_read'] = true;
+                    $permission['can_create'] = true;
+                    $permission['can_update'] = true;
+                    $permission['can_delete'] = true;
                 }
 
-                $roles_permmissions[] = $temps;
-                $temps = [];
+                $roles_permissions[] = $permission;
             }
         }
-        $this->model->insertBatchFixtures($roles_permmissions, 'role_permissions');
+
+        // insertion en une seule fois
+        $this->model->insertBatchFixtures($roles_permissions, 'role_permissions');
     }
+
 
     /**
      * Fixtures pour les compte utilisateurs
@@ -593,12 +689,12 @@ class AppFixtures extends CI_Controller
         }
 
         // $personnels_id = $this->model->getIds('personnel', 'id_personnel');
-        $personnels_id =  $this->model->getAllIdTeacher();
+        $personnels_id = $this->model->getAllIdTeacher();
         $eleves_id = $this->model->getIds('eleve', 'id_eleve');
         $parent_id = $this->model->getIds('parents', 'id_parent');
 
 
-        $user_relations  = [$personnels_id, $eleves_id, $parent_id];
+        $user_relations = [$personnels_id, $eleves_id, $parent_id];
 
         $roles_id = $this->model->getIds('roles', 'id_role');
 
@@ -662,62 +758,159 @@ class AppFixtures extends CI_Controller
         ]);
 
         if ($clean) {
-            // On efface seulement la base de données
-            return;
+            return; // Supprime uniquement les données
         }
 
         $teachersId = $this->model->getAllIdTeacher();
-        $id = 1;
-        foreach ($teachersId as $id) {
-            $assignations = $this->model->getAssignationByTeacher($id);
-            $lecons = [];
+
+        // Helpers
+        $this->load->helper(['url', 'text']);
+
+        // Tableau global pour toutes les leçons
+        $allLecons = [];
+        // Tableau global pour tous les exercices
+        $allExercices = [];
+
+        foreach ($teachersId as $teacherId) {
+
+            $assignations = $this->model->getAssignationByTeacher($teacherId);
+
             foreach ($assignations as $assignation) {
-                $titre = $this->faker->sentence(6);
-                $this->load->helper(['url', 'text']);
-                $slug = url_title(convert_accented_characters($titre . ' ' . $id), 'dash', TRUE);
-                $lecon = [
-                    'titre' => $titre,
-                    'slug' => $slug,
+
+                // ----- Génération des leçons -----
+                $titreLecon = $this->faker->sentence(6);
+                $slugLecon = url_title(convert_accented_characters($titreLecon . ' ' . $teacherId), 'dash', TRUE);
+
+                $allLecons[] = [
+                    'titre' => $titreLecon,
+                    'slug' => $slugLecon,
                     'description' => $this->faker->paragraph(3),
                     'contenu' => $this->faker->paragraphs(5, true),
                     'fichier_support' => $this->faker->optional()->fileExtension(),
                     'ficher_principale' => $this->faker->url,
                     'created_at' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d H:i:s'),
+
                     'id_prof' => $assignation['id_prof'],
                     'id_matiere' => $assignation['id_matiere'],
                     'id_niveau' => $assignation['id_niveau']
                 ];
-                $lecons[] = $lecon;
-                $id++;
+
+                // ----- Génération des exercices -----
+                $titreEx = $this->faker->sentence(6);
+                $slugEx = url_title(convert_accented_characters($titreEx . ' ' . $teacherId), 'dash', TRUE);
+
+                $allExercices[] = [
+                    'titre' => $titreEx,
+                    'slug' => $slugEx,
+                    'description' => $this->faker->paragraph(3),
+                    'contenu' => $this->faker->paragraphs(5, true),
+                    'fichier_support' => $this->faker->optional()->fileExtension(),
+                    'ficher_principale' => $this->faker->url,
+                    'created_at' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d H:i:s'),
+
+                    'id_prof' => $assignation['id_prof'],
+                    'id_matiere' => $assignation['id_matiere'],
+                    'id_niveau' => $assignation['id_niveau']
+                ];
             }
-            // Insertion des loçons pour le prof dans la base de donnée
-            $this->model->insertBatchFixtures($lecons, 'lecon');
         }
-        $id = 1;
-        foreach ($teachersId as $id) {
-            $assignations = $this->model->getAssignationByTeacher($id);
-            $exercices = [];
-            foreach ($assignations as $assignation) {
-                $titre = $this->faker->sentence(6);
-                $this->load->helper(['url', 'text']);
-                $slug = url_title(convert_accented_characters($titre . ' ' . $id), 'dash', TRUE);
-                $exercice = [
-                    'titre' => $titre,
-                    'slug' => $slug,
-                    'description' => $this->faker->paragraph(3),
-                    'contenu' => $this->faker->paragraphs(5, true),
-                    'fichier_support' => $this->faker->optional()->fileExtension(),
-                    'ficher_principale' => $this->faker->url,
-                    'created_at' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d H:i:s'),
-                    'id_prof' => $assignation['id_prof'],
-                    'id_matiere' => $assignation['id_matiere'],
-                    'id_niveau' => $assignation['id_niveau']
-                ];
-                $exercices[] = $exercice;
-                $id++;
+
+        // Insertions en batch
+        if (!empty($allLecons)) {
+            $this->model->insertBatchFixtures($allLecons, 'lecon');
+        }
+
+        if (!empty($allExercices)) {
+            $this->model->insertBatchFixtures($allExercices, 'exercice');
+        }
+    }
+
+
+    public function loadEmploiDuTemps($clean = false)
+    {
+        // 1. Vider la table
+        $this->model->emptyDb(['emploi_du_temps']);
+
+        if ($clean) {
+            return;
+        }
+
+        // Année scolaire active
+        $anneeScolaireId = $this->model->findLatest('annee_scolaire');
+        $classes = $this->model->getIds('classe', 'id_classe');
+
+        if (empty($anneeScolaireId) || empty($classes)) {
+            return;
+        }
+
+        // Jours disponibles (Lun → Ven)
+        $jours = [1, 2, 3, 4, 5];
+
+        $emploiDuTemps = [];
+
+        // Tableaux pour éviter les conflits
+        $planningClasse = [];
+        $planningProfesseur = [];
+        $planningSalle = [];
+
+        foreach ($jours as $jour) {
+            foreach (HEUREINDEX as $indexHoraire => $horaire) {
+
+                foreach ($classes as $classe) {
+                    // Récupérer les assignations de la classe
+                    $assignations = $this->assignation->findAllByICdlasse($classe);
+
+                    if (empty($assignations)) {
+                        continue;
+                    }
+
+                    // 🟦 Mélanger les assignations une fois par jour et classe
+                    if (!isset($assignationsShuffled[$classe][$jour])) {
+                        $assignationsShuffled[$classe][$jour] = $assignations;
+                        shuffle($assignationsShuffled[$classe][$jour]);
+                    }
+
+                    $list = $assignationsShuffled[$classe][$jour];
+                    $assignationCount = count($list);
+
+                    // Sélection de la matière (rotation)
+                    $assignation = $list[$indexHoraire % $assignationCount];
+                    $professeurId = $assignation['professeur_id_professeur'];
+
+                    // Générer une salle aléatoire
+                    $salle = "Salle " . rand(1, 25);
+
+                    // Vérifier conflits
+                    if (
+                        isset($planningClasse[$classe][$jour][$horaire]) ||
+                        isset($planningProfesseur[$professeurId][$jour][$horaire]) ||
+                        isset($planningSalle[$salle][$jour][$horaire])
+                    ) {
+                        continue;
+                    }
+
+                    // Ajouter créneau
+                    $emploiDuTemps[] = [
+                        'assignation_id' => $assignation['id_assignation'],
+                        'jour_id' => $jour,
+                        'heure_debut' => $horaire,
+                        'salle' => $salle,
+                        'annee_scolaire_id' => $anneeScolaireId['id_annee_scolaire'],
+                        'heure_index' => $indexHoraire
+                    ];
+
+                    // Marquer occupé
+                    $planningClasse[$classe][$jour][$horaire] = true;
+                    $planningProfesseur[$professeurId][$jour][$horaire] = true;
+                    $planningSalle[$salle][$jour][$horaire] = true;
+                }
             }
-            // Insertion des loçons pour le prof dans la base de donnée
-            $this->model->insertBatchFixtures($exercices, 'exercice');
+        }
+
+        // Insertion
+        if (!empty($emploiDuTemps)) {
+            $this->model->insertBatchFixtures($emploiDuTemps, 'emploi_du_temps');
+            echo count($emploiDuTemps) . ' créneaux générés pour ' . count($classes) . ' classes' . PHP_EOL;
         }
     }
 
@@ -1039,7 +1232,8 @@ class AppFixtures extends CI_Controller
             'site_message_contact'
         ]);
 
-        if ($clean == true) return;
+        if ($clean == true)
+            return;
 
         // ===================== HERO SLIDES ===================== //
         $heroSlides = [
@@ -1227,10 +1421,6 @@ class AppFixtures extends CI_Controller
     }
 
 
-
-
-
-
     /**
      * Create a fake data  in the data base 
      *
@@ -1244,6 +1434,7 @@ class AppFixtures extends CI_Controller
         $this->LoadEleveParent();
         $this->loadLeconExercice();
         $this->loadUser();
+        $this->loadEmploiDuTemps();
 
         echo "✅ Fausse base de données générée avec succès !" . PHP_EOL;
     }
@@ -1256,6 +1447,7 @@ class AppFixtures extends CI_Controller
      */
     public function cleanUp()
     {
+        $this->loadEmploiDuTemps(true);
         $this->loadUser(true);
         $this->loadConfigurations(true);
         $this->loadPersonnel(true);

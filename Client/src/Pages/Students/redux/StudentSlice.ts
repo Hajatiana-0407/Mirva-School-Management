@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { createStudent, deleteStudent, getAllStudent, getStudentByMatricule, updateStudent } from "./StudentAsyncThunk";
 import { StudentDetailsType } from "../../../Utils/Types";
 import { createRegistration } from "../../Registrations/redux/registerAsyncThunk";
+import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 
 
 type initialStateType = {
@@ -36,6 +37,9 @@ const StudentSlice = createSlice({
 
     },
     extraReducers(builder) {
+        builder.addCase(logoutUser.fulfilled, () => {
+            return initialState;
+        });
 
         // ? ************************************* Read ************************************* //
         builder
@@ -198,7 +202,7 @@ const StudentSlice = createSlice({
                         urgence_tel: data.urgence_tel
                     }
 
-                    
+
                     state.error = '';
                     state.datas.unshift(newStudent);
                 }

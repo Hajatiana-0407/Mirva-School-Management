@@ -22,7 +22,7 @@ type LevelListePropsType = {
 type ActionColTypeLevel = SubjectType & { coefficient: number };
 const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType) => {
     const { datas, action } = useSelector(getLevelState);
-    const { datas : Classes } = useSelector( getClasseState )
+    const { datas: Classes } = useSelector(getClasseState)
     const [searchTerm, setSearchTerm] = useState('');
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
     const [levelToDelete, setLevelToDelete] = useState<levelType | null>(null);
@@ -40,8 +40,8 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
                 <div className=''>
                     <div className="ml-2 py-2 flex gap-1 items-center min-w-40  max-w-52 flex-wrap ">
                         {classes.listes?.map((classe) => (
-                            <Link 
-                            to={`/back-office/classes/${ classe.id_classe }`}
+                            <Link
+                                to={`/back-office/classes/${classe.id_classe}`}
                                 key={classe.id_classe}
                                 className="px-2 py-1 rounded text-xs font-medium hover:opacity-80 border bg-secondary-200"
                             >
@@ -136,7 +136,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
 
     useEffect(() => {
         dispatch(getAllLevel());
-    }, [dispatch ,Classes ]);
+    }, [dispatch, Classes]);
 
     // TABLEAU //
     const columns = [
@@ -154,7 +154,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
     ];
 
     const actions = [
-        { icon: Eye, label: "Voir les détails", onClick: (item: any) => navigate(`/back-office/level-details/${ item.id_niveau }`), color: 'primary' },
+        { icon: Eye, label: "Voir les détails", onClick: (item: any) => navigate(`/back-office/level-details/${item.id_niveau}`), color: 'primary' },
         { icon: Edit, type: 'update', label: 'Modifier', onClick: handleEdit, color: 'green' },
         { icon: Archive, type: 'delete', label: "Supprimer", onClick: handleDelete, color: 'red' },
     ];
@@ -187,7 +187,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
                     actions={actions}
                     searchTerm={searchTerm}
                     isLoading={action.isLoading as boolean}
-                    onRowClick={( item: levelType) => navigate('/back-office/level-details/' + item.id_niveau)}
+                    onRowClick={(item: levelType) => navigate('/back-office/level-details/' + item.id_niveau)}
                 />
             </div>
             {/* CONFIRAMTION DE SUPPRESSION */}

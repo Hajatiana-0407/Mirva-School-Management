@@ -3,6 +3,7 @@ import { RootStateType } from '../../../Redux/store';
 import { ActionIntialValue, ActionType, ApiReturnType, RegistrationType } from '../../../Utils/Types';
 import { createRegistration, deleteRegistration, getAllRegistrations } from './registerAsyncThunk';
 import { toast } from 'react-toastify';
+import { logoutUser } from '../../Auth/redux/AuthAsyncThunk';
 
 
 
@@ -24,6 +25,9 @@ const registrationSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(logoutUser.fulfilled, () => {
+            return initialState;
+        });
 
     // ? ************************************* Read ************************************* //
     builder

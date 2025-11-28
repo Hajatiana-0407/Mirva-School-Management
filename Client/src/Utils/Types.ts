@@ -647,5 +647,87 @@ export const RoleInitialValue: RoleType = {
     permissions: {}
 }
 
+// ===================== Employe du temps  ===================== //
+export type SheduleType = {
+    id_edt?: number;
+    assignation_id: number;
+    jour_id: number;
+    heure_debut: string;
+    heure_fin: string;
+    salle: string;
+    heure_index?: number;
+    annee_scolaire_id: number;
+
+    id_matiere: number;
+    denomination: string;
+    abbreviation: string;
+    description: string;
+    couleur: string;
+    matiere: string;
+
+    id_classe: number;
+    niveau_id_niveau: number;
+    classe: string;
+
+    id_personnel: number;
+    nom: string;
+    prenom: string;
+
+    created_at: string;
+}
+export const SheduleInitialeValue: SheduleType = {
+    assignation_id: 0,
+    jour_id: 0,
+    heure_debut: "",
+    heure_fin: "",
+    salle: "",
+    annee_scolaire_id: 0,
+
+    id_matiere: 0,
+    denomination: "",
+    abbreviation: "",
+    description: "",
+    couleur: "",
+    matiere: "",
+
+    id_classe: 0,
+    niveau_id_niveau: 0,
+    classe: "",
+
+    id_personnel: 0,
+    nom: "",
+    prenom: "",
+
+    created_at: "",
+};
+
+export type SheduleByClasseType = ClasseType & EmployeeType & { edt: SheduleType[] } ;
+export const SheduleClasseIntialeValue: SheduleByClasseType = { ...classeInitialState , ...employeeInitialValue , edt: [] }
+
+export type AssignationType = {
+    // colonnes de la table 'classe'
+    id_assignation?: number;
+    id_classe: number;
+    denomination: string;
+    description?: string | null;
+    abreviation?: string | null;
+    niveau_id?: number | null;
+    // ajoute ici les autres colonnes réelles de ta table 'classe'
+
+    // alias supplémentaires
+    classe: string; // c.denomination as classe
+
+    // données du personnel
+    nom: string;
+    prenom: string;
+    id_personnel: number;
+
+    // données de la matière
+    matiere: string;       // m.denomination as matiere
+    abbreviation: string;  // m.abbreviation
+    id_matiere: number;
+}
+
+
 
 
