@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-bold mb-4 capitalize">{school.nom || 'Nom de votre école'} {school.adresse ? '- ' + school.adresse : ''} </h3>
             <p className="text-primary-100 mb-4">
-              Depuis plus de 20 ans, nous formons les leaders de demain dans un environnement bienveillant et stimulant au cœur de Tanjombato.
+              Depuis plus de 20 ans, nous formons les leaders de demain dans un environnement bienveillant et stimulant au cœur de Alarobia Amboniloha.
             </p>
             <div className="flex space-x-4">
               {school.facebook &&
