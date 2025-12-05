@@ -9,7 +9,7 @@ class EnseignantModel extends CI_Model
         parent::__construct();
     }
 
-    public function findAll()
+    public function findAllQuery()
     {
         $query = $this->db->select('*')
             ->from($this->table)

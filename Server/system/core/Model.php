@@ -61,8 +61,11 @@ class CI_Model
 
     protected $table;
     protected $primaryKey;
+    protected $searchs = [];
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * __get magic
@@ -88,7 +91,7 @@ class CI_Model
      * @param [type] $id ( id a exclure )
      * @return boolean
      */
-    public function isExist($champs = [], $champSeparator = 'and',  $excludes  = [], $excludeSeparator = 'and')
+    public function isExist($champs = [], $champSeparator = 'and', $excludes = [], $excludeSeparator = 'and')
     {
         $query = $this->db;
 
@@ -142,18 +145,17 @@ class CI_Model
 
     // * fonctions CRUD * //
     // ======= READ =======
-    public function findAll()
+    public function findAllQuery()
     {
         return $this->db->select('*')
             ->from($this->table)
-            ->order_by($this->primaryKey, 'DESC')
-            ->get()
-            ->result_array();
+            ->order_by($this->primaryKey, 'DESC');
     }
 
     public function findOneById($id)
     {
-        if (!!!$id)  return null;
+        if (!!!$id)
+            return null;
         return $this->db->select('*')
             ->from($this->table)
             ->where($this->primaryKey, $id)
@@ -189,10 +191,10 @@ class CI_Model
     // ======= UPDATE =======
     public function update($id, $data)
     {
-        $updated =  $this->db->where($this->primaryKey, $id)
+        $updated = $this->db->where($this->primaryKey, $id)
             ->update($this->table, $data);
         if ($updated) {
-            return  $this->findOneById($id);
+            return $this->findOneById($id);
         }
         return $updated;
     }
@@ -250,4 +252,46 @@ class CI_Model
         }
         return $this->db->count_all_results();
     }
+
+
+
+    // PAGINATION
+    public function paginateQuery($builder, $page = 1, $search = '', $limit = PAGINATIONLIMIT)
+    {
+        $offset = ($page - 1) * $limit;
+
+
+        // Search
+        if ($search !== '') {
+            $builder->group_start();
+            foreach ($this->searchs as $index => $field) {
+                if ($index === 0) {
+                    $builder->like($field, $search);
+                } else {
+                    $builder->or_like($field, $search);
+                }
+            }
+            $builder->group_end();
+        }
+
+        // COUNT propre
+        $countBuilder = clone $builder;
+        $total = $countBuilder->count_all_results(); // <-- retirer ", false"
+
+        // Pagination
+        $builder->limit($limit, $offset);
+
+        $data = $builder->get()->result_array();
+
+        return [
+            "data" => $data,
+            "total" => $total,
+            "page" => (int) $page,
+            "limit" => $limit,
+            "total_pages" => ceil($total / $limit),
+            "search" => $search
+        ];
+    }
+
+
 }

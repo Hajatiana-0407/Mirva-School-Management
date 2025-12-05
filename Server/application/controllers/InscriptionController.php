@@ -14,7 +14,7 @@ class InscriptionController extends CI_Controller
 
     public function index()
     {
-        $data = $this->InscriptionModel->findAll();
+        $data = $this->InscriptionModel->findAllQuery();
         echo json_encode($data);
     }
 

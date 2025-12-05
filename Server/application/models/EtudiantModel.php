@@ -12,7 +12,7 @@ class EtudiantModel extends CI_Model
     }
 
     // ? ======= READ =======
-    public function findAll()
+    public function findAllQuery()
     {
         return $this->db->select($this->table . '.* , c.* , n.*')
             ->from($this->table)

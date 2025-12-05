@@ -12,7 +12,7 @@ class ModuleController extends CI_Controller
 
     public function index()
     {
-        $data = $this->ModuleModel->findAll();
+        $data = $this->ModuleModel->findAllQuery();
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($data));

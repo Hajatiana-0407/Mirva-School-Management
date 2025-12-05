@@ -12,10 +12,18 @@ class ClasseController extends CI_Controller
 
     public function index()
     {
-        $data = $this->ClasseModel->findAll();
+        $page = $this->input->get('page',1) ?? 1 ;
+        $search = $this->input->get('query' , 1 ) ??'';
+        $query  = $this->ClasseModel->findAllQuery();
+        $pagination = $this->ClasseModel->paginateQuery( $query , $page , $search  );
+        $pagination['data'] = $this->ClasseModel->findAllData( $pagination['data']) ; 
+
         $this->output
             ->set_content_type('application/json')
-            ->set_output(json_encode($data));
+            ->set_output(json_encode([
+                'pagination'=> $pagination , 
+                'data' => $pagination['data']
+            ]));
     }
 
     public function create()

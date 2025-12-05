@@ -12,7 +12,7 @@ class MatiereController extends CI_Controller
 
     public function index()
     {
-        $data = $this->MatiereModel->findAll();
+        $data = $this->MatiereModel->findAllQuery();
         echo json_encode($data);
     }
 

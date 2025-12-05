@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Loading from '../Components/ui/Loading';
 import ActionMenu from '../Components/ActionMenu';
 import RightClickMenu from '../Components/RightClickMenu';
 import { useHashPermission } from '../Hooks/useHashPermission';
 import clsx from 'clsx';
+import { PaginationType } from '../Utils/Types';
+import { AsyncThunk } from '@reduxjs/toolkit';
+import { usePagination } from '../Hooks/usePagination';
 
 interface TableProps {
   data: any[];
@@ -20,11 +23,15 @@ interface TableProps {
     color: string;
     type?: string
   }>;
-  searchTerm?: string;
   isLoading?: boolean;
   actionType?: 'button' | 'pop-up';
   onRowClick?: (item: any) => void;
   idModule?: string;
+  pagination: PaginationType;
+  thunk: AsyncThunk<any, {
+    page?: number;
+    query?: any;
+  }, any>
 }
 
 export const getActionColor = (color: string) => {
@@ -43,10 +50,9 @@ export const getActionColor = (color: string) => {
   return colors[color as keyof typeof colors] || 'text-secondary-600 hover:text-secondary-800';
 };
 
-const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, actionType = 'button', onRowClick, idModule }: TableProps) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+const Table = ({ data, columns, actions, isLoading = false, actionType = 'button', onRowClick, idModule, pagination, thunk }: TableProps) => {
   const permission = useHashPermission({ redirect: true });
+  const { handlePageChange, isLoading: paginationLoading, newPage } = usePagination({ thunk, page: pagination.page })
 
   // État pour le menu contextuel
   const [rightClickMenu, setRightClickMenu] = useState<{
@@ -60,36 +66,6 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
     y: 0,
     item: null
   });
-
-  // RECHERCHE
-  const filteredData = data.filter((item) =>
-    Object.values(item).some((value) =>
-      value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
-
-  // Remettre la page a 1 si le data est vide 
-  useEffect(() => {
-    if (data.length == 0) {
-      setCurrentPage(1);
-    }
-  }, [data.length]);
-
-  // Fermer le menu contextuel quand les données changent
-  useEffect(() => {
-    setRightClickMenu(prev => ({ ...prev, isOpen: false }));
-  }, [data, currentPage]);
-
-  // Calculer les éléments à afficher pour la page actuelle
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
 
   // Gestion du clic droit
   const handleRightClick = (event: React.MouseEvent, item: any) => {
@@ -151,7 +127,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
             <tbody>
 
               {/* LOADING */}
-              {(isLoading && !currentItems.length) ? (
+              {(isLoading && !data.length) ? (
                 <tr>
                   <td colSpan={columns.length + 1}>
                     <Loading />
@@ -159,7 +135,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                 </tr>
               )
                 // ?  AUCUN RESULTAT
-                : (!isLoading && !currentItems.length) ? (
+                : (!isLoading && !data.length) ? (
                   <tr>
                     <td colSpan={columns.length + 1} className=''>
                       <div className='text-secondary-400 text-sm md:text-md text-center pt-6'>
@@ -170,7 +146,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                 )
                   // ? AFFICHAGE 
                   : (
-                    currentItems.map((item, index) => (
+                    data.map((item, index) => (
                       <tr
                         key={index}
                         className={clsx({ 'cursor-pointer': onRowClick }, `border-b hover:bg-secondary-50 w-max`)}
@@ -248,42 +224,108 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
       />
 
       {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between">
+      {pagination.total_pages > 1 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+          {/* Informations sur les éléments */}
           <div className="text-sm text-secondary-600">
-            Affichage de {indexOfFirstItem + 1} à{" "}
-            {Math.min(indexOfLastItem, filteredData.length)} sur{" "}
-            {filteredData.length} éléments
+            {pagination.total} éléments
           </div>
-          <div className="flex items-center space-x-2">
+
+          <div className="flex items-center space-x-1">
+            {/* Bouton précédent */}
             <button
               type="button"
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="p-2 rounded border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-secondary-50"
+              onClick={() => handlePageChange(pagination.page - 1 , pagination.search )}
+              disabled={pagination.page === 1}
+              className="p-2 rounded-lg border border-gray-300 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-primary-50 hover:border-primary-300 transition-colors"
+              aria-label="Page précédente"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => handlePageChange(page)}
-                className={`px-3 py-1 rounded ${currentPage === page
-                  ? "bg-primary-600 text-light"
-                  : "border hover:bg-secondary-50"
-                  }`}
-                type="button"
-              >
-                {page}
-              </button>
-            ))}
+
+            {/* Numéros de page avec logique de troncature */}
+            {(() => {
+              const pages = [];
+              const currentPage = pagination.page;
+              const totalPages = pagination.total_pages;
+
+              if (totalPages <= 7) {
+                // Afficher toutes les pages si peu nombreuses
+                for (let i = 1; i <= totalPages; i++) {
+                  pages.push(i);
+                }
+              } else {
+                // Logique de troncature pour beaucoup de pages
+                pages.push(1);
+
+                if (currentPage > 4) {
+                  pages.push('...');
+                }
+
+                let start = Math.max(2, currentPage - 1);
+                let end = Math.min(totalPages - 1, currentPage + 1);
+
+                // Ajuster pour garder un nombre cohérent de pages
+                if (currentPage <= 4) {
+                  end = 5;
+                }
+                if (currentPage >= totalPages - 3) {
+                  start = totalPages - 4;
+                }
+
+                for (let i = start; i <= end; i++) {
+                  if (i > 1 && i < totalPages) {
+                    pages.push(i);
+                  }
+                }
+
+                if (currentPage < totalPages - 3) {
+                  pages.push('...');
+                }
+
+                pages.push(totalPages);
+              }
+
+              return pages.map((page, index) => {
+                if (page === '...') {
+                  return (
+                    <span
+                      key={`ellipsis-${index}`}
+                      className="px-3 py-1 text-gray-400"
+                    >
+                      ...
+                    </span>
+                  );
+                }
+
+                return (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page as number , pagination.search )}
+                    className={`min-w-[40px] px-3 py-2 rounded-lg font-medium transition-all flex items-center justify-center ${pagination.page === page
+                      ? "bg-primary-600 text-white shadow-sm"
+                      : "border border-gray-300 text-gray-700 hover:bg-primary-50 hover:border-primary-300"
+                      }`}
+                    type="button"
+                    aria-current={pagination.page === page ? "page" : undefined}
+                  >
+                    {paginationLoading && newPage == page ? <div className="w-5 h-5 inline-block border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+                      : page
+                    }
+                  </button>
+                );
+              });
+            })()}
+
+            {/* Bouton suivant */}
             <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(pagination.page + 1 , pagination.search )}
+              disabled={pagination.page === pagination.total_pages}
               type="button"
-              className="p-2 rounded border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-secondary-50"
+              className="p-2 rounded-lg border border-gray-300 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-primary-50 hover:border-primary-300 transition-colors"
+              aria-label="Page suivante"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
         </div>

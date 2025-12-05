@@ -12,7 +12,7 @@ class InscriptionModel extends CI_Model
     }
 
     // ? ======= READ =======
-    public function findAll()
+    public function findAllQuery()
     {
         return $this->db->select('* ,e.nom as nom_eleve ,  as.nom as annee_scolaire_nom')
             ->from($this->table)

@@ -10,6 +10,23 @@ export const ActionIntialValue: ActionType = {
     isUpdating: false,
 }
 
+export type PaginationType = {
+    data: any;
+    total: number;
+    page: number;
+    limit: number;
+    total_pages: number ; 
+    search ?: string 
+}
+
+export const PaginationInitialValue: PaginationType = {
+    data: [],
+    total: 0,
+    page: 0,
+    limit: 0,
+    total_pages: 0
+}
+
 // APP
 export type AppStateType = {
     hiddeTheModalActive: boolean
@@ -72,14 +89,17 @@ export const AuthInitialValue: AuthStateType = {
 
 // BACK'S OBJECT RETURN 
 export type ApiReturnType = {
-    'error': boolean;
-    'message'?: string,
-    'data'?: any
+    error: boolean;
+    message?: string,
+    data?: any ; 
+    pagination : PaginationType
+
 }
 export const ApiReturnInitial: ApiReturnType = {
-    'error': false,
-    'message': '',
-    'data': {}
+    error: false,
+    message: '',
+    data: {} , 
+    pagination : PaginationInitialValue
 }
 
 // MODULES ( COMPOSANTS ) //
@@ -701,8 +721,8 @@ export const SheduleInitialeValue: SheduleType = {
     created_at: "",
 };
 
-export type SheduleByClasseType = ClasseType & EmployeeType & { edt: SheduleType[] } ;
-export const SheduleClasseIntialeValue: SheduleByClasseType = { ...classeInitialState , ...employeeInitialValue , edt: [] }
+export type SheduleByClasseType = ClasseType & EmployeeType & { edt: SheduleType[] };
+export const SheduleClasseIntialeValue: SheduleByClasseType = { ...classeInitialState, ...employeeInitialValue, edt: [] }
 
 export type AssignationType = {
     // colonnes de la table 'classe'

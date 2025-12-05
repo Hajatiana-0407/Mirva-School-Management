@@ -13,7 +13,7 @@ class AnneeScolaireController extends CI_Controller
     // READ 
     public function index()
     {
-        $datas = $this->AnneeScolaireModel->findAll();
+        $datas = $this->AnneeScolaireModel->findAllQuery();
         echo json_encode($datas);
     }
 

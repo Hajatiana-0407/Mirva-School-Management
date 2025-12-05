@@ -12,7 +12,7 @@ class EtudiantController extends CI_Controller
 
     public function index()
     {
-        $data = $this->EtudiantModel->findAll();
+        $data = $this->EtudiantModel->findAllQuery();
         echo json_encode($data);
     }
 

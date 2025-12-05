@@ -13,7 +13,7 @@ class EnseigantsController extends CI_Controller
 
     public function index()
     {
-        $data = $this->EnseignantModel->findAll();
+        $data = $this->EnseignantModel->findAllQuery();
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($data));

@@ -12,7 +12,7 @@ class ExerciceModel extends CI_Model
     }
 
 
-    public function findAll()
+    public function findAllQuery()
     {
         $session = $this->session->userData();
 

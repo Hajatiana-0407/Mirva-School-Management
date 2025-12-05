@@ -12,7 +12,7 @@ class ParentController extends CI_Controller
 
     public function index()
     {
-        $data = $this->ParentModel->findAll();
+        $data = $this->ParentModel->findAllQuery();
         echo json_encode($data);
     }
 

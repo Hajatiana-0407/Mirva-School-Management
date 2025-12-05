@@ -12,7 +12,7 @@ class NiveauModel extends CI_Model
     }
 
     // ======= FIND ALL =======
-    public function findAll()
+    public function findAllQuery()
     {
         $niveaux =  $this->db->select($this->table . '.* , COUNT(c.id_classe) as total_classe ,  COUNT(mn.niveau_id_niveau) as total_matiere')
             ->from($this->table)

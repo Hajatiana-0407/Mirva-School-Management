@@ -11,7 +11,7 @@ class EmploiDuTempsModel extends CI_Model
         parent::__construct();
     }
     // ======= READ =======
-    public function findAll(): array
+    public function findAllQuery(): array
     {
         $user_identity = $this->session->userdata('user_identity');
         $role_id = $this->session->userdata('role_id');

@@ -12,7 +12,7 @@ class LeconController extends CI_Controller
 
     public function index()
     {
-        $lecons = $this->LeconModel->findAll();
+        $lecons = $this->LeconModel->findAllQuery();
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($lecons));

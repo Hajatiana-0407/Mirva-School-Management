@@ -12,7 +12,7 @@ class ExerciceController extends CI_Controller
 
     public function index()
     {
-        $exercices = $this->ExerciceModel->findAll();
+        $exercices = $this->ExerciceModel->findAllQuery();
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($exercices));

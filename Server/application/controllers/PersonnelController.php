@@ -12,7 +12,7 @@ class PersonnelController extends CI_Controller
 
     public function index()
     {
-        $data = $this->PersonnelModel->findAll();
+        $data = $this->PersonnelModel->findAllQuery();
         echo json_encode($data);
     }
 
