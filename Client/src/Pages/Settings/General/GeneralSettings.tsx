@@ -84,7 +84,7 @@ const GeneralSettings = () => {
                         className="flex items-center gap-1 text-primary-600 underline"
                     >
                         <Plus className="w-4 h-4" />
-                        <span>Nouvelle année scolaire</span>
+                        <span>Nouvelle année scolaire</span>.
                     </button>
                 }
             </Title>

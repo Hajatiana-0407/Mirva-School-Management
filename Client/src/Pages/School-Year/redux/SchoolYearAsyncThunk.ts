@@ -6,17 +6,18 @@ import { SchoolYearType } from "../../../Utils/Types";
 import { toast } from "react-toastify";
 
 // READ
-export const getAllSchoolYear = createAsyncThunk('schoolYear/getAll', async (): Promise<SchoolYearType[]> => {
-  let datas: SchoolYearType[] = [];
-  await api.get('admin/school-year')
-    .then(response => {
-      datas = response.data;
-    })
+export const getAllSchoolYear = createAsyncThunk('schoolYear/getAll', async ({ page, query, no_pagination }: { page?: number; query?: any, no_pagination?: boolean }): Promise<ApiReturnType> => {
+  let datas: ApiReturnType = ApiReturnInitial;
+  await api.get('admin/school-year', {
+    params: { page, query, no_pagination }
+  }).then(response => {
+    datas = response.data
+  })
     .catch(error => {
       console.error('Erreur lors de la récupération des données:', error);
     });
   return datas;
-});
+})
 
 // UPDATE
 export const updateSchoolYear = createAsyncThunk('schoolYear/modification', async ({ schoolYear, id }: { schoolYear: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
@@ -73,8 +74,8 @@ export const deleteSchoolYear = createAsyncThunk('schoolYear/suppression', async
 
 
 // SET ACTIVE SCHOOL YEAR 
-export const changeActiveSchoolYear = createAsyncThunk('schoolYear/change-active', async (validateData: any ): Promise<ApiReturnType> => {
-  let data = ApiReturnInitial ;   
+export const changeActiveSchoolYear = createAsyncThunk('schoolYear/change-active', async (validateData: any): Promise<ApiReturnType> => {
+  let data = ApiReturnInitial;
   await api.post('admin/school-year/change-active',
     validateData
   ).then(response => {

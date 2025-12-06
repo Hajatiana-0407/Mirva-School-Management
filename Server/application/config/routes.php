@@ -282,7 +282,7 @@ $GLOBALS['secure'] = [
     'api/admin/type-personnel' => true,
 
     // Année scolaire
-    'api/admin/school-year' => true,
+    // 'api/admin/school-year' => true,
     'api/admin/school-year/update' => true,
     'api/admin/school-year/create' => true,
     'api/admin/school-year/delete' => true,
