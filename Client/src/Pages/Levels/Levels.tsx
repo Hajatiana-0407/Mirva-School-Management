@@ -45,7 +45,7 @@ const Levels = () => {
   }, [hiddeTheModalActive]);
 
   useEffect(() => {
-    dispatch(getAllLevel());
+    dispatch(getAllLevel({}));
   }, [dispatch]);
   return (
 

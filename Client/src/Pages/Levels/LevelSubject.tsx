@@ -165,7 +165,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
     }
 
     useEffect(() => {
-        dispatch(getAllLevel());
+        dispatch(getAllLevel({}));
     }, [dispatch]);
 
     // Modal

@@ -8,6 +8,7 @@ type FilterAndSearchType = {
     thunk: AsyncThunk<any, {
         page?: number;
         query?: any;
+        no_pagination?: boolean
     }, any>
 }
 

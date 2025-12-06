@@ -51,7 +51,7 @@ const LevelDetails: React.FC = () => {
         if (!id) return;
         // dispatch pour récupérer le niveau si absent
         if (!level) {
-            dispatch(getAllLevel());
+            dispatch(getAllLevel({}));
         }
     }, [id, dispatch]);
 

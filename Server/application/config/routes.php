@@ -255,7 +255,7 @@ $GLOBALS['secure'] = [
     'api/admin/matiere-classe/*' => true,
 
     // Niveau
-    'api/admin/niveau' => true,
+    // 'api/admin/niveau' => true,
     'api/admin/niveau/update' => true,
     'api/admin/niveau/create' => true,
     'api/admin/niveau/delete' => true,

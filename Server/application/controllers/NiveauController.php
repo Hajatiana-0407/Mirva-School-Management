@@ -14,10 +14,19 @@ class NiveauController extends CI_Controller
 
     public function index()
     {
-        $data = $this->NiveauModel->findAllQuery();
+        $page = $this->input->get('page', 1) ?? 1;
+        $search = $this->input->get('query', 1) ?? '';
+        $no_pagination = $this->input->get('no_pagination', 1) ?? false ;
+        $query = $this->NiveauModel->findAllQuery();
+        $pagination = $this->NiveauModel->paginateQuery($query, $page, $search , $no_pagination);
+        $pagination['data'] = $this->NiveauModel->findAllData($pagination['data']);
+
         $this->output
             ->set_content_type('application/json')
-            ->set_output(json_encode($data));
+            ->set_output(json_encode([
+                'pagination' => $pagination,
+                'data' => $pagination['data']
+            ]));
     }
 
     public function create()
@@ -31,22 +40,22 @@ class NiveauController extends CI_Controller
         if ($this->NiveauModel->isExist(['niveau' => $data['niveau']])) {
             echo json_encode(['error' => true, 'message' => 'Le niveau existe déjà.']);
         } else {
-            $data =  $this->NiveauModel->insert($data);
+            $data = $this->NiveauModel->insert($data);
             if ($data) {
                 $nbr_classe = 0;
                 if ($this->input->post('classe')) {
-                    $nbr_classe = (int)$this->input->post('classe');
+                    $nbr_classe = (int) $this->input->post('classe');
                     if ($nbr_classe > 0 && $nbr_classe <= 15) {
                         $classes = [];
                         for ($i = ($nbr_classe - 1); $i >= 0; $i--) {
                             $alphabet = range('A', 'Z');
-                            $classes[]  = [
+                            $classes[] = [
                                 'denomination' => ucfirst($data->niveau) . " " . $alphabet[$i],
                                 'niveau_id_niveau' => $data->id_niveau,
                             ];
                         }
 
-                        $isClasseAdd =  $this->ClasseModel->insertBatch($classes);
+                        $isClasseAdd = $this->ClasseModel->insertBatch($classes);
                         if ($isClasseAdd) {
                             $data->total_classe = $nbr_classe;
                         }
@@ -64,7 +73,7 @@ class NiveauController extends CI_Controller
     {
         $datas = [];
         if ($id > 0) {
-            $datas =  $this->MatiereNiveauModel->getLelvelSubjectByIdNiveau($id);
+            $datas = $this->MatiereNiveauModel->getLelvelSubjectByIdNiveau($id);
         }
         echo json_encode($datas);
     }
@@ -79,7 +88,7 @@ class NiveauController extends CI_Controller
     {
         $datas = [];
         if ($id_prof > 0) {
-            $datas =  $this->NiveauModel->getLevelByTeacherId($id_prof);
+            $datas = $this->NiveauModel->getLevelByTeacherId($id_prof);
         }
         $this->output
             ->set_content_type('application/json')
@@ -99,14 +108,16 @@ class NiveauController extends CI_Controller
             'description' => $this->input->post('description'),
         ];
 
-        if ($this->NiveauModel->isExist(
-            ["niveau" => $data['niveau']],
-            'and',
-            [$this->pk => $id_niveau]
-        )) {
+        if (
+            $this->NiveauModel->isExist(
+                ["niveau" => $data['niveau']],
+                'and',
+                [$this->pk => $id_niveau]
+            )
+        ) {
             echo json_encode(['error' => true, 'message' => 'Le niveau existe déjà.']);
         } else {
-            $data =  $this->NiveauModel->update($id_niveau, $data);
+            $data = $this->NiveauModel->update($id_niveau, $data);
             if ($data) {
                 echo json_encode(['error' => false, 'data' => $data]);
             } else {
@@ -130,19 +141,19 @@ class NiveauController extends CI_Controller
                 if ($data) {
                     echo json_encode(['error' => false, 'data' => $data]);
                 } else {
-                    echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                    echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
                 }
             } else {
-                echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
             }
         } else {
-            echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+            echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
         }
     }
 
     public function registerCoef()
     {
-        $toDeleteIdMatiere  = [];
+        $toDeleteIdMatiere = [];
         if (isset($_POST['deletes']) && $_POST['deletes'] !== '') {
             $deletesString = trim(strip_tags($_POST['deletes']));
             $toDeleteIdMatiere = explode(',', $deletesString);

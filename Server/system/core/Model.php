@@ -256,7 +256,7 @@ class CI_Model
 
 
     // PAGINATION
-    public function paginateQuery($builder, $page = 1, $search = '', $limit = PAGINATIONLIMIT)
+    public function paginateQuery($builder, $page = 1, $search = '', $no_pagination = false, $limit = PAGINATIONLIMIT)
     {
         $offset = ($page - 1) * $limit;
 
@@ -279,7 +279,9 @@ class CI_Model
         $total = $countBuilder->count_all_results(); // <-- retirer ", false"
 
         // Pagination
-        $builder->limit($limit, $offset);
+        if (!$no_pagination) {
+            $builder->limit($limit, $offset);
+        }
 
         $data = $builder->get()->result_array();
 
