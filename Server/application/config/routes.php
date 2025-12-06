@@ -263,7 +263,7 @@ $GLOBALS['secure'] = [
     'api/admin/niveau-matiere/enrigistrer' => true,
 
     // Matière
-    'api/admin/matiere' => true,
+    // 'api/admin/matiere' => true,
     'api/admin/matiere/update' => true,
     'api/admin/matiere/create' => true,
     'api/admin/matiere/delete' => true,

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionIntialValue, ActionType, ApiReturnType, SubjectType } from "../../../Utils/Types";
+import { ActionIntialValue, ActionType, ApiReturnType, PaginationInitialValue, PaginationType, SubjectType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
 import { createSubject, deleteSubject, getAllSubject, updateSubject } from "./SubjectAsyncThunk";
@@ -8,14 +8,14 @@ import { createSubject, deleteSubject, getAllSubject, updateSubject } from "./Su
 type initialStateType = {
     action: ActionType,
     datas: SubjectType[],
-    page: number,
+    pagination : PaginationType,
     error: string
 }
 
 const initialState: initialStateType = {
     action: ActionIntialValue,
     datas: [],
-    page: 1,
+    pagination : PaginationInitialValue ,
     error: '',
 }
 
@@ -36,10 +36,11 @@ const SubjectSlice = createSlice({
                 state.action.isLoading = true;
             })
             .addCase(getAllSubject.fulfilled, (state, action: {
-                payload: SubjectType[]
+                payload: ApiReturnType
             }) => {
                 state.action.isLoading = false;
-                state.datas = action.payload;
+                state.datas = action.payload.data;
+                state.pagination = action.payload.pagination
             })
             .addCase(getAllSubject.rejected, (state) => {
                 state.action.isLoading = false;

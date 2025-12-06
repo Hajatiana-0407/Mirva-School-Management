@@ -12,8 +12,18 @@ class MatiereController extends CI_Controller
 
     public function index()
     {
-        $data = $this->MatiereModel->findAllQuery();
-        echo json_encode($data);
+        $page = $this->input->get('page', 1) ?? 1;
+        $search = $this->input->get('query', 1) ?? '';
+        $no_pagination = $this->input->get('no_pagination', 1) ?? false;
+        $query = $this->MatiereModel->findAllQuery();
+        $pagination = $this->MatiereModel->paginateQuery($query, $page, $search, $no_pagination);
+
+        $this->output
+            ->set_content_type('application/json')  
+            ->set_output(json_encode([
+                'pagination' => $pagination,
+                'data' => $pagination['data']
+            ]));
     }
 
     public function create()
@@ -26,13 +36,15 @@ class MatiereController extends CI_Controller
         ];
 
 
-        if ($this->MatiereModel->isExist(
-            ['denomination' => $data['denomination'], 'abbreviation' => $data['abbreviation']],
-            'or',
-        )) {
+        if (
+            $this->MatiereModel->isExist(
+                ['denomination' => $data['denomination'], 'abbreviation' => $data['abbreviation']],
+                'or',
+            )
+        ) {
             echo json_encode(['error' => true, 'message' => "La dénomination ou l’abréviation est déjà utilisée."]);
         } else {
-            $data =  $this->MatiereModel->insert($data);
+            $data = $this->MatiereModel->insert($data);
             if ($data) {
                 echo json_encode(['error' => false, 'data' => $data]);
             } else {
@@ -53,14 +65,16 @@ class MatiereController extends CI_Controller
         ];
 
 
-        if ($this->MatiereModel->isExist(
-            ['denomination' => $data['denomination'], 'abbreviation' => $data['abbreviation']],
-            'or',
-            [$this->pk => $id]
-        )) {
+        if (
+            $this->MatiereModel->isExist(
+                ['denomination' => $data['denomination'], 'abbreviation' => $data['abbreviation']],
+                'or',
+                [$this->pk => $id]
+            )
+        ) {
             echo json_encode(['error' => true, 'message' => "La dénomination ou l’abréviation est déjà utilisée."]);
         } else {
-            $data =  $this->MatiereModel->update($id, $data);
+            $data = $this->MatiereModel->update($id, $data);
             if ($data) {
                 echo json_encode(['error' => false, 'data' => $data]);
             } else {
@@ -84,13 +98,13 @@ class MatiereController extends CI_Controller
                 if ($data) {
                     echo json_encode(['error' => false, 'data' => $data]);
                 } else {
-                    echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                    echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
                 }
             } else {
-                echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
             }
         } else {
-            echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+            echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
         }
     }
 }
