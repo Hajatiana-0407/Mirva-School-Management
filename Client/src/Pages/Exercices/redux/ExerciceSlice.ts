@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionIntialValue, ActionType, ApiReturnType, ExerciceInitialValue, ExerciceType } from "../../../Utils/Types";
+import { ActionIntialValue, ActionType, ApiReturnType, ExerciceInitialValue, ExerciceType, PaginationInitialValue, PaginationType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { createExercice, deleteExercice, getAllExercices, publish, updateexercice } from "./ExerciceAsyncThunk";
 import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
@@ -9,7 +9,7 @@ import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 type initialStateType = {
     action: ActionType,
     datas: ExerciceType[],
-    page: number,
+    pagination: PaginationType,
     error: string,
     single: {
         data?: ExerciceType;
@@ -20,7 +20,7 @@ type initialStateType = {
 const initialState: initialStateType = {
     action: ActionIntialValue,
     datas: [],
-    page: 1,
+    pagination: PaginationInitialValue,
     error: '',
     single: {
         data: ExerciceInitialValue,
@@ -55,10 +55,11 @@ const ExerciceSlice = createSlice({
                 state.error = '';
             })
             .addCase(getAllExercices.fulfilled, (state, action: {
-                payload: ExerciceType[]
+                payload:ApiReturnType
             }) => {
                 state.action.isLoading = false;
-                state.datas = action.payload;
+                state.datas = action.payload.data ;
+                state.pagination = action.payload.pagination
             })
             .addCase(getAllExercices.rejected, (state) => {
                 state.action.isLoading = false;

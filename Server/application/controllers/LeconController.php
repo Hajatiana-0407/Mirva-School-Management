@@ -12,10 +12,18 @@ class LeconController extends CI_Controller
 
     public function index()
     {
-        $lecons = $this->LeconModel->findAllQuery();
+        $page = $this->input->get('page', 1) ?? 1;
+        $search = $this->input->get('query', 1) ?? '';
+        $no_pagination = $this->input->get('no_pagination', 1) ?? false;
+        $query = $this->LeconModel->findAllQuery();
+        $pagination = $this->LeconModel->paginateQuery($query, $page, $search, $no_pagination);
+
         $this->output
             ->set_content_type('application/json')
-            ->set_output(json_encode($lecons));
+            ->set_output(json_encode([
+                'pagination' => $pagination,
+                'data' => $pagination['data']
+            ]));
     }
 
     public function create()
@@ -29,9 +37,9 @@ class LeconController extends CI_Controller
                     $latest = $this->LeconModel->findLatest();
                     $slug = $latest ? url_title(convert_accented_characters($post['titre'] . ' ' . $latest['id_lecon']), 'dash', TRUE) : url_title(convert_accented_characters($post['titre'] . ' ' . 1), 'dash', TRUE);
                     $data = [
-                        'id_prof' => $post['id_prof'] !== ''  ? $post['id_prof'] : null,
-                        'id_niveau' => $post['id_niveau'] !== ''  ? $post['id_niveau'] : null,
-                        'id_matiere' => $post['id_matiere'] !== ''  ? $post['id_matiere'] : null,
+                        'id_prof' => $post['id_prof'] !== '' ? $post['id_prof'] : null,
+                        'id_niveau' => $post['id_niveau'] !== '' ? $post['id_niveau'] : null,
+                        'id_matiere' => $post['id_matiere'] !== '' ? $post['id_matiere'] : null,
                         'titre' => $post['titre'],
                         'description' => $post['description'] ?? '',
                         'contenu' => $post['contenu'] ?? '',
@@ -43,7 +51,7 @@ class LeconController extends CI_Controller
                     if (isset($_FILES['ficher_principale']) && $_FILES['ficher_principale']['error'] == 0) {
                         $ficher_principale_result = upload_file('ficher_principale', LECON_UPLOAD_DIRECTORY, '*');
                         if ($ficher_principale_result['success']) {
-                            $data['ficher_principale'] =  $ficher_principale_result['file_name'];
+                            $data['ficher_principale'] = $ficher_principale_result['file_name'];
                         } else {
                             echo json_encode(['error' => true, 'message' => "Erreur upload ficher_principale : " . $ficher_principale_result['error']]);
                             return;
@@ -52,7 +60,7 @@ class LeconController extends CI_Controller
                     if (isset($_FILES['fichier_support']) && $_FILES['fichier_support']['error'] == 0) {
                         $fichier_support_result = upload_file('fichier_support', LECON_UPLOAD_DIRECTORY, "*");
                         if ($fichier_support_result['success']) {
-                            $data['fichier_support'] =  $fichier_support_result['file_name'];
+                            $data['fichier_support'] = $fichier_support_result['file_name'];
                         } else {
                             echo json_encode(['error' => true, 'message' => "Erreur upload fichier_support : " . $fichier_support_result['error']]);
                             return;
@@ -113,9 +121,9 @@ class LeconController extends CI_Controller
                 case 'admin':
                 case 'teacher':
                     $data = [
-                        'id_prof' => $post['id_prof'] !== ''  ? $post['id_prof'] : null,
-                        'id_niveau' => $post['id_niveau'] !== ''  ? $post['id_niveau'] : null,
-                        'id_matiere' => $post['id_matiere'] !== ''  ? $post['id_matiere'] : null,
+                        'id_prof' => $post['id_prof'] !== '' ? $post['id_prof'] : null,
+                        'id_niveau' => $post['id_niveau'] !== '' ? $post['id_niveau'] : null,
+                        'id_matiere' => $post['id_matiere'] !== '' ? $post['id_matiere'] : null,
                         'titre' => $post['titre'],
                         'description' => $post['description'] ?? '',
                         'contenu' => $post['contenu'] ?? '',
@@ -127,7 +135,7 @@ class LeconController extends CI_Controller
                     if (isset($_FILES['ficher_principale']) && $_FILES['ficher_principale']['error'] == 0) {
                         $ficher_principale_result = upload_file('ficher_principale', LECON_UPLOAD_DIRECTORY, '*');
                         if ($ficher_principale_result['success']) {
-                            $data['ficher_principale'] =  $ficher_principale_result['file_name'];
+                            $data['ficher_principale'] = $ficher_principale_result['file_name'];
                         } else {
                             echo json_encode(['error' => true, 'message' => "Erreur upload ficher_principale : " . $ficher_principale_result['error']]);
                             return;
@@ -136,13 +144,13 @@ class LeconController extends CI_Controller
                     if (isset($_FILES['fichier_support']) && $_FILES['fichier_support']['error'] == 0) {
                         $fichier_support_result = upload_file('fichier_support', LECON_UPLOAD_DIRECTORY, "*");
                         if ($fichier_support_result['success']) {
-                            $data['fichier_support'] =  $fichier_support_result['file_name'];
+                            $data['fichier_support'] = $fichier_support_result['file_name'];
                         } else {
                             echo json_encode(['error' => true, 'message' => "Erreur upload fichier_support : " . $fichier_support_result['error']]);
                             return;
                         }
                     }
-                    $inserted = $this->LeconModel->update($id_lecon,  $data);
+                    $inserted = $this->LeconModel->update($id_lecon, $data);
                     if ($inserted) {
                         $this->output
                             ->set_content_type('application/json')
@@ -193,13 +201,13 @@ class LeconController extends CI_Controller
                 if ($data) {
                     echo json_encode(['error' => false, 'data' => $data]);
                 } else {
-                    echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                    echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
                 }
             } else {
-                echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
             }
         } else {
-            echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+            echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
         }
     }
 

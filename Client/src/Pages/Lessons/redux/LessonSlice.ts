@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionIntialValue, ActionType, ApiReturnType, LessonInitialValue, LessonType } from "../../../Utils/Types";
+import { ActionIntialValue, ActionType, ApiReturnType, LessonInitialValue, LessonType, PaginationInitialValue, PaginationType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { createLesson, deleteLesson, getAllLessons, publish, updatelesson } from "./LessonAsyncThunk";
 import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
@@ -9,7 +9,7 @@ import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 type initialStateType = {
     action: ActionType,
     datas: LessonType[],
-    page: number,
+    pagination: PaginationType,
     error: string,
     single: {
         data?: LessonType;
@@ -20,7 +20,7 @@ type initialStateType = {
 const initialState: initialStateType = {
     action: ActionIntialValue,
     datas: [],
-    page: 1,
+    pagination: PaginationInitialValue,
     error: '',
     single: {
         data: LessonInitialValue,
@@ -55,10 +55,11 @@ const LessonSlice = createSlice({
                 state.error = '';
             })
             .addCase(getAllLessons.fulfilled, (state, action: {
-                payload: LessonType[]
+                payload: ApiReturnType
             }) => {
                 state.action.isLoading = false;
-                state.datas = action.payload;
+                state.datas = action.payload.data;
+                state.pagination = action.payload.pagination
             })
             .addCase(getAllLessons.rejected, (state) => {
                 state.action.isLoading = false;

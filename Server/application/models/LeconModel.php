@@ -80,9 +80,7 @@ class LeconModel extends CI_Model
         // Exécution finale
         return $this->db
             ->group_by('l.id_lecon')
-            ->order_by('l.created_at', 'DESC')
-            ->get()
-            ->result_array();
+            ->order_by('l.created_at', 'DESC');
     }
 
 

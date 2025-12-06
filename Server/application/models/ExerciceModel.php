@@ -77,9 +77,7 @@ class ExerciceModel extends CI_Model
         // Exécution finale
         return $this->db
             ->group_by('e.id_exercice')
-            ->order_by('e.created_at', 'DESC')
-            ->get()
-            ->result_array();
+            ->order_by('e.created_at', 'DESC');
     }
 
 

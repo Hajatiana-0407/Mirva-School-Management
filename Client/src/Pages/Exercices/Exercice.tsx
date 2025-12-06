@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Trash, PenBox, Download, Eye, BellPlus, Share, Share2, BookOpen, GraduationCap } from 'lucide-react';
+import { Plus, Trash, PenBox, Download, Eye, BellPlus, Share, Share2, BookOpen, GraduationCap } from 'lucide-react';
 import Modal from '../Modal';
 import { getAppState } from '../../Redux/AppSlice';
 import { ExerciceType } from '../../Utils/Types';
@@ -19,21 +19,21 @@ import { Link } from 'react-router-dom';
 import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
 import { useActiveUser } from '../../Hooks/useActiveUser';
+import Pagination from '../../Components/Pagination';
 
 
 
 const Exercice = () => {
   const { hiddeTheModalActive } = useSelector(getAppState);
-  const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingExercice, setEditingExercice] = useState<ExerciceType | null>(null);
-  const { datas, action } = useSelector(getExerciceState);
+  const { datas, action, pagination } = useSelector(getExerciceState);
   const [exerciceToArchive, setexerciceToArchive] = useState<ExerciceType | null>(null)
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const [progress, setProgress] = useState(0)
   const [showProgress, setShowProgress] = useState(false)
   const dispatch: AppDispatch = useDispatch();
-  const permission = useHashPermission(  { redirect : true  });
+  const permission = useHashPermission({ redirect: true });
   const { isStudent } = useActiveUser();
 
   const handleCloseModal = () => {
@@ -78,7 +78,8 @@ const Exercice = () => {
   }, [hiddeTheModalActive]);
 
   useEffect(() => {
-    dispatch(getAllExercices());
+    if (datas.length == 0)
+      dispatch(getAllExercices({}));
   }, [dispatch])
 
 
@@ -101,26 +102,10 @@ const Exercice = () => {
         }
       </Title>
 
-      <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
-              <input
-                type="text"
-                placeholder="Rechercher une année scolaire..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-            </div>
-            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg hover:bg-secondary-50">
-              <Filter className="w-4 h-4" />
-              <span>Filtres</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      <Pagination
+        pagination={pagination}
+        thunk={getAllExercices}
+      />
 
       <div>
         {datas.length === 0 && action.isLoading &&
@@ -276,6 +261,10 @@ const Exercice = () => {
           })}
         </div>
       </div>
+      <Pagination
+        pagination={pagination}
+        thunk={getAllExercices}
+      />
 
       {/* Modal pour ajouter/modifier une année scolaire */}
       <Modal

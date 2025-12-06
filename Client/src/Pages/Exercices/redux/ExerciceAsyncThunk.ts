@@ -1,21 +1,22 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../../Utils/api";
-import { ApiReturnInitial, ApiReturnType, ExerciceType } from "../../../Utils/Types";
+import { ApiReturnInitial, ApiReturnType } from "../../../Utils/Types";
 import { setHiddeModalValue } from "../../../Redux/AppSlice";
 import { toast } from "react-toastify";
 
 // READ
-export const getAllExercices = createAsyncThunk('exercice/getAll', async (): Promise<ExerciceType[]> => {
-  let datas: ExerciceType[] = [];
-  await api.get('admin/exercice')
-    .then(response => {
-      datas = response.data;
-    })
+export const getAllExercices = createAsyncThunk('exercice/getAll', async ({ page, query, no_pagination }: { page?: number; query?: any, no_pagination?: boolean }): Promise<ApiReturnType> => {
+  let datas: ApiReturnType = ApiReturnInitial;
+  await api.get('admin/exercice', {
+    params: { page, query, no_pagination }
+  }).then(response => {
+    datas = response.data
+  })
     .catch(error => {
-      console.error('Erreur lors de la récupération des leçons :', error);
+      console.error('Erreur lors de la récupération des données:', error);
     });
   return datas;
-});
+})
 
 
 // CREATE

@@ -3,6 +3,7 @@ import React from 'react'
 import { PaginationType } from '../Utils/Types';
 import { AsyncThunk } from '@reduxjs/toolkit';
 import { usePagination } from '../Hooks/usePagination';
+import clsx from 'clsx';
 
 type PaginationComponentType = {
     pagination: PaginationType;
@@ -10,18 +11,25 @@ type PaginationComponentType = {
         page?: number;
         query?: any;
     }, any>
+    position?: 'left' | 'right' | 'center'
 }
-const Pagination: React.FC<PaginationComponentType> = ({ pagination, thunk }) => {
+const Pagination: React.FC<PaginationComponentType> = ({ pagination, thunk, position = 'center' }) => {
     const { handlePageChange, isLoading, newPage } = usePagination({ page: pagination.page, thunk })
     return (
         <>
             {/* Pagination */}
             {pagination.total_pages > 1 && (
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                <div className={clsx({
+                    'justify-center flex-col sm:flex-row': position == 'center',
+                    'flex-col-reverse sm:flex-row justify-between': position == 'left',
+                    'flex-col sm:flex-row justify-between': position == 'right'
+                }, "flex  items-center  gap-4")}>
                     {/* Informations sur les éléments */}
-                    <div className="text-sm text-secondary-600">
-                        {pagination.total} éléments
-                    </div>
+                    {!(position === 'center') &&
+                        <div className="text-sm text-secondary-600">
+                            {pagination.total} éléments
+                        </div>
+                    }
 
                     <div className="flex items-center space-x-1">
                         {/* Bouton précédent */}
