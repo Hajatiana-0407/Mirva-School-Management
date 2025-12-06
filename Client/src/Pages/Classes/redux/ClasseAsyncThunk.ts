@@ -5,10 +5,10 @@ import { setHiddeModalValue } from "../../../Redux/AppSlice";
 
 
 // READ
-export const getAllClasse = createAsyncThunk('classe/getAll', async ({ page, query }: { page?: number; query?: any }): Promise<ApiReturnType> => {
+export const getAllClasse = createAsyncThunk('classe/getAll', async ({ page, query, no_pagination }: { page?: number; query?: any, no_pagination?: boolean }): Promise<ApiReturnType> => {
     let datas: ApiReturnType = ApiReturnInitial;
     await api.get('admin/classe', {
-        params: { page, query }
+        params: { page, query , no_pagination  }
     })
         .then(response => {
             datas = response.data

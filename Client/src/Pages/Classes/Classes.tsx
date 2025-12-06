@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive, Eye } from 'lucide-react';
+import { Plus, Edit, Archive, Eye } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
@@ -20,7 +20,6 @@ const Classes: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const { datas: classes, action, pagination } = useSelector(getClasseState);
   const { hiddeTheModalActive } = useSelector(getAppState);
-  const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingClass, setEditingClass] = useState<ClasseType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);

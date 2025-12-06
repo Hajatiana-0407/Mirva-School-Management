@@ -45,7 +45,7 @@ const ClasseDetails: React.FC = () => {
         if (!id) return;
         // dispatch pour récupérer la classe si absente
         if (!classe) {
-            dispatch(getAllClasse());
+            dispatch(getAllClasse({}));
         }
     }, [id, dispatch]);
 
