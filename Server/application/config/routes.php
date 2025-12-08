@@ -123,6 +123,10 @@ $route['api/site/Installation/publish'] = 'SiteInstallationController/publish';
 //! *********************  ROUTE POUR LE SITE WEB **********************************************************************
 
 
+// Filtre 
+$route['api/filtre/lecon'] = 'FiltreCotroller/lecon';
+
+
 // ===================== Authentification  ===================== //
 $route['api/auth/login'] = 'AuthController/login';
 $route['api/auth/logout'] = 'AuthController/logout';

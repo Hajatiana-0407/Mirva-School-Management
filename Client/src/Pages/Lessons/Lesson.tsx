@@ -6,7 +6,7 @@ import { LessonType } from '../../Utils/Types';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../Redux/store';
 import { getLessonState } from './redux/LessonSlice';
-import { deleteLesson, getAllLessons, publish } from './redux/LessonAsyncThunk';
+import { deleteLesson, filterLesson, getAllLessons, publish } from './redux/LessonAsyncThunk';
 import ActionMenu from '../../Components/ActionMenu';
 import { baseUrl, download, hexToRgba } from '../../Utils/Utils';
 import Profile from '../../Components/ui/Profile';
@@ -20,11 +20,18 @@ import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
 import { useActiveUser } from '../../Hooks/useActiveUser';
 import Pagination from '../../Components/Pagination';
+import { getLevelState } from '../Levels/redux/LevelSlice';
+import { FilterAndSearchType } from '../../Components/FilterAndSearch';
+import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
+import { getAllSubject } from '../Subjects/redux/SubjectAsyncThunk';
+import { getSubjectState } from '../Subjects/redux/SubjectSlice';
 
 
 
 const Lesson = () => {
   const { hiddeTheModalActive } = useSelector(getAppState);
+  const { datas: levels } = useSelector(getLevelState);
+  const { datas: subjects } = useSelector(getSubjectState);
   const [showModal, setShowModal] = useState(false);
   const [editingLesson, setEditingLesson] = useState<LessonType | null>(null);
   const { datas, action, pagination } = useSelector(getLessonState);
@@ -80,15 +87,37 @@ const Lesson = () => {
   useEffect(() => {
     if (datas.length == 0)
       dispatch(getAllLessons({}));
+
+    if (levels.length == 0)
+      dispatch(getAllLevel({}))
+    if (subjects.length == 0)
+      dispatch(getAllSubject({}))
   }, [dispatch])
 
+  // Parametre pour le filtre dans le header 
+  const filter: FilterAndSearchType = {
+    pagination: pagination,
+    thunk: getAllLessons,
+    isAdvanced: true,
+    filters: [
+      { label: 'Date de debut', name: 'date_debut', type: 'date' },
+      { label: 'Date de fin', name: 'date_fin', type: 'date' },
+      { label: 'Niveau', name: 'niveau', type: 'select', options: levels.map(level => ({ label: level.niveau, value: level.id_niveau as number })) },
+      { label: 'Matière', name: 'matiere', type: 'select', options: subjects.map(sugject => ({ label: sugject.denomination, value: sugject.id_matiere as number })) },
+    ],
+    filterThunk: filterLesson,
+    isLoading: action.isFilterLoading
+  }
+  console.log( action.isFilterLoading );
+  
 
   return (
     <div className="space-y-4 md:space-y-6">
-
       <Title
         title='Cours et leçons'
         description='Gérez les cours, les leçons et le contenu pédagogique.'
+        fixed
+        filter={filter}
       >
         {permission.create &&
           <button
@@ -102,10 +131,10 @@ const Lesson = () => {
         }
       </Title>
 
-
       <Pagination
         pagination={pagination}
         thunk={getAllLessons}
+        filterThunk={filterLesson}
       />
 
       <div>
@@ -265,6 +294,7 @@ const Lesson = () => {
       <Pagination
         pagination={pagination}
         thunk={getAllLessons}
+        filterThunk={filterLesson}
       />
 
       {/* Modal pour ajouter/modifier une année scolaire */}

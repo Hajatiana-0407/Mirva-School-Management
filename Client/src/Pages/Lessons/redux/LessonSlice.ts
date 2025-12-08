@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ActionIntialValue, ActionType, ApiReturnType, LessonInitialValue, LessonType, PaginationInitialValue, PaginationType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
-import { createLesson, deleteLesson, getAllLessons, publish, updatelesson } from "./LessonAsyncThunk";
+import { createLesson, deleteLesson, filterLesson, getAllLessons, publish, updatelesson } from "./LessonAsyncThunk";
 import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 
 // Type SchoolYear à adapter selon votre modèle
@@ -63,6 +63,24 @@ const LessonSlice = createSlice({
             })
             .addCase(getAllLessons.rejected, (state) => {
                 state.action.isLoading = false;
+                state.error = 'Erreur de connexion au server'
+            });
+
+        // Filtre 
+        builder
+            .addCase(filterLesson.pending, (state) => {
+                state.action.isFilterLoading = true;
+                state.error = '';
+            })
+            .addCase(filterLesson.fulfilled, (state, action: {
+                payload: ApiReturnType
+            }) => {
+                state.action.isFilterLoading = false;
+                state.datas = action.payload.data;
+                state.pagination = action.payload.pagination
+            })
+            .addCase(filterLesson.rejected, (state) => {
+                state.action.isFilterLoading = false;
                 state.error = 'Erreur de connexion au server'
             });
 

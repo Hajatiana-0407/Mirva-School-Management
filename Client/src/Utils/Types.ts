@@ -3,6 +3,7 @@ export type ActionType = {
     isLoading?: boolean;
     isDeleting?: boolean;
     isUpdating?: boolean;
+    isFilterLoading?: boolean 
 }
 export const ActionIntialValue: ActionType = {
     isLoading: false,
@@ -15,8 +16,11 @@ export type PaginationType = {
     total: number;
     page: number;
     limit: number;
-    total_pages: number ; 
-    search ?: string 
+    total_pages: number;
+    search?: string;
+    filter?: {
+        [key: string]: any;
+    };
 }
 
 export const PaginationInitialValue: PaginationType = {
@@ -91,15 +95,15 @@ export const AuthInitialValue: AuthStateType = {
 export type ApiReturnType = {
     error: boolean;
     message?: string,
-    data?: any ; 
-    pagination : PaginationType
+    data?: any;
+    pagination: PaginationType
 
 }
 export const ApiReturnInitial: ApiReturnType = {
     error: false,
     message: '',
-    data: {} , 
-    pagination : PaginationInitialValue
+    data: {},
+    pagination: PaginationInitialValue
 }
 
 // MODULES ( COMPOSANTS ) //

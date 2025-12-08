@@ -17,6 +17,23 @@ export const getAllLessons = createAsyncThunk('lesson/getAll', async ({ page, qu
     });
   return datas;
 })
+export const filterLesson = createAsyncThunk(
+  'lesson/filter',
+  async ({ page = 1, filter }: { page?: number; filter?: FormData }): Promise<ApiReturnType> => {
+    let datas: ApiReturnType = ApiReturnInitial;
+    filter?.append('page', String(page));
+    console.log(filter);
+
+    try {
+      const response = await api.post('filtre/lecon', filter);
+      datas = response.data;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données:', error);
+    }
+    return datas;
+  }
+);
+
 
 // CREATE
 export const createLesson = createAsyncThunk('leçon/ajout', async (lesson: any, { dispatch }): Promise<ApiReturnType> => {
