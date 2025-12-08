@@ -10,11 +10,15 @@ type PaginationComponentType = {
     thunk: AsyncThunk<any, {
         page?: number;
         query?: any;
-    }, any>
+    }, any>,
+    filterThunk?: AsyncThunk<any, {
+        page?: number;
+        filter?: any
+    }, any>,
     position?: 'left' | 'right' | 'center'
 }
-const Pagination: React.FC<PaginationComponentType> = ({ pagination, thunk, position = 'center' }) => {
-    const { handlePageChange, isLoading, newPage } = usePagination({ page: pagination.page, thunk })
+const Pagination: React.FC<PaginationComponentType> = ({ pagination, thunk, position = 'center', filterThunk }) => {
+    const { handlePageChange, isLoading, newPage } = usePagination({ thunk, pagination, filterThunk })
     return (
         <>
             {/* Pagination */}
@@ -108,6 +112,7 @@ const Pagination: React.FC<PaginationComponentType> = ({ pagination, thunk, posi
                                             }`}
                                         type="button"
                                         aria-current={pagination.page === page ? "page" : undefined}
+                                        disabled={pagination.page === page}
                                     >
                                         {isLoading && newPage == page ? <div className="w-5 h-5 inline-block border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
                                             : page
