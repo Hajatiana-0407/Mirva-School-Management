@@ -39,15 +39,10 @@ const FilterAndSearch: React.FC<FilterAndSearchType> = ({ pagination, thunk, fil
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         onSubmite((validateData) => {
             if (filterThunk) {
-                dispatch(filterThunk({ page: pagination.page, filter: validateData }))
+                dispatch(filterThunk({ page: 1 , filter: validateData }))
             }
         }, e);
     }
-
-    console.log('Filter : '  , isLoading);
-    
-
-
     const handleReinitialize = () => {
         onReinitialize?.();
         reinitialize();

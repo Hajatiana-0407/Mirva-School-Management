@@ -18,6 +18,23 @@ export const getAllExercices = createAsyncThunk('exercice/getAll', async ({ page
   return datas;
 })
 
+export const filterExercice = createAsyncThunk(
+  'exercice/filter',
+  async ({ page = 1, filter }: { page?: number; filter?: FormData }): Promise<ApiReturnType> => {
+    let datas: ApiReturnType = ApiReturnInitial;
+    filter?.append('page', String(page));
+    console.log(filter);
+
+    try {
+      const response = await api.post('filtre/exercice', filter);
+      datas = response.data;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données:', error);
+    }
+    return datas;
+  }
+);
+
 
 // CREATE
 export const createExercice = createAsyncThunk('leçon/ajout', async (exercice: any, { dispatch }): Promise<ApiReturnType> => {
@@ -97,7 +114,7 @@ export const publish = createAsyncThunk('exercice/publish', async (id_exercice: 
 })
 
 
-// Get By Slug 
+// Get By Slug
 // export const getExerciceBySlug = createAsyncThunk('exercice/getOneBySlug', async (slug: string): Promise<ApiReturnType> => {
 //   let data: ApiReturnType = ApiReturnInitial;
 //   await api.get(`admin/exercice/${slug}`)

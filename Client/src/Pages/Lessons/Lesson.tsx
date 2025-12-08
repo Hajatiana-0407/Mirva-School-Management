@@ -108,9 +108,7 @@ const Lesson = () => {
     filterThunk: filterLesson,
     isLoading: action.isFilterLoading
   }
-  console.log( action.isFilterLoading );
   
-
   return (
     <div className="space-y-4 md:space-y-6">
       <Title
