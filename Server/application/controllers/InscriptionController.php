@@ -14,8 +14,18 @@ class InscriptionController extends CI_Controller
 
     public function index()
     {
-        $data = $this->InscriptionModel->findAllQuery();
-        echo json_encode($data);
+        $page = $this->input->get('page', 1) ?? 1;
+        $query = $this->input->get('query', 1) ?? '';
+        $no_pagination = $this->input->get('no_pagination', 1) ?? false;
+        $builder = $this->InscriptionModel->findAllQuery();
+        $pagination = $this->InscriptionModel->paginateQuery($builder, $page, $query, $no_pagination);
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode([
+                'pagination' => $pagination,
+                'data' => $pagination['data']
+            ]));
     }
 
     // ? Creation d'une nouvel inscription 
@@ -24,9 +34,11 @@ class InscriptionController extends CI_Controller
 
         // ? Recuperation et verification de doublan matricule 
         $matricule = $this->input->post('matricule_etudiant');
-        if ($this->EtudiantModel->isExist([
-            'matricule_etudiant' => $matricule
-        ])) {
+        if (
+            $this->EtudiantModel->isExist([
+                'matricule_etudiant' => $matricule
+            ])
+        ) {
             echo json_encode([
                 'error' => true,
                 'message' => "Le matricule '$matricule' existe déjà."
@@ -45,7 +57,7 @@ class InscriptionController extends CI_Controller
             }
 
             return [
-                'id_parent' => isset($parentData['id_parent']) ? (int)$parentData['id_parent'] : 0,
+                'id_parent' => isset($parentData['id_parent']) ? (int) $parentData['id_parent'] : 0,
                 'nom' => htmlspecialchars($parentData['nom']),
                 'prenom' => isset($parentData['prenom']) ? htmlspecialchars($parentData['prenom']) : '',
                 'profession' => isset($parentData['profession']) ? htmlspecialchars($parentData['profession']) : '',
@@ -70,7 +82,7 @@ class InscriptionController extends CI_Controller
                 if (isset($_FILES[$key]) && $_FILES[$key]['error']['pc_cin'] == 0) {
                     $piTuteurUpload = upload_file($key . "[pc_cin]", PARENT_UPLOAD_DIR);
                     if ($piTuteurUpload['success']) {
-                        $parent['pc_cin'] =  $piTuteurUpload['file_name'];
+                        $parent['pc_cin'] = $piTuteurUpload['file_name'];
                     } else {
                         echo json_encode([
                             'error' => true,
@@ -136,7 +148,7 @@ class InscriptionController extends CI_Controller
         if (isset($_FILES['piece_identite']) && $_FILES['piece_identite']['error'] == 0) {
             $pcPieceIdentiteUpload = upload_file('piece_identite', STUDENT_UPLOAD_DIR . 'pi');
             if ($pcPieceIdentiteUpload['success']) {
-                $pieceIndetite =  $pcPieceIdentiteUpload['file_name'];
+                $pieceIndetite = $pcPieceIdentiteUpload['file_name'];
             } else {
                 echo json_encode([
                     'error' => true,
@@ -186,7 +198,7 @@ class InscriptionController extends CI_Controller
 
         // ! Enregistrement de l'etudiant dans la base de données
         $eleve_id = null;
-        $etudiantIsered =  $this->EtudiantModel->insert($etudiant);
+        $etudiantIsered = $this->EtudiantModel->insert($etudiant);
         if ($etudiantIsered) {
             $eleve_id = $etudiantIsered['id_eleve'];
         }
@@ -216,7 +228,7 @@ class InscriptionController extends CI_Controller
         $inscriptionData = $this->InscriptionModel->insert($inscription);
         if ($inscriptionData) {
             // ? Creation de compte automatique 
-            $roleEtudiant =  $this->UtilisateurModel->getIdRoleStudent();
+            $roleEtudiant = $this->UtilisateurModel->getIdRoleStudent();
             $this->UtilisateurModel->insert([
                 'id_role' => $roleEtudiant->id_role,
                 'id_eleve' => $inscriptionData['id_eleve'],
@@ -227,7 +239,8 @@ class InscriptionController extends CI_Controller
             echo json_encode(['error' => false, 'data' => $inscriptionData]);
         } else {
             echo json_encode(['error' => true, 'message' => "Erreur lors de l'enregistrement de l'inscription"]);
-        };
+        }
+        ;
         return;
     }
 
@@ -244,13 +257,13 @@ class InscriptionController extends CI_Controller
                 if ($data) {
                     echo json_encode(['error' => false, 'data' => $data]);
                 } else {
-                    echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                    echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
                 }
             } else {
-                echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
             }
         } else {
-            echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+            echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
         }
     }
 }

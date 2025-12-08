@@ -366,7 +366,7 @@ class AppFixtures extends CI_Controller
 
         $inscriptionsToInsert = [];
 
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             $inscriptionsToInsert[] = [
                 'date_inscription' => $this->faker->date(),
                 'classe_id_classe' => $this->faker->randomElement($classes),

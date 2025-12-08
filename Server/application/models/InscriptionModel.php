@@ -5,6 +5,7 @@ class InscriptionModel extends CI_Model
 {
     protected $table = 'inscription';
     protected $primaryKey = 'id_inscription';
+    protected $searchs = ['e.nom' , 'e.prenom' , 'e.matricule_etudiant' , 'e.telephone' , 'c.denomination' , 'n.niveau' , 'as.nom'] ; 
 
     public function __construct()
     {
@@ -21,9 +22,7 @@ class InscriptionModel extends CI_Model
             ->join('niveau n', ' n.id_niveau = ' . $this->table . '.niveau_id_niveau', 'left')
             ->join('annee_scolaire as', ' as.id_annee_scolaire = ' . $this->table . '.annee_scolaire_id_annee_scolaire', 'left')
             ->where('as.isActif =', 1)
-            ->order_by($this->primaryKey, 'DESC')
-            ->get()
-            ->result_array();
+            ->order_by($this->primaryKey, 'DESC');
     }
     public function findOneById($id)
     {

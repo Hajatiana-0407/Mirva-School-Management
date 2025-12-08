@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootStateType } from '../../../Redux/store';
-import { ActionIntialValue, ActionType, ApiReturnType, RegistrationType } from '../../../Utils/Types';
-import { createRegistration, deleteRegistration, getAllRegistrations } from './registerAsyncThunk';
+import { ActionIntialValue, ActionType, ApiReturnType, PaginationInitialValue, PaginationType, RegistrationType } from '../../../Utils/Types';
+import { createRegistration, deleteRegistration, filterRegistration, getAllRegistrations } from './registerAsyncThunk';
 import { toast } from 'react-toastify';
 import { logoutUser } from '../../Auth/redux/AuthAsyncThunk';
 
@@ -10,13 +10,13 @@ import { logoutUser } from '../../Auth/redux/AuthAsyncThunk';
 type initialStateType = {
   action: ActionType,
   datas: RegistrationType[],
-  page: number,
+  pagination: PaginationType,
   error: string
 }
 const initialState: initialStateType = {
   action: ActionIntialValue,
   datas: [],
-  page: 1,
+  pagination: PaginationInitialValue,
   error: '',
 }
 
@@ -26,24 +26,43 @@ const registrationSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(logoutUser.fulfilled, () => {
-            return initialState;
-        });
+      return initialState;
+    });
 
-    // ? ************************************* Read ************************************* //
+    // ? ===================== Read  ===================== //
     builder
       .addCase(getAllRegistrations.pending, (state) => {
         state.action.isLoading = true;
+        state.error = '';
       })
       .addCase(getAllRegistrations.fulfilled, (state, action: {
-        payload: RegistrationType[]
+        payload: ApiReturnType
       }) => {
         state.action.isLoading = false;
-        state.datas = action.payload;
+        state.datas = action.payload.data;
+        state.pagination = action.payload.pagination
       })
       .addCase(getAllRegistrations.rejected, (state) => {
         state.action.isLoading = false;
         state.error = 'Erreur de connexion au server'
-        toast.error("Erreur de connexion au server");
+      });
+
+    // Filtre 
+    builder
+      .addCase(filterRegistration.pending, (state) => {
+        state.action.isFilterLoading = true;
+        state.error = '';
+      })
+      .addCase(filterRegistration.fulfilled, (state, action: {
+        payload: ApiReturnType
+      }) => {
+        state.action.isFilterLoading = false;
+        state.datas = action.payload.data;
+        state.pagination = action.payload.pagination
+      })
+      .addCase(filterRegistration.rejected, (state) => {
+        state.action.isFilterLoading = false;
+        state.error = 'Erreur de connexion au server'
       });
 
     //  ************************************* Create ************************************* //

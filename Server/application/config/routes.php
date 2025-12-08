@@ -294,7 +294,7 @@ $GLOBALS['secure'] = [
     'api/admin/school-year/change-active' => true,
 
     // Inscription
-    'api/admin/registration' => true,
+    // 'api/admin/registration' => true,
     'api/admin/registration-student' => true,
     'api/admin/registration/delete' => true,
 
