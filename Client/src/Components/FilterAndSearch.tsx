@@ -1,4 +1,4 @@
-import { Calendar, ChevronDown, Search, X } from "lucide-react";
+import { Calendar, ChevronDown, RefreshCcw, Search, X } from "lucide-react";
 import React, { useState } from "react";
 import { PaginationType } from "../Utils/Types";
 import { usePagination } from "../Hooks/usePagination";
@@ -39,7 +39,7 @@ const FilterAndSearch: React.FC<FilterAndSearchType> = ({ pagination, thunk, fil
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         onSubmite((validateData) => {
             if (filterThunk) {
-                dispatch(filterThunk({ page: 1 , filter: validateData }))
+                dispatch(filterThunk({ page: 1, filter: validateData }))
             }
         }, e);
     }
@@ -52,7 +52,7 @@ const FilterAndSearch: React.FC<FilterAndSearchType> = ({ pagination, thunk, fil
         <div className="w-full">
             {/* ------ MODE SIMPLE ------ */}
             {!isAdvanced && (
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1 md:gap-3">
                     <div className="relative flex-1">
                         <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                         <input
@@ -68,14 +68,28 @@ const FilterAndSearch: React.FC<FilterAndSearchType> = ({ pagination, thunk, fil
                             }}
                         />
                     </div>
-
-                    <button
-                        onClick={() => simpleSearch && handleSearch(1, simpleSearch)}
-                        disabled={!simpleSearch}
-                        className="px-5 py-2 bg-gray-900 text-white hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200 font-medium"
-                    >
-                        Rechercher
-                    </button>
+                    <div className="flex gap-1">
+                        <button
+                            onClick={() => simpleSearch && handleSearch(1, simpleSearch)}
+                            disabled={!simpleSearch}
+                            className="px-2 md:px-5 py-2 bg-gray-900 text-white hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200 font-medium"
+                        >
+                            <span className="hidden md:block">Rechercher</span>
+                            <span className="block md:hidden">
+                                <Search />
+                            </span>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                handleReinitialize();
+                                setSimpleSearch('');
+                            }}
+                            className="flex items-center gap-2 px-2 md:px-5 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition-colors duration-200"
+                        >
+                            <RefreshCcw />
+                        </button>
+                    </div>
                 </div>
             )}
 
