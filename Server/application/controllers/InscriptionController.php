@@ -219,7 +219,6 @@ class InscriptionController extends CI_Controller
             'annee_scolaire_id_annee_scolaire' => $this->input->post('annee_scolaire'),
             'eleve_id_eleve' => $eleve_id,
             'ancienne_ecole' => $this->input->post('ancienne_ecole'),
-            'date_inscription' => $this->input->post('date_inscription'),
             'is_droit_payed' => $this->input->post('isDroitPaye'),
         ];
 

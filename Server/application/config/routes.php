@@ -127,6 +127,7 @@ $route['api/site/Installation/publish'] = 'SiteInstallationController/publish';
 $route['api/filtre/lecon'] = 'FiltreCotroller/lecon';
 $route['api/filtre/exercice'] = 'FiltreCotroller/exercice';
 $route['api/filtre/inscription'] = 'FiltreCotroller/inscription';
+$route['api/filtre/etudiant'] = 'FiltreCotroller/etudiant';
 
 
 // ===================== Authentification  ===================== //
@@ -300,12 +301,8 @@ $GLOBALS['secure'] = [
     'api/admin/registration/delete' => true,
 
     // Étudiant
-    'api/admin/etudiant' => true,
-    // 'api/admin/etudiant/update' => true,
-    // 'api/admin/etudiant/create' => true,
-    // 'api/admin/etudiant/delete' => true,
-    // 'api/admin/etudiant/statistique' => true,
-    // 'api/admin/etudiant/*' => true,
+    // 'api/admin/etudiant' => true,
+    'api/admin/etudiant/*' => true,
 
     // Parent
     'api/admin/parent' => true,

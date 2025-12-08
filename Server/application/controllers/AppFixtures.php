@@ -266,7 +266,7 @@ class AppFixtures extends CI_Controller
         $lastStudentMatricule = $lastStudent->matricule_etudiant ?? '';
 
         $elevesToInsert = [];
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 25; $i++) {
             $matriculeStudent = generateMatricule(STUDENT_PRIFIX, $lastStudentMatricule);
 
             $elevesToInsert[] = [

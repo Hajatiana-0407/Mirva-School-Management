@@ -5,30 +5,52 @@ class EtudiantModel extends CI_Model
 {
     protected $table = 'eleve';
     protected $primaryKey = 'id_eleve';
-
+    protected $searchs = ['eleve.nom', 'eleve.prenom', 'eleve.telephone', 'eleve.email', 'eleve.adresse', 'eleve.matricule_etudiant', 'c.denomination', 'n.niveau'];
     public function __construct()
     {
         parent::__construct();
     }
 
+
+
+
+    public function filtreQuery($niveau, $classe, $sexe)
+    {
+        $builder = $this->findAllQuery();
+
+        // Filtre niveau
+        if (!empty($niveau) && $niveau != 0) {
+            $builder->where('n.id_niveau', $niveau);
+        }
+        // Filtre Classe
+        if (!empty($classe) && $classe != 0) {
+            $builder->where('c.id_classe', $classe);
+        }
+        // Filtre Droit
+        if (!empty($sexe)) {
+            $builder->where('eleve.sexe', $sexe);
+        }
+        return $builder;
+    }
+
+
     // ? ======= READ =======
     public function findAllQuery()
     {
-        return $this->db->select($this->table . '.* , c.* , n.*')
+        return $this->db->select($this->table . '.* , c.denomination , c.id_classe , ,n.niveau , n.id_niveau')
             ->from($this->table)
             ->join('inscription i', 'i.eleve_id_eleve = ' . $this->table . '.' . $this->primaryKey, 'left')
             ->join('classe c', 'c.id_classe = i.classe_id_classe', 'left')
             ->join('niveau n', ' n.id_niveau = c.niveau_id_niveau', 'left')
             ->order_by($this->primaryKey, 'DESC')
-            ->group_by($this->table . '.' . $this->primaryKey)
-            ->get()
-            ->result_array();
+            ->group_by($this->table . '.' . $this->primaryKey);
     }
 
 
     public function findOneById($id)
     {
-        if (!!!$id)  return null;
+        if (!!!$id)
+            return null;
         return $this->db->select($this->table . '.* , c.* , n.*')
             ->from($this->table)
             ->join('inscription i', 'i.eleve_id_eleve = ' . $this->table . '.' . $this->primaryKey, 'left')
@@ -42,8 +64,9 @@ class EtudiantModel extends CI_Model
 
     public function findDetailsByMat($matricule = '')
     {
-        if (!!!$matricule)  return null;
-        $etudiant =  $this->db->select($this->table . '.* , c.* , n.* ')
+        if (!!!$matricule)
+            return null;
+        $etudiant = $this->db->select($this->table . '.* , c.* , n.* ')
             ->from($this->table)
             ->join('inscription i', 'i.eleve_id_eleve = ' . $this->table . '.' . $this->primaryKey, 'left')
             ->join('classe c', 'c.id_classe = i.classe_id_classe', 'left')

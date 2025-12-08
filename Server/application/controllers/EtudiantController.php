@@ -12,8 +12,17 @@ class EtudiantController extends CI_Controller
 
     public function index()
     {
-        $data = $this->EtudiantModel->findAllQuery();
-        echo json_encode($data);
+        $page = $this->input->get('page', 1) ?? 1;
+        $query = $this->input->get('query', 1) ?? '';
+        $no_pagination = $this->input->get('no_pagination', 1) ?? false;
+        $builder = $this->EtudiantModel->findAllQuery();
+        $pagination = $this->EtudiantModel->paginateQuery($builder, $page, $query, $no_pagination);
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode([
+                'pagination' => $pagination,
+                'data' => $pagination['data']
+            ]));
     }
 
     public function findOne($matricule = '')
@@ -22,7 +31,9 @@ class EtudiantController extends CI_Controller
         echo json_encode($data);
     }
 
-    public function create() {}
+    public function create()
+    {
+    }
 
     public function update()
     {
@@ -31,11 +42,13 @@ class EtudiantController extends CI_Controller
         // ? Recuperation et verification de doublan matricule 
         $matricule = $this->input->post('matricule_etudiant');
 
-        if ($this->EtudiantModel->isExist(
-            ['matricule_etudiant' => $matricule],
-            'and',
-            ['id_eleve' => $id]
-        )) {
+        if (
+            $this->EtudiantModel->isExist(
+                ['matricule_etudiant' => $matricule],
+                'and',
+                ['id_eleve' => $id]
+            )
+        ) {
             echo json_encode([
                 'error' => true,
                 'message' => "Le matricule '$matricule' existe déjà."
@@ -75,7 +88,7 @@ class EtudiantController extends CI_Controller
         if (isset($_FILES['piece_identite']) && $_FILES['piece_identite']['error'] == 0) {
             $pcPieceIdentiteUpload = upload_file('piece_identite', STUDENT_UPLOAD_DIR . 'pi');
             if ($pcPieceIdentiteUpload['success']) {
-                $pieceIndetite =  $pcPieceIdentiteUpload['file_name'];
+                $pieceIndetite = $pcPieceIdentiteUpload['file_name'];
             } else {
                 echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité de l'etudiant : " . $pcPieceIdentiteUpload['error']]);
                 return;
@@ -123,7 +136,7 @@ class EtudiantController extends CI_Controller
         }
 
         // ! Enregistrement de l'etudiant dans la base de données
-        $etudiantUpdated =  $this->EtudiantModel->update($id,  $etudiant);
+        $etudiantUpdated = $this->EtudiantModel->update($id, $etudiant);
 
         if ($etudiantUpdated) {
             echo json_encode(['error' => false, 'data' => $etudiantUpdated]);
@@ -151,13 +164,13 @@ class EtudiantController extends CI_Controller
                 if ($data) {
                     echo json_encode(['error' => false, 'data' => $data]);
                 } else {
-                    echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                    echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
                 }
             } else {
-                echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
             }
         } else {
-            echo json_encode(['error' => true,  'message' => 'Échec de la suppression']);
+            echo json_encode(['error' => true, 'message' => 'Échec de la suppression']);
         }
     }
 
@@ -176,11 +189,11 @@ class EtudiantController extends CI_Controller
         $statistique = [
             'boy' => [
                 'nbr' => $boys,
-                'percent' =>  $all !== 0 ?  $boys * 100 / $all : 0,
+                'percent' => $all !== 0 ? $boys * 100 / $all : 0,
             ],
             'girl' => [
                 'nbr' => $girls,
-                'percent' => $all !== 0 ?  $girls * 100 / $all : 0,
+                'percent' => $all !== 0 ? $girls * 100 / $all : 0,
             ],
             'all' => [
                 'nbr' => $all,
@@ -209,7 +222,7 @@ class EtudiantController extends CI_Controller
                 'data' => $matricule
             ]);
         } else {
-            echo json_encode(['error' => true,  'message' => 'Éche lors de la récupération du matricule']);
+            echo json_encode(['error' => true, 'message' => 'Éche lors de la récupération du matricule']);
         }
     }
 }

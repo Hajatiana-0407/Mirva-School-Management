@@ -21,12 +21,10 @@ export const getAllRegistrations = createAsyncThunk('registration/getAll', async
 })
 
 export const filterRegistration = createAsyncThunk(
-  'lesson/filter',
+  'registration/filter',
   async ({ page = 1, filter }: { page?: number; filter?: FormData }): Promise<ApiReturnType> => {
     let datas: ApiReturnType = ApiReturnInitial;
     filter?.append('page', String(page));
-    console.log(filter);
-
     try {
       const response = await api.post('filtre/inscription', filter);
       datas = response.data;

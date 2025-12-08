@@ -30,7 +30,11 @@ interface TableProps {
   thunk: AsyncThunk<any, {
     page?: number;
     query?: any;
-  }, any>
+  }, any>,
+  filterThunk?: AsyncThunk<any, {
+    page?: number;
+    filter?: any
+  }, any>,
 }
 
 export const getActionColor = (color: string) => {
@@ -49,7 +53,7 @@ export const getActionColor = (color: string) => {
   return colors[color as keyof typeof colors] || 'text-secondary-600 hover:text-secondary-800';
 };
 
-const Table = ({ data, columns, actions, isLoading = false, actionType = 'button', onRowClick, idModule, pagination, thunk }: TableProps) => {
+const Table = ({ data, columns, actions, isLoading = false, actionType = 'button', onRowClick, idModule, pagination, thunk ,filterThunk }: TableProps) => {
   const permission = useHashPermission({ redirect: true });
 
   // État pour le menu contextuel
@@ -223,6 +227,7 @@ const Table = ({ data, columns, actions, isLoading = false, actionType = 'button
       <Pagination
         pagination={pagination}
         thunk={thunk}
+        filterThunk={filterThunk}
       />
     </div>
   );
