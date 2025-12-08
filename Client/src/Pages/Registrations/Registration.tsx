@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getRegistrationState } from './redux/registerSlice';
 import { RegistrationType, StudentType } from '../../Utils/Types'
 import { AppDispatch } from '../../Redux/store';
-import { deleteRegistration, getAllRegistrations } from './redux/registerAsyncThunk';
+import { deleteRegistration, filterRegistration, getAllRegistrations } from './redux/registerAsyncThunk';
 import clsx from 'clsx';
 import { getAppState } from '../../Redux/AppSlice';
 import Profile from '../../Components/ui/Profile';
@@ -16,7 +16,11 @@ import RegisterForm from '../../Components/Forms/RegisterForm';
 import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
 import { navigate } from '../../Utils/navigate';
-import FilterAndSearch from '../../Components/FilterAndSearch';
+import FilterAndSearch, { FilterAndSearchType } from '../../Components/FilterAndSearch';
+import { getLevelState } from '../Levels/redux/LevelSlice';
+import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
+import { getClasseState } from '../Classes/redux/ClasseSlice';
+import { getAllClasse } from '../Classes/redux/ClasseAsyncThunk';
 
 
 const Registration: React.FC = () => {
@@ -26,6 +30,8 @@ const Registration: React.FC = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [dataToDelete, setDataToDelete] = useState<RegistrationType | null>(null);
   const { datas: registrations, action, pagination } = useSelector(getRegistrationState);
+  const { datas: levels } = useSelector(getLevelState);
+  const { datas: classes } = useSelector(getClasseState);
   const dispatch: AppDispatch = useDispatch();
   const { hiddeTheModalActive } = useSelector(getAppState);
   const permission = useHashPermission({ redirect: true });
@@ -54,7 +60,14 @@ const Registration: React.FC = () => {
 
   // ? ===================== EFFETS =====================
   useEffect(() => {
-    dispatch(getAllRegistrations({}));
+    if (registrations?.length == 0)
+      dispatch(getAllRegistrations({}));
+
+    if (levels?.length == 0)
+      dispatch(getAllLevel({}))
+    if (classes?.length == 0)
+      dispatch(getAllClasse({}))
+
   }, [dispatch]);
 
   // ! Modale 
@@ -126,11 +139,29 @@ const Registration: React.FC = () => {
     },
   ];
 
+  // Donnée pour le filtre 
+  const filter: FilterAndSearchType = {
+    pagination: pagination,
+    thunk: getAllRegistrations,
+    isAdvanced: true,
+    filters: [
+      { label: 'Date de debut', name: 'date_debut', type: 'date' },
+      { label: 'Date de fin', name: 'date_fin', type: 'date' },
+      { label: 'Niveau', name: 'niveau', type: 'select', options: levels.map(level => ({ label: level.niveau, value: level.id_niveau as number })) },
+      { label: 'Classe', name: 'classe', type: 'select', options: classes.map(classe => ({ label: classe.denomination, value: classe.id_classe as number })) },
+      { label: 'Droit d\'inscription', name: 'droit', type: 'select', options: [{ label: 'Payé', value: 1 }, { label: 'Non payé', value: 0 }] },
+    ],
+    filterThunk: filterRegistration,
+    isLoading: action.isFilterLoading
+  }
+
   return (
     <div className="space-y-4 md:space-y-6">
       <Title
         title='Inscription des élèves'
         description='Gérez les inscriptions des élèves pour la nouvelle année scolaire.'
+        filter={filter}
+        fixed
       >
         {permission.create &&
           <button

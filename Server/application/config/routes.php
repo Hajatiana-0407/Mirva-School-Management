@@ -126,6 +126,7 @@ $route['api/site/Installation/publish'] = 'SiteInstallationController/publish';
 // Filtre 
 $route['api/filtre/lecon'] = 'FiltreCotroller/lecon';
 $route['api/filtre/exercice'] = 'FiltreCotroller/exercice';
+$route['api/filtre/inscription'] = 'FiltreCotroller/inscription';
 
 
 // ===================== Authentification  ===================== //

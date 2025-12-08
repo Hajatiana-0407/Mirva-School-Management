@@ -28,7 +28,7 @@ export const filterRegistration = createAsyncThunk(
     console.log(filter);
 
     try {
-      const response = await api.post('filtre/lecon', filter);
+      const response = await api.post('filtre/inscription', filter);
       datas = response.data;
     } catch (error) {
       console.error('Erreur lors de la récupération des données:', error);
