@@ -15,6 +15,7 @@ type AdvancedFilterField = {
     name: string;
     label: string;
     options?: { label: string, value: number }[];
+    defaultLabele?: string
 };
 
 export type FilterAndSearchType = {
@@ -116,8 +117,10 @@ const FilterAndSearch: React.FC<FilterAndSearchType> = ({ pagination, thunk, fil
                                     let options: any[] = [];
                                     if (field.type == 'select' && field.options) {
                                         options = field.options;
-                                        !options.some(option => option.label == 'Tous') ?
-                                            options.unshift({ label: 'Tous', value: 0 }) : '';
+                                        !options.some(option => {
+                                            return !field.defaultLabele ? option.label == 'Tous' : option.label == field.defaultLabele
+                                        }) ?
+                                            options.unshift({ label: field.defaultLabele || 'Tous', value: 0 }) : '';
                                     }
                                     return (
                                         <div key={i} className="flex flex-col">
@@ -149,7 +152,6 @@ const FilterAndSearch: React.FC<FilterAndSearchType> = ({ pagination, thunk, fil
                                                     name={field.name}
                                                     icon={Calendar}
                                                     type="date"
-
                                                 />
                                             )}
                                         </div>

@@ -12,10 +12,31 @@ class EmploiDuTempsController extends CI_Controller
 
     public function index()
     {
-        $data = $this->EmploiDuTempsModel->findAllQuery();
+        $page = $this->input->get('page', 1) ?? 1;
+        $search = $this->input->get('query', 1) ?? '';
+        $no_pagination = $this->input->get('no_pagination', 1) ?? false;
+
+        // Teste de l'utilisateur 
+        $role_id = $this->session->userdata('role_id');
+        switch ($role_id) {
+            case 'admin':
+                $builder = $this->EmploiDuTempsModel->findAllQueryAdmin();
+                $pagination = $this->EmploiDuTempsModel->paginateQuery($builder, $page, $search, $no_pagination);
+                $pagination['data'] = $this->EmploiDuTempsModel->findAllDataClasse($pagination['data']);
+                break;
+
+            default:
+                # code...
+                break;
+        }
+
+
         $this->output
             ->set_content_type('application/json')
-            ->set_output(json_encode($data));
+            ->set_output(json_encode([
+                'pagination' => $pagination,
+                'data' => $pagination['data']
+            ]));
     }
 
     public function create()
@@ -93,8 +114,8 @@ class EmploiDuTempsController extends CI_Controller
             $input = json_decode(file_get_contents('php://input'), true);
             if (!empty($input[$this->pk])) {
                 $id = $input[$this->pk];
-                $id_classe = isset(  $input['id_classe'] ) ? $input['id_classe'] : null  ;
-                $id_personnel = isset(  $input['id_personnel'] ) ? $input['id_personnel'] : null ;
+                $id_classe = isset($input['id_classe']) ? $input['id_classe'] : null;
+                $id_personnel = isset($input['id_personnel']) ? $input['id_personnel'] : null;
 
                 $data = $this->EmploiDuTempsModel->delete($id);
 

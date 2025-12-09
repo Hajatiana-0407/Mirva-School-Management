@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { Plus, Calendar, Clock, Users, MapPin, Edit, Archive, School } from 'lucide-react';
+import { Plus, Clock, Users, MapPin, Edit, Archive } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Modal from '../Modal';
 import Title from '../../Components/ui/Title';
-import Input from '../../Components/ui/Input';
 import Loading from '../../Components/ui/Loading';
 import SheduleForm from '../../Components/Forms/SheduleForm';
 import RightClickMenu from '../../Components/RightClickMenu';
@@ -12,7 +11,7 @@ import ConfirmDialog from '../ConfirmDialog';
 
 import { AppDispatch } from '../../Redux/store';
 import { getSheduleState } from './redux/SheduleSlice';
-import { getAllShedule, deleteShedule } from './redux/SheduleAsyncThunk';
+import { getAllShedule, deleteShedule, filterShedule } from './redux/SheduleAsyncThunk';
 import { getSchoolYearState } from '../School-Year/redux/SchoolYearSlice';
 import { getAllSchoolYear } from '../School-Year/redux/SchoolYearAsyncThunk';
 import { getClasseState } from '../Classes/redux/ClasseSlice';
@@ -25,6 +24,8 @@ import { getActionColor } from '../Table';
 import { useHashPermission } from '../../Hooks/useHashPermission';
 import { useActiveUser } from '../../Hooks/useActiveUser';
 import { getAuthState } from '../Auth/redux/AuthSlice';
+import Pagination from '../../Components/Pagination';
+import { FilterAndSearchType } from '../../Components/FilterAndSearch';
 
 
 // ------------------------------
@@ -73,11 +74,11 @@ const Schedule: React.FC = () => {
   // Redux
   // --------------------
   const dispatch: AppDispatch = useDispatch();
-  const { action: shedule_action, datas: shedules } = useSelector(getSheduleState);
+  const { action: shedule_action, datas: shedules, pagination } = useSelector(getSheduleState);
   const { datas: annee_scolaires, activeSchoolYear, action: annee_action } = useSelector(getSchoolYearState);
   const { datas: classes, action: classe_action } = useSelector(getClasseState);
   const { hiddeTheModalActive } = useSelector(getAppState);
-  const { isAdmin, isTeacher } = useActiveUser();
+  const { isTeacher } = useActiveUser();
   const { datas: { info: user } } = useSelector(getAuthState)
 
   const permission = useHashPermission();
@@ -168,20 +169,28 @@ const Schedule: React.FC = () => {
   // Fetch Data
   // ------------------------------
   useEffect(() => {
-    if (!shedule_action.isLoading && shedules?.length === 0) dispatch(getAllShedule());
-    if (!annee_action.isLoading && annee_scolaires?.length === 0) dispatch(getAllSchoolYear());
-    if (!classe_action.isLoading && classes?.length === 0) dispatch(getAllClasse());
+    if (shedules?.length === 0) dispatch(getAllShedule({}));
+    if (!annee_action.isLoading && annee_scolaires?.length === 0) dispatch(getAllSchoolYear({}));
+    if (!classe_action.isLoading && classes?.length === 0) dispatch(getAllClasse({}));
   }, [
-    dispatch,
-    shedules, shedule_action.isLoading,
-    annee_scolaires, annee_action.isLoading,
-    classes, classe_action.isLoading
-  ]);
+    dispatch]);
 
 
   useEffect(() => {
     if (showModal && hiddeTheModalActive) handleCloseModal();
   }, [hiddeTheModalActive]);
+
+  const filter: FilterAndSearchType = {
+    pagination: pagination,
+    thunk: getAllShedule,
+    isAdvanced: true,
+    filters: [
+      { label: 'Classe', name: 'classe', type: 'select', options: classes_options },
+      { label: 'Année scolaire', name: 'annee_scolaire', type: 'select', options: school_year_options, defaultLabele: 'Annéé scolaire active' },
+    ],
+    filterThunk: filterShedule,
+    isLoading: shedule_action.isFilterLoading
+  }
 
 
   // ------------------------------
@@ -194,29 +203,34 @@ const Schedule: React.FC = () => {
         title="Emploi du Temps"
         description="Plan détaillé des cours et activités."
         fixed
+        filter={filter}
       >
-        {isAdmin &&
-          <div className="flex gap-2 md:gap-4">
-            <Input name="classe" label="Classe" icon={Users} type="select" options={classes_options} />
-            <Input name="schoolYear" label="Année scolaire" icon={Calendar} type="select" options={school_year_options} />
-          </div>
-        }
+        <div></div>
       </Title>
+
+
+      <Pagination
+        pagination={pagination}
+        thunk={getAllShedule}
+      />
 
 
       {shedule_action.isLoading && !shedules?.length && <Loading />}
 
 
       <div className="space-y-6">
+        {!shedule_action.isLoading && !shedules?.length && (
+          <div className='text-secondary-400 text-md text-center pt-6'>
+            Nous n’avons trouvé aucun élément.
+          </div>
+        )}
         {shedules?.map((shedule: SheduleByClasseType) => {
-          const classe = classes?.find(c => c.id_classe === shedule?.id_classe);
-
           return (
             <div key={shedule?.id_classe} className="bg-white p-4 md:p-6 rounded-xl shadow-sm border">
 
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-semibold text-gray-800">{classe?.denomination ? classe.denomination : shedule.nom ? `${shedule.nom} ${shedule.prenom}` : ''}</h3>
+                <h3 className="text-2xl font-semibold text-gray-800">{shedule.denomination}</h3>
                 {permission.create &&
                   <button
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition disabled:bg-primary-400"
@@ -346,7 +360,14 @@ const Schedule: React.FC = () => {
             </div>
           );
         })}
+
       </div>
+
+
+      <Pagination
+        pagination={pagination}
+        thunk={getAllShedule}
+      />
 
 
       {/* MODAL */}

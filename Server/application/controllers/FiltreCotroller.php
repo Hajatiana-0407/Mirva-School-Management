@@ -139,4 +139,42 @@ class FiltreCotroller extends CI_Controller
                 'data' => $pagination['data'],
             ]));
     }
+    public function emploi_du_temps()
+    {
+        $this->load->model('EmploiDuTempsModel');
+        $page = $this->input->post('page', 1) ?? 1;
+        $query = $this->input->post('query', 1) ?? '';
+
+        // Filtre 
+        $classe = $this->input->post('classe', 1) ?? null;
+        $annee_scolaire = $this->input->post('annee_scolaire', 1) ?? null;
+        if ($annee_scolaire == "0")
+            $annee_scolaire = null;
+        // Teste de l'utilisateur 
+        $role_id = $this->session->userdata('role_id');
+        switch ($role_id) {
+            case 'admin':
+                $builder = $this->EmploiDuTempsModel->filtreQuery($classe);
+                $pagination = $this->EmploiDuTempsModel->paginateQuery($builder, $page);
+                $pagination['data'] = $this->EmploiDuTempsModel->findAllDataClasse($pagination['data'], $annee_scolaire);
+                break;
+            default:
+                # code...
+                break;
+        }
+
+
+
+        $pagination['filter'] = [
+            'query' => $query,
+            'classe' => $classe,
+        ];
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode([
+                'pagination' => $pagination,
+                'data' => $pagination['data'],
+            ]));
+    }
 }

@@ -128,6 +128,7 @@ $route['api/filtre/lecon'] = 'FiltreCotroller/lecon';
 $route['api/filtre/exercice'] = 'FiltreCotroller/exercice';
 $route['api/filtre/inscription'] = 'FiltreCotroller/inscription';
 $route['api/filtre/etudiant'] = 'FiltreCotroller/etudiant';
+$route['api/filtre/emploi_du_temps'] = 'FiltreCotroller/emploi_du_temps';
 
 
 // ===================== Authentification  ===================== //
