@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive, Eye, BookOpen, User, Users, Shield, Brush, Library, Calculator, Truck, HeartPulse } from 'lucide-react';
+import { Plus, Edit, Archive, Eye, BookOpen, User, Users, Shield, Brush, Library, Calculator, Truck, HeartPulse } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEmployeState } from './redux/EmployeSlice';
-import { EmployeeType, TypePersonnelType } from '../../Utils/Types';
+import { EmployeeType } from '../../Utils/Types';
 import { AppDispatch } from '../../Redux/store';
 import { deleteEmployees, getAllEmployees } from './redux/EmployeAsyncThunk';
-import { getTypeEmployeesState } from '../../Redux/Other/slices/TypeEmployeesSlice';
 import { getAppState } from '../../Redux/AppSlice';
 import { useNavigate } from 'react-router-dom';
 import Profile from '../../Components/ui/Profile';
@@ -16,6 +15,7 @@ import EmployeForm from '../../Components/Forms/EmployeForm';
 import { getShortDate } from '../../Utils/Utils';
 import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
+import FilterAndSearch from '../../Components/FilterAndSearch';
 
 // Mapping des types à des couleurs de fond
 export const typeBgColors: Record<string, string> = {
@@ -41,17 +41,15 @@ export const typeIcons: Record<string, any> = {
 };
 
 const Employees: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingEmployees, setEditingEmployees] = useState<EmployeeType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [teacherToArchive, setTeacherToArchive] = useState<EmployeeType | null>(null);
-  const { datas: TypesEmployees } = useSelector(getTypeEmployeesState);
   const { hiddeTheModalActive } = useSelector(getAppState);
-  const { datas: employees, action } = useSelector(getEmployeState);
+  const { datas: employees, action, pagination } = useSelector(getEmployeState);
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
-  const permission = useHashPermission(  { redirect : true  });
+  const permission = useHashPermission({ redirect: true });
 
 
   //Handlers
@@ -169,7 +167,8 @@ const Employees: React.FC = () => {
 
   // Effets
   useEffect(() => {
-    dispatch(getAllEmployees());
+    if (employees.length == 0)
+      dispatch(getAllEmployees({}));
   }, [dispatch]);
 
   // Modale 
@@ -200,51 +199,10 @@ const Employees: React.FC = () => {
 
       {/* Filtrage  */}
       <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
-        <div className="flex items-center justify-between mb-6 md:mb-6">
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
-              <input
-                type="text"
-                placeholder="Rechercher un enseignant..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-            </div>
-            <select
-              id="countries"
-              className="bg-secondary-50 border border-secondary-300 text-secondary-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-3 cursor-pointer"
-              onChange={(e) => {
-                setSearchTerm(e.target.value)
-              }}
-            >
-              <option value="">Tous les fonctions</option>
-              {
-                TypesEmployees.map((type: TypePersonnelType) => (
-                  <option key={type.id_type_personnel} value={type.type}>{type.type}</option>
-                ))
-              }
-            </select>
-            <select
-              id="countries"
-              className="bg-secondary-50 border border-secondary-300 text-secondary-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-3 cursor-pointer"
-              onChange={(e) => {
-                setSearchTerm(e.target.value)
-              }}
-            >
-              <option value="">Tous les Status</option>
-              <option value="Actif">Actif</option>
-              <option value="Suspendu">Suspendu</option>
-              <option value="Démissionnaire">Démissionnaire</option>
-
-            </select>
-            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg hover:bg-secondary-50">
-              <Filter className="w-4 h-4" />
-              <span>Filtres</span>
-            </button>
-          </div>
-        </div>
+        <FilterAndSearch
+          pagination={pagination}
+          thunk={getAllEmployees}
+        />
 
 
         <Table
@@ -252,8 +210,9 @@ const Employees: React.FC = () => {
           data={employees}
           columns={columns}
           actions={actions}
-          searchTerm={searchTerm}
-          onRowClick={( item: EmployeeType ) => navigate(`/back-office/employees/${item.matricule_personnel}`) }
+          onRowClick={(item: EmployeeType) => navigate(`/back-office/employees/${item.matricule_personnel}`)}
+          pagination={pagination}
+          thunk={getAllEmployees}
         />
       </div>
 

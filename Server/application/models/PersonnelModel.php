@@ -5,6 +5,7 @@ class PersonnelModel extends CI_Model
 {
     protected $table = 'personnel';
     protected $primaryKey = 'id_personnel';
+    protected $searchs = ['personnel.nom', 'personnel.prenom', 'personnel.telephone', 'personnel.addresse', 'personnel.matricule_personnel', 'personnel.numero_cin'];
 
     public function __construct()
     {
@@ -13,12 +14,10 @@ class PersonnelModel extends CI_Model
 
     public function findAllQuery()
     {
-        $query = $this->db->select('*')
+        return $this->db->select('*')
             ->from($this->table)
             ->join('type_personnel', "{$this->table}.id_type_personnel = type_personnel.id_type_personnel", 'left')
-            ->order_by($this->primaryKey, 'DESC')
-            ->get();
-        return $query->result_array();
+            ->order_by($this->primaryKey, 'DESC');
     }
 
     public function findOneById($id)
@@ -33,10 +32,11 @@ class PersonnelModel extends CI_Model
 
     public function findOneDetailsByMatricule($matricule = '')
     {
-        if ($matricule === '' || !$matricule) return false;
+        if ($matricule === '' || !$matricule)
+            return false;
         $query = $this->db->select('*')
             ->from($this->table)
-            ->where('matricule_personnel', $matricule )
+            ->where('matricule_personnel', $matricule)
             ->join('type_personnel', "{$this->table}.id_type_personnel = type_personnel.id_type_personnel", 'left')
             ->get();
         return $query->row();

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionIntialValue, ActionType, ApiReturnType, EmployeeType, TypePersonnelType } from "../../../Utils/Types";
+import { ActionIntialValue, ActionType, ApiReturnType, EmployeeType, PaginationInitialValue, PaginationType, TypePersonnelType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
 import { createEmployees, deleteEmployees, getAllEmployees, getEmployeByMatricule, updateEmployees } from "./EmployeAsyncThunk";
@@ -9,7 +9,7 @@ import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 type initialStateType = {
     action: ActionType,
     datas: EmployeeType[],
-    page: number,
+    pagination: PaginationType,
     error: string;
     single: {
         data?: EmployeeType & TypePersonnelType;
@@ -20,7 +20,7 @@ type initialStateType = {
 const initialState: initialStateType = {
     action: ActionIntialValue,
     datas: [],
-    page: 1,
+    pagination: PaginationInitialValue,
     error: '',
     single: { action: ActionIntialValue }
 }
@@ -38,16 +38,17 @@ const EmployeSlice = createSlice({
         builder.addCase(logoutUser.fulfilled, () => {
             return initialState;
         });
-        // ? ************************************* Read ************************************* //
+        // // ************************************* Read ************************************* //
         builder
             .addCase(getAllEmployees.pending, (state) => {
                 state.action.isLoading = true;
             })
             .addCase(getAllEmployees.fulfilled, (state, action: {
-                payload: EmployeeType[]
+                payload: ApiReturnType
             }) => {
                 state.action.isLoading = false;
-                state.datas = action.payload;
+                state.datas = action.payload.data;
+                state.pagination = action.payload.pagination
             })
             .addCase(getAllEmployees.rejected, (state) => {
                 state.action.isLoading = false;

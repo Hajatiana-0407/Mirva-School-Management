@@ -277,7 +277,7 @@ $GLOBALS['secure'] = [
     'api/admin/matiere/delete' => true,
 
     // Personnel
-    'api/admin/personnel' => true,
+    // 'api/admin/personnel' => true,
     'api/admin/personnel/update' => true,
     'api/admin/personnel/create' => true,
     'api/admin/personnel/delete' => true,
