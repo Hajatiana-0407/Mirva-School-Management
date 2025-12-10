@@ -3,7 +3,7 @@ export type ActionType = {
     isLoading?: boolean;
     isDeleting?: boolean;
     isUpdating?: boolean;
-    isFilterLoading?: boolean 
+    isFilterLoading?: boolean
 }
 export const ActionIntialValue: ActionType = {
     isLoading: false,
@@ -33,10 +33,14 @@ export const PaginationInitialValue: PaginationType = {
 
 // APP
 export type AppStateType = {
-    hiddeTheModalActive: boolean
+    hiddeTheModalActive: boolean;
+    allClasses?: ClasseType[];
+    allSchoolyears?: SchoolYearType[];
+    allLevels?: levelType[] ; 
+    allSubjects?: SubjectType[]
 }
 export const AppInitialValue: AppStateType = {
-    hiddeTheModalActive: false
+    hiddeTheModalActive: false,
 }
 export type MenuItemType = {
     id: string;

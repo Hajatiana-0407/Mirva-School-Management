@@ -12,10 +12,6 @@ import ConfirmDialog from '../ConfirmDialog';
 import { AppDispatch } from '../../Redux/store';
 import { getSheduleState } from './redux/SheduleSlice';
 import { getAllShedule, deleteShedule, filterShedule } from './redux/SheduleAsyncThunk';
-import { getSchoolYearState } from '../School-Year/redux/SchoolYearSlice';
-import { getAllSchoolYear } from '../School-Year/redux/SchoolYearAsyncThunk';
-import { getClasseState } from '../Classes/redux/ClasseSlice';
-import { getAllClasse } from '../Classes/redux/ClasseAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
 
 import { hexToRgba, timeSlots } from '../../Utils/Utils';
@@ -26,6 +22,7 @@ import { useActiveUser } from '../../Hooks/useActiveUser';
 import { getAuthState } from '../Auth/redux/AuthSlice';
 import Pagination from '../../Components/Pagination';
 import { FilterAndSearchType } from '../../Components/FilterAndSearch';
+import { getAllClassesNoPagination, getAllSchoolYearsNoPagination } from '../../Redux/Other/asyncThunk/AppAsyncThunk';
 
 
 // ------------------------------
@@ -75,8 +72,8 @@ const Schedule: React.FC = () => {
   // --------------------
   const dispatch: AppDispatch = useDispatch();
   const { action: shedule_action, datas: shedules, pagination } = useSelector(getSheduleState);
-  const { datas: annee_scolaires, activeSchoolYear, action: annee_action } = useSelector(getSchoolYearState);
-  const { datas: classes, action: classe_action } = useSelector(getClasseState);
+  const { allSchoolyears: annee_scolaires } = useSelector(getAppState);
+  const { allClasses: classes } = useSelector(getAppState);
   const { hiddeTheModalActive } = useSelector(getAppState);
   const { isTeacher } = useActiveUser();
   const { datas: { info: user } } = useSelector(getAuthState)
@@ -152,17 +149,9 @@ const Schedule: React.FC = () => {
     [classes]
   );
 
-  const school_year_options = useMemo(() => {
-    if (!annee_scolaires || !activeSchoolYear) return [];
-    const list = annee_scolaires
-      .filter(a => a.id_annee_scolaire !== activeSchoolYear.id_annee_scolaire)
-      .map(a => ({ label: a.nom, value: a.id_annee_scolaire as number }));
-
-    return [
-      { label: activeSchoolYear.nom, value: activeSchoolYear.id_annee_scolaire as number },
-      ...list
-    ];
-  }, [annee_scolaires, activeSchoolYear]);
+  const school_year_options = useMemo(
+    () => annee_scolaires?.map(c => ({ label: c.nom, value: c.id_annee_scolaire as number })), [annee_scolaires]
+  );
 
 
   // ------------------------------
@@ -170,10 +159,11 @@ const Schedule: React.FC = () => {
   // ------------------------------
   useEffect(() => {
     if (shedules?.length === 0) dispatch(getAllShedule({}));
-    if (!annee_action.isLoading && annee_scolaires?.length === 0) dispatch(getAllSchoolYear({}));
-    if (!classe_action.isLoading && classes?.length === 0) dispatch(getAllClasse({}));
-  }, [
-    dispatch]);
+    if (!annee_scolaires || annee_scolaires.length == 0)
+      dispatch(getAllSchoolYearsNoPagination());
+    if (!classes || classes.length == 0)
+      dispatch(getAllClassesNoPagination());
+  }, [dispatch]);
 
 
   useEffect(() => {

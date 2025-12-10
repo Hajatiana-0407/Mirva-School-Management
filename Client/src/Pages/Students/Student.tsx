@@ -18,16 +18,14 @@ import StudentForm from '../../Components/Forms/StudentForm';
 import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
 import FilterAndSearch, { FilterAndSearchType } from '../../Components/FilterAndSearch';
-import { getLevelState } from '../Levels/redux/LevelSlice';
-import { getClasseState } from '../Classes/redux/ClasseSlice';
 import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
 import { getAllClasse } from '../Classes/redux/ClasseAsyncThunk';
 
 
 const Student = () => {
   const { datas: students, action, pagination } = useSelector(getStudentState);
-  const { datas: levels } = useSelector(getLevelState);
-  const { datas: classes } = useSelector(getClasseState);
+  const { allLevels: levels } = useSelector(getAppState);
+  const { allClasses: classes } = useSelector(getAppState);
 
   const { hiddeTheModalActive } = useSelector(getAppState);
   const [showModal, setShowModal] = useState(false);
@@ -84,9 +82,9 @@ const Student = () => {
     if (students.length == 0)
       dispatch(getAllStudent({}));
 
-    if (levels.length == 0)
+    if (!levels || levels?.length == 0)
       dispatch(getAllLevel({}));
-    if (classes.length == 0)
+    if (!classes || classes?.length == 0)
       dispatch(getAllClasse({}));
   }, [dispatch]);
 
@@ -162,8 +160,8 @@ const Student = () => {
     thunk: getAllStudent,
     isAdvanced: true,
     filters: [
-      { label: 'Niveau', name: 'niveau', type: 'select', options: levels.map(level => ({ label: level.niveau, value: level.id_niveau as number })) },
-      { label: 'Classe', name: 'classe', type: 'select', options: classes.map(classe => ({ label: classe.denomination, value: classe.id_classe as number })) },
+      { label: 'Niveau', name: 'niveau', type: 'select', options: levels?.map(level => ({ label: level.niveau, value: level.id_niveau as number })) },
+      { label: 'Classe', name: 'classe', type: 'select', options: classes?.map(classe => ({ label: classe.denomination, value: classe.id_classe as number })) },
       { label: 'Genre', name: 'sexe', type: 'select', options: [{ label: 'Homme', value: 2 }, { label: 'Femme', value: 1 }] },
     ],
     filterThunk: filterStudent,

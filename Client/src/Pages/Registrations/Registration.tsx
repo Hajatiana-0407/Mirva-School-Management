@@ -17,10 +17,7 @@ import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
 import { navigate } from '../../Utils/navigate';
 import FilterAndSearch, { FilterAndSearchType } from '../../Components/FilterAndSearch';
-import { getLevelState } from '../Levels/redux/LevelSlice';
-import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
-import { getClasseState } from '../Classes/redux/ClasseSlice';
-import { getAllClasse } from '../Classes/redux/ClasseAsyncThunk';
+import { getAllClassesNoPagination, getAllLevelsNoPagination } from '../../Redux/Other/asyncThunk/AppAsyncThunk';
 
 
 const Registration: React.FC = () => {
@@ -30,8 +27,8 @@ const Registration: React.FC = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [dataToDelete, setDataToDelete] = useState<RegistrationType | null>(null);
   const { datas: registrations, action, pagination } = useSelector(getRegistrationState);
-  const { datas: levels } = useSelector(getLevelState);
-  const { datas: classes } = useSelector(getClasseState);
+  const { allLevels: levels } = useSelector(getAppState);
+  const { allClasses: classes } = useSelector(getAppState);
   const dispatch: AppDispatch = useDispatch();
   const { hiddeTheModalActive } = useSelector(getAppState);
   const permission = useHashPermission({ redirect: true });
@@ -63,10 +60,10 @@ const Registration: React.FC = () => {
     if (registrations?.length == 0)
       dispatch(getAllRegistrations({}));
 
-    if (levels?.length == 0)
-      dispatch(getAllLevel({}))
-    if (classes?.length == 0)
-      dispatch(getAllClasse({}))
+    if (!levels || levels?.length == 0)
+      dispatch(getAllLevelsNoPagination())
+    if (!classes || classes?.length == 0)
+      dispatch(getAllClassesNoPagination())
 
   }, [dispatch]);
 
@@ -147,8 +144,8 @@ const Registration: React.FC = () => {
     filters: [
       { label: 'Date de debut', name: 'date_debut', type: 'date' },
       { label: 'Date de fin', name: 'date_fin', type: 'date' },
-      { label: 'Niveau', name: 'niveau', type: 'select', options: levels.map(level => ({ label: level.niveau, value: level.id_niveau as number })) },
-      { label: 'Classe', name: 'classe', type: 'select', options: classes.map(classe => ({ label: classe.denomination, value: classe.id_classe as number })) },
+      { label: 'Niveau', name: 'niveau', type: 'select', options: levels?.map(level => ({ label: level.niveau, value: level.id_niveau as number })) },
+      { label: 'Classe', name: 'classe', type: 'select', options: classes?.map(classe => ({ label: classe.denomination, value: classe.id_classe as number })) },
       { label: 'Droit d\'inscription', name: 'droit', type: 'select', options: [{ label: 'Payé', value: 1 }, { label: 'Non payé', value: 0 }] },
     ],
     filterThunk: filterRegistration,

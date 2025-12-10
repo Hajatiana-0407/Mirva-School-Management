@@ -20,18 +20,15 @@ import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
 import { useActiveUser } from '../../Hooks/useActiveUser';
 import Pagination from '../../Components/Pagination';
-import { getLevelState } from '../Levels/redux/LevelSlice';
 import { FilterAndSearchType } from '../../Components/FilterAndSearch';
-import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
-import { getAllSubject } from '../Subjects/redux/SubjectAsyncThunk';
-import { getSubjectState } from '../Subjects/redux/SubjectSlice';
+import { getAllLevelsNoPagination, getAllSubjectsNoPagination } from '../../Redux/Other/asyncThunk/AppAsyncThunk';
 
 
 
 const Lesson = () => {
   const { hiddeTheModalActive } = useSelector(getAppState);
-  const { datas: levels } = useSelector(getLevelState);
-  const { datas: subjects } = useSelector(getSubjectState);
+  const { allLevels: levels } = useSelector(getAppState);
+  const { allSubjects: subjects } = useSelector(getAppState);
   const [showModal, setShowModal] = useState(false);
   const [editingLesson, setEditingLesson] = useState<LessonType | null>(null);
   const { datas, action, pagination } = useSelector(getLessonState);
@@ -88,10 +85,10 @@ const Lesson = () => {
     if (datas.length == 0)
       dispatch(getAllLessons({}));
 
-    if (levels.length == 0)
-      dispatch(getAllLevel({}))
-    if (subjects.length == 0)
-      dispatch(getAllSubject({}))
+    if (!levels || levels?.length == 0)
+      dispatch(getAllLevelsNoPagination())
+    if (!subjects || subjects?.length == 0)
+      dispatch(getAllSubjectsNoPagination())
   }, [dispatch])
 
   // Parametre pour le filtre dans le header 
@@ -102,13 +99,13 @@ const Lesson = () => {
     filters: [
       { label: 'Date de debut', name: 'date_debut', type: 'date' },
       { label: 'Date de fin', name: 'date_fin', type: 'date' },
-      { label: 'Niveau', name: 'niveau', type: 'select', options: levels.map(level => ({ label: level.niveau, value: level.id_niveau as number })) },
-      { label: 'Matière', name: 'matiere', type: 'select', options: subjects.map(sugject => ({ label: sugject.denomination, value: sugject.id_matiere as number })) },
+      { label: 'Niveau', name: 'niveau', type: 'select', options: levels?.map(level => ({ label: level.niveau, value: level.id_niveau as number })) },
+      { label: 'Matière', name: 'matiere', type: 'select', options: subjects?.map(sugject => ({ label: sugject.denomination, value: sugject.id_matiere as number })) },
     ],
     filterThunk: filterLesson,
     isLoading: action.isFilterLoading
   }
-  
+
   return (
     <div className="space-y-4 md:space-y-6">
       <Title

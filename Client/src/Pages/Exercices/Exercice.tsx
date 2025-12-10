@@ -21,17 +21,14 @@ import Title from '../../Components/ui/Title';
 import { useActiveUser } from '../../Hooks/useActiveUser';
 import Pagination from '../../Components/Pagination';
 import { FilterAndSearchType } from '../../Components/FilterAndSearch';
-import { getLevelState } from '../Levels/redux/LevelSlice';
-import { getSubjectState } from '../Subjects/redux/SubjectSlice';
-import { getAllSubject } from '../Subjects/redux/SubjectAsyncThunk';
-import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
+import { getAllLevelsNoPagination, getAllSubjectsNoPagination } from '../../Redux/Other/asyncThunk/AppAsyncThunk';
 
 
 
 const Exercice = () => {
   const { hiddeTheModalActive } = useSelector(getAppState);
-  const { datas: levels } = useSelector(getLevelState);
-  const { datas: subjects } = useSelector(getSubjectState);
+  const { allLevels: levels } = useSelector(getAppState);
+  const { allSubjects: subjects } = useSelector(getAppState);
   const [showModal, setShowModal] = useState(false);
   const [editingExercice, setEditingExercice] = useState<ExerciceType | null>(null);
   const { datas, action, pagination } = useSelector(getExerciceState);
@@ -87,10 +84,10 @@ const Exercice = () => {
   useEffect(() => {
     if (datas.length == 0)
       dispatch(getAllExercices({}));
-    if (subjects.length == 0)
-      dispatch(getAllSubject({}));
-    if (levels.length == 0)
-      dispatch(getAllLevel({}));
+    if ( !subjects || subjects?.length == 0)
+      dispatch(getAllSubjectsNoPagination());
+    if (!levels || levels?.length == 0)
+      dispatch(getAllLevelsNoPagination());
   }, [dispatch])
 
 
@@ -102,8 +99,8 @@ const Exercice = () => {
     filters: [
       { label: 'Date de debut', name: 'date_debut', type: 'date' },
       { label: 'Date de fin', name: 'date_fin', type: 'date' },
-      { label: 'Niveau', name: 'niveau', type: 'select', options: levels.map(level => ({ label: level.niveau, value: level.id_niveau as number })) },
-      { label: 'Matière', name: 'matiere', type: 'select', options: subjects.map(sugject => ({ label: sugject.denomination, value: sugject.id_matiere as number })) },
+      { label: 'Niveau', name: 'niveau', type: 'select', options: levels?.map(level => ({ label: level.niveau, value: level.id_niveau as number })) },
+      { label: 'Matière', name: 'matiere', type: 'select', options: subjects?.map(sugject => ({ label: sugject.denomination, value: sugject.id_matiere as number })) },
     ],
     filterThunk: filterExercice,
     isLoading: action.isFilterLoading
