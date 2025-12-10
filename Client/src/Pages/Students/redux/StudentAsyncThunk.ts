@@ -19,17 +19,34 @@ export const getStatistique = createAsyncThunk('etudiant/getStatistique', async 
 })
 
 // READ
-export const getAllStudent = createAsyncThunk('etudiant/getAll', async (): Promise<StudentType[]> => {
-    let datas: StudentType[] = [];
-    await api.get('admin/etudiant')
-        .then(response => {
-            datas = response.data
-        })
+export const getAllStudent = createAsyncThunk('etudiant/getAll', async ({ page, query, no_pagination }: { page?: number; query?: any, no_pagination?: boolean }): Promise<ApiReturnType> => {
+    let datas: ApiReturnType = ApiReturnInitial;
+    await api.get('admin/etudiant', {
+        params: { page, query, no_pagination }
+    }).then(response => {
+        datas = response.data
+    })
         .catch(error => {
             console.error('Erreur lors de la récupération des données:', error);
         });
     return datas;
 })
+
+export const filterStudent = createAsyncThunk(
+    'etudiant/filter',
+    async ({ page = 1, filter }: { page?: number; filter?: FormData }): Promise<ApiReturnType> => {
+        let datas: ApiReturnType = ApiReturnInitial;
+        filter?.append('page', String(page));
+        try {
+            const response = await api.post('filtre/etudiant', filter);
+            datas = response.data;
+        } catch (error) {
+            console.error('Erreur lors de la récupération des données:', error);
+        }
+        return datas;
+    }
+);
+
 
 export const getStudentByMatricule = createAsyncThunk('etudiant/getOne', async (matricule: string): Promise<ApiReturnType> => {
     let data: ApiReturnType = ApiReturnInitial;

@@ -12,7 +12,7 @@ class ModuleModel extends CI_Model
     }
 
 
-    public function findAll()
+    public function findAllQuery()
     {
         $modules =  $this->db->select('*')
             ->from($this->table)

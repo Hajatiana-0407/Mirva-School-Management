@@ -57,7 +57,7 @@ function BackOffice() {
                 dispatch(getSchoolInfo());
             }
             if (!activeSchoolYear) {
-                dispatch(getAllSchoolYear());
+                dispatch(getAllSchoolYear({}));
             }
             if (modules.length === 0) {
                 dispatch(getAllModule());
@@ -131,7 +131,7 @@ function BackOffice() {
                         <Route path=':slug' element={<ExerciceSingle />} />
                     </Route>
 
-                    <Route path='homepage-settings' element={<HomeSetting/>} />
+                    <Route path='homepage-settings' element={<HomeSetting />} />
                     {/* 404 Not found  */}
                     <Route path="*" element={<Navigate to="/back-office/dashboard" replace />} />
                 </Route>

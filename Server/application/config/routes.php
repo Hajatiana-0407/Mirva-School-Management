@@ -123,6 +123,16 @@ $route['api/site/Installation/publish'] = 'SiteInstallationController/publish';
 //! *********************  ROUTE POUR LE SITE WEB **********************************************************************
 
 
+// Filtre 
+$route['api/filtre/lecon'] = 'FiltreCotroller/lecon';
+$route['api/filtre/exercice'] = 'FiltreCotroller/exercice';
+$route['api/filtre/inscription'] = 'FiltreCotroller/inscription';
+$route['api/filtre/etudiant'] = 'FiltreCotroller/etudiant';
+$route['api/filtre/emploi_du_temps'] = 'FiltreCotroller/emploi_du_temps';
+$route['api/filtre/personnel'] = 'FiltreCotroller/personnel';
+$route['api/filtre/parent'] = 'FiltreCotroller/parent';
+
+
 // ===================== Authentification  ===================== //
 $route['api/auth/login'] = 'AuthController/login';
 $route['api/auth/logout'] = 'AuthController/logout';
@@ -255,7 +265,7 @@ $GLOBALS['secure'] = [
     'api/admin/matiere-classe/*' => true,
 
     // Niveau
-    'api/admin/niveau' => true,
+    // 'api/admin/niveau' => true,
     'api/admin/niveau/update' => true,
     'api/admin/niveau/create' => true,
     'api/admin/niveau/delete' => true,
@@ -263,13 +273,13 @@ $GLOBALS['secure'] = [
     'api/admin/niveau-matiere/enrigistrer' => true,
 
     // Matière
-    'api/admin/matiere' => true,
+    // 'api/admin/matiere' => true,
     'api/admin/matiere/update' => true,
     'api/admin/matiere/create' => true,
     'api/admin/matiere/delete' => true,
 
     // Personnel
-    'api/admin/personnel' => true,
+    // 'api/admin/personnel' => true,
     'api/admin/personnel/update' => true,
     'api/admin/personnel/create' => true,
     'api/admin/personnel/delete' => true,
@@ -279,27 +289,23 @@ $GLOBALS['secure'] = [
     // 'api/admin/teachers' => true,
 
     // Type personnel
-    'api/admin/type-personnel' => true,
+    // 'api/admin/type-personnel' => true,
 
     // Année scolaire
-    'api/admin/school-year' => true,
+    // 'api/admin/school-year' => true,
     'api/admin/school-year/update' => true,
     'api/admin/school-year/create' => true,
     'api/admin/school-year/delete' => true,
     'api/admin/school-year/change-active' => true,
 
     // Inscription
-    'api/admin/registration' => true,
+    // 'api/admin/registration' => true,
     'api/admin/registration-student' => true,
     'api/admin/registration/delete' => true,
 
     // Étudiant
-    'api/admin/etudiant' => true,
-    // 'api/admin/etudiant/update' => true,
-    // 'api/admin/etudiant/create' => true,
-    // 'api/admin/etudiant/delete' => true,
-    // 'api/admin/etudiant/statistique' => true,
-    // 'api/admin/etudiant/*' => true,
+    // 'api/admin/etudiant' => true,
+    'api/admin/etudiant/*' => true,
 
     // Parent
     'api/admin/parent' => true,

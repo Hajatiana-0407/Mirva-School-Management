@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionIntialValue, ActionType, ApiReturnType, SchoolYearType } from "../../../Utils/Types";
+import { ActionIntialValue, ActionType, ApiReturnType, PaginationInitialValue, PaginationType, SchoolYearType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
 import { changeActiveSchoolYear, createSchoolYear, deleteSchoolYear, getAllSchoolYear, updateSchoolYear } from "./SchoolYearAsyncThunk";
@@ -10,7 +10,7 @@ type initialStateType = {
     action: ActionType,
     datas: SchoolYearType[],
     activeSchoolYear: SchoolYearType | null,
-    page: number,
+    pagination: PaginationType,
     error: string
 }
 
@@ -18,7 +18,7 @@ const initialState: initialStateType = {
     action: ActionIntialValue,
     datas: [],
     activeSchoolYear: null,
-    page: 1,
+    pagination: PaginationInitialValue ,
     error: '',
 }
 
@@ -36,9 +36,13 @@ const SchoolYearSlice = createSlice({
             .addCase(getAllSchoolYear.pending, (state) => {
                 state.action.isLoading = true;
             })
-            .addCase(getAllSchoolYear.fulfilled, (state, action: { payload: SchoolYearType[] }) => {
+            .addCase(getAllSchoolYear.fulfilled, (state, action: { payload: ApiReturnType }) => {
                 state.action.isLoading = false;
-                state.datas = action.payload;
+                if (action.payload.data)
+                    state.datas = action.payload.data;
+                if (action.payload.pagination)
+                    state.pagination = action.payload.pagination
+
                 if (state.datas.length > 0) {
                     state.activeSchoolYear = state.datas.find(year => year.isActif === '1') || state.datas[0];
                 } else {
@@ -48,7 +52,6 @@ const SchoolYearSlice = createSlice({
             })
             .addCase(getAllSchoolYear.rejected, (state) => {
                 state.action.isLoading = false;
-                state.error = 'Erreur de connexion au server';
                 toast.error("Erreur de connexion au server");
             });
 

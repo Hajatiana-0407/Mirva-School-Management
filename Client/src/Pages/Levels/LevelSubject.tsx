@@ -1,15 +1,12 @@
 import { ArrowDown, ArrowRight, BookOpen, GraduationCap, Plus, Save } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
-import { getLevelState } from "./redux/LevelSlice";
 import { LevelSubjectType, levelType, SubjectType } from "../../Utils/Types";
-import { getSubjectState } from "../Subjects/redux/SubjectSlice";
-import { getAllLevel, getLelvelSubjectByIdNiveau, registerSubjectLevelCoef } from "./redux/LevelAsyncThunk";
+import { getLelvelSubjectByIdNiveau, registerSubjectLevelCoef } from "./redux/LevelAsyncThunk";
 import { AppDispatch } from "../../Redux/store";
 import { getLevelSubjectState } from "./redux/LevelSubjectSlice";
 import Loading from "../../Components/ui/Loading";
 import { hexToRgba } from "../../Utils/Utils";
-import { getAllSubject } from "../Subjects/redux/SubjectAsyncThunk";
 import SubjectComponent from "./SubjectComponent";
 import useForm from "../../Hooks/useForm";
 import { object } from "yup";
@@ -19,12 +16,13 @@ import HeadingSmall from "../../Components/ui/HeadingSmall";
 import Modal from "../Modal";
 import SubjectForm from "../../Components/Forms/SubjectForm";
 import { getAppState } from "../../Redux/AppSlice";
+import { getAllLevelsNoPagination, getAllSubjectsNoPagination } from "../../Redux/Other/asyncThunk/AppAsyncThunk";
 
 const LevelSubjectSchema = object({})
 const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) => {
     const [idActiveLevel, setIdActiveLevel] = useState<any>(0);
-    const { datas: levels } = useSelector(getLevelState);
-    const { datas: subjects } = useSelector(getSubjectState);
+    const { allLevels: levels } = useSelector(getAppState);
+    const { allSubjects: subjects } = useSelector(getAppState);
     const [levelActive, setLevelActive] = useState<levelType | null>(null)
     const { datas: levelSubjects, action: levelSubjectAction } = useSelector(getLevelSubjectState);
     const [subjectSave, setSubjectSave] = useState<number[]>([]);
@@ -67,12 +65,8 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
     }, [levelSubjects, idActiveLevel]);
 
     useEffect(() => {
-        dispatch(getAllSubject());
-    }, [dispatch])
-
-    useEffect(() => {
         if (idActiveLevel) {
-            levels.map((level: levelType) => {
+            levels?.map((level: levelType) => {
                 if (level.id_niveau == idActiveLevel) {
                     setLevelActive(level);
                 }
@@ -165,7 +159,10 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
     }
 
     useEffect(() => {
-        dispatch(getAllLevel());
+        if (!levels || levels.length == 0)
+            dispatch(getAllLevelsNoPagination())
+        if (!subjects || subjects.length == 0)
+            dispatch(getAllSubjectsNoPagination());
     }, [dispatch]);
 
     // Modal
@@ -191,7 +188,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                     className="bg-secondary-50 border border-secondary-300 text-black text-sm rounded-e-lg border-s-secondary-100 dark:border-s-secondary-700 border-s-2 focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
                 >
                     <option value={0} >Choisissez un niveau</option>
-                    {levels.map((value: levelType, key: number) => (
+                    {levels?.map((value: levelType, key: number) => (
                         <option key={key} value={value.id_niveau} >{value.niveau} </option>
                     ))}
                 </select>
@@ -213,7 +210,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                             }
                         </div>
                         <div className="max-h-80 overflow-y-auto">
-                            {subjects.map((subject: SubjectType, key: number) => {
+                            {subjects?.map((subject: SubjectType, key: number) => {
                                 if (
                                     !levelSubjects.some((value) => (value.matiere_id_matiere === subject.id_matiere) //* Si le matiere a deja une une coefficient dans  la base  */
                                         && !subjectCoefToDelete.includes(subject.id_matiere)) && !idAllSubjectCoefAdded.includes(subject.id_matiere as number) // si la matiere a ete supprimer de la liste 
@@ -282,7 +279,7 @@ const LevelSubject = ({ idLevelToAddSubject }: { idLevelToAddSubject: number }) 
                                             )}
 
                                             {/* Matiere | Niveau | Coefficient -> Modifier */}
-                                            {subjects.slice().reverse().map((subject: SubjectType) => {
+                                            {subjects?.slice().reverse().map((subject: SubjectType) => {
                                                 const levelSubject = levelSubjects.find((value) => value.matiere_id_matiere === subject.id_matiere)
                                                 if (levelSubject && !subjectCoefToDelete.includes(levelSubject.matiere_id_matiere as number)) {
                                                     return <SubjectComponent key={`update-${subject.id_matiere}`} subject={subject} levelSubject={levelSubject} nameKey={`update[${subject.id_matiere}]`} onDelete={handleDelete} type="update" />

@@ -5,11 +5,11 @@ import { AppDispatch } from '../../Redux/store';
 import useForm from '../../Hooks/useForm';
 import { classeInitialState, ClasseType, levelType } from '../../Utils/Types';
 import { getClasseState } from '../../Pages/Classes/redux/ClasseSlice';
-import { getLevelState } from '../../Pages/Levels/redux/LevelSlice';
-import { getAllLevel } from '../../Pages/Levels/redux/LevelAsyncThunk';
 import InputError from '../../Components/ui/InputError';
 import { createClasse, updateClasse } from '../../Pages/Classes/redux/ClasseAsyncThunk';
 import { Check, PenBox, X } from 'lucide-react';
+import { getAppState } from '../../Redux/AppSlice';
+import { getAllLevelsNoPagination } from '../../Redux/Other/asyncThunk/AppAsyncThunk';
 
 // Validation de donnée avec yup 
 const classeSchema = object({
@@ -26,7 +26,7 @@ const ClasseForm: React.FC<ClasseFormPropsType> = ({ classe, handleClose, idLeve
     const dispatch: AppDispatch = useDispatch();
     const { action, error } = useSelector(getClasseState);
     const { onSubmite, formErrors } = useForm<ClasseType>(classeSchema, classeInitialState);
-    const { datas: niveaux } = useSelector(getLevelState);
+    const { allLevels: niveaux } = useSelector(getAppState);
 
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,8 +35,8 @@ const ClasseForm: React.FC<ClasseFormPropsType> = ({ classe, handleClose, idLeve
         }, e)
     }
     useEffect(() => {
-        if (niveaux.length === 0) {
-            dispatch(getAllLevel());
+        if ( !niveaux || niveaux?.length === 0) {
+            dispatch(getAllLevelsNoPagination());
         }
     }, [dispatch]);
 
@@ -52,12 +52,12 @@ const ClasseForm: React.FC<ClasseFormPropsType> = ({ classe, handleClose, idLeve
                 >
                     {!classe && <option value="0">Sélectionner un niveau</option>}
 
-                    {niveaux.map((niveau: levelType, key: number) => {
+                    {niveaux?.map((niveau: levelType, key: number) => {
                         return classe && classe.niveau_id_niveau === niveau.id_niveau
                             ? <option key={key} value={niveau.id_niveau}>{niveau.niveau}</option>
                             : classe ? "" : <option key={key} value={niveau.id_niveau}>{niveau.niveau}</option>
                     })}
-                    {niveaux.map((niveau: levelType, key: number) => {
+                    {niveaux?.map((niveau: levelType, key: number) => {
                         return classe && classe.niveau_id_niveau !== niveau.id_niveau
                             ? <option key={key} value={niveau.id_niveau}>{niveau.niveau}</option>
                             : ""

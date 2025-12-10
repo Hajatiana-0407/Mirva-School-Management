@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionIntialValue, ActionType, ApiReturnType, ClasseType } from "../../../Utils/Types";
+import { ActionIntialValue, ActionType, ApiReturnType, ClasseType, PaginationInitialValue, PaginationType } from "../../../Utils/Types";
 import { createClasse, deleteClasse, getAllClasse, updateClasse } from "./ClasseAsyncThunk";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
@@ -9,14 +9,14 @@ import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 type initialStateType = {
     action: ActionType,
     datas: ClasseType[],
-    page: number,
+    pagination: PaginationType
     error: string
 }
 
 const initialState: initialStateType = {
     action: ActionIntialValue,
     datas: [],
-    page: 1,
+    pagination: PaginationInitialValue,
     error: '',
 }
 
@@ -39,10 +39,13 @@ const LevelSlice = createSlice({
                 state.action.isLoading = true;
             })
             .addCase(getAllClasse.fulfilled, (state, action: {
-                payload: ClasseType[]
+                payload: ApiReturnType
             }) => {
                 state.action.isLoading = false;
-                state.datas = action.payload;
+                if (action.payload.data)
+                    state.datas = action.payload.data;
+                if (action.payload.pagination)
+                    state.pagination = action.payload.pagination
             })
             .addCase(getAllClasse.rejected, (state) => {
                 state.action.isLoading = false;

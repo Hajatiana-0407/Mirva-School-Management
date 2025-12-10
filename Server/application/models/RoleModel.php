@@ -12,7 +12,7 @@ class RoleModel extends CI_Model
     }
 
     // ? ======= READ =======
-    public function findAll()
+    public function findAllQuery()
     {
         $roles =  $this->db->select('r.* , COUNT(u.id_user) as total_utilisateur')
             ->from($this->table . ' r')

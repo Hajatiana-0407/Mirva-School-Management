@@ -5,6 +5,7 @@ class AnneeScolaireModel extends CI_Model
 {
     protected $table = 'annee_scolaire';
     protected $primaryKey = 'id_annee_scolaire';
+    protected $searchs = ['annee_scolaire.nom', 'annee_scolaire.description'];
 
     public function __construct()
     {
@@ -12,47 +13,14 @@ class AnneeScolaireModel extends CI_Model
     }
 
 
-    // ======= CREATE =======
-    public function insert($data)
+    // Read
+    public function findAllQuery()
     {
-        $inserted = $this->db->insert($this->table, $data);
-
-        if ($inserted) {
-            $inserted_id = $this->db->insert_id();
-
-            // Desactiver les autres années scolaires
-            $this->db->where($this->primaryKey . ' <>', $inserted_id);
-            $this->db->update($this->table, ['isActif' => 0]);
-
-            return $this->findOneById($inserted_id);
-        }
-
-        return false;
+        return $this->db->select('*')
+            ->from($this->table)
+            ->order_by('isActif', 'DESC')
+            ->order_by($this->primaryKey, 'DESC');
     }
-
-
-    // ======= DELETE =======
-    public function delete($id)
-    {
-        $element = $this->db
-            ->get_where($this->table, [$this->primaryKey => $id])
-            ->row();
-        if ($element) {
-            $deleted = $this->db
-                ->where($this->primaryKey, $id)
-                ->delete($this->table);
-
-            if ($deleted) {
-                if ($element->isActif === '1') {
-                    // Si l'année scolaire supprimée était active, activer la dernière année scolaire
-                    $this->makeActiveTheLastSchoolYear();
-                }
-                return $id;
-            }
-        }
-        return false;
-    }
-
 
     // ======= Make active the laste schoolYear =======
     public function makeActiveTheLastSchoolYear()
@@ -83,7 +51,7 @@ class AnneeScolaireModel extends CI_Model
             $this->db->update($this->table, ['isActif' => 1]);
 
             // Desactiver les autres années scolaires
-            $this->db->where($this->primaryKey . ' <>', $id );
+            $this->db->where($this->primaryKey . ' <>', $id);
             $this->db->update($this->table, ['isActif' => 0]);
             return true;
         }

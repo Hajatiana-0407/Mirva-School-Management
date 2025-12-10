@@ -12,8 +12,8 @@ class TypePersonnelController extends CI_Controller
 
     public function index()
     {
-        $data = $this->TypePersonnelModel->findAll();
-        echo json_encode($data);
+        $builder = $this->TypePersonnelModel->findAllQuery();
+        echo json_encode($builder->get()->result_array());
     }
 
 }

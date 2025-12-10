@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Trash, PenBox, Download, Eye, BellPlus, Share, Share2, BookOpen, GraduationCap } from 'lucide-react';
+import { Plus, Trash, PenBox, Download, Eye, BellPlus, Share, Share2, BookOpen, GraduationCap } from 'lucide-react';
 import Modal from '../Modal';
 import { getAppState } from '../../Redux/AppSlice';
 import { ExerciceType } from '../../Utils/Types';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../Redux/store';
 import { getExerciceState } from './redux/ExerciceSlice';
-import { deleteExercice, getAllExercices, publish } from './redux/ExerciceAsyncThunk';
+import { deleteExercice, filterExercice, getAllExercices, publish } from './redux/ExerciceAsyncThunk';
 import ActionMenu from '../../Components/ActionMenu';
 import { baseUrl, download, hexToRgba } from '../../Utils/Utils';
 import Profile from '../../Components/ui/Profile';
@@ -19,21 +19,25 @@ import { Link } from 'react-router-dom';
 import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
 import { useActiveUser } from '../../Hooks/useActiveUser';
+import Pagination from '../../Components/Pagination';
+import { FilterAndSearchType } from '../../Components/FilterAndSearch';
+import { getAllLevelsNoPagination, getAllSubjectsNoPagination } from '../../Redux/Other/asyncThunk/AppAsyncThunk';
 
 
 
 const Exercice = () => {
   const { hiddeTheModalActive } = useSelector(getAppState);
-  const [searchTerm, setSearchTerm] = useState('');
+  const { allLevels: levels } = useSelector(getAppState);
+  const { allSubjects: subjects } = useSelector(getAppState);
   const [showModal, setShowModal] = useState(false);
   const [editingExercice, setEditingExercice] = useState<ExerciceType | null>(null);
-  const { datas, action } = useSelector(getExerciceState);
+  const { datas, action, pagination } = useSelector(getExerciceState);
   const [exerciceToArchive, setexerciceToArchive] = useState<ExerciceType | null>(null)
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const [progress, setProgress] = useState(0)
   const [showProgress, setShowProgress] = useState(false)
   const dispatch: AppDispatch = useDispatch();
-  const permission = useHashPermission(  { redirect : true  });
+  const permission = useHashPermission({ redirect: true });
   const { isStudent } = useActiveUser();
 
   const handleCloseModal = () => {
@@ -78,9 +82,29 @@ const Exercice = () => {
   }, [hiddeTheModalActive]);
 
   useEffect(() => {
-    dispatch(getAllExercices());
+    if (datas.length == 0)
+      dispatch(getAllExercices({}));
+    if ( !subjects || subjects?.length == 0)
+      dispatch(getAllSubjectsNoPagination());
+    if (!levels || levels?.length == 0)
+      dispatch(getAllLevelsNoPagination());
   }, [dispatch])
 
+
+  // Parametre pour le filtre dans le header 
+  const filter: FilterAndSearchType = {
+    pagination: pagination,
+    thunk: getAllExercices,
+    isAdvanced: true,
+    filters: [
+      { label: 'Date de debut', name: 'date_debut', type: 'date' },
+      { label: 'Date de fin', name: 'date_fin', type: 'date' },
+      { label: 'Niveau', name: 'niveau', type: 'select', options: levels?.map(level => ({ label: level.niveau, value: level.id_niveau as number })) },
+      { label: 'Matière', name: 'matiere', type: 'select', options: subjects?.map(sugject => ({ label: sugject.denomination, value: sugject.id_matiere as number })) },
+    ],
+    filterThunk: filterExercice,
+    isLoading: action.isFilterLoading
+  }
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -88,6 +112,8 @@ const Exercice = () => {
       <Title
         title='Exercices'
         description='Gérez les exercices, les devoirs et les activités d’apprentissage.'
+        fixed
+        filter={filter}
       >
         {permission.create &&
           <button
@@ -101,26 +127,11 @@ const Exercice = () => {
         }
       </Title>
 
-      <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
-              <input
-                type="text"
-                placeholder="Rechercher une année scolaire..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-            </div>
-            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg hover:bg-secondary-50">
-              <Filter className="w-4 h-4" />
-              <span>Filtres</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      <Pagination
+        pagination={pagination}
+        thunk={getAllExercices}
+        filterThunk={filterExercice}
+      />
 
       <div>
         {datas.length === 0 && action.isLoading &&
@@ -276,6 +287,10 @@ const Exercice = () => {
           })}
         </div>
       </div>
+      <Pagination
+        pagination={pagination}
+        thunk={getAllExercices}
+      />
 
       {/* Modal pour ajouter/modifier une année scolaire */}
       <Modal

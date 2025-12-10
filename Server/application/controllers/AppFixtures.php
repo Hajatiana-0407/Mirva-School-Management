@@ -266,7 +266,7 @@ class AppFixtures extends CI_Controller
         $lastStudentMatricule = $lastStudent->matricule_etudiant ?? '';
 
         $elevesToInsert = [];
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 25; $i++) {
             $matriculeStudent = generateMatricule(STUDENT_PRIFIX, $lastStudentMatricule);
 
             $elevesToInsert[] = [
@@ -328,19 +328,30 @@ class AppFixtures extends CI_Controller
         // Récupérer les IDs parents créés
         $parents = $this->model->getIds('parents', 'id_parent');
 
-
         // Maintenant on crée les liens élèves ↔ parents
-        $index = 0;
+        $parentsChoosed = [];
         foreach ($eleves as $eleve) {
             $nbParents = rand(1, 3);
-
             for ($i = 0; $i < $nbParents; $i++) {
-                $parentsElevesToInsert[] = [
-                    'eleve_id_eleve' => $eleve,
-                    'parent_id_parent' => $parents[$index],
-                    'type' => $this->faker->randomElement(['père', 'mère', 'tuteur'])
-                ];
-                $index++;
+                $teste = 0;
+                do {
+                    $parentId = $parents[array_rand($parents, 1)];
+                    $teste++;
+                } while ($teste <= 4 && in_array($parentId, $parentsChoosed));
+
+                if (!in_array($parentId, $parentsChoosed)) {
+                    $parentsChoosed[] = $parentId;
+                } else {
+                    continue;
+                }
+
+                if ($parentId !== null && $parentId !== 0) {
+                    $parentsElevesToInsert[] = [
+                        'eleve_id_eleve' => $eleve,
+                        'parent_id_parent' => $parentId,
+                        'type' => $this->faker->randomElement(['père', 'mère', 'tuteur'])
+                    ];
+                }
             }
         }
 
@@ -355,7 +366,7 @@ class AppFixtures extends CI_Controller
 
         $inscriptionsToInsert = [];
 
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             $inscriptionsToInsert[] = [
                 'date_inscription' => $this->faker->date(),
                 'classe_id_classe' => $this->faker->randomElement($classes),

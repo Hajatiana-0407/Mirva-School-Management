@@ -5,6 +5,36 @@ import { setHiddeModalValue } from '../../../Redux/AppSlice';
 import { toast } from 'react-toastify';
 import { ApiReturnType } from '../../../Utils/Types';
 
+
+
+export const getAllRegistrations = createAsyncThunk('registration/getAll', async ({ page, query, no_pagination }: { page?: number; query?: any, no_pagination?: boolean }): Promise<ApiReturnType> => {
+  let datas: ApiReturnType = ApiReturnInitial;
+  await api.get('admin/registration', {
+    params: { page, query, no_pagination }
+  }).then(response => {
+    datas = response.data
+  })
+    .catch(error => {
+      console.error('Erreur lors de la récupération des données:', error);
+    });
+  return datas;
+})
+
+export const filterRegistration = createAsyncThunk(
+  'registration/filter',
+  async ({ page = 1, filter }: { page?: number; filter?: FormData }): Promise<ApiReturnType> => {
+    let datas: ApiReturnType = ApiReturnInitial;
+    filter?.append('page', String(page));
+    try {
+      const response = await api.post('filtre/inscription', filter);
+      datas = response.data;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données:', error);
+    }
+    return datas;
+  }
+);
+
 export const createRegistration = createAsyncThunk<ApiReturnType, RegistrationType>(
   'registration/create',
   async (datas, { dispatch }) => {
@@ -23,21 +53,6 @@ export const createRegistration = createAsyncThunk<ApiReturnType, RegistrationTy
       }
     });
     return data;
-  }
-);
-
-export const getAllRegistrations = createAsyncThunk<RegistrationType[]>(
-  'registration/getAll',
-  async () => {
-    let datas: RegistrationType[] = [];
-    await api.get('admin/registration')
-      .then(response => {
-        datas = response.data
-      })
-      .catch(error => {
-        console.error('Erreur lors de la récupération des données:', error);
-      });
-    return datas;
   }
 );
 

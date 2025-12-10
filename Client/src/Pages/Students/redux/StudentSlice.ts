@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionIntialValue, ActionType, ApiReturnType, StudentType } from "../../../Utils/Types";
+import { ActionIntialValue, ActionType, ApiReturnType, PaginationInitialValue, PaginationType, StudentType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
-import { createStudent, deleteStudent, getAllStudent, getStudentByMatricule, updateStudent } from "./StudentAsyncThunk";
+import { createStudent, deleteStudent, filterStudent, getAllStudent, getStudentByMatricule, updateStudent } from "./StudentAsyncThunk";
 import { StudentDetailsType } from "../../../Utils/Types";
 import { createRegistration } from "../../Registrations/redux/registerAsyncThunk";
 import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
@@ -11,7 +11,7 @@ import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 type initialStateType = {
     action: ActionType,
     datas: StudentType[],
-    page: number,
+    pagination: PaginationType,
     error: string
     single: {
         data?: StudentDetailsType;
@@ -22,7 +22,7 @@ type initialStateType = {
 const initialState: initialStateType = {
     action: ActionIntialValue,
     datas: [],
-    page: 1,
+    pagination: PaginationInitialValue,
     error: '',
     single: { action: ActionIntialValue }
 }
@@ -41,22 +41,46 @@ const StudentSlice = createSlice({
             return initialState;
         });
 
-        // ? ************************************* Read ************************************* //
+        // ? ===================== Read  ===================== //
         builder
             .addCase(getAllStudent.pending, (state) => {
                 state.action.isLoading = true;
+                state.error = '';
             })
             .addCase(getAllStudent.fulfilled, (state, action: {
-                payload: StudentType[]
+                payload: ApiReturnType
             }) => {
                 state.action.isLoading = false;
-                state.datas = action.payload;
+                if (action.payload.data)
+                    state.datas = action.payload.data;
+                if (action.payload.pagination)
+                    state.pagination = action.payload.pagination
             })
             .addCase(getAllStudent.rejected, (state) => {
                 state.action.isLoading = false;
                 state.error = 'Erreur de connexion au server'
-                toast.error("Erreur de connexion au server");
             });
+
+        // Filtre 
+        builder
+            .addCase(filterStudent.pending, (state) => {
+                state.action.isFilterLoading = true;
+                state.error = '';
+            })
+            .addCase(filterStudent.fulfilled, (state, action: {
+                payload: ApiReturnType
+            }) => {
+                state.action.isFilterLoading = false;
+                if (action.payload.data)
+                    state.datas = action.payload.data;
+                if (action.payload.pagination)
+                    state.pagination = action.payload.pagination
+            })
+            .addCase(filterStudent.rejected, (state) => {
+                state.action.isFilterLoading = false;
+                state.error = 'Erreur de connexion au server'
+            });
+
 
         // ? ************************************* Create ************************************* //
         builder

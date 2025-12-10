@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionIntialValue, ActionType, ApiReturnType, levelType } from "../../../Utils/Types";
+import { ActionIntialValue, ActionType, ApiReturnType, levelType, PaginationInitialValue, PaginationType } from "../../../Utils/Types";
 import { createLevel, deleteLevel, getAllLevel, updateLevel } from "./LevelAsyncThunk";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
@@ -9,14 +9,14 @@ import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 type initialStateType = {
     action: ActionType,
     datas: levelType[],
-    page: number,
+    pagination: PaginationType,
     error: string
 }
 
 const initialState: initialStateType = {
     action: ActionIntialValue,
     datas: [],
-    page: 1,
+    pagination: PaginationInitialValue,
     error: '',
 }
 
@@ -40,15 +40,15 @@ const LevelSlice = createSlice({
                 state.action.isLoading = true;
             })
             .addCase(getAllLevel.fulfilled, (state, action: {
-                payload: levelType[]
+                payload: ApiReturnType
             }) => {
                 state.action.isLoading = false;
-                state.datas = action.payload;
+                state.datas = action.payload.data ;
+                state.pagination = action.payload.pagination
             })
             .addCase(getAllLevel.rejected, (state) => {
                 state.action.isLoading = false;
                 state.error = 'Erreur de connexion au server'
-                toast.error("Erreur de connexion au server");
             });
 
         // ************************************* Create ************************************* //

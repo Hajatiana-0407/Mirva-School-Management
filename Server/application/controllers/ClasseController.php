@@ -12,24 +12,35 @@ class ClasseController extends CI_Controller
 
     public function index()
     {
-        $data = $this->ClasseModel->findAll();
+        $page = $this->input->get('page', 1) ?? 1;
+        $search = $this->input->get('query', 1) ?? '';
+        $no_pagination = $this->input->get('no_pagination', 1) ?? false;
+        $query = $this->ClasseModel->findAllQuery();
+        $pagination = $this->ClasseModel->paginateQuery($query, $page, $search, $no_pagination);
+        $pagination['data'] = $this->ClasseModel->findAllData($pagination['data']);
+
         $this->output
             ->set_content_type('application/json')
-            ->set_output(json_encode($data));
+            ->set_output(json_encode([
+                'pagination' => $pagination,
+                'data' => $pagination['data']
+            ]));
     }
 
     public function create()
     {
         $data = [
             'denomination' => $this->input->post('denomination'),
-            'niveau_id_niveau' => (int)$this->input->post('niveau_id_niveau'),
+            'niveau_id_niveau' => (int) $this->input->post('niveau_id_niveau'),
         ];
-        if ($this->ClasseModel->isExist([
-            'denomination' => $data['denomination'],
-        ])) {
+        if (
+            $this->ClasseModel->isExist([
+                'denomination' => $data['denomination'],
+            ])
+        ) {
             echo json_encode(['error' => true, 'message' => "La classe \''{$data['denomination']}'\' existe déjà."]);
         } else {
-            $data =  $this->ClasseModel->insert($data);
+            $data = $this->ClasseModel->insert($data);
             if ($data) {
                 echo json_encode(['error' => false, 'data' => $data]);
             } else {
@@ -44,18 +55,20 @@ class ClasseController extends CI_Controller
         $id = $this->input->post($this->pk);
         $data = [
             'denomination' => $this->input->post('denomination'),
-            'niveau_id_niveau' => (int)$this->input->post('niveau_id_niveau'),
+            'niveau_id_niveau' => (int) $this->input->post('niveau_id_niveau'),
         ];
 
 
-        if ($this->ClasseModel->isExist(
-            ['denomination' => $data['denomination']],
-            'and',
-            [$this->pk => $id]
-        )) {
+        if (
+            $this->ClasseModel->isExist(
+                ['denomination' => $data['denomination']],
+                'and',
+                [$this->pk => $id]
+            )
+        ) {
             echo json_encode(['error' => true, 'message' => "La classe \''{$data['denomination']}'\' existe déjà."]);
         } else {
-            $data =  $this->ClasseModel->update($id, $data);
+            $data = $this->ClasseModel->update($id, $data);
             if ($data) {
                 echo json_encode(['error' => false, 'data' => $data]);
             } else {
@@ -79,13 +92,13 @@ class ClasseController extends CI_Controller
                 if ($data) {
                     echo json_encode(['error' => false, 'data' => $data]);
                 } else {
-                    echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                    echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
                 }
             } else {
-                echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
             }
         } else {
-            echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+            echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
         }
     }
 
@@ -96,7 +109,7 @@ class ClasseController extends CI_Controller
     {
         $datas = [];
         if ($id > 0) {
-            $datas =  $this->ClasseModel->getAllClasseByIdMatiere($id);
+            $datas = $this->ClasseModel->getAllClasseByIdMatiere($id);
         }
         echo json_encode($datas);
     }

@@ -1,21 +1,38 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../../Utils/api";
-import { ApiReturnInitial, ApiReturnType, LessonType } from "../../../Utils/Types";
+import { ApiReturnInitial, ApiReturnType } from "../../../Utils/Types";
 import { setHiddeModalValue } from "../../../Redux/AppSlice";
 import { toast } from "react-toastify";
 
 // READ
-export const getAllLessons = createAsyncThunk('lesson/getAll', async (): Promise<LessonType[]> => {
-  let datas: LessonType[] = [];
-  await api.get('admin/lesson')
-    .then(response => {
-      datas = response.data;
-    })
+export const getAllLessons = createAsyncThunk('lesson/getAll', async ({ page, query, no_pagination }: { page?: number; query?: any, no_pagination?: boolean }): Promise<ApiReturnType> => {
+  let datas: ApiReturnType = ApiReturnInitial;
+  await api.get('admin/lesson', {
+    params: { page, query, no_pagination }
+  }).then(response => {
+    datas = response.data
+  })
     .catch(error => {
-      console.error('Erreur lors de la récupération des leçons :', error);
+      console.error('Erreur lors de la récupération des données:', error);
     });
   return datas;
-});
+})
+export const filterLesson = createAsyncThunk(
+  'lesson/filter',
+  async ({ page = 1, filter }: { page?: number; filter?: FormData }): Promise<ApiReturnType> => {
+    let datas: ApiReturnType = ApiReturnInitial;
+    filter?.append('page', String(page));
+    console.log(filter);
+
+    try {
+      const response = await api.post('filtre/lecon', filter);
+      datas = response.data;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données:', error);
+    }
+    return datas;
+  }
+);
 
 
 // CREATE
@@ -96,7 +113,7 @@ export const publish = createAsyncThunk('lesson/publish', async (id_lecon: numbe
 })
 
 
-// Get By Slug 
+// Get By Slug
 // export const getLessonBySlug = createAsyncThunk('lesson/getOneBySlug', async (slug: string): Promise<ApiReturnType> => {
 //   let data: ApiReturnType = ApiReturnInitial;
 //   await api.get(`admin/lesson/${slug}`)

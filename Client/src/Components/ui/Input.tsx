@@ -97,9 +97,9 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                         <span
                             className={clsx(
                                 {
-                                    hidden: !isEmpty && type !== "select",
+                                    hidden: !isEmpty && type !== 'select' && type != 'date',
                                 },
-                                "transition-all duration-700 absolute left-3 top-0 -translate-y-1/2 text-sm text-primary-400 pointer-events-none bg-light z-20"
+                                "transition-all duration-700 absolute left-3 top-0 -translate-y-1/2 text-sm text-secondary-600 pointer-events-none bg-light z-20"
                             )}
                         >
                             {label}
@@ -121,7 +121,7 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                                                 "ps-12": icon,
                                                 "text-secondary-400/60": options.length === 0,
                                             },
-                                            "bg-light pl-10 pr-10 py-2 border w-full border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none"
+                                            "bg-light pl-10 pr-10 py-2 border w-full border-secondary-300 anh focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none"
                                         )}
                                     >
                                         {options.length ? (
@@ -145,7 +145,7 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                                                 "ps-12": icon,
                                                 "text-secondary-400/60": options.length === 0,
                                             },
-                                            "bg-light pl-10 pr-10 py-2 border w-full border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none"
+                                            "bg-light pl-10 pr-10 py-2 border w-full border-secondary-300 anh focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none"
                                         )}
                                     >
                                         {options.length ? (
@@ -171,7 +171,7 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                             <div className="flex w-full flex-col items-start gap-2 relative">
                                 <label
                                     className={clsx(
-                                        "flex w-full items-center gap-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-400/60 rounded-lg cursor-pointer transition-colors"
+                                        "flex w-full items-center gap-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-400/60 anh cursor-pointer transition-colors"
                                     )}
                                 >
                                     <div className="w-5 h-5" />
@@ -224,7 +224,7 @@ const Input = forwardRef<HTMLInputElement | HTMLSelectElement, InputProps>(
                                 readOnly={readonly}
                                 className={clsx(
                                     { "ps-12": icon },
-                                    "pl-10 pr-4 py-2 border w-full border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                    "pl-10 pr-4 py-2 border w-full border-secondary-300 anh focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                 )}
                             />
                         )}

@@ -12,7 +12,7 @@ class SiteValeurController extends CI_Controller
 
     public function index()
     {
-        $data = $this->SiteValeurModel->findAll();
+        $data = $this->SiteValeurModel->findAllQuery()->get()->result_array();
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode([

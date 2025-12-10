@@ -1,16 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ApiReturnInitial, ApiReturnType, LevelSubjectType, levelType } from "../../../Utils/Types";
+import { ApiReturnInitial, ApiReturnType, LevelSubjectType } from "../../../Utils/Types";
 import api from "../../../Utils/api";
 import { setHiddeModalValue } from "../../../Redux/AppSlice";
 
 
 // READ
-export const getAllLevel = createAsyncThunk('niveau/getAll', async (): Promise<levelType[]> => {
-    let datas: levelType[] = [];
-    await api.get('admin/niveau')
-        .then(response => {
-            datas = response.data
-        })
+export const getAllLevel = createAsyncThunk('niveau/getAll', async ({ page, query, no_pagination }: { page?: number; query?: any, no_pagination?: boolean }): Promise<ApiReturnType> => {
+    let datas: ApiReturnType = ApiReturnInitial;
+    await api.get('admin/niveau', {
+        params: { page, query, no_pagination }
+    }).then(response => {
+        datas = response.data
+    })
         .catch(error => {
             console.error('Erreur lors de la récupération des données:', error);
         });

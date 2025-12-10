@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
 import { ValidationError, type AnyObjectSchema } from 'yup'
 import { AppDispatch } from "../Redux/store";
 import { setHiddeModalValue } from "../Redux/AppSlice";
@@ -18,7 +17,7 @@ export default function useForm<T>(
     onSubmite: (next: (data: T) => void, e: React.FormEvent<HTMLFormElement>) => Promise<void>;
     resetError: () => void;
     forceError: (errors: Partial<Record<keyof T, string>>) => void;
-    HandleValidateSchema: (form: HTMLFormElement , step?: number ) => Promise<boolean>
+    HandleValidateSchema: (form: HTMLFormElement, step?: number) => Promise<boolean>
 } {
     const [formValue, setAllFormValue] = useState(initial);
     const [formErrors, setFormErrors] = useState<Partial<Record<keyof T, string>>>();
@@ -75,7 +74,6 @@ export default function useForm<T>(
             setAllFormValue(data as T);
         }
 
-        const toastId = toast.loading('Veuillez patienter...');
         try {
             const schemas = Array.isArray(schemaValidation)
                 ? schemaValidation
@@ -104,10 +102,7 @@ export default function useForm<T>(
                 setFormErrors({});
                 next(formData as any);
             }
-            toast.dismiss(toastId);
-        } catch (error) {
-            toast.dismiss(toastId);
-        }
+        } catch (error) { }
     };
 
     // Seulement pour testé si le schema est valide ( pour des formulaire a plusieur etape )

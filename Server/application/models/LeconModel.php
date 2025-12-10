@@ -11,13 +11,58 @@ class LeconModel extends CI_Model
         parent::__construct();
     }
 
+    public function filtreQuery($niveau, $matiere, $query, $date_debut, $date_fin)
+    {
+        $builder = $this->findAllQuery();
 
-    public function findAll()
+        // Filtre niveau
+        if (!empty($niveau) && $niveau != 0) {
+            $builder->where('l.id_niveau', $niveau);
+        }
+
+        // Filtre matière
+        if (!empty($matiere) && $matiere != 0) {
+            $builder->where('l.id_matiere', $matiere);
+        }
+
+        // Filtre date début
+        if (!empty($date_debut)) {
+            $builder->where('l.created_at >=', $date_debut);
+        }
+
+        // Filtre date fin
+        if (!empty($date_fin)) {
+            $builder->where('l.created_at <=', $date_fin);
+        }
+
+        // Recherche globale
+        if (!empty($query)) {
+            $builder->group_start();
+
+            $builder->like('l.titre', $query);
+            $builder->or_like('l.description', $query);
+            $builder->or_like('n.niveau', $query);
+            $builder->or_like('m.denomination', $query);
+            $builder->or_like('m.abbreviation', $query);
+
+            // Recherche nom+prenom combinés
+            $builder->or_like('CONCAT(p.nom, " ", p.prenom)', $query, 'both', false);
+
+            $builder->group_end();
+        }
+
+        return $builder;
+    }
+
+
+
+    public function findAllQuery()
     {
         $session = $this->session->userData();
 
         // Si l'utilisateur est non connecter
-        if( !isset( $session['role_id'])) return [] ; 
+        if (!isset($session['role_id']))
+            return [];
 
         // Définition du niveau de l'élève si applicable
         $niveau_utilisateur = null;
@@ -61,7 +106,7 @@ class LeconModel extends CI_Model
             ->join('personnel p', 'p.id_personnel = l.id_prof', 'left');
 
         // Si c'est un enseignant → afficher uniquement ses leçons
-        if ($session['role_id'] == 'teacher'  ) {
+        if ($session['role_id'] == 'teacher') {
             $this->db->where('l.id_prof', isset($session['user_identity']['id_personnel']) ? $session['user_identity']['id_personnel'] : null);
         }
 
@@ -80,9 +125,7 @@ class LeconModel extends CI_Model
         // Exécution finale
         return $this->db
             ->group_by('l.id_lecon')
-            ->order_by('l.created_at', 'DESC')
-            ->get()
-            ->result_array();
+            ->order_by('l.created_at', 'DESC');
     }
 
 
@@ -130,7 +173,7 @@ class LeconModel extends CI_Model
             ->join('personnel p', 'p.id_personnel = l.id_prof', 'left')
             ->where($this->primaryKey, $id);
         // Si c'est un enseignant → afficher uniquement ses leçons
-        if ($session['role_id'] == 'teacher'  ) {
+        if ($session['role_id'] == 'teacher') {
             $this->db->where('l.id_prof', isset($session['user_identity']['id_personnel']) ? $session['user_identity']['id_personnel'] : null);
         }
 

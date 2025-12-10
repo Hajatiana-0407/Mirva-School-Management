@@ -12,8 +12,18 @@ class PersonnelController extends CI_Controller
 
     public function index()
     {
-        $data = $this->PersonnelModel->findAll();
-        echo json_encode($data);
+        $page = $this->input->get('page', 1) ?? 1;
+        $search = $this->input->get('query', 1) ?? '';
+        $no_pagination = $this->input->get('no_pagination', 1) ?? false;
+        $query = $this->PersonnelModel->findAllQuery();
+        $pagination = $this->PersonnelModel->paginateQuery($query, $page, $search, $no_pagination);
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode([
+                'pagination' => $pagination,
+                'data' => $pagination['data']
+            ]));
     }
 
     public function findOneByMatricule($matricule)
@@ -81,7 +91,7 @@ class PersonnelController extends CI_Controller
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
                 $photo_result = upload_file('photo', PERSONNEL_UPLOAD_DIR . 'photos');
                 if ($photo_result['success']) {
-                    $data['photo'] =  $photo_result['file_name'];
+                    $data['photo'] = $photo_result['file_name'];
                 } else {
                     echo json_encode(['error' => true, 'message' => "Erreur upload photo : " . $photo_result['error']]);
                     return;
@@ -92,7 +102,7 @@ class PersonnelController extends CI_Controller
             if (isset($_FILES['pc_cin']) && $_FILES['pc_cin']['error'] == 0) {
                 $cin_result = upload_file('pc_cin', PERSONNEL_UPLOAD_DIR . 'pi');
                 if ($cin_result['success']) {
-                    $data['pc_cin'] =  $cin_result['file_name'];
+                    $data['pc_cin'] = $cin_result['file_name'];
                 } else {
                     echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité : " . $cin_result['error']]);
                     return;
@@ -113,14 +123,15 @@ class PersonnelController extends CI_Controller
                     foreach ($assignations as $assignation) {
                         if (!$isAll) {
                             // Condition pour l'arret du boocle si le matiere et tous 
-                            if ($assignation['id_matiere'] === 'tous') $isAll = true;
+                            if ($assignation['id_matiere'] === 'tous')
+                                $isAll = true;
 
                             $assignation_data[] = [
                                 'professeur_id_professeur' => $result->id_personnel,
-                                'classe_id_classe'    => $assignation['id_classe'],
-                                'matiere_id_matiere'  => $assignation['id_matiere'] === 'tous' ? 0 : $assignation['id_matiere'],
-                                'heure_semaine'      => $assignation['heures'],
-                                'is_all_matiere' =>  $assignation['id_matiere'] === 'tous'
+                                'classe_id_classe' => $assignation['id_classe'],
+                                'matiere_id_matiere' => $assignation['id_matiere'] === 'tous' ? 0 : $assignation['id_matiere'],
+                                'heure_semaine' => $assignation['heures'],
+                                'is_all_matiere' => $assignation['id_matiere'] === 'tous'
                             ];
                         }
                     }
@@ -166,7 +177,7 @@ class PersonnelController extends CI_Controller
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
                 $photo_result = upload_file('photo', PERSONNEL_UPLOAD_DIR . 'photos');
                 if ($photo_result['success']) {
-                    $data['photo'] =  $photo_result['file_name'];
+                    $data['photo'] = $photo_result['file_name'];
                 } else {
                     echo json_encode(['error' => true, 'message' => "Erreur upload photo : " . $photo_result['error']]);
                     return;
@@ -177,7 +188,7 @@ class PersonnelController extends CI_Controller
             if (isset($_FILES['pc_cin']) && $_FILES['pc_cin']['error'] == 0) {
                 $cin_result = upload_file('pc_cin', PERSONNEL_UPLOAD_DIR . 'pi');
                 if ($cin_result['success']) {
-                    $data['pc_cin'] =  $cin_result['file_name'];
+                    $data['pc_cin'] = $cin_result['file_name'];
                 } else {
                     echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité : " . $cin_result['error']]);
                     return;
@@ -185,7 +196,7 @@ class PersonnelController extends CI_Controller
             }
 
             // Création du personnel
-            $result = $this->PersonnelModel->update($id,  $data);
+            $result = $this->PersonnelModel->update($id, $data);
 
             if ($result) {
                 echo json_encode(['error' => false, 'data' => $result]);
@@ -219,13 +230,13 @@ class PersonnelController extends CI_Controller
                 if ($data) {
                     echo json_encode(['error' => false, 'data' => $data]);
                 } else {
-                    echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                    echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
                 }
             } else {
-                echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
             }
         } else {
-            echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+            echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
         }
     }
 }

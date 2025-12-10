@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Search, Filter, Archive, User, Eye, Edit, Users, TrendingUp, TrendingDown, Plus } from 'lucide-react';
+import { Archive, User, Eye, Edit, Users, TrendingUp, TrendingDown, Plus } from 'lucide-react';
 
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
@@ -7,7 +7,7 @@ import Table from '../Table';
 import { useDispatch, useSelector } from 'react-redux';
 import { StudentType, RegistrationType } from '../../Utils/Types';
 import { AppDispatch } from '../../Redux/store';
-import { deleteStudent, getAllStudent, getStatistique } from './redux/StudentAsyncThunk';
+import { deleteStudent, filterStudent, getAllStudent, getStatistique } from './redux/StudentAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
 import { getStudentState } from './redux/StudentSlice';
 import clsx from 'clsx';
@@ -17,13 +17,17 @@ import RegisterForm from '../../Components/Forms/RegisterForm';
 import StudentForm from '../../Components/Forms/StudentForm';
 import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
+import FilterAndSearch, { FilterAndSearchType } from '../../Components/FilterAndSearch';
+import { getAllLevel } from '../Levels/redux/LevelAsyncThunk';
+import { getAllClasse } from '../Classes/redux/ClasseAsyncThunk';
 
 
 const Student = () => {
-  const { datas: students, action } = useSelector(getStudentState);
+  const { datas: students, action, pagination } = useSelector(getStudentState);
+  const { allLevels: levels } = useSelector(getAppState);
+  const { allClasses: classes } = useSelector(getAppState);
 
   const { hiddeTheModalActive } = useSelector(getAppState);
-  const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showModalRegister, setShowModalRegister] = useState(false);
   const [editingStudent, setEditingStudent] = useState<StudentType | null>(null);
@@ -32,7 +36,7 @@ const Student = () => {
   const [statistique, setStatistique] = useState<any>(null)
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const permission = useHashPermission(  { redirect : true  });
+  const permission = useHashPermission({ redirect: true });
 
   const handleEdit = (student: StudentType) => {
     setEditingStudent(student);
@@ -75,7 +79,13 @@ const Student = () => {
   }, [hiddeTheModalActive]);
 
   useEffect(() => {
-    dispatch(getAllStudent());
+    if (students.length == 0)
+      dispatch(getAllStudent({}));
+
+    if (!levels || levels?.length == 0)
+      dispatch(getAllLevel({}));
+    if (!classes || classes?.length == 0)
+      dispatch(getAllClasse({}));
   }, [dispatch]);
 
 
@@ -143,11 +153,27 @@ const Student = () => {
     { key: 'sexe', label: 'Sexe' },
   ];
 
+
+  // Donnée pour le filtre 
+  const filter: FilterAndSearchType = {
+    pagination: pagination,
+    thunk: getAllStudent,
+    isAdvanced: true,
+    filters: [
+      { label: 'Niveau', name: 'niveau', type: 'select', options: levels?.map(level => ({ label: level.niveau, value: level.id_niveau as number })) },
+      { label: 'Classe', name: 'classe', type: 'select', options: classes?.map(classe => ({ label: classe.denomination, value: classe.id_classe as number })) },
+      { label: 'Genre', name: 'sexe', type: 'select', options: [{ label: 'Homme', value: 2 }, { label: 'Femme', value: 1 }] },
+    ],
+    filterThunk: filterStudent,
+    isLoading: action.isFilterLoading
+  }
   return (
     <div className="space-y-4 md:space-y-6">
       <Title
         title='Liste des étudiants'
         description='Consultez et gérez les informations des étudiants inscrits.'
+        fixed
+        filter={filter}
       >
         {permission.create &&
           <button
@@ -179,7 +205,7 @@ const Student = () => {
               <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
             )}
             <span className={`text-sm ${statistique?.girl.nbr >= statistique?.boy.nbr ? 'text-green-600' : 'text-red-600'}`}>
-              {parseInt(statistique?.girl?.percent) || 0 } %
+              {parseInt(statistique?.girl?.percent) || 0} %
             </span>
           </div>
         </div>
@@ -202,7 +228,7 @@ const Student = () => {
               <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
             )}
             <span className={`text-sm ${statistique?.boy.nbr >= statistique?.girl.nbr ? 'text-green-600' : 'text-red-600'}`}>
-              {parseInt(statistique?.boy?.percent) || 0 } %
+              {parseInt(statistique?.boy?.percent) || 0} %
             </span>
           </div>
         </div>
@@ -228,32 +254,21 @@ const Student = () => {
       </div>
 
       <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
-        <div className="flex items-center justify-between mb-6 md:mb-6">
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
-              <input
-                type="text"
-                placeholder="Rechercher une matière..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-            </div>
-            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg hover:bg-secondary-50">
-              <Filter className="w-4 h-4" />
-              <span>Filtres</span>
-            </button>
-          </div>
-        </div>
+        <FilterAndSearch
+          pagination={pagination}
+          thunk={getAllStudent}
+          filterThunk={filterStudent}
+        />
 
         <Table
           data={students}
           columns={columns}
           actions={actions}
-          searchTerm={searchTerm}
           isLoading={action.isLoading as boolean}
-          onRowClick={( item: StudentType ) => navigate(`/back-office/students/${ item.matricule_etudiant }`)}
+          onRowClick={(item: StudentType) => navigate(`/back-office/students/${item.matricule_etudiant}`)}
+          pagination={pagination}
+          thunk={getAllStudent}
+          filterThunk={filterStudent}
         />
       </div>
 

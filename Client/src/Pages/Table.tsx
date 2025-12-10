@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
 import Loading from '../Components/ui/Loading';
 import ActionMenu from '../Components/ActionMenu';
 import RightClickMenu from '../Components/RightClickMenu';
 import { useHashPermission } from '../Hooks/useHashPermission';
 import clsx from 'clsx';
+import { PaginationType } from '../Utils/Types';
+import { AsyncThunk } from '@reduxjs/toolkit';
+import Pagination from '../Components/Pagination';
 
 interface TableProps {
   data: any[];
@@ -20,11 +22,19 @@ interface TableProps {
     color: string;
     type?: string
   }>;
-  searchTerm?: string;
   isLoading?: boolean;
   actionType?: 'button' | 'pop-up';
   onRowClick?: (item: any) => void;
   idModule?: string;
+  pagination?: PaginationType;
+  thunk?: AsyncThunk<any, {
+    page?: number;
+    query?: any;
+  }, any>,
+  filterThunk?: AsyncThunk<any, {
+    page?: number;
+    filter?: any
+  }, any>,
 }
 
 export const getActionColor = (color: string) => {
@@ -43,9 +53,7 @@ export const getActionColor = (color: string) => {
   return colors[color as keyof typeof colors] || 'text-secondary-600 hover:text-secondary-800';
 };
 
-const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, actionType = 'button', onRowClick, idModule }: TableProps) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+const Table = ({ data, columns, actions, isLoading = false, actionType = 'button', onRowClick, idModule, pagination, thunk, filterThunk }: TableProps) => {
   const permission = useHashPermission({ redirect: true });
 
   // État pour le menu contextuel
@@ -60,36 +68,6 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
     y: 0,
     item: null
   });
-
-  // RECHERCHE
-  const filteredData = data.filter((item) =>
-    Object.values(item).some((value) =>
-      value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
-
-  // Remettre la page a 1 si le data est vide 
-  useEffect(() => {
-    if (data.length == 0) {
-      setCurrentPage(1);
-    }
-  }, [data.length]);
-
-  // Fermer le menu contextuel quand les données changent
-  useEffect(() => {
-    setRightClickMenu(prev => ({ ...prev, isOpen: false }));
-  }, [data, currentPage]);
-
-  // Calculer les éléments à afficher pour la page actuelle
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
 
   // Gestion du clic droit
   const handleRightClick = (event: React.MouseEvent, item: any) => {
@@ -151,7 +129,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
             <tbody>
 
               {/* LOADING */}
-              {(isLoading && !currentItems.length) ? (
+              {(isLoading && !data.length) ? (
                 <tr>
                   <td colSpan={columns.length + 1}>
                     <Loading />
@@ -159,7 +137,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                 </tr>
               )
                 // ?  AUCUN RESULTAT
-                : (!isLoading && !currentItems.length) ? (
+                : (!isLoading && !data.length) ? (
                   <tr>
                     <td colSpan={columns.length + 1} className=''>
                       <div className='text-secondary-400 text-sm md:text-md text-center pt-6'>
@@ -170,7 +148,7 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
                 )
                   // ? AFFICHAGE 
                   : (
-                    currentItems.map((item, index) => (
+                    data.map((item, index) => (
                       <tr
                         key={index}
                         className={clsx({ 'cursor-pointer': onRowClick }, `border-b hover:bg-secondary-50 w-max`)}
@@ -246,48 +224,11 @@ const Table = ({ data, columns, actions, searchTerm = '', isLoading = false, act
         onClose={closeRightClickMenu}
         idModule={idModule}
       />
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-secondary-600">
-            Affichage de {indexOfFirstItem + 1} à{" "}
-            {Math.min(indexOfLastItem, filteredData.length)} sur{" "}
-            {filteredData.length} éléments
-          </div>
-          <div className="flex items-center space-x-2">
-            <button
-              type="button"
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="p-2 rounded border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-secondary-50"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => handlePageChange(page)}
-                className={`px-3 py-1 rounded ${currentPage === page
-                  ? "bg-primary-600 text-light"
-                  : "border hover:bg-secondary-50"
-                  }`}
-                type="button"
-              >
-                {page}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              type="button"
-              className="p-2 rounded border disabled:opacity-50 disabled:cursor-not-allowed hover:bg-secondary-50"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      )}
+      <Pagination
+        pagination={pagination as PaginationType}
+        thunk={thunk as any}
+        filterThunk={filterThunk}
+      />
     </div>
   );
 };

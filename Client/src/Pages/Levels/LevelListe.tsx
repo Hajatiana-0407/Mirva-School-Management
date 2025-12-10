@@ -1,4 +1,4 @@
-import { Archive, Edit, Eye, Filter, Search } from "lucide-react"
+import { Archive, Edit, Eye } from "lucide-react"
 import { ClasseType, levelType, SubjectType } from "../../Utils/Types";
 import { hexToRgba } from "../../Utils/Utils";
 import { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ import Modal from "../Modal";
 import ClasseForm from "../../Components/Forms/ClasseForm";
 import { getAppState } from "../../Redux/AppSlice";
 import { getClasseState } from "../Classes/redux/ClasseSlice";
+import FilterAndSearch from "../../Components/FilterAndSearch";
 
 type LevelListePropsType = {
     handleEdit: (level: levelType) => void
@@ -21,9 +22,8 @@ type LevelListePropsType = {
 
 type ActionColTypeLevel = SubjectType & { coefficient: number };
 const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType) => {
-    const { datas, action } = useSelector(getLevelState);
+    const { datas, action  ,  pagination } = useSelector(getLevelState);
     const { datas: Classes } = useSelector(getClasseState)
-    const [searchTerm, setSearchTerm] = useState('');
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
     const [levelToDelete, setLevelToDelete] = useState<levelType | null>(null);
     const [showClasseModale, setShowClasseModale] = useState(false)
@@ -135,7 +135,7 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
     }, [hiddeTheModalActive]);
 
     useEffect(() => {
-        dispatch(getAllLevel());
+        dispatch(getAllLevel({}));
     }, [dispatch, Classes]);
 
     // TABLEAU //
@@ -162,32 +162,20 @@ const LevelListe = ({ handleEdit, setIdLevelToAddSubject }: LevelListePropsType)
     return (
         <>
             <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
-                <div className="flex items-center justify-between mb-6 md:mb-6">
-                    <div className="flex items-center space-x-4">
-                        <div className="relative">
-                            <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
-                            <input
-                                type="text"
-                                placeholder="Rechercher un niveau..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                            />
-                        </div>
-                        <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg hover:bg-secondary-50">
-                            <Filter className="w-4 h-4" />
-                            <span>Filtres</span>
-                        </button>
-                    </div>
-                </div>
+
+            <FilterAndSearch 
+                pagination={pagination}
+                thunk={getAllLevel}
+            />
 
                 <Table
                     data={datas}
                     columns={columns}
                     actions={actions}
-                    searchTerm={searchTerm}
                     isLoading={action.isLoading as boolean}
                     onRowClick={(item: levelType) => navigate('/back-office/level-details/' + item.id_niveau)}
+                    pagination={pagination}
+                    thunk={getAllLevel}
                 />
             </div>
             {/* CONFIRAMTION DE SUPPRESSION */}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Filter, Edit, Archive, User, X, PenBox, Check, Users } from 'lucide-react';
+import { Plus, Search, Edit, Archive, User, X, PenBox, Check, Users } from 'lucide-react';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
 import Table from '../Table';
@@ -9,7 +9,7 @@ import useForm from '../../Hooks/useForm';
 import { ApiReturnType, ParentType, StudentType } from '../../Utils/Types';
 import { object, string } from 'yup';
 import { AppDispatch } from '../../Redux/store';
-import { deleteParent, getAllParent, upsertParent } from './redux/ParentAsyncThunk';
+import { deleteParent, filterParent, getAllParent, upsertParent } from './redux/ParentAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
 import InputError from '../../Components/ui/InputError';
 import Input from '../../Components/ui/Input';
@@ -24,6 +24,7 @@ import ParentModifForm from '../../Components/Forms/ParentModifForm';
 import { baseUrl } from '../../Utils/Utils';
 import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
+import FilterAndSearch, { FilterAndSearchType } from '../../Components/FilterAndSearch';
 
 const SearchFormSchema = object({
   matricule_etudiant: string().required('le matricule ne peut pas être vide .'),
@@ -47,9 +48,8 @@ const getParentRelationColor = (status: string) => {
 type ParentStudentType = ParentType & StudentType;
 
 const Parents = () => {
-  const { datas: parents, action, error } = useSelector(getParentState);
+  const { datas: parents, action, error, pagination } = useSelector(getParentState);
   const { hiddeTheModalActive } = useSelector(getAppState);
-  const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [parentToArchive, setParentToArchive] = useState<ParentStudentType | null>(null);
@@ -60,7 +60,7 @@ const Parents = () => {
   const [showModalModif, setShowModalModif] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
   const { formErrors, onSubmite } = useForm(ParentSchema, {})
-  const permission = useHashPermission(  { redirect : true  });
+  const permission = useHashPermission({ redirect: true });
 
   const handleEdit = (parent: ParentType) => {
     setParentToUpdate(parent);
@@ -132,7 +132,8 @@ const Parents = () => {
   }, [hiddeTheModalActive]);
 
   useEffect(() => {
-    dispatch(getAllParent());
+    if (parents.length == 0)
+      dispatch(getAllParent({}));
   }, [dispatch]);
 
   // ? ================== TABLEAU ===================== //
@@ -178,6 +179,24 @@ const Parents = () => {
 
   ];
 
+  // Parametre pour le filtre dans le header 
+  const filter: FilterAndSearchType = {
+    pagination: pagination,
+    thunk: getAllParent,
+    isAdvanced: true,
+    filters: [
+      {
+        label: 'Type', name: 'type', type: 'select', options: [
+          { label: 'Mère', value: 1 },
+          { label: 'Père', value: 2 },
+          { label: 'Tuteur', value: 3 },
+        ]
+      },
+    ],
+    filterThunk: filterParent,
+    isLoading: action.isFilterLoading
+  }
+
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -185,6 +204,8 @@ const Parents = () => {
       <Title
         title='Parents et Tuteurs'
         description='Gérez les informations et le suivi des parents et tuteurs des élèves.'
+        fixed
+        filter={filter}
       >
         {permission.create &&
           <button
@@ -195,36 +216,24 @@ const Parents = () => {
             className="bg-primary-600 text-light px-2 py-1 sm:px-4 sm:py-2 _classe rounded-lg flex items-center space-x-2 hover:bg-primary-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
-            <span className='max-md:hidden-susp' >Ajouter</span>
+            <span className='max-md:hidden-susp' >Nouveau parent</span>
           </button>
         }
       </Title>
       <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
-        <div className="flex items-center justify-between mb-6 md:mb-6">
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
-              <input
-                type="text"
-                placeholder="Rechercher une matière..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-            </div>
-            <button className="flex items-center space-x-2 px-2 py-1 sm:px-4 sm:py-2 _classe border border-secondary-300 rounded-lg hover:bg-secondary-50">
-              <Filter className="w-4 h-4" />
-              <span>Filtres</span>
-            </button>
-          </div>
-        </div>
+        <FilterAndSearch
+          pagination={pagination}
+          thunk={getAllParent}
+        />
 
         <Table
           data={parents}
           columns={columns}
           actions={actions}
-          searchTerm={searchTerm}
           isLoading={action.isLoading as boolean}
+          pagination={pagination}
+          thunk={getAllParent}
+          filterThunk={filterParent}
         />
       </div>
 

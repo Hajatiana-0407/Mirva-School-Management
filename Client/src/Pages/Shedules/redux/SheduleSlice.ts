@@ -1,19 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionIntialValue, ActionType, ApiReturnType, SheduleByClasseType } from "../../../Utils/Types";
-import { createShedule, deleteShedule, getAllShedule, updateShedule } from "./SheduleAsyncThunk";
+import { ActionIntialValue, ActionType, ApiReturnType, PaginationInitialValue, PaginationType, SheduleByClasseType } from "../../../Utils/Types";
+import { createShedule, deleteShedule, filterShedule, getAllShedule, updateShedule } from "./SheduleAsyncThunk";
 import { RootStateType } from "../../../Redux/store";
 import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 type initialStateType = {
     action: ActionType,
     datas?: SheduleByClasseType[],
-    page: number,
+    pagination: PaginationType,
     error: string
 }
 
 const initialState: initialStateType = {
     action: ActionIntialValue,
     datas: [],
-    page: 1,
+    pagination: PaginationInitialValue,
     error: '',
 }
 
@@ -26,20 +26,43 @@ const SheduleSlice = createSlice({
             return initialState;
         });
 
-        // // ************************************* Read ************************************* //
+        // ? ===================== Read  ===================== //
         builder
             .addCase(getAllShedule.pending, (state) => {
                 state.action.isLoading = true;
                 state.error = '';
             })
             .addCase(getAllShedule.fulfilled, (state, action: {
-                payload: SheduleByClasseType[]
+                payload: ApiReturnType
             }) => {
                 state.action.isLoading = false;
-                state.datas = action.payload;
+                if (action.payload.data)
+                    state.datas = action.payload.data;
+                if (action.payload.pagination)
+                    state.pagination = action.payload.pagination
             })
             .addCase(getAllShedule.rejected, (state) => {
                 state.action.isLoading = false;
+                state.error = 'Erreur de connexion au server'
+            });
+
+        // Filtre 
+        builder
+            .addCase(filterShedule.pending, (state) => {
+                state.action.isFilterLoading = true;
+                state.error = '';
+            })
+            .addCase(filterShedule.fulfilled, (state, action: {
+                payload: ApiReturnType
+            }) => {
+                state.action.isFilterLoading = false;
+                if (action.payload.data)
+                    state.datas = action.payload.data;
+                if (action.payload.pagination)
+                    state.pagination = action.payload.pagination
+            })
+            .addCase(filterShedule.rejected, (state) => {
+                state.action.isFilterLoading = false;
                 state.error = 'Erreur de connexion au server'
             });
 

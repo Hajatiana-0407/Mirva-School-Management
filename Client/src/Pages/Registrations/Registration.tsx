@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Archive, CheckCircle, Clock, Eye } from 'lucide-react';
+import { Plus, Archive, CheckCircle, Clock, Eye } from 'lucide-react';
 import Table from '../Table';
 import Modal from '../Modal';
 import ConfirmDialog from '../ConfirmDialog';
@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getRegistrationState } from './redux/registerSlice';
 import { RegistrationType, StudentType } from '../../Utils/Types'
 import { AppDispatch } from '../../Redux/store';
-import { deleteRegistration, getAllRegistrations } from './redux/registerAsyncThunk';
+import { deleteRegistration, filterRegistration, getAllRegistrations } from './redux/registerAsyncThunk';
 import clsx from 'clsx';
 import { getAppState } from '../../Redux/AppSlice';
 import Profile from '../../Components/ui/Profile';
@@ -16,16 +16,19 @@ import RegisterForm from '../../Components/Forms/RegisterForm';
 import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
 import { navigate } from '../../Utils/navigate';
+import FilterAndSearch, { FilterAndSearchType } from '../../Components/FilterAndSearch';
+import { getAllClassesNoPagination, getAllLevelsNoPagination } from '../../Redux/Other/asyncThunk/AppAsyncThunk';
 
 
 const Registration: React.FC = () => {
   // ? ===================== GESTION DES ETATS ===================== //
-  const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<RegistrationType | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [dataToDelete, setDataToDelete] = useState<RegistrationType | null>(null);
-  const { datas: registrations, action } = useSelector(getRegistrationState);
+  const { datas: registrations, action, pagination } = useSelector(getRegistrationState);
+  const { allLevels: levels } = useSelector(getAppState);
+  const { allClasses: classes } = useSelector(getAppState);
   const dispatch: AppDispatch = useDispatch();
   const { hiddeTheModalActive } = useSelector(getAppState);
   const permission = useHashPermission({ redirect: true });
@@ -54,7 +57,14 @@ const Registration: React.FC = () => {
 
   // ? ===================== EFFETS =====================
   useEffect(() => {
-    dispatch(getAllRegistrations());
+    if (registrations?.length == 0)
+      dispatch(getAllRegistrations({}));
+
+    if (!levels || levels?.length == 0)
+      dispatch(getAllLevelsNoPagination())
+    if (!classes || classes?.length == 0)
+      dispatch(getAllClassesNoPagination())
+
   }, [dispatch]);
 
   // ! Modale 
@@ -67,7 +77,7 @@ const Registration: React.FC = () => {
 
   // ? ===================== TABLEAUX =====================
   const actions = [
-     { icon: Eye, label: "Voir les détails", onClick: (item: RegistrationType) => navigate('/back-office/students/' + item.matricule_etudiant), color: 'primary' },
+    { icon: Eye, label: "Voir les détails", onClick: (item: RegistrationType) => navigate('/back-office/students/' + item.matricule_etudiant), color: 'primary' },
     { icon: Archive, type: 'delete', label: "Supprimer", onClick: handleArchive, color: 'red' },
   ];
 
@@ -126,11 +136,29 @@ const Registration: React.FC = () => {
     },
   ];
 
+  // Donnée pour le filtre 
+  const filter: FilterAndSearchType = {
+    pagination: pagination,
+    thunk: getAllRegistrations,
+    isAdvanced: true,
+    filters: [
+      { label: 'Date de debut', name: 'date_debut', type: 'date' },
+      { label: 'Date de fin', name: 'date_fin', type: 'date' },
+      { label: 'Niveau', name: 'niveau', type: 'select', options: levels?.map(level => ({ label: level.niveau, value: level.id_niveau as number })) },
+      { label: 'Classe', name: 'classe', type: 'select', options: classes?.map(classe => ({ label: classe.denomination, value: classe.id_classe as number })) },
+      { label: 'Droit d\'inscription', name: 'droit', type: 'select', options: [{ label: 'Payé', value: 1 }, { label: 'Non payé', value: 0 }] },
+    ],
+    filterThunk: filterRegistration,
+    isLoading: action.isFilterLoading
+  }
+
   return (
     <div className="space-y-4 md:space-y-6">
       <Title
         title='Inscription des élèves'
         description='Gérez les inscriptions des élèves pour la nouvelle année scolaire.'
+        filter={filter}
+        fixed
       >
         {permission.create &&
           <button
@@ -143,27 +171,20 @@ const Registration: React.FC = () => {
         }
       </Title>
       <div className="bg-light p-3 md:p-6 rounded-lg shadow-sm border">
-        <div className="flex items-center justify-between mb-6 md:mb-6">
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-400" />
-              <input
-                type="text"
-                placeholder="Rechercher un élève..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-            </div>
-          </div>
-        </div>
+
+        <FilterAndSearch
+          pagination={pagination}
+          thunk={getAllRegistrations}
+        />
+
         <Table
           isLoading={action.isLoading as boolean}
           data={registrations}
           columns={columns}
           actions={actions}
-          searchTerm={searchTerm}
           onRowClick={(item: StudentType) => navigate(`/back-office/students/${item.matricule_etudiant}`)}
+          pagination={pagination}
+          thunk={getAllRegistrations}
         />
       </div>
       <Modal

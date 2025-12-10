@@ -9,12 +9,10 @@ import { AnyObjectSchema, object, string } from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { ApiReturnType, ClasseType, registrationInitialValue, RegistrationType, StudentFormDataInitialValue, StudentFormDataType } from '../../Utils/Types';
 import useForm from '../../Hooks/useForm';
-import { getLevelState } from '../../Pages/Levels/redux/LevelSlice';
 import { AppDispatch } from '../../Redux/store';
 import { getSchoolYearState } from '../../Pages/School-Year/redux/SchoolYearSlice';
 import { createRegistration } from '../../Pages/Registrations/redux/registerAsyncThunk';
 import { getRegistrationState } from '../../Pages/Registrations/redux/registerSlice';
-import { getAllLevel } from '../../Pages/Levels/redux/LevelAsyncThunk';
 import HeadingSmall from '../ui/HeadingSmall';
 import Onglet from '../ui/Onglet';
 import ParentForm, { personSchema } from './ParentForm';
@@ -23,6 +21,8 @@ import CheckInput from '../ui/CheckInput';
 import { getMatricule } from '../../Pages/Students/redux/StudentAsyncThunk';
 import Loading from '../ui/Loading';
 import * as Yup from 'yup'
+import { getAppState } from '../../Redux/AppSlice';
+import { getAllLevelsNoPagination } from '../../Redux/Other/asyncThunk/AppAsyncThunk';
 
 // ?  ===================== Schema de validation pour le formulaire  ===================== //
 const StudentSchema = Yup.object({
@@ -73,7 +73,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
     const [step, setStep] = useState(1);
     const [formValues, setFormValues] = useState<StudentFormDataType>(StudentFormDataInitialValue);
     const { onSubmite, formErrors, HandleValidateSchema } = useForm<RegistrationType>(RegistrationSchema, registrationInitialValue);
-    const { datas: levelDatas } = useSelector(getLevelState);
+    const { allLevels: levelDatas } = useSelector(getAppState);
     const [classeOptions, setclasseOptions] = useState<any[]>([])
     const dispatch: AppDispatch = useDispatch();
     const [classeAndLevel, setClasseAndLevel] = useState<{ classe: string | null; level: string | null; }>({ classe: null, level: null })
@@ -84,7 +84,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
     ];
 
     // ! Level input options
-    const levelOptions = levelDatas.map((level) => ({ value: level.id_niveau as number, label: level.niveau }));
+    const levelOptions = levelDatas?.map((level) => ({ value: level.id_niveau as number, label: level.niveau }));
     // ! Année scolaire 
     const { activeSchoolYear } = useSelector(getSchoolYearState);
     const totalSteps = fomrStep.length + 1;
@@ -146,7 +146,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
         }
 
         if (e.target.name === 'niveau') {
-            const selectedLevel = levelDatas.find((level) => level.id_niveau == parseInt(e.target.value))
+            const selectedLevel = levelDatas?.find((level) => level.id_niveau == parseInt(e.target.value))
             const newClasseOptions = selectedLevel ? selectedLevel?.classe?.listes.map((classe: ClasseType) => ({ value: classe.id_classe as number, label: classe.denomination })) : []
             setclasseOptions(newClasseOptions as any[])
 
@@ -164,7 +164,7 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
 
     // Level pare defaut 
     useEffect(() => {
-        if (levelDatas.length) {
+        if (levelDatas?.length) {
             const selectedLevel = levelDatas[0]
             const newClasseOptions = selectedLevel ? selectedLevel?.classe?.listes.map((classe: ClasseType) => ({ value: classe.id_classe as number, label: classe.denomination })) : []
             setclasseOptions(newClasseOptions as any[]);
@@ -177,8 +177,8 @@ const RegisterForm: React.FC<RegisterFormPropsType> = ({ editingStudent }) => {
 
 
     useEffect(() => {
-        if (!levelDatas.length) {
-            dispatch(getAllLevel())
+        if (!levelDatas?.length ) {
+            dispatch(getAllLevelsNoPagination())
         }
     }, [dispatch]);
 

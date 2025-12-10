@@ -12,7 +12,7 @@ class UtilisateurCotroller extends CI_Controller
 
     public function index()
     {
-        $data = $this->UtilisateurModel->findAll();
+        $data = $this->UtilisateurModel->findAllQuery();
         echo json_encode($data);
     }
 

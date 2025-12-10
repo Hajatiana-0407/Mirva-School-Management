@@ -11,8 +11,51 @@ class ExerciceModel extends CI_Model
         parent::__construct();
     }
 
+    public function filtreQuery($niveau, $matiere, $query, $date_debut, $date_fin)
+    {
+        $builder = $this->findAllQuery();
 
-    public function findAll()
+        // Filtre niveau
+        if (!empty($niveau) && $niveau != 0) {
+            $builder->where('e.id_niveau', $niveau);
+        }
+
+        // Filtre matière
+        if (!empty($matiere) && $matiere != 0) {
+            $builder->where('e.id_matiere', $matiere);
+        }
+
+        // Filtre date début
+        if (!empty($date_debut)) {
+            $builder->where('e.created_at >=', $date_debut);
+        }
+
+        // Filtre date fin
+        if (!empty($date_fin)) {
+            $builder->where('e.created_at <=', $date_fin);
+        }
+
+        // Recherche globale
+        if (!empty($query)) {
+            $builder->group_start();
+
+            $builder->like('e.titre', $query);
+            $builder->or_like('e.description', $query);
+            $builder->or_like('n.niveau', $query);
+            $builder->or_like('m.denomination', $query);
+            $builder->or_like('m.abbreviation', $query);
+
+            // Recherche nom+prenom combinés
+            $builder->or_like('CONCAT(p.nom, " ", p.prenom)', $query, 'both', false);
+
+            $builder->group_end();
+        }
+
+        return $builder;
+    }
+
+
+    public function findAllQuery()
     {
         $session = $this->session->userData();
 
@@ -58,7 +101,7 @@ class ExerciceModel extends CI_Model
             ->join('personnel p', 'p.id_personnel = e.id_prof', 'left');
 
         // Si c'est un enseignant → afficher uniquement ses leçons
-        if ($session['role_id'] == 'teacher'  ) {
+        if ($session['role_id'] == 'teacher') {
             $this->db->where('e.id_prof', isset($session['user_identity']['id_personnel']) ? $session['user_identity']['id_personnel'] : null);
         }
 
@@ -77,9 +120,7 @@ class ExerciceModel extends CI_Model
         // Exécution finale
         return $this->db
             ->group_by('e.id_exercice')
-            ->order_by('e.created_at', 'DESC')
-            ->get()
-            ->result_array();
+            ->order_by('e.created_at', 'DESC');
     }
 
 
@@ -129,7 +170,7 @@ class ExerciceModel extends CI_Model
 
 
         // Si c'est un enseignant → afficher uniquement ses leçons
-        if ($session['role_id'] == 'teacher'  ) {
+        if ($session['role_id'] == 'teacher') {
             $this->db->where('e.id_prof', isset($session['user_identity']['id_personnel']) ? $session['user_identity']['id_personnel'] : null);
         }
 

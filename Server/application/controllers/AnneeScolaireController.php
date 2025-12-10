@@ -13,8 +13,18 @@ class AnneeScolaireController extends CI_Controller
     // READ 
     public function index()
     {
-        $datas = $this->AnneeScolaireModel->findAll();
-        echo json_encode($datas);
+        $page = $this->input->get('page', 1) ?? 1;
+        $search = $this->input->get('query', 1) ?? '';
+        $no_pagination = $this->input->get( 'no_pagination', 1) ?? false;
+        $query = $this->AnneeScolaireModel->findAllQuery();
+        $pagination = $this->AnneeScolaireModel->paginateQuery($query, $page, $search, $no_pagination);
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode([
+                'pagination' => $pagination,
+                'data' => $pagination['data']
+            ]));
     }
 
 
@@ -33,7 +43,7 @@ class AnneeScolaireController extends CI_Controller
         if ($this->AnneeScolaireModel->isExist(['nom' => $data['nom']])) {
             echo json_encode(['error' => true, 'message' => 'L\'année scolaire existe déjà.']);
         } else {
-            $data =  $this->AnneeScolaireModel->insert($data);
+            $data = $this->AnneeScolaireModel->insert($data);
             if ($data) {
                 echo json_encode(['error' => false, 'data' => $data]);
             } else {
@@ -54,14 +64,17 @@ class AnneeScolaireController extends CI_Controller
         ];
 
 
-        if ($this->AnneeScolaireModel->isExist(
-            ['nom' => $data['nom']]
-            ,'and' ,
-            [$this->pk => $id ]
-        )) {
+        if (
+            $this->AnneeScolaireModel->isExist(
+                ['nom' => $data['nom']]
+                ,
+                'and',
+                [$this->pk => $id]
+            )
+        ) {
             echo json_encode(['error' => true, 'message' => 'L\'année scolaire existe déjà.']);
         } else {
-            $data =  $this->AnneeScolaireModel->update($id, $data);
+            $data = $this->AnneeScolaireModel->update($id, $data);
             if ($data) {
                 echo json_encode(['error' => false, 'data' => $data]);
             } else {
@@ -85,13 +98,13 @@ class AnneeScolaireController extends CI_Controller
                 if ($data) {
                     echo json_encode(['error' => false, 'data' => $data]);
                 } else {
-                    echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                    echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
                 }
             } else {
-                echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+                echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
             }
         } else {
-            echo json_encode(['error' => false,  'message' => 'Échec de la suppression']);
+            echo json_encode(['error' => false, 'message' => 'Échec de la suppression']);
         }
     }
 

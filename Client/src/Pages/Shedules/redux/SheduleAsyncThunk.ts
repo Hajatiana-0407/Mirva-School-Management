@@ -1,22 +1,40 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ApiReturnInitial, ApiReturnType, SheduleByClasseType } from "../../../Utils/Types";
+import { ApiReturnInitial, ApiReturnType } from "../../../Utils/Types";
 import api from "../../../Utils/api";
 import { setHiddeModalValue } from "../../../Redux/AppSlice";
 import { toast } from "react-toastify";
 
 
 // READ
-export const getAllShedule = createAsyncThunk('shedule/getAll', async (): Promise<SheduleByClasseType[]> => {
-    let datas: SheduleByClasseType[] = [];
-    await api.get('admin/emploi-du-temps')
-        .then(response => {
-            datas = response.data
-        })
+export const getAllShedule = createAsyncThunk('shedule/getAll', async ({ page, query, no_pagination }: { page?: number; query?: any, no_pagination?: boolean }): Promise<ApiReturnType> => {
+    let datas: ApiReturnType = ApiReturnInitial;
+    await api.get('admin/emploi-du-temps', {
+        params: { page, query, no_pagination }
+    }).then(response => {
+        datas = response.data
+    })
         .catch(error => {
             console.error('Erreur lors de la récupération des données:', error);
         });
     return datas;
 })
+
+export const filterShedule = createAsyncThunk(
+    'emploi_du_temps/filter',
+    async ({ page = 1, filter }: { page?: number; filter?: FormData }): Promise<ApiReturnType> => {
+        let datas: ApiReturnType = ApiReturnInitial;
+        filter?.append('page', String(page));
+        console.log(filter);
+
+        try {
+            const response = await api.post('filtre/emploi_du_temps', filter);
+            datas = response.data;
+        } catch (error) {
+            console.error('Erreur lors de la récupération des données:', error);
+        }
+        return datas;
+    }
+);
 
 // UPDATE
 export const updateShedule = createAsyncThunk('shedule/modification', async ({ Shedule, id }: { Shedule: any, id: number }, { dispatch }): Promise<ApiReturnType> => {
