@@ -13,10 +13,19 @@ class EnseigantsController extends CI_Controller
 
     public function index()
     {
-        $data = $this->EnseignantModel->findAllQuery();
+        $page = $this->input->get('page', 1) ?? 1;
+        $query = $this->input->get('query', 1) ?? '';
+        $no_pagination = $this->input->get('no_pagination', 1) ?? false;
+        $builder = $this->EnseignantModel->findAllQuery();
+        $pagination = $this->EnseignantModel->paginateQuery($builder, $page, $query, $no_pagination);
+        $pagination['data'] = $this->EnseignantModel->findAllData($pagination['data']);
+
         $this->output
             ->set_content_type('application/json')
-            ->set_output(json_encode($data));
+            ->set_output(json_encode([
+                'pagination' => $pagination,
+                'data' => $pagination['data']
+            ]));
     }
 
 
@@ -73,7 +82,7 @@ class EnseigantsController extends CI_Controller
             foreach ($_POST as $key => $value) {
                 if (
                     $key !== 'type_personnel'
-                    &&  $key !== 'assignations'
+                    && $key !== 'assignations'
                 ) {
                     $data[$key] = $this->input->post($key);
                 }
@@ -84,7 +93,7 @@ class EnseigantsController extends CI_Controller
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
                 $photo_result = upload_file('photo', PERSONNEL_UPLOAD_DIR . 'photos');
                 if ($photo_result['success']) {
-                    $data['photo'] =  $photo_result['file_name'];
+                    $data['photo'] = $photo_result['file_name'];
                 } else {
                     echo json_encode(['error' => true, 'message' => "Erreur upload photo : " . $photo_result['error']]);
                     return;
@@ -95,7 +104,7 @@ class EnseigantsController extends CI_Controller
             if (isset($_FILES['pc_cin']) && $_FILES['pc_cin']['error'] == 0) {
                 $cin_result = upload_file('pc_cin', PERSONNEL_UPLOAD_DIR . 'pi');
                 if ($cin_result['success']) {
-                    $data['pc_cin'] =  $cin_result['file_name'];
+                    $data['pc_cin'] = $cin_result['file_name'];
                 } else {
                     echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité : " . $cin_result['error']]);
                     return;
@@ -109,10 +118,10 @@ class EnseigantsController extends CI_Controller
                 // ? Teste si le type est proffesseur ( enseignant ) 
                 $assignations = $this->input->post('assignations');
                 if ($assignations) {
-                    
+
                     // ? Creation de compte utilisateur pour le prof
                     $this->load->model('UtilisateurModel');
-                    $roleEnseignant =  $this->UtilisateurModel->getIdRoleTeacher();
+                    $roleEnseignant = $this->UtilisateurModel->getIdRoleTeacher();
                     $this->UtilisateurModel->insert([
                         'id_role' => $roleEnseignant->id_role,
                         'id_personnel' => $result['id_personnel'],
@@ -126,21 +135,22 @@ class EnseigantsController extends CI_Controller
                     foreach ($assignations as $assignation) {
                         if (!$isAll) {
                             // Condition pour l'arret du boocle si le matiere et tous 
-                            if ($assignation['id_matiere'] === 'tous') $isAll = true;
+                            if ($assignation['id_matiere'] === 'tous')
+                                $isAll = true;
 
                             $assignation_data[] = [
                                 'professeur_id_professeur' => $result['id_personnel'],
-                                'classe_id_classe'    => $assignation['id_classe'],
-                                'matiere_id_matiere'  => $assignation['id_matiere'] === 'tous' ? 0 : $assignation['id_matiere'],
-                                'heure_semaine'      => $assignation['heures'],
-                                'is_all_matiere' =>  $assignation['id_matiere'] === 'tous'
+                                'classe_id_classe' => $assignation['id_classe'],
+                                'matiere_id_matiere' => $assignation['id_matiere'] === 'tous' ? 0 : $assignation['id_matiere'],
+                                'heure_semaine' => $assignation['heures'],
+                                'is_all_matiere' => $assignation['id_matiere'] === 'tous'
                             ];
                         }
                     }
                     $this->MatiereClasseProfModel->insertBatch($assignation_data);
                 }
 
-                echo json_encode(['error' => false, 'data' => $this->EnseignantModel->findOneById($result['id_personnel'],)]);
+                echo json_encode(['error' => false, 'data' => $this->EnseignantModel->findOneById($result['id_personnel'], )]);
             } else {
                 echo json_encode(['error' => true, 'message' => "Erreur lors de l'enregistrement"]);
             }
@@ -177,14 +187,15 @@ class EnseigantsController extends CI_Controller
                 if (!$isAll) {
 
                     // Condition pour l'arret du boocle si le matiere et tous 
-                    if ($assignation['id_matiere'] === 'tous') $isAll = true;
+                    if ($assignation['id_matiere'] === 'tous')
+                        $isAll = true;
 
                     $assignation_data[] = [
                         'professeur_id_professeur' => $id_personnel,
-                        'classe_id_classe'    => $assignation['id_classe'],
-                        'matiere_id_matiere'  => $assignation['id_matiere'] === 'tous' ? 0 : $assignation['id_matiere'],
-                        'heure_semaine'      => $assignation['heures'],
-                        'is_all_matiere' =>  $assignation['id_matiere'] === 'tous'
+                        'classe_id_classe' => $assignation['id_classe'],
+                        'matiere_id_matiere' => $assignation['id_matiere'] === 'tous' ? 0 : $assignation['id_matiere'],
+                        'heure_semaine' => $assignation['heures'],
+                        'is_all_matiere' => $assignation['id_matiere'] === 'tous'
                     ];
                 }
             }
@@ -196,7 +207,7 @@ class EnseigantsController extends CI_Controller
             $this->MatiereClasseProfModel->insertBatch($assignation_data);
 
             // ? Recuperer la modification 
-            $details = $this->EnseignantModel->findOneDetailsByMatriculeOrId( null , $id_personnel ) ; 
+            $details = $this->EnseignantModel->findOneDetailsByMatriculeOrId(null, $id_personnel);
 
             $data = [
                 'error' => false,
@@ -236,7 +247,7 @@ class EnseigantsController extends CI_Controller
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
                 $photo_result = upload_file('photo', PERSONNEL_UPLOAD_DIR . 'photos');
                 if ($photo_result['success']) {
-                    $data['photo'] =  $photo_result['file_name'];
+                    $data['photo'] = $photo_result['file_name'];
                 } else {
                     echo json_encode(['error' => true, 'message' => "Erreur upload photo : " . $photo_result['error']]);
                     return;
@@ -247,7 +258,7 @@ class EnseigantsController extends CI_Controller
             if (isset($_FILES['pc_cin']) && $_FILES['pc_cin']['error'] == 0) {
                 $cin_result = upload_file('pc_cin', PERSONNEL_UPLOAD_DIR . 'pi');
                 if ($cin_result['success']) {
-                    $data['pc_cin'] =  $cin_result['file_name'];
+                    $data['pc_cin'] = $cin_result['file_name'];
                 } else {
                     echo json_encode(['error' => true, 'message' => "Erreur upload pièce d'identité : " . $cin_result['error']]);
                     return;
@@ -255,7 +266,7 @@ class EnseigantsController extends CI_Controller
             }
 
             // Création du personnel
-            $result = $this->EnseignantModel->update($id,  $data);
+            $result = $this->EnseignantModel->update($id, $data);
 
             if ($result) {
                 echo json_encode(['error' => false, 'data' => $result]);

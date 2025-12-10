@@ -1,15 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionIntialValue, ActionType, ApiReturnType, EmployeeType, TypePersonnelType } from "../../../Utils/Types";
+import { ActionIntialValue, ActionType, ApiReturnType, EmployeeType, PaginationInitialValue, PaginationType, TypePersonnelType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
-import { assignationTeacher, createTeacher, getAllTeachers, getTeacherByMatricule, updateTeacher } from "./TeacherAsyncThunk";
+import { assignationTeacher, createTeacher, filterTeacher, getAllTeachers, getTeacherByMatricule, updateTeacher } from "./TeacherAsyncThunk";
 import { deleteEmployees } from "../../Employees/redux/EmployeAsyncThunk";
 import { AssignationType } from "../../TeacherSubject";
 
 type initialStateType = {
     action: ActionType,
     datas: EmployeeType[],
-    page: number,
+    pagination: PaginationType,
     error: string;
     single: {
         data?: EmployeeType & TypePersonnelType & { assignations?: AssignationType[] };
@@ -20,7 +20,7 @@ type initialStateType = {
 const initialState: initialStateType = {
     action: ActionIntialValue,
     datas: [],
-    page: 1,
+    pagination: PaginationInitialValue,
     error: '',
     single: {
         action: ActionIntialValue
@@ -43,13 +43,36 @@ const TeacherSlice = createSlice({
                 state.action.isLoading = true;
             })
             .addCase(getAllTeachers.fulfilled, (state, action: {
-                payload: EmployeeType[]
+                payload: ApiReturnType
             }) => {
                 state.action.isLoading = false;
-                state.datas = action.payload;
+                if (action.payload.data)
+                    state.datas = action.payload.data;
+                if (action.payload.pagination)
+                    state.pagination = action.payload.pagination
             })
             .addCase(getAllTeachers.rejected, (state) => {
                 state.action.isLoading = false;
+                state.error = 'Erreur de connexion au server'
+                toast.error("Erreur de connexion au server");
+            });
+        // Filtre 
+        builder
+            .addCase(filterTeacher.pending, (state) => {
+                state.action.isFilterLoading = true;
+                state.error = '';
+            })
+            .addCase(filterTeacher.fulfilled, (state, action: {
+                payload: ApiReturnType
+            }) => {
+                state.action.isFilterLoading = false;
+                if (action.payload.data)
+                    state.datas = action.payload.data;
+                if (action.payload.pagination)
+                    state.pagination = action.payload.pagination
+            })
+            .addCase(filterTeacher.rejected, (state) => {
+                state.action.isFilterLoading = false;
                 state.error = 'Erreur de connexion au server'
             });
 

@@ -3,7 +3,7 @@ class EnseignantModel extends CI_Model
 {
     protected $table = 'personnel';
     protected $primaryKey = 'id_personnel';
-
+    protected $searchs = ['personnel.nom', 'personnel.prenom', 'personnel.telephone', 'personnel.addresse', 'personnel.matricule_personnel', 'personnel.numero_cin', 'personnel.email'];
     public function __construct()
     {
         parent::__construct();
@@ -11,14 +11,16 @@ class EnseignantModel extends CI_Model
 
     public function findAllQuery()
     {
-        $query = $this->db->select('*')
+        return $this->db->select($this->table . '.* , type_personnel.type , type_personnel.description')
             ->from($this->table)
             ->join('type_personnel', "{$this->table}.id_type_personnel = type_personnel.id_type_personnel", 'left')
             ->group_by($this->primaryKey)
             ->order_by($this->primaryKey, 'DESC')
-            ->like('type_personnel.type', 'Enseignant')
-            ->get();
-        $enseignants =  $query->result_array();
+            ->where('type_personnel.type', 'Enseignant');
+    }
+
+    public function findAllData($enseignants = [])
+    {
         // Classe pour chaque enseignant
         foreach ($enseignants as &$enseignant) {
             $classes = $this->db->select('c.* , n.*')
@@ -43,7 +45,7 @@ class EnseignantModel extends CI_Model
                     ->row();
 
 
-                $matieres =  [];
+                $matieres = [];
                 // Si tous les matieres dans la classe 
                 if ($isAll) {
                     $matieres = $this->db->select('m.*')
@@ -78,7 +80,7 @@ class EnseignantModel extends CI_Model
             ->where($this->primaryKey, $id)
             ->like('type_personnel.type', 'Enseignant')
             ->get();
-        $enseignant =  $query->row_array();
+        $enseignant = $query->row_array();
         // Classe pour chaque enseignant
         $classes = $this->db->select('c.* , n.*')
             ->from('classe c')
@@ -102,7 +104,7 @@ class EnseignantModel extends CI_Model
                 ->row();
 
 
-            $matieres =  [];
+            $matieres = [];
             // Si tous les matieres dans la classe 
             if ($isAll) {
                 $matieres = $this->db->select('m.*')
@@ -135,15 +137,16 @@ class EnseignantModel extends CI_Model
             ->join('type_personnel', "{$this->table}.id_type_personnel = type_personnel.id_type_personnel", 'left')
             ->where('type_personnel.type', 'Enseignant');
 
-            if ( $matricule ){
-                $this->db->where("{$this->table}.matricule_personnel", $matricule) ; 
-            }else {
-                $this->db->where("{$this->table}.id_personnel", $id) ; 
-            }
+        if ($matricule) {
+            $this->db->where("{$this->table}.matricule_personnel", $matricule);
+        } else {
+            $this->db->where("{$this->table}.id_personnel", $id);
+        }
 
         $enseignant = $this->db->get()->row_array();
 
-        if (!$enseignant) return null;
+        if (!$enseignant)
+            return null;
 
 
         // ===================== Assignations ===================== //
@@ -183,7 +186,7 @@ class EnseignantModel extends CI_Model
         }
 
 
-        $enseignant['assignations']  = $assignations;
+        $enseignant['assignations'] = $assignations;
 
 
         return $enseignant;
