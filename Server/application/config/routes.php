@@ -129,6 +129,7 @@ $route['api/filtre/exercice'] = 'FiltreCotroller/exercice';
 $route['api/filtre/inscription'] = 'FiltreCotroller/inscription';
 $route['api/filtre/etudiant'] = 'FiltreCotroller/etudiant';
 $route['api/filtre/emploi_du_temps'] = 'FiltreCotroller/emploi_du_temps';
+$route['api/filtre/personnel'] = 'FiltreCotroller/personnel';
 
 
 // ===================== Authentification  ===================== //
@@ -287,7 +288,7 @@ $GLOBALS['secure'] = [
     // 'api/admin/teachers' => true,
 
     // Type personnel
-    'api/admin/type-personnel' => true,
+    // 'api/admin/type-personnel' => true,
 
     // Année scolaire
     // 'api/admin/school-year' => true,

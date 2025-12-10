@@ -177,4 +177,53 @@ class FiltreCotroller extends CI_Controller
                 'data' => $pagination['data'],
             ]));
     }
+
+
+    public function personnel()
+    {
+        $this->load->model('PersonnelModel');
+        $page = $this->input->post('page', 1) ?? 1;
+        $query = $this->input->post('query', 1) ?? '';
+
+        // Filtre 
+        $date_debut = $this->input->post('date_debut', 1) ?? '';
+        $date_fin = $this->input->post('date_fin', 1) ?? '';
+        $statut = $this->input->post('statut', 1) ?? null;
+        $type = $this->input->post('type', 1) ?? null;
+
+        $statutLabel = null;
+        switch ($statut) {
+            case 1:
+                $statutLabel = 'Actif';
+                break;
+            case 2:
+                $statutLabel = 'Démissionnaire';
+                break;
+            case 3:
+                $statutLabel = "Suspendu";
+                break;
+
+            default:
+                $statutLabel = null;
+                break;
+        }
+
+        $builder = $this->PersonnelModel->filtreQuery($statutLabel, $type, $date_debut, $date_fin);
+        $pagination = $this->PersonnelModel->paginateQuery($builder, $page, $query);
+
+        $pagination['filter'] = [
+            'date_debut' => $date_debut,
+            'date_fin' => $date_fin,
+            'type' => $type,
+            'statut' => $statut,
+            'query' => $query
+        ];
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode([
+                'pagination' => $pagination,
+                'data' => $pagination['data'],
+            ]));
+    }
 }

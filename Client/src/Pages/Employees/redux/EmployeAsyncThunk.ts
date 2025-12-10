@@ -19,6 +19,21 @@ export const getAllEmployees = createAsyncThunk('personnel/getAll', async ({ pag
         });
     return datas;
 })
+export const filterEmployees = createAsyncThunk(
+    'personnel/filter',
+    async ({ page = 1, filter }: { page?: number; filter?: FormData }): Promise<ApiReturnType> => {
+        let datas: ApiReturnType = ApiReturnInitial;
+        filter?.append('page', String(page));
+
+        try {
+            const response = await api.post('filtre/personnel', filter);
+            datas = response.data;
+        } catch (error) {
+            console.error('Erreur lors de la récupération des données:', error);
+        }
+        return datas;
+    }
+);
 
 // UPDATE
 export const updateEmployees = createAsyncThunk('personnel/modification', async ({ datas, id }: { datas: any, id: number }, { dispatch }): Promise<ApiReturnType> => {

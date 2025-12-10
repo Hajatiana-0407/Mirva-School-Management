@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getEmployeState } from './redux/EmployeSlice';
 import { EmployeeType } from '../../Utils/Types';
 import { AppDispatch } from '../../Redux/store';
-import { deleteEmployees, getAllEmployees } from './redux/EmployeAsyncThunk';
+import { deleteEmployees, filterEmployees, getAllEmployees } from './redux/EmployeAsyncThunk';
 import { getAppState } from '../../Redux/AppSlice';
 import { useNavigate } from 'react-router-dom';
 import Profile from '../../Components/ui/Profile';
@@ -15,7 +15,9 @@ import EmployeForm from '../../Components/Forms/EmployeForm';
 import { getShortDate } from '../../Utils/Utils';
 import { useHashPermission } from '../../Hooks/useHashPermission';
 import Title from '../../Components/ui/Title';
-import FilterAndSearch from '../../Components/FilterAndSearch';
+import FilterAndSearch, { FilterAndSearchType } from '../../Components/FilterAndSearch';
+import { getAllTypePersonnel } from '../../Redux/Other/asyncThunk/TypeEmployesAsyncThunk';
+import { getTypeEmployeesState } from '../../Redux/Other/slices/TypeEmployeesSlice';
 
 // Mapping des types à des couleurs de fond
 export const typeBgColors: Record<string, string> = {
@@ -47,6 +49,7 @@ const Employees: React.FC = () => {
   const [teacherToArchive, setTeacherToArchive] = useState<EmployeeType | null>(null);
   const { hiddeTheModalActive } = useSelector(getAppState);
   const { datas: employees, action, pagination } = useSelector(getEmployeState);
+  const { datas: typeEmployees } = useSelector(getTypeEmployeesState);
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const permission = useHashPermission({ redirect: true });
@@ -169,6 +172,8 @@ const Employees: React.FC = () => {
   useEffect(() => {
     if (employees.length == 0)
       dispatch(getAllEmployees({}));
+    if (typeEmployees.length == 0)
+      dispatch(getAllTypePersonnel())
   }, [dispatch]);
 
   // Modale 
@@ -178,6 +183,34 @@ const Employees: React.FC = () => {
     }
   }, [hiddeTheModalActive]);
 
+
+  // Options 
+  const statutOption = [
+    { label: 'Actif', value: 1 },
+    { label: 'Démissionnaire', value: 2 },
+    { label: 'Suspendu', value: 3 },
+  ]
+  const typeOptions = typeEmployees.map(type => (
+    { label: type.type, value: type.id_type_personnel as number }
+  ))
+
+
+
+  // Parametre pour le filtre dans le header 
+  const filter: FilterAndSearchType = {
+    pagination: pagination,
+    thunk: getAllEmployees,
+    isAdvanced: true,
+    filters: [
+      { label: 'Date d\'embauche ( debut )', name: 'date_debut', type: 'date' },
+      { label: 'Date d\'embauche (fin)', name: 'date_fin', type: 'date' },
+      { label: 'Statut', name: 'statut', type: 'select', options: statutOption },
+      { label: 'Fonction', name: 'type', type: 'select', options: typeOptions },
+    ],
+    filterThunk: filterEmployees,
+    isLoading: action.isFilterLoading
+  }
+
   return (
     <div className="space-y-4 md:space-y-6">
 
@@ -185,6 +218,8 @@ const Employees: React.FC = () => {
       <Title
         title='Gestion des employés'
         description='Gérez et suivez l’ensemble des employés de votre établissement.'
+        fixed
+        filter={filter}
       >
         {permission.create &&
           <button
@@ -202,6 +237,7 @@ const Employees: React.FC = () => {
         <FilterAndSearch
           pagination={pagination}
           thunk={getAllEmployees}
+          filterThunk={filterEmployees}
         />
 
 
@@ -213,6 +249,7 @@ const Employees: React.FC = () => {
           onRowClick={(item: EmployeeType) => navigate(`/back-office/employees/${item.matricule_personnel}`)}
           pagination={pagination}
           thunk={getAllEmployees}
+          filterThunk={filterEmployees}
         />
       </div>
 

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ActionIntialValue, ActionType, ApiReturnType, EmployeeType, PaginationInitialValue, PaginationType, TypePersonnelType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
-import { createEmployees, deleteEmployees, getAllEmployees, getEmployeByMatricule, updateEmployees } from "./EmployeAsyncThunk";
+import { createEmployees, deleteEmployees, filterEmployees, getAllEmployees, getEmployeByMatricule, updateEmployees } from "./EmployeAsyncThunk";
 import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 
 
@@ -54,6 +54,23 @@ const EmployeSlice = createSlice({
                 state.action.isLoading = false;
                 state.error = 'Erreur de connexion au server'
                 toast.error("Erreur de connexion au server");
+            });
+        // Filtre 
+        builder
+            .addCase(filterEmployees.pending, (state) => {
+                state.action.isFilterLoading = true;
+                state.error = '';
+            })
+            .addCase(filterEmployees.fulfilled, (state, action: {
+                payload: ApiReturnType
+            }) => {
+                state.action.isFilterLoading = false;
+                state.datas = action.payload.data;
+                state.pagination = action.payload.pagination
+            })
+            .addCase(filterEmployees.rejected, (state) => {
+                state.action.isFilterLoading = false;
+                state.error = 'Erreur de connexion au server'
             });
 
         // ************************************* Create ************************************* //
