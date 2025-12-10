@@ -1,4 +1,4 @@
-import { Calendar, ChevronDown, RefreshCcw, Search, X } from "lucide-react";
+import { Calendar, Check, ChevronDown, RefreshCcw, Search, X } from "lucide-react";
 import React, { useState } from "react";
 import { PaginationType } from "../Utils/Types";
 import { usePagination } from "../Hooks/usePagination";
@@ -174,14 +174,10 @@ const FilterAndSearch: React.FC<FilterAndSearchType> = ({ pagination, thunk, fil
 
                         <button
                             type="submit"
-                            className="px-6 py-2.5 relative bg-secondary-900 text-white hover:bg-secondary-700 transition-colors duration-200 font-medium"
+                            className="flex items-center gap-2 px-6 py-2.5 relative bg-secondary-900 text-white hover:bg-secondary-700 transition-colors duration-200 font-medium"
                             disabled={isLoading}
                         >
-                            {isLoading &&
-                                <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-secondary-100/50 backdrop-blur-[0.8px] ">
-                                    <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div>
-                                </div>
-                            }
+                            {isLoading ? <div className="w-5 h-5 me-1 inline-block border-4 border-light border-t-transparent rounded-full animate-spin"></div> : <Check className="w-4 h-4" />}
                             Appliquer les filtres
                         </button>
                     </div>
