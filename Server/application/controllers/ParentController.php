@@ -12,8 +12,18 @@ class ParentController extends CI_Controller
 
     public function index()
     {
-        $data = $this->ParentModel->findAllQuery();
-        echo json_encode($data);
+        $page = $this->input->get('page', 1) ?? 1;
+        $search = $this->input->get('query', 1) ?? '';
+        $no_pagination = $this->input->get('no_pagination', 1) ?? false;
+        $query = $this->ParentModel->findAllQuery();
+        $pagination = $this->ParentModel->paginateQuery($query, $page, $search, $no_pagination);
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode([
+                'pagination' => $pagination,
+                'data' => $pagination['data']
+            ]));
     }
 
     public function update()
@@ -46,7 +56,7 @@ class ParentController extends CI_Controller
                 }
             }
 
-            $data_updated =  $this->ParentModel->update($id, $data);
+            $data_updated = $this->ParentModel->update($id, $data);
             if ($data_updated) {
                 echo json_encode([
                     'error' => false,
@@ -84,7 +94,7 @@ class ParentController extends CI_Controller
             }
 
             return [
-                'id_parent' => isset($parentData['id_parent']) ? (int)$parentData['id_parent'] : 0,
+                'id_parent' => isset($parentData['id_parent']) ? (int) $parentData['id_parent'] : 0,
                 'nom' => htmlspecialchars($parentData['nom']),
                 'prenom' => isset($parentData['prenom']) ? htmlspecialchars($parentData['prenom']) : '',
                 'profession' => isset($parentData['profession']) ? htmlspecialchars($parentData['profession']) : '',
@@ -113,7 +123,7 @@ class ParentController extends CI_Controller
                 if (isset($_FILES[$key]) && $_FILES[$key]['error']['pc_cin'] == 0) {
                     $piTuteurUpload = upload_file($key . "[pc_cin]", PARENT_UPLOAD_DIR);
                     if ($piTuteurUpload['success']) {
-                        $parent['pc_cin'] =  $piTuteurUpload['file_name'];
+                        $parent['pc_cin'] = $piTuteurUpload['file_name'];
                     } else {
                         echo json_encode([
                             'error' => true,
@@ -183,13 +193,13 @@ class ParentController extends CI_Controller
                 if ($data) {
                     echo json_encode(['error' => false, 'data' => $data]);
                 } else {
-                    echo json_encode(['error' => true,  'message' => 'Échec de la suppression']);
+                    echo json_encode(['error' => true, 'message' => 'Échec de la suppression']);
                 }
             } else {
-                echo json_encode(['error' => true,  'message' => 'Échec de la suppression']);
+                echo json_encode(['error' => true, 'message' => 'Échec de la suppression']);
             }
         } else {
-            echo json_encode(['error' => true,  'message' => 'Échec de la suppression']);
+            echo json_encode(['error' => true, 'message' => 'Échec de la suppression']);
         }
     }
 }

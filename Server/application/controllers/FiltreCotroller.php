@@ -177,8 +177,6 @@ class FiltreCotroller extends CI_Controller
                 'data' => $pagination['data'],
             ]));
     }
-
-
     public function personnel()
     {
         $this->load->model('PersonnelModel');
@@ -216,6 +214,48 @@ class FiltreCotroller extends CI_Controller
             'date_fin' => $date_fin,
             'type' => $type,
             'statut' => $statut,
+            'query' => $query
+        ];
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode([
+                'pagination' => $pagination,
+                'data' => $pagination['data'],
+            ]));
+    }
+    public function parent()
+    {
+        $this->load->model('ParentModel');
+        $page = $this->input->post('page', 1) ?? 1;
+        $query = $this->input->post('query', 1) ?? '';
+
+        // Filtre 
+        $type = $this->input->post('type', 1) ?? null;
+
+        $type_label = null;
+        switch ($type) {
+            case 1:
+                $type_label = 'mère';
+                break;
+            case 2:
+                $type_label = 'père';
+                break;
+            case 3:
+                $type_label = "tuteur";
+                break;
+
+            default:
+                $type_label = null;
+                break;
+        }
+
+
+        $builder = $this->ParentModel->filtreQuery($type_label);
+        $pagination = $this->ParentModel->paginateQuery($builder, $page, $query);
+
+        $pagination['filter'] = [
+            'type' => $type,
             'query' => $query
         ];
 

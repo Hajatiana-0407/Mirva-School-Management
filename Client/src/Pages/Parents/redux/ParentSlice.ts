@@ -1,22 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ActionIntialValue, ActionType, ApiReturnType, ParentType } from "../../../Utils/Types";
+import { ActionIntialValue, ActionType, ApiReturnType, PaginationInitialValue, PaginationType, ParentType } from "../../../Utils/Types";
 import { RootStateType } from "../../../Redux/store";
 import { toast } from "react-toastify";
-import { upsertParent, deleteParent, getAllParent, updateParent } from "./ParentAsyncThunk";
+import { upsertParent, deleteParent, getAllParent, updateParent, filterParent } from "./ParentAsyncThunk";
 import { logoutUser } from "../../Auth/redux/AuthAsyncThunk";
 
 
 type initialStateType = {
     action: ActionType,
     datas: ParentType[],
-    page: number,
+    pagination: PaginationType,
     error: string
 }
 
 const initialState: initialStateType = {
     action: ActionIntialValue,
     datas: [],
-    page: 1,
+    pagination: PaginationInitialValue,
     error: '',
 }
 
@@ -40,15 +40,37 @@ const ParentSlice = createSlice({
                 state.action.isLoading = true;
             })
             .addCase(getAllParent.fulfilled, (state, action: {
-                payload: ParentType[]
+                payload: ApiReturnType
             }) => {
                 state.action.isLoading = false;
-                state.datas = action.payload;
+                if (action.payload.data)
+                    state.datas = action.payload.data;
+                if (action.payload.pagination)
+                    state.pagination = action.payload.pagination
             })
             .addCase(getAllParent.rejected, (state) => {
                 state.action.isLoading = false;
                 state.error = 'Erreur de connexion au server'
                 toast.error("Erreur de connexion au server");
+            });
+        // Filtre 
+        builder
+            .addCase(filterParent.pending, (state) => {
+                state.action.isFilterLoading = true;
+                state.error = '';
+            })
+            .addCase(filterParent.fulfilled, (state, action: {
+                payload: ApiReturnType
+            }) => {
+                state.action.isFilterLoading = false;
+                if (action.payload.data)
+                    state.datas = action.payload.data;
+                if (action.payload.pagination)
+                    state.pagination = action.payload.pagination
+            })
+            .addCase(filterParent.rejected, (state) => {
+                state.action.isFilterLoading = false;
+                state.error = 'Erreur de connexion au server'
             });
 
         // ************************************* Upsert ************************************* //

@@ -130,6 +130,7 @@ $route['api/filtre/inscription'] = 'FiltreCotroller/inscription';
 $route['api/filtre/etudiant'] = 'FiltreCotroller/etudiant';
 $route['api/filtre/emploi_du_temps'] = 'FiltreCotroller/emploi_du_temps';
 $route['api/filtre/personnel'] = 'FiltreCotroller/personnel';
+$route['api/filtre/parent'] = 'FiltreCotroller/parent';
 
 
 // ===================== Authentification  ===================== //

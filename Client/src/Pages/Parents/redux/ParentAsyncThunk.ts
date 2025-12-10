@@ -1,14 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ApiReturnInitial, ApiReturnType, ParentType } from "../../../Utils/Types";
+import { ApiReturnInitial, ApiReturnType } from "../../../Utils/Types";
 import api from "../../../Utils/api";
 import { setHiddeModalValue } from "../../../Redux/AppSlice";
 import { toast } from "react-toastify";
 
 
 // READ
-export const getAllParent = createAsyncThunk('parent/getAll', async (): Promise<ParentType[]> => {
-    let datas: ParentType[] = [];
-    await api.get('admin/parent')
+export const getAllParent = createAsyncThunk('parent/getAll', async ({ page, query, no_pagination }: { page?: number; query?: any, no_pagination?: boolean }): Promise<ApiReturnType> => {
+    let datas: ApiReturnType = ApiReturnInitial;
+    await api.get('admin/parent', {
+        params: { page, query, no_pagination }
+    })
         .then(response => {
             datas = response.data
         })
@@ -17,6 +19,21 @@ export const getAllParent = createAsyncThunk('parent/getAll', async (): Promise<
         });
     return datas;
 })
+export const filterParent= createAsyncThunk(
+    'parent/filter',
+    async ({ page = 1, filter }: { page?: number; filter?: FormData }): Promise<ApiReturnType> => {
+        let datas: ApiReturnType = ApiReturnInitial;
+        filter?.append('page', String(page));
+
+        try {
+            const response = await api.post('filtre/parent', filter);
+            datas = response.data;
+        } catch (error) {
+            console.error('Erreur lors de la récupération des données:', error);
+        }
+        return datas;
+    }
+);
 
 // UPSERT
 export const upsertParent = createAsyncThunk('parent/upsert', async (parentData: any, { dispatch }): Promise<ApiReturnType> => {

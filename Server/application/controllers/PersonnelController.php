@@ -17,7 +17,6 @@ class PersonnelController extends CI_Controller
         $no_pagination = $this->input->get('no_pagination', 1) ?? false;
         $query = $this->PersonnelModel->findAllQuery();
         $pagination = $this->PersonnelModel->paginateQuery($query, $page, $search, $no_pagination);
-        // $pagination['data'] = $this->PersonnelModel->findAllData($pagination['data']);
 
         $this->output
             ->set_content_type('application/json')
