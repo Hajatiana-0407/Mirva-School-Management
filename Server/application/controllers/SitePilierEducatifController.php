@@ -12,7 +12,7 @@ class SitePilierEducatifController extends CI_Controller
 
     public function index()
     {
-        $data = $this->SitePilierEducatifModel->findAllQuery();
+        $data = $this->SitePilierEducatifModel->findAllQuery()->get()->result_array();
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode([

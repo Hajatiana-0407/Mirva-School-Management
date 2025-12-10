@@ -12,7 +12,7 @@ class SiteInstallationController extends CI_Controller
 
     public function index()
     {
-        $data = $this->SiteInstallationModel->findAllQuery();
+        $data = $this->SiteInstallationModel->findAllQuery()->get()->result_array();
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode([

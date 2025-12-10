@@ -12,7 +12,7 @@ class HeroController extends CI_Controller
 
     public function index()
     {
-        $data = $this->HeroModel->findAllQuery();
+        $data = $this->HeroModel->findAllQuery()->get()->result_array();
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode([
