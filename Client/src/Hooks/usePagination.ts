@@ -24,14 +24,14 @@ export const usePagination = ({
 
     // Pagination  navigation
     const handlePageChange = (page: number, query?: any) => {
-        console.log(pagination.filter);
+        console.log(pagination?.filter);
 
         if (page != 0) {
             setisLoading(true);
             setNewPage(page);
             if (!!pagination?.filter && !!filterThunk) {
                 const formdata = new FormData();
-                Object.entries(pagination.filter).forEach(([key, value]) => {
+                Object.entries(pagination?.filter).forEach(([key, value]) => {
                     formdata.append(key, value);
                 });
                 dispatch(filterThunk({ page, filter: formdata }))
@@ -61,10 +61,10 @@ export const usePagination = ({
     }
 
     useEffect(() => {
-        if (newPage == pagination.page) {
+        if (newPage == pagination?.page) {
             setisLoading(false);
         }
-    }, [newPage, pagination.page])
+    }, [newPage, pagination?.page])
 
     return {
         handlePageChange,

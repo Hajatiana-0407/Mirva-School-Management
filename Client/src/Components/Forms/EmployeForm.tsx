@@ -61,7 +61,6 @@ type EmployeFormPropsType = {
 
 
 const EmployeForm: React.FC<EmployeFormPropsType> = ({ editingEmployees, handleClose = () => { }, type }) => {
-    // const { datas: TypesEmployees } = useSelector(getTypeEmployeesState);
     const { datas: TypesEmployees } = useSelector(getTypeEmployeesState);
     const { action: employeeAction } = useSelector(getEmployeState);
     const { action: teacherAction } = useSelector(getTeacherState)

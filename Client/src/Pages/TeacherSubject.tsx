@@ -1,16 +1,16 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { Check, Clock, Trash2, X, Pencil, BookOpen, ArrowRight, Trash, AlertCircle } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { getSubjectState } from "./Subjects/redux/SubjectSlice";
-import { ClasseType } from "../Utils/Types";
+import { ClasseType, PaginationInitialValue } from "../Utils/Types";
 import { AppDispatch } from "../Redux/store";
-import { getAllSubject } from "./Subjects/redux/SubjectAsyncThunk";
-import { getAllClasse, getSubjectLevelByIdSubject } from "./Classes/redux/ClasseAsyncThunk";
+import {  getSubjectLevelByIdSubject } from "./Classes/redux/ClasseAsyncThunk";
 import Table from "./Table";
 import Input from "../Components/ui/Input";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import ConfirmDialog from "./ConfirmDialog";
+import { getAppState } from "../Redux/AppSlice";
+import { getAllClassesNoPagination, getAllSubjectsNoPagination } from "../Redux/Other/asyncThunk/AppAsyncThunk";
 
 export type AssignationType = {
     id_matiere?: number | string;
@@ -36,18 +36,17 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
     const [classes, setClasses] = useState<ClasseType[]>([]);
     const [isActiveConfirmation, setIsActiveConfirmation] = useState(false);
 
-    const { datas: subjects } = useSelector(getSubjectState);
+    const { allSubjects: subjects } = useSelector(getAppState);
     const dispatch: AppDispatch = useDispatch();
 
     // Options des matières
     const subjectOptions = [
         ...(assignations.length === 0 ? [{ label: 'Tous', value: 'tous' }] : []),
-        ...subjects
-            .filter(() => !assignations.some(a => a.matiere === 'Tous'))
+        ...( subjects ? subjects?.filter(() => !assignations.some(a => a.matiere === 'Tous'))
             .map(subject => ({
                 label: `${subject.denomination} ${subject.abbreviation.toUpperCase()}`,
                 value: subject.id_matiere as number
-            }))
+            })) : [] )
     ];
 
     // Fonction de comparaison robuste pour détecter les changements
@@ -97,15 +96,15 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
 
     // Chargement initial des données
     useEffect(() => {
-        if (subjects.length === 0) {
-            dispatch(getAllSubject());
+        if ( !subjects || subjects?.length === 0) {
+            dispatch(getAllSubjectsNoPagination());
         }
-    }, [dispatch, subjects.length]);
+    }, [dispatch]);
 
     useEffect(() => {
         if (classes?.length === 0) {
-            dispatch(getAllClasse()).then((res: any) => {
-                const allClasses = res.payload as ClasseType[];
+            dispatch(getAllClassesNoPagination()).then((res: any) => {
+                const allClasses = res.payload.data as ClasseType[];
                 setClasses(allClasses);
                 if (!assignationsInitialValue.length) {
                     setSelectedSubject('tous');
@@ -118,7 +117,7 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
     const isClassAlreadyAssigned = (classeId: number): boolean => {
         const matiereName = selectedSubject === "tous"
             ? "Tous"
-            : subjects.find(s => s.id_matiere?.toString() === selectedSubject)?.denomination;
+            : subjects?.find(s => s.id_matiere?.toString() === selectedSubject)?.denomination;
 
         const classeName = classes?.find(c => c.id_classe === classeId)?.denomination;
 
@@ -140,8 +139,8 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
                 setClasses(res.payload as ClasseType[]);
             });
         } else if (value === "tous") {
-            dispatch(getAllClasse()).then((res: any) => {
-                setClasses(res.payload as ClasseType[]);
+            dispatch(getAllClassesNoPagination()).then((res: any) => {
+                setClasses(res.payload.data as ClasseType[]);
             });
         } else {
             setClasses([]);
@@ -180,7 +179,7 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
 
         const subjectObj = selectedSubject === "tous"
             ? { denomination: "Tous", id_matiere: "tous" }
-            : subjects.find(s => s.id_matiere?.toString() === selectedSubject);
+            : subjects?.find(s => s.id_matiere?.toString() === selectedSubject);
 
         if (!subjectObj) return;
 
@@ -490,6 +489,7 @@ const TeacherSubject = ({ assignationsInitialValue = [], onChange }: TeacherSubj
                                     }
                                 ]}
                                 isLoading={false}
+                                pagination={PaginationInitialValue}
                             />
                         </div>
 

@@ -96,7 +96,7 @@ const EmployeSlice = createSlice({
             })
             .addCase(createEmployees.rejected, (state) => {
                 state.action.isLoading = false;
-                state.error = 'Erreur de connexion au server';
+                // state.error = 'Erreur de connexion au server';
                 toast.error("Erreur de connexion au server");
             })
 

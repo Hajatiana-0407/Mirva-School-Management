@@ -22,7 +22,7 @@ const Pagination: React.FC<PaginationComponentType> = ({ pagination, thunk, posi
     return (
         <>
             {/* Pagination */}
-            {pagination.total_pages > 1 && (
+            {pagination?.total_pages > 1 && (
                 <div className={clsx({
                     'justify-center flex-col sm:flex-row': position == 'center',
                     'flex-col-reverse sm:flex-row justify-between': position == 'left',
@@ -31,7 +31,7 @@ const Pagination: React.FC<PaginationComponentType> = ({ pagination, thunk, posi
                     {/* Informations sur les éléments */}
                     {!(position === 'center') &&
                         <div className="text-sm text-secondary-600">
-                            {pagination.total} éléments
+                            {pagination?.total} éléments
                         </div>
                     }
 
@@ -39,8 +39,8 @@ const Pagination: React.FC<PaginationComponentType> = ({ pagination, thunk, posi
                         {/* Bouton précédent */}
                         <button
                             type="button"
-                            onClick={() => handlePageChange(pagination.page - 1, pagination.search)}
-                            disabled={pagination.page === 1}
+                            onClick={() => handlePageChange(pagination?.page - 1, pagination?.search)}
+                            disabled={pagination?.page === 1}
                             className="p-2 rounded-lg border border-gray-300 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-primary-50 hover:border-primary-300 transition-colors"
                             aria-label="Page précédente"
                         >
@@ -50,8 +50,8 @@ const Pagination: React.FC<PaginationComponentType> = ({ pagination, thunk, posi
                         {/* Numéros de page avec logique de troncature */}
                         {(() => {
                             const pages = [];
-                            const currentPage = pagination.page;
-                            const totalPages = pagination.total_pages;
+                            const currentPage = pagination?.page;
+                            const totalPages = pagination?.total_pages;
 
                             if (totalPages <= 7) {
                                 // Afficher toutes les pages si peu nombreuses
@@ -105,14 +105,14 @@ const Pagination: React.FC<PaginationComponentType> = ({ pagination, thunk, posi
                                 return (
                                     <button
                                         key={page}
-                                        onClick={() => handlePageChange(page as number, pagination.search)}
-                                        className={`min-w-[40px] px-3 py-2 rounded-lg font-medium transition-all flex items-center justify-center ${pagination.page === page
+                                        onClick={() => handlePageChange(page as number, pagination?.search)}
+                                        className={`min-w-[40px] px-3 py-2 rounded-lg font-medium transition-all flex items-center justify-center ${pagination?.page === page
                                             ? "bg-primary-600 text-white shadow-sm"
                                             : "border border-gray-300 text-gray-700 hover:bg-primary-50 hover:border-primary-300"
                                             }`}
                                         type="button"
-                                        aria-current={pagination.page === page ? "page" : undefined}
-                                        disabled={pagination.page === page}
+                                        aria-current={pagination?.page === page ? "page" : undefined}
+                                        disabled={pagination?.page === page}
                                     >
                                         {isLoading && newPage == page ? <div className="w-5 h-5 inline-block border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
                                             : page
@@ -124,8 +124,8 @@ const Pagination: React.FC<PaginationComponentType> = ({ pagination, thunk, posi
 
                         {/* Bouton suivant */}
                         <button
-                            onClick={() => handlePageChange(pagination.page + 1, pagination.search)}
-                            disabled={pagination.page === pagination.total_pages}
+                            onClick={() => handlePageChange(pagination?.page + 1, pagination?.search)}
+                            disabled={pagination?.page === pagination?.total_pages}
                             type="button"
                             className="p-2 rounded-lg border border-gray-300 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-primary-50 hover:border-primary-300 transition-colors"
                             aria-label="Page suivante"
