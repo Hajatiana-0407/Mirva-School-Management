@@ -47,8 +47,10 @@ const EmployeSlice = createSlice({
                 payload: ApiReturnType
             }) => {
                 state.action.isLoading = false;
-                state.datas = action.payload.data;
-                state.pagination = action.payload.pagination
+                if (action.payload.data)
+                    state.datas = action.payload.data;
+                if (action.payload.pagination)
+                    state.pagination = action.payload.pagination
             })
             .addCase(getAllEmployees.rejected, (state) => {
                 state.action.isLoading = false;
@@ -65,8 +67,10 @@ const EmployeSlice = createSlice({
                 payload: ApiReturnType
             }) => {
                 state.action.isFilterLoading = false;
-                state.datas = action.payload.data;
-                state.pagination = action.payload.pagination
+                if (action.payload.data)
+                    state.datas = action.payload.data;
+                if (action.payload.pagination)
+                    state.pagination = action.payload.pagination
             })
             .addCase(filterEmployees.rejected, (state) => {
                 state.action.isFilterLoading = false;

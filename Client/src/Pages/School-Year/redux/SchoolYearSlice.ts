@@ -38,8 +38,10 @@ const SchoolYearSlice = createSlice({
             })
             .addCase(getAllSchoolYear.fulfilled, (state, action: { payload: ApiReturnType }) => {
                 state.action.isLoading = false;
-                state.datas = action.payload.data;
-                state.pagination = action.payload.pagination
+                if (action.payload.data)
+                    state.datas = action.payload.data;
+                if (action.payload.pagination)
+                    state.pagination = action.payload.pagination
 
                 if (state.datas.length > 0) {
                     state.activeSchoolYear = state.datas.find(year => year.isActif === '1') || state.datas[0];

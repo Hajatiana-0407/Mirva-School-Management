@@ -51,8 +51,10 @@ const StudentSlice = createSlice({
                 payload: ApiReturnType
             }) => {
                 state.action.isLoading = false;
-                state.datas = action.payload.data;
-                state.pagination = action.payload.pagination
+                if (action.payload.data)
+                    state.datas = action.payload.data;
+                if (action.payload.pagination)
+                    state.pagination = action.payload.pagination
             })
             .addCase(getAllStudent.rejected, (state) => {
                 state.action.isLoading = false;
@@ -69,8 +71,10 @@ const StudentSlice = createSlice({
                 payload: ApiReturnType
             }) => {
                 state.action.isFilterLoading = false;
-                state.datas = action.payload.data;
-                state.pagination = action.payload.pagination
+                if (action.payload.data)
+                    state.datas = action.payload.data;
+                if (action.payload.pagination)
+                    state.pagination = action.payload.pagination
             })
             .addCase(filterStudent.rejected, (state) => {
                 state.action.isFilterLoading = false;
