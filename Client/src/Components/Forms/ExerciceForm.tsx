@@ -10,14 +10,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAuthState } from "../../Pages/Auth/redux/AuthSlice";
 import { useEffect, useState } from "react";
 import { AppDispatch } from "../../Redux/store";
-import { getAllLevel, getLelvelSubjectByIdNiveau, getLevelByTeacherId } from "../../Pages/Levels/redux/LevelAsyncThunk";
-import { getLevelState } from "../../Pages/Levels/redux/LevelSlice";
+import {  getLelvelSubjectByIdNiveau, getLevelByTeacherId } from "../../Pages/Levels/redux/LevelAsyncThunk";
 import Loading from "../ui/Loading";
 import InputError from "../ui/InputError";
 import { createExercice, updateexercice } from "../../Pages/Exercices/redux/ExerciceAsyncThunk";
 import { getExerciceState } from "../../Pages/Exercices/redux/ExerciceSlice";
 import { baseUrl } from "../../Utils/Utils";
 import { useActiveUser } from "../../Hooks/useActiveUser";
+import { getAppState } from "../../Redux/AppSlice";
+import { getAllLevelsNoPagination } from "../../Redux/Other/asyncThunk/AppAsyncThunk";
 
 // Schéma de validation pour exercice
 export const exerciceSchema = Yup.object({
@@ -36,7 +37,7 @@ type ExerciceFormPropsType = {
 const ExerciceForm: React.FC<ExerciceFormPropsType> = ({ exercice, handleCloseModal }) => {
     const { formErrors, onSubmite } = useForm(exerciceSchema, ExerciceInitialValue)
     const { datas: { info } } = useSelector(getAuthState);
-    const { datas: levelsState } = useSelector(getLevelState);
+    const { allLevels: levelsState } = useSelector(getAppState);
     const [levels, setLevels] = useState<levelType[]>([])
     const { action, error } = useSelector(getExerciceState);
     const dispatch: AppDispatch = useDispatch();
@@ -73,7 +74,8 @@ const ExerciceForm: React.FC<ExerciceFormPropsType> = ({ exercice, handleCloseMo
                 });
 
         } else {
-            setLevels(levelsState);
+            if (levelsState)
+                setLevels(levelsState);
         }
         return () => { }
     }, [levelsState])
@@ -120,8 +122,8 @@ const ExerciceForm: React.FC<ExerciceFormPropsType> = ({ exercice, handleCloseMo
      * Si l'etat du niveau est encore vide on recupere dans le back 
      */
     useEffect(() => {
-        if (!levelsState.length && !isTeacher) {
-            dispatch(getAllLevel());
+        if ((!levelsState || levelsState.length == 0) && !isTeacher) {
+            dispatch(getAllLevelsNoPagination());
         }
         return () => { }
     }, [dispatch]);

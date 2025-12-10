@@ -38,15 +38,6 @@ export const personSchema = Yup.object({
         otherwise: (schema) => schema.notRequired(),
     }),
 
-
-    // email: Yup.string()
-    //     .email("Veuillez saisir une adresse e-mail valide.")
-    //     .when("nom", {
-    //         is: (val: string | undefined) => val && val.trim().length > 0,
-    //         then: (s) => s.required("L’adresse e-mail est obligatoire."),
-    //         otherwise: (s) => s.notRequired(),
-    //     }),
-
 });
 
 export const ParentSchema = Yup.object({
